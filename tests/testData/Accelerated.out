@@ -1,0 +1,2510 @@
+Ippl> CommMPI: Parent process waiting for children ...
+Ippl> CommMPI: Child 1 ready.
+Ippl> CommMPI: Started job 1 on host `Dude.psi.ch'.
+Ippl> CommMPI: Started job 2 on host `Dude.psi.ch'.
+Ippl> CommMPI: Started job 3 on host `Dude.psi.ch'.
+Ippl> CommMPI: Child 2 ready.
+Ippl> CommMPI: Child 3 ready.
+Ippl> CommMPI: Initialization complete.
+{0}>                ____  _____       ___ 
+{0}>               / __ \|  __ \ /\   | | 
+{0}>              | |  | | |__) /  \  | |
+{0}>              | |  | |  ___/ /\ \ | |
+{0}>              | |__| | |  / ____ \| |____
+{0}>               \____/|_| /_/    \_\______|
+OPAL{0}> 
+OPAL{0}> This is OPAL (Object Oriented Parallel Accelerator Library) Version 1.5.00.1
+OPAL{0}> 
+OPAL{0}>                 (c) PSI, http://amas.web.psi.ch
+OPAL{0}> 
+OPAL{0}> Please send cookies, goodies or other motivations (wine and beer ... ) 
+OPAL{0}> to the OPAL developers opal@lists.psi.ch
+OPAL{0}> 
+OPAL{0}> Time: 08:50:03 date: 22/11/2016
+OPAL{0}> 
+OPAL{0}> Couldn't find startup file "/Users/adelmann/init.opal".
+OPAL{0}> Note: this is not mandatory for an OPAL simulation!
+OPAL{0}> 
+OPAL{0}> * Reading input stream "Accelerated.in".
+OPAL{0}> 
+OPAL{0}> value: {GAMMA,BRHO,EDES,BETA,GAMBET,H2MASS}={1.00021,0.127687,0.00039037,0.0203937,0.0203979,1.87664}
+OPAL{0}> 
+OPAL{0}> 
+OPAL{0}> value: {GAMBET}={0.0203979}
+OPAL{0}> 
+OPAL{0}> 
+OPAL{0}> value: {RINIT0,PR0}={117.9,0.0023}
+OPAL{0}> 
+OPAL{0}> 
+OPAL{0}> value: {PXINEV}={16.8988}
+OPAL{0}> 
+OPAL{0}> 
+OPAL{0}> value: {SIGMAPX}={0}
+OPAL{0}> 
+OPAL{0}> * m before gsl_linalg_cholesky_decomp
+OPAL{0}> * r(0, : ) =          1 &  -0.002156 &          0 &          0 & -0.0007278 &     0.6929 \\
+OPAL{0}> * r(1, : ) =  -0.002156 &          1 &          0 &          0 &     0.7025 & -0.0008288 \\
+OPAL{0}> * r(2, : ) =          0 &          0 &          1 &   0.003609 &          0 &          0 \\
+OPAL{0}> * r(3, : ) =          0 &          0 &   0.003609 &          1 &          0 &          0 \\
+OPAL{0}> * r(4, : ) = -0.0007278 &     0.7025 &          0 &          0 &          1 & -8.356e-05 \\
+OPAL{0}> * r(5, : ) =     0.6929 & -0.0008288 &          0 &          0 & -8.356e-05 &          1 \\
+OPAL{0}> * m after gsl_linalg_cholesky_decomp
+OPAL{0}> * r(0, : ) =          1 &          0 &          0 &          0 &          0 &          0 \\
+OPAL{0}> * r(1, : ) =  -0.002156 &          1 &          0 &          0 &          0 &          0 \\
+OPAL{0}> * r(2, : ) =          0 &          0 &          1 &          0 &          0 &          0 \\
+OPAL{0}> * r(3, : ) =          0 &          0 &   0.003609 &          1 &          0 &          0 \\
+OPAL{0}> * r(4, : ) = -0.0007278 &     0.7025 &          0 &          0 &     0.7117 &          0 \\
+OPAL{0}> * r(5, : ) =     0.6929 &  0.0006651 &          0 &          0 & -6.533e-05 &      0.721 \\
+OPAL{0}> * Mass of simulation particle= 1.191e+04 GeV/c^2
+OPAL{0}> * Charge of simulation particle= 1.017e-15 [C]
+OPAL{0}> * ********************************************************************************** 
+OPAL{0}> * Selected Tracking Method == CYCLOTRON-T, NEW TRACK
+OPAL{0}> * ********************************************************************************** 
+OPAL{0}> * Number of neighbour bunches= 1
+OPAL{0}> * DT                         = 1e-12
+OPAL{0}> * MAXSTEPS                   = 79920
+OPAL{0}> * Phase space dump frequency = 1000000000
+OPAL{0}> * Statistics dump frequency  = 10 w.r.t. the time step.
+OPAL{0}> * ********************************************************************************** 
+OPAL{0}> * ************* D I S T R I B U T I O N ********************************************
+OPAL{0}> * 
+OPAL{0}> * Distribution type: GAUSS
+OPAL{0}> * 
+OPAL{0}> * SIGMAX   = 0.001 [m]
+OPAL{0}> * SIGMAY   = 0.003 [m]
+OPAL{0}> * SIGMAZ   = 0.005 [m]
+OPAL{0}> * SIGMAPX  = 0.0001342 [Beta Gamma]
+OPAL{0}> * SIGMAPY  = 8.49e-05 [Beta Gamma]
+OPAL{0}> * SIGMAPZ  = 0.0001181 [Beta Gamma]
+OPAL{0}> * AVRGPZ   = 0 [Beta Gamma]
+OPAL{0}> * CORRX    = -0.002156
+OPAL{0}> * CORRY    = 0.003609
+OPAL{0}> * CORRZ    = -8.356e-05
+OPAL{0}> * R61      = 0.6929
+OPAL{0}> * R62      = -0.0008288
+OPAL{0}> * R51      = -0.0007278
+OPAL{0}> * R52      = 0.7025
+OPAL{0}> * CUTOFFX  = 3 [units of SIGMAX]
+OPAL{0}> * CUTOFFY  = 3 [units of SIGMAY]
+OPAL{0}> * CUTOFFZ  = 3 [units of SIGMAZ]
+OPAL{0}> * CUTOFFPX = 3 [units of SIGMAPX]
+OPAL{0}> * CUTOFFPY = 3 [units of SIGMAPY]
+OPAL{0}> * CUTOFFPZ = 3 [units of SIGMAPY]
+OPAL{0}> * 
+OPAL{0}> * Distribution is injected.
+OPAL{0}> * 
+OPAL{0}> * **********************************************************************************
+OPAL{0}> 
+OPAL{0}> * ************* B E A M ************************************************************ 
+OPAL{0}> * BEAM        BEAM1
+OPAL{0}> * PARTICLE    H2PLUS
+OPAL{0}> * CURRENT     0.00665 A
+OPAL{0}> * FREQUENCY   49.16 MHz
+OPAL{0}> * CHARGE      +e * 1 
+OPAL{0}> * REST MASS   1.877 GeV
+OPAL{0}> * MOMENTUM    0.03828
+OPAL{0}> * NPART       1.33e+05
+OPAL{0}> * ********************************************************************************** 
+OPAL{0}> 
+OPAL{0}> * ************* F I E L D S O L V E R ********************************************** 
+OPAL{0}> * FIELDSOLVER  FS1
+OPAL{0}> * TYPE         FFT
+OPAL{0}> * N-PROCESSORS 4
+OPAL{0}> * MX           32
+OPAL{0}> * MY           32
+OPAL{0}> * MT           32
+OPAL{0}> * BBOXINCR     2
+OPAL{0}> * GRRENSF      INTEGRATED
+OPAL{0}> * XDIM         parallel  
+OPAL{0}> * YDIM         parallel  
+OPAL{0}> * Z(T)DIM      serial  
+OPAL{0}> 
+OPAL{0}> * ********************************************************************************** 
+OPAL{0}> 
+OPAL{0}> * -------------------------- Adding Cyclotron ---------------------------- *
+OPAL{0}> 
+OPAL{0}> * Bunch global starting position:
+OPAL{0}> * RINIT = 117.9 [mm]
+OPAL{0}> * PHIINIT = -135 [deg]
+OPAL{0}> * ZINIT = 0 [mm]
+OPAL{0}> 
+OPAL{0}> * Bunch global starting momenta:
+OPAL{0}> * Initial gamma = 1
+OPAL{0}> * Initial beta = 0.02039
+OPAL{0}> * Reference total momentum (beta * gamma) = 20.4 [MCU]
+OPAL{0}> * Reference azimuthal momentum (Pt) = 20.27 [MCU]
+OPAL{0}> * Reference radial momentum (Pr) = 2.3 [MCU]
+OPAL{0}> * Reference axial momentum (Pz) = 0 [MCU]
+OPAL{0}> 
+OPAL{0}> * 1-fold field symmerty 
+OPAL{0}> * Field map file name = ./Injmap20120405_Symmetrized.dat 
+OPAL{0}> * Type of cyclotron = CARBONCYCL 
+OPAL{0}> * Radial aperture = 0 ... 3000 [mm] 
+OPAL{0}> * Vertical aperture = -40 ... 40 [mm]
+OPAL{0}> * Number of trimcoils = 0
+OPAL{0}> * Harmonic number h = 6 
+OPAL{0}> * ----------------------------------------------
+OPAL{0}> *      READ IN CARBON CYCLOTRON FIELD MAP       
+OPAL{0}> * ----------------------------------------------
+OPAL{0}> * Minimal radius of measured field map: 0 [mm]
+OPAL{0}> * Stepsize in radial direction: 10 [mm]
+OPAL{0}> * Minimal angle of measured field map: 0 [deg]
+OPAL{0}> * Stepsize in azimuthal direction: 1 [deg]
+OPAL{0}> * Grid points along azimuth (ntet): 360
+OPAL{0}> * Grid points along radius (nrad): 251
+OPAL{0}> * Adding a guard cell along azimuth
+OPAL{0}> * Total stored grid point number ((ntet+1) * nrad) : 90611
+OPAL{0}> * rescaling of the fields with factor: 1
+OPAL{0}> * Field Maps read successfully!
+OPAL{0}> 
+OPAL{0}> * --------- RFCavity ------------------------------
+OPAL{0}> * Minimal radius of cavity= 40 [mm]
+OPAL{0}> * Maximal radius of cavity= 2100 [mm]
+OPAL{0}> * RF frequency (2*pi*f)= 3.089e+08 [rad/s]
+OPAL{0}> * RF Field map file name= ./InjRFVoltage.dat
+OPAL{0}> * Cavity azimuth position= 31 [deg] 
+OPAL{0}> * Cavity gap width= 10 [mm] 
+OPAL{0}> * Cavity Shift distance= 0 [mm] 
+OPAL{0}> * Initial RF phase (t=0)= 271 [deg] 
+OPAL{0}> * Read cavity voltage profile data
+OPAL{0}> * Cavity voltage data read successfully!
+OPAL{0}> * --------- RFCavity ------------------------------
+OPAL{0}> * Minimal radius of cavity= 40 [mm]
+OPAL{0}> * Maximal radius of cavity= 2100 [mm]
+OPAL{0}> * RF frequency (2*pi*f)= 3.089e+08 [rad/s]
+OPAL{0}> * RF Field map file name= ./InjRFVoltage.dat
+OPAL{0}> * Cavity azimuth position= 59 [deg] 
+OPAL{0}> * Cavity gap width= 10 [mm] 
+OPAL{0}> * Cavity Shift distance= 0 [mm] 
+OPAL{0}> * Initial RF phase (t=0)= 439 [deg] 
+OPAL{0}> * Read cavity voltage profile data
+OPAL{0}> * Cavity voltage data read successfully!
+OPAL{0}> * --------- RFCavity ------------------------------
+OPAL{0}> * Minimal radius of cavity= 40 [mm]
+OPAL{0}> * Maximal radius of cavity= 2100 [mm]
+OPAL{0}> * RF frequency (2*pi*f)= 3.089e+08 [rad/s]
+OPAL{0}> * RF Field map file name= ./InjRFVoltage.dat
+OPAL{0}> * Cavity azimuth position= 121 [deg] 
+OPAL{0}> * Cavity gap width= 10 [mm] 
+OPAL{0}> * Cavity Shift distance= 0 [mm] 
+OPAL{0}> * Initial RF phase (t=0)= 811 [deg] 
+OPAL{0}> * Read cavity voltage profile data
+OPAL{0}> * Cavity voltage data read successfully!
+OPAL{0}> * --------- RFCavity ------------------------------
+OPAL{0}> * Minimal radius of cavity= 40 [mm]
+OPAL{0}> * Maximal radius of cavity= 2100 [mm]
+OPAL{0}> * RF frequency (2*pi*f)= 3.089e+08 [rad/s]
+OPAL{0}> * RF Field map file name= ./InjRFVoltage.dat
+OPAL{0}> * Cavity azimuth position= 149 [deg] 
+OPAL{0}> * Cavity gap width= 10 [mm] 
+OPAL{0}> * Cavity Shift distance= 0 [mm] 
+OPAL{0}> * Initial RF phase (t=0)= 979 [deg] 
+OPAL{0}> * Read cavity voltage profile data
+OPAL{0}> * Cavity voltage data read successfully!
+OPAL{0}> * --------- RFCavity ------------------------------
+OPAL{0}> * Minimal radius of cavity= 40 [mm]
+OPAL{0}> * Maximal radius of cavity= 2100 [mm]
+OPAL{0}> * RF frequency (2*pi*f)= 3.089e+08 [rad/s]
+OPAL{0}> * RF Field map file name= ./InjRFVoltage.dat
+OPAL{0}> * Cavity azimuth position= 211 [deg] 
+OPAL{0}> * Cavity gap width= 10 [mm] 
+OPAL{0}> * Cavity Shift distance= 0 [mm] 
+OPAL{0}> * Initial RF phase (t=0)= 1351 [deg] 
+OPAL{0}> * Read cavity voltage profile data
+OPAL{0}> * Cavity voltage data read successfully!
+OPAL{0}> * --------- RFCavity ------------------------------
+OPAL{0}> * Minimal radius of cavity= 40 [mm]
+OPAL{0}> * Maximal radius of cavity= 2100 [mm]
+OPAL{0}> * RF frequency (2*pi*f)= 3.089e+08 [rad/s]
+OPAL{0}> * RF Field map file name= ./InjRFVoltage.dat
+OPAL{0}> * Cavity azimuth position= 239 [deg] 
+OPAL{0}> * Cavity gap width= 10 [mm] 
+OPAL{0}> * Cavity Shift distance= 0 [mm] 
+OPAL{0}> * Initial RF phase (t=0)= 1519 [deg] 
+OPAL{0}> * Read cavity voltage profile data
+OPAL{0}> * Cavity voltage data read successfully!
+OPAL{0}> * --------- RFCavity ------------------------------
+OPAL{0}> * Minimal radius of cavity= 40 [mm]
+OPAL{0}> * Maximal radius of cavity= 2100 [mm]
+OPAL{0}> * RF frequency (2*pi*f)= 3.089e+08 [rad/s]
+OPAL{0}> * RF Field map file name= ./InjRFVoltage.dat
+OPAL{0}> * Cavity azimuth position= 301 [deg] 
+OPAL{0}> * Cavity gap width= 10 [mm] 
+OPAL{0}> * Cavity Shift distance= 0 [mm] 
+OPAL{0}> * Initial RF phase (t=0)= 1891 [deg] 
+OPAL{0}> * Read cavity voltage profile data
+OPAL{0}> * Cavity voltage data read successfully!
+OPAL{0}> * --------- RFCavity ------------------------------
+OPAL{0}> * Minimal radius of cavity= 40 [mm]
+OPAL{0}> * Maximal radius of cavity= 2100 [mm]
+OPAL{0}> * RF frequency (2*pi*f)= 3.089e+08 [rad/s]
+OPAL{0}> * RF Field map file name= ./InjRFVoltage.dat
+OPAL{0}> * Cavity azimuth position= 329 [deg] 
+OPAL{0}> * Cavity gap width= 10 [mm] 
+OPAL{0}> * Cavity Shift distance= 0 [mm] 
+OPAL{0}> * Initial RF phase (t=0)= 2059 [deg] 
+OPAL{0}> * Read cavity voltage profile data
+OPAL{0}> * Cavity voltage data read successfully!
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= 277.5 [mm]
+OPAL{0}> * Xend= 274 [mm]
+OPAL{0}> * Ystart= 278 [mm]
+OPAL{0}> * Yend= 274.4 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= 266.2 [mm]
+OPAL{0}> * Xend= 262.7 [mm]
+OPAL{0}> * Ystart= 266.7 [mm]
+OPAL{0}> * Yend= 263.1 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= 2.279 [mm]
+OPAL{0}> * Xend= -2.721 [mm]
+OPAL{0}> * Ystart= 426.4 [mm]
+OPAL{0}> * Yend= 426.4 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= 2.287 [mm]
+OPAL{0}> * Xend= -2.713 [mm]
+OPAL{0}> * Ystart= 410.4 [mm]
+OPAL{0}> * Yend= 410.4 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= -277.8 [mm]
+OPAL{0}> * Xend= -281.3 [mm]
+OPAL{0}> * Ystart= 277.4 [mm]
+OPAL{0}> * Yend= 280.9 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= -266.4 [mm]
+OPAL{0}> * Xend= -270 [mm]
+OPAL{0}> * Ystart= 266.1 [mm]
+OPAL{0}> * Yend= 269.6 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= -430.8 [mm]
+OPAL{0}> * Xend= -430.8 [mm]
+OPAL{0}> * Ystart= -2.733 [mm]
+OPAL{0}> * Yend= 2.267 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= -414.8 [mm]
+OPAL{0}> * Xend= -414.8 [mm]
+OPAL{0}> * Ystart= -2.724 [mm]
+OPAL{0}> * Yend= 2.276 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= -284.1 [mm]
+OPAL{0}> * Xend= -280.5 [mm]
+OPAL{0}> * Ystart= -284.6 [mm]
+OPAL{0}> * Yend= -281.1 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= -272.8 [mm]
+OPAL{0}> * Xend= -269.2 [mm]
+OPAL{0}> * Ystart= -273.3 [mm]
+OPAL{0}> * Yend= -269.7 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= -1.836 [mm]
+OPAL{0}> * Xend= 3.164 [mm]
+OPAL{0}> * Ystart= -437.4 [mm]
+OPAL{0}> * Yend= -437.4 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= -1.86 [mm]
+OPAL{0}> * Xend= 3.14 [mm]
+OPAL{0}> * Ystart= -421.4 [mm]
+OPAL{0}> * Yend= -421.4 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= 286 [mm]
+OPAL{0}> * Xend= 289.6 [mm]
+OPAL{0}> * Ystart= -285.5 [mm]
+OPAL{0}> * Yend= -289.1 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= 274.7 [mm]
+OPAL{0}> * Xend= 278.2 [mm]
+OPAL{0}> * Ystart= -274.2 [mm]
+OPAL{0}> * Yend= -277.8 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= 445.6 [mm]
+OPAL{0}> * Xend= 445.8 [mm]
+OPAL{0}> * Ystart= -12.68 [mm]
+OPAL{0}> * Yend= -17.68 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * --------- Collimator -----------------------------
+OPAL{0}> * Xstart= 429.6 [mm]
+OPAL{0}> * Xend= 429.8 [mm]
+OPAL{0}> * Ystart= -12.14 [mm]
+OPAL{0}> * Yend= -17.13 [mm]
+OPAL{0}> * Zstart= -100 [mm]
+OPAL{0}> * Zend= 100 [mm]
+OPAL{0}> * Width= 4 [mm]
+OPAL{0}> * -----------  Probe -------------------------------
+OPAL{0}> XStart= 1273 [mm]
+OPAL{0}> XEnd= 1344 [mm]
+OPAL{0}> YStart= 1273 [mm]
+OPAL{0}> YEnd= 1344 [mm]
+OPAL{0}> Width= 0 [mm]
+OPAL{0}> * Initialize probe
+OPAL{0}> * -----------  Probe -------------------------------
+OPAL{0}> XStart= -2.604 [mm]
+OPAL{0}> XEnd= -2.733 [mm]
+OPAL{0}> YStart= 2030 [mm]
+OPAL{0}> YEnd= 2130 [mm]
+OPAL{0}> Width= 0 [mm]
+OPAL{0}> * Initialize probe
+OPAL{0}> * -----------  Probe -------------------------------
+OPAL{0}> XStart= -1277 [mm]
+OPAL{0}> XEnd= -1348 [mm]
+OPAL{0}> YStart= 1276 [mm]
+OPAL{0}> YEnd= 1346 [mm]
+OPAL{0}> Width= 0 [mm]
+OPAL{0}> * Initialize probe
+OPAL{0}> * -----------  Probe -------------------------------
+OPAL{0}> XStart= -2035 [mm]
+OPAL{0}> XEnd= -2135 [mm]
+OPAL{0}> YStart= -3.144 [mm]
+OPAL{0}> YEnd= -3.299 [mm]
+OPAL{0}> Width= 0 [mm]
+OPAL{0}> * Initialize probe
+OPAL{0}> * -----------  Probe -------------------------------
+OPAL{0}> XStart= -1278 [mm]
+OPAL{0}> XEnd= -1348 [mm]
+OPAL{0}> YStart= -1280 [mm]
+OPAL{0}> YEnd= -1351 [mm]
+OPAL{0}> Width= 0 [mm]
+OPAL{0}> * Initialize probe
+OPAL{0}> * -----------  Probe -------------------------------
+OPAL{0}> XStart= 0.8691 [mm]
+OPAL{0}> XEnd= 0.9118 [mm]
+OPAL{0}> YStart= -2037 [mm]
+OPAL{0}> YEnd= -2137 [mm]
+OPAL{0}> Width= 0 [mm]
+OPAL{0}> * Initialize probe
+OPAL{0}> * -----------  Probe -------------------------------
+OPAL{0}> XStart= 1281 [mm]
+OPAL{0}> XEnd= 1351 [mm]
+OPAL{0}> YStart= -1280 [mm]
+OPAL{0}> YEnd= -1351 [mm]
+OPAL{0}> Width= 0 [mm]
+OPAL{0}> * Initialize probe
+OPAL{0}> * -----------  Probe -------------------------------
+OPAL{0}> XStart= 2038 [mm]
+OPAL{0}> XEnd= 2138 [mm]
+OPAL{0}> YStart= -67.98 [mm]
+OPAL{0}> YEnd= -71.32 [mm]
+OPAL{0}> Width= 0 [mm]
+OPAL{0}> * Initialize probe
+OPAL{0}> * -------------------------------------
+OPAL{0}> * The selected Beam line elements are :
+OPAL{0}> * -> CYCLOTRON
+OPAL{0}> * -> CAVITY
+OPAL{0}> * -> CAVITY
+OPAL{0}> * -> CAVITY
+OPAL{0}> * -> CAVITY
+OPAL{0}> * -> CAVITY
+OPAL{0}> * -> CAVITY
+OPAL{0}> * -> CAVITY
+OPAL{0}> * -> CAVITY
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> CCOLLIMATOR
+OPAL{0}> * -> PROBE
+OPAL{0}> * -> PROBE
+OPAL{0}> * -> PROBE
+OPAL{0}> * -> PROBE
+OPAL{0}> * -> PROBE
+OPAL{0}> * -> PROBE
+OPAL{0}> * -> PROBE
+OPAL{0}> * -> PROBE
+OPAL{0}> * -------------------------------------
+OPAL{0}> * 4th order Runge-Kutta integrator
+OPAL{0}> * Before repartition:  min local particle number 26819 max local particle number: 39643
+OPAL{0}> * After repartition:  min local particle number 32401 max local particle number: 34061
+OPAL{0}> 
+OPAL{0}> * *********************** Bunch information in local frame: ************************
+OPAL{0}> * ************** B U N C H ********************************************************* 
+OPAL{0}> * NP              =   133000
+OPAL{0}> * Qtot            =    1.35267e-01 [nC]       Qi    =  1.01705e-06 [nC]
+OPAL{0}> * Ekin            =    3.90439e-01 [MeV]      dEkin =  4.41302e-03 [MeV]
+OPAL{0}> * rmax            = (  3.26629e-03 ,  9.30549e-03 ,  1.56370e-02 ) [m]
+OPAL{0}> * rmin            = ( -3.26560e-03 , -9.28874e-03 , -1.55684e-02 ) [m]
+OPAL{0}> * rms beam size   = (  1.01896e-03 ,  2.90429e-03 ,  4.87407e-03 ) [m]
+OPAL{0}> * rms momenta     = (  1.29966e-04 ,  1.00526e-04 ,  1.15298e-04 ) [beta gamma]
+OPAL{0}> * mean position   = (  1.02869e-11 , -5.15840e-11 ,  2.47224e-11 ) [m]
+OPAL{0}> * mean momenta    = ( -2.95744e-13 ,  2.03987e-02 , -1.33605e-09 ) [beta gamma]
+OPAL{0}> * rms emittance   = (  6.49158e-06 ,  1.43118e-05 ,  2.75479e-05 ) (not normalized)
+OPAL{0}> * rms correlation = ( -7.45551e-03 , -8.25993e-04 ,  1.55931e-03 )
+OPAL{0}> * hr              = (  2.10706e-04 ,  5.99814e-04 ,  1.00663e-03 ) [m]
+OPAL{0}> * dh              =    2.00000e+00 [%]
+OPAL{0}> * t               =    0.00000e+00 [s]        dT    =  2.82513e-11 [s]
+OPAL{0}> * spos            =   -1.91827e-18 [m]
+OPAL{0}> * ********************************************************************************** 
+OPAL{0}> 
+OPAL{0}> 
+OPAL{0}> * Phase space dump 0 (local frame) at integration step 0
+OPAL{0}> * T = 0 ns, Live Particles: 133000
+OPAL{0}> * E = 0.39044 MeV, beta * gamma = 0.020399
+OPAL{0}> * Bunch position: R =  117.9 mm, Theta = -135 Deg, Z = 0.0033477 mm
+OPAL{0}> * Local Azimuth = 218.53 Deg, Local Elevation = -0.49913 Deg
+OPAL{0}> 
+OPAL{0}> * *********************** Bunch information in global frame: ***********************
+OPAL{0}> * ************** B U N C H ********************************************************* 
+OPAL{0}> * NP              =   133000
+OPAL{0}> * Qtot            =    1.35267e-01 [nC]       Qi    =  1.01705e-06 [nC]
+OPAL{0}> * Ekin            =    3.90439e-01 [MeV]      dEkin =  4.41316e-03 [MeV]
+OPAL{0}> * rmax            = (  3.26629e-03 ,  9.30549e-03 ,  1.56370e-02 ) [m]
+OPAL{0}> * rmin            = ( -3.26560e-03 , -9.28874e-03 , -1.55684e-02 ) [m]
+OPAL{0}> * rms beam size   = (  2.18979e-03 ,  2.18682e-03 ,  4.87410e-03 ) [m]
+OPAL{0}> * rms momenta     = (  1.14779e-04 ,  1.17565e-04 ,  1.15302e-04 ) [beta gamma]
+OPAL{0}> * mean position   = ( -8.33726e-02 , -8.33628e-02 ,  3.34772e-06 ) [m]
+OPAL{0}> * mean momenta    = (  1.27052e-02 , -1.59578e-02 , -1.77703e-04 ) [beta gamma]
+OPAL{0}> * rms emittance   = (  1.23136e-05 ,  1.25933e-05 ,  2.75490e-05 ) (not normalized)
+OPAL{0}> * rms correlation = ( -3.45240e-02 ,  3.88144e-02 ,  6.83431e-04 )
+OPAL{0}> * hr              = (  2.10706e-04 ,  5.99814e-04 ,  1.00663e-03 ) [m]
+OPAL{0}> * dh              =    2.00000e+00 [%]
+OPAL{0}> * t               =    0.00000e+00 [s]        dT    =  2.82513e-11 [s]
+OPAL{0}> * spos            =    3.34772e-06 [m]
+OPAL{0}> * ********************************************************************************** 
+OPAL{0}> 
+OPAL{0}> * Beginning of this run is at t = 0 [ns]
+OPAL{0}> * The time step is set to dt = 0.16951 [ns]
+OPAL{0}> * Single particle trajectory dump frequency is set to 1
+OPAL{0}> * The frequency to solve space charge fields is set to 1
+OPAL{0}> * The repartition frequency is set to 10
+OPAL{0}> 
+OPAL{0}> * --------------------------------- Start tracking ------------------------------------ *
+OPAL{0}> 
+OPAL{0}> *** Finished turn 1, Total number of live particles: 133000
+OPAL{0}> 
+OPAL{0}> * Phase space dump 1 (local frame) at integration step 720
+OPAL{0}> * T = 122.05 ns, Live Particles: 133000
+OPAL{0}> * E = 0.91697 MeV, beta * gamma = 0.031262
+OPAL{0}> * Bunch position: R =  177.06 mm, Theta = -137.98 Deg, Z = -5.0135 mm
+OPAL{0}> * Local Azimuth = 220.34 Deg, Local Elevation = -0.10324 Deg
+OPAL{0}> 
+OPAL{0}> *** Finished turn 2, Total number of live particles: 133000
+OPAL{0}> 
+OPAL{0}> * Phase space dump 2 (local frame) at integration step 1440
+OPAL{0}> * T = 244.09 ns, Live Particles: 133000
+OPAL{0}> * E = 1.4413 MeV, beta * gamma = 0.039196
+OPAL{0}> * Bunch position: R =  220.73 mm, Theta = -138.39 Deg, Z = 0.5107 mm
+OPAL{0}> * Local Azimuth = 221.21 Deg, Local Elevation = 0.38038 Deg
+OPAL{0}> * Cavity RF4A Phase= 26.986 [deg] transit time factor=  0.99725 dE= 0.065506 [MeV] E_kin= 1.5771 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 3, Total number of live particles: 133000
+OPAL{0}> 
+OPAL{0}> * Phase space dump 3 (local frame) at integration step 2160
+OPAL{0}> * T = 366.14 ns, Live Particles: 133000
+OPAL{0}> * E = 1.9741 MeV, beta * gamma = 0.045876
+OPAL{0}> * Bunch position: R =  257.44 mm, Theta = -138.74 Deg, Z = 2.8889 mm
+OPAL{0}> * Local Azimuth = 221.63 Deg, Local Elevation = -0.24537 Deg
+OPAL{0}> * Cavity RF3B Phase= 25.071 [deg] transit time factor=  0.9979 dE= 0.067997 [MeV] E_kin= 2.0444 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 4, Total number of live particles: 133000
+OPAL{0}> 
+OPAL{0}> * Phase space dump 4 (local frame) at integration step 2880
+OPAL{0}> * T = 488.18 ns, Live Particles: 133000
+OPAL{0}> * E = 2.5111 MeV, beta * gamma = 0.051746
+OPAL{0}> * Bunch position: R =  289.23 mm, Theta = -139.04 Deg, Z = -4.1644 mm
+OPAL{0}> * Local Azimuth = 221.86 Deg, Local Elevation = 0.040034 Deg
+OPAL{0}> * Cavity RF3B Phase= 26.41 [deg] transit time factor=  0.99834 dE= 0.06883 [MeV] E_kin= 2.5802 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.187 [deg] transit time factor=  0.99839 dE= 0.065994 [MeV] E_kin= 2.6462 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.598 [deg] transit time factor=  0.99854 dE= 0.065719 [MeV] E_kin= 2.9174 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.6 [deg] transit time factor=  0.99861 dE= 0.066012 [MeV] E_kin= 3.0529 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 5, Total number of live particles: 133000
+OPAL{0}> 
+OPAL{0}> * Phase space dump 5 (local frame) at integration step 3600
+OPAL{0}> * T = 610.23 ns, Live Particles: 133000
+OPAL{0}> * E = 3.0552 MeV, beta * gamma = 0.057083
+OPAL{0}> * Bunch position: R =  317.97 mm, Theta = -139.14 Deg, Z = 3.8817 mm
+OPAL{0}> * Local Azimuth = 222.09 Deg, Local Elevation = 0.11047 Deg
+OPAL{0}> * Cavity RF4A Phase= 31.747 [deg] transit time factor=  0.99867 dE= 0.066955 [MeV] E_kin= 3.19 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.561 [deg] transit time factor=  0.99878 dE= 0.066998 [MeV] E_kin= 3.4665 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 26.732 [deg] transit time factor=  0.9988 dE= 0.071086 [MeV] E_kin= 3.5376 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.552 [deg] transit time factor=  0.99882 dE= 0.067253 [MeV] E_kin= 3.6048 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 6, Total number of live particles: 133000
+OPAL{0}> 
+OPAL{0}> * Phase space dump 6 (local frame) at integration step 4320
+OPAL{0}> * T = 732.27 ns, Live Particles: 133000
+OPAL{0}> * E = 3.6101 MeV, beta * gamma = 0.062055
+OPAL{0}> * Bunch position: R =  344.76 mm, Theta = -139.11 Deg, Z = -3.1187 mm
+OPAL{0}> * Local Azimuth = 222.31 Deg, Local Elevation = -0.18596 Deg
+OPAL{0}> * Cavity RF4A Phase= 31.68 [deg] transit time factor=  0.99887 dE= 0.068168 [MeV] E_kin= 3.7446 [MeV] Time dep freq = 1
+Ippl{0}> Step 4685, 7 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 4686, 33 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 4687, 15 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 4775, 1 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 4865, 2 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 4866, 7 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 4867, 19 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF2B Phase= 26.417 [deg] transit time factor=  0.99897 dE= 0.072414 [MeV] E_kin= 4.0985 [MeV] Time dep freq = 1
+Ippl{0}> Step 4956, 1 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 4957, 5 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF3A Phase= 32.458 [deg] transit time factor=  0.99898 dE= 0.068374 [MeV] E_kin= 4.1669 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 7, Total number of live particles: 132910
+OPAL{0}> 
+OPAL{0}> * Phase space dump 7 (local frame) at integration step 5040
+OPAL{0}> * T = 854.32 ns, Live Particles: 132910
+OPAL{0}> * E = 4.1753 MeV, beta * gamma = 0.066742
+OPAL{0}> * Bunch position: R =  369.9 mm, Theta = -139.07 Deg, Z = 2.4861 mm
+OPAL{0}> * Local Azimuth = 222.48 Deg, Local Elevation = 0.21361 Deg
+Ippl{0}> Step 5043, 5 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5044, 22 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5045, 54 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5046, 42 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5047, 12 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5048, 6 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF3B Phase= 25.887 [deg] transit time factor=  0.999 dE= 0.072987 [MeV] E_kin= 4.2399 [MeV] Time dep freq = 1
+Ippl{0}> Step 5134, 2 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5135, 25 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5136, 14 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF4A Phase= 31.653 [deg] transit time factor=  0.99902 dE= 0.069237 [MeV] E_kin= 4.3091 [MeV] Time dep freq = 1
+Ippl{0}> Step 5225, 32 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5226, 217 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5227, 70 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF4B Phase= 25.165 [deg] transit time factor=  0.99903 dE= 0.07372 [MeV] E_kin= 4.3828 [MeV] Time dep freq = 1
+Ippl{0}> Step 5311, 1 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5312, 15 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5313, 5 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5405, 111 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5406, 620 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5407, 1710 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5408, 2252 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5409, 955 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5410, 141 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5495, 1 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5496, 701 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5497, 1555 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5498, 1496 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5499, 614 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5500, 11 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5584, 2 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5585, 31 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5586, 247 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5587, 1320 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5588, 1184 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5589, 573 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5590, 77 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5591, 2 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF2B Phase= 26.169 [deg] transit time factor=  0.99909 dE= 0.073625 [MeV] E_kin= 4.6686 [MeV] Time dep freq = 1
+Ippl{0}> Step 5675, 51 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5676, 290 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5677, 3416 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5678, 2946 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5679, 298 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5680, 12 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF3A Phase= 32.336 [deg] transit time factor=  0.99911 dE= 0.069452 [MeV] E_kin= 4.7381 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 8, Total number of live particles: 111772
+OPAL{0}> 
+OPAL{0}> * Phase space dump 8 (local frame) at integration step 5760
+OPAL{0}> * T = 976.37 ns, Live Particles: 111772
+OPAL{0}> * E = 4.7418 MeV, beta * gamma = 0.071132
+OPAL{0}> * Bunch position: R =  393.29 mm, Theta = -139.02 Deg, Z = -2.0902 mm
+OPAL{0}> * Local Azimuth = 222.59 Deg, Local Elevation = -0.21219 Deg
+Ippl{0}> Step 5765, 35 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5766, 317 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5767, 1200 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5768, 747 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5769, 146 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5770, 17 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF3B Phase= 25.482 [deg] transit time factor=  0.99912 dE= 0.074286 [MeV] E_kin= 4.8123 [MeV] Time dep freq = 1
+Ippl{0}> Step 5855, 10 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5856, 578 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5857, 2109 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5858, 1454 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5859, 103 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5944, 6 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5945, 10 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5946, 189 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5947, 372 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5948, 209 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 5949, 59 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF4B Phase= 24.89 [deg] transit time factor=  0.99915 dE= 0.074938 [MeV] E_kin= 4.9576 [MeV] Time dep freq = 1
+Ippl{0}> Step 6031, 3 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 6032, 303 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 6033, 1038 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 6034, 541 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 6035, 60 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF1A Phase= 32.009 [deg] transit time factor=  0.99916 dE= 0.070226 [MeV] E_kin= 5.0278 [MeV] Time dep freq = 1
+Ippl{0}> Step 6129, 24 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 6130, 17 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 6218, 2 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 6219, 1 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF2A Phase= 32.626 [deg] transit time factor=  0.99918 dE= 0.069963 [MeV] E_kin= 5.1726 [MeV] Time dep freq = 1
+Ippl{0}> Step 6308, 1 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 6309, 20 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> * Cavity RF2B Phase= 25.788 [deg] transit time factor=  0.99919 dE= 0.074865 [MeV] E_kin= 5.2475 [MeV] Time dep freq = 1
+Ippl{0}> Step 6399, 2 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+Ippl{0}> Step 6400, 7 particles lost on stripper, collimator, septum, or out of cyclotron aperture
+OPAL{0}> 
+OPAL{0}> *** Finished turn 9, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 9 (local frame) at integration step 6480
+OPAL{0}> * T = 1098.4 ns, Live Particles: 102192
+OPAL{0}> * E = 5.3224 MeV, beta * gamma = 0.075367
+OPAL{0}> * Bunch position: R =  415.85 mm, Theta = -138.98 Deg, Z = 2.0091 mm
+OPAL{0}> * Local Azimuth = 222.71 Deg, Local Elevation = 0.20572 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.957 [deg] transit time factor=  0.99922 dE= 0.075617 [MeV] E_kin= 5.3937 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.44 [deg] transit time factor=  0.99923 dE= 0.071337 [MeV] E_kin= 5.465 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 24.621 [deg] transit time factor=  0.99924 dE= 0.076111 [MeV] E_kin= 5.5411 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.147 [deg] transit time factor=  0.99925 dE= 0.071051 [MeV] E_kin= 5.6122 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 25.555 [deg] transit time factor=  0.99928 dE= 0.075977 [MeV] E_kin= 5.8349 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.88 [deg] transit time factor=  0.99929 dE= 0.071651 [MeV] E_kin= 5.9065 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 10, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 10 (local frame) at integration step 7200
+OPAL{0}> * T = 1220.5 ns, Live Particles: 102192
+OPAL{0}> * E = 5.9145 MeV, beta * gamma = 0.079455
+OPAL{0}> * Bunch position: R =  437.65 mm, Theta = -138.94 Deg, Z = -2.2125 mm
+OPAL{0}> * Local Azimuth = 222.79 Deg, Local Elevation = -0.18652 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.615 [deg] transit time factor=  0.99929 dE= 0.076801 [MeV] E_kin= 5.9833 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.458 [deg] transit time factor=  0.9993 dE= 0.072239 [MeV] E_kin= 6.0556 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 24.494 [deg] transit time factor=  0.99931 dE= 0.077163 [MeV] E_kin= 6.1327 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.289 [deg] transit time factor=  0.99932 dE= 0.071833 [MeV] E_kin= 6.2046 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.579 [deg] transit time factor=  0.99934 dE= 0.071779 [MeV] E_kin= 6.3532 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.748 [deg] transit time factor=  0.99935 dE= 0.072634 [MeV] E_kin= 6.503 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 11, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 11 (local frame) at integration step 7920
+OPAL{0}> * T = 1342.5 ns, Live Particles: 102192
+OPAL{0}> * E = 6.5147 MeV, beta * gamma = 0.083395
+OPAL{0}> * Bunch position: R =  458.73 mm, Theta = -138.91 Deg, Z = 2.6082 mm
+OPAL{0}> * Local Azimuth = 222.87 Deg, Local Elevation = 0.15523 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.349 [deg] transit time factor=  0.99936 dE= 0.077906 [MeV] E_kin= 6.5809 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.568 [deg] transit time factor=  0.99937 dE= 0.073024 [MeV] E_kin= 6.6539 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 24.457 [deg] transit time factor=  0.99937 dE= 0.078105 [MeV] E_kin= 6.732 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.404 [deg] transit time factor=  0.99938 dE= 0.072578 [MeV] E_kin= 6.8046 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.573 [deg] transit time factor=  0.99939 dE= 0.072606 [MeV] E_kin= 6.955 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 25.048 [deg] transit time factor=  0.9994 dE= 0.078118 [MeV] E_kin= 7.0331 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.902 [deg] transit time factor=  0.99941 dE= 0.073338 [MeV] E_kin= 7.1065 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 12, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 12 (local frame) at integration step 8640
+OPAL{0}> * T = 1464.5 ns, Live Particles: 102192
+OPAL{0}> * E = 7.1221 MeV, beta * gamma = 0.087204
+OPAL{0}> * Bunch position: R =  479.17 mm, Theta = -138.93 Deg, Z = -3.1411 mm
+OPAL{0}> * Local Azimuth = 222.93 Deg, Local Elevation = -0.10857 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.408 [deg] transit time factor=  0.99941 dE= 0.078751 [MeV] E_kin= 7.1852 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.007 [deg] transit time factor=  0.99942 dE= 0.073486 [MeV] E_kin= 7.2587 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 24.709 [deg] transit time factor=  0.99942 dE= 0.078803 [MeV] E_kin= 7.3375 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.684 [deg] transit time factor=  0.99943 dE= 0.073128 [MeV] E_kin= 7.4107 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 25.236 [deg] transit time factor=  0.99944 dE= 0.078648 [MeV] E_kin= 7.4893 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.497 [deg] transit time factor=  0.99944 dE= 0.073437 [MeV] E_kin= 7.5627 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 24.757 [deg] transit time factor=  0.99945 dE= 0.079132 [MeV] E_kin= 7.6419 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.793 [deg] transit time factor=  0.99945 dE= 0.074205 [MeV] E_kin= 7.7161 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 13, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 13 (local frame) at integration step 9360
+OPAL{0}> * T = 1586.6 ns, Live Particles: 102192
+OPAL{0}> * E = 7.7359 MeV, beta * gamma = 0.090891
+OPAL{0}> * Bunch position: R =  498.85 mm, Theta = -138.9 Deg, Z = 3.4322 mm
+OPAL{0}> * Local Azimuth = 223 Deg, Local Elevation = 0.048938 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.18 [deg] transit time factor=  0.99946 dE= 0.079729 [MeV] E_kin= 7.7958 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.055 [deg] transit time factor=  0.99946 dE= 0.07422 [MeV] E_kin= 7.87 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 24.621 [deg] transit time factor=  0.99947 dE= 0.079682 [MeV] E_kin= 7.9497 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.746 [deg] transit time factor=  0.99947 dE= 0.073833 [MeV] E_kin= 8.0235 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 25.147 [deg] transit time factor=  0.99948 dE= 0.079517 [MeV] E_kin= 8.1031 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.607 [deg] transit time factor=  0.99948 dE= 0.074102 [MeV] E_kin= 8.1772 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 24.762 [deg] transit time factor=  0.99949 dE= 0.079943 [MeV] E_kin= 8.2571 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.113 [deg] transit time factor=  0.99949 dE= 0.074702 [MeV] E_kin= 8.3318 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 14, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 14 (local frame) at integration step 10080
+OPAL{0}> * T = 1708.6 ns, Live Particles: 102192
+OPAL{0}> * E = 8.3559 MeV, beta * gamma = 0.094471
+OPAL{0}> * Bunch position: R =  517.94 mm, Theta = -138.94 Deg, Z = -3.5037 mm
+OPAL{0}> * Local Azimuth = 223.06 Deg, Local Elevation = 0.024544 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.357 [deg] transit time factor=  0.9995 dE= 0.080427 [MeV] E_kin= 8.4122 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.363 [deg] transit time factor=  0.9995 dE= 0.074711 [MeV] E_kin= 8.4869 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 24.738 [deg] transit time factor=  0.99951 dE= 0.080401 [MeV] E_kin= 8.5673 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.835 [deg] transit time factor=  0.99951 dE= 0.074491 [MeV] E_kin= 8.6418 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 25.048 [deg] transit time factor=  0.99952 dE= 0.080373 [MeV] E_kin= 8.7222 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.633 [deg] transit time factor=  0.99952 dE= 0.074822 [MeV] E_kin= 8.797 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 24.689 [deg] transit time factor=  0.99952 dE= 0.080794 [MeV] E_kin= 8.8778 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.369 [deg] transit time factor=  0.99953 dE= 0.075242 [MeV] E_kin= 8.9531 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 15, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 15 (local frame) at integration step 10800
+OPAL{0}> * T = 1830.7 ns, Live Particles: 102192
+OPAL{0}> * E = 8.9817 MeV, beta * gamma = 0.097953
+OPAL{0}> * Bunch position: R =  536.57 mm, Theta = -138.99 Deg, Z = 3.0035 mm
+OPAL{0}> * Local Azimuth = 223.11 Deg, Local Elevation = -0.10213 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.537 [deg] transit time factor=  0.99953 dE= 0.081119 [MeV] E_kin= 9.0342 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.758 [deg] transit time factor=  0.99954 dE= 0.075121 [MeV] E_kin= 9.1093 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 24.979 [deg] transit time factor=  0.99954 dE= 0.081036 [MeV] E_kin= 9.1903 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 33.081 [deg] transit time factor=  0.99955 dE= 0.075014 [MeV] E_kin= 9.2654 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 25.12 [deg] transit time factor=  0.99955 dE= 0.081116 [MeV] E_kin= 9.3465 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.823 [deg] transit time factor=  0.99955 dE= 0.075403 [MeV] E_kin= 9.4219 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 24.781 [deg] transit time factor=  0.99956 dE= 0.081539 [MeV] E_kin= 9.5034 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.734 [deg] transit time factor=  0.99956 dE= 0.075683 [MeV] E_kin= 9.5791 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 16, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 16 (local frame) at integration step 11520
+OPAL{0}> * T = 1952.7 ns, Live Particles: 102192
+OPAL{0}> * E = 9.6126 MeV, beta * gamma = 0.10134
+OPAL{0}> * Bunch position: R =  554.58 mm, Theta = -139.04 Deg, Z = -1.9765 mm
+OPAL{0}> * Local Azimuth = 223.16 Deg, Local Elevation = 0.15791 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.801 [deg] transit time factor=  0.99956 dE= 0.081749 [MeV] E_kin= 9.6608 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 33.095 [deg] transit time factor=  0.99957 dE= 0.075566 [MeV] E_kin= 9.7364 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 25.123 [deg] transit time factor=  0.99957 dE= 0.081725 [MeV] E_kin= 9.8181 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 33.094 [deg] transit time factor=  0.99957 dE= 0.075726 [MeV] E_kin= 9.8939 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 24.93 [deg] transit time factor=  0.99958 dE= 0.082027 [MeV] E_kin= 9.9759 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.638 [deg] transit time factor=  0.99958 dE= 0.076298 [MeV] E_kin= 10.052 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 24.478 [deg] transit time factor=  0.99958 dE= 0.08254 [MeV] E_kin= 10.135 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.654 [deg] transit time factor=  0.99959 dE= 0.076502 [MeV] E_kin= 10.211 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 17, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 17 (local frame) at integration step 12240
+OPAL{0}> * T = 2074.8 ns, Live Particles: 102192
+OPAL{0}> * E = 10.25 MeV, beta * gamma = 0.10466
+OPAL{0}> * Bunch position: R =  572.28 mm, Theta = -139.04 Deg, Z = 0.20851 mm
+OPAL{0}> * Local Azimuth = 223.22 Deg, Local Elevation = -0.18788 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.657 [deg] transit time factor=  0.99959 dE= 0.082655 [MeV] E_kin= 10.294 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 33.223 [deg] transit time factor=  0.99959 dE= 0.076204 [MeV] E_kin= 10.37 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 25.182 [deg] transit time factor=  0.9996 dE= 0.082494 [MeV] E_kin= 10.453 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 33.369 [deg] transit time factor=  0.9996 dE= 0.076234 [MeV] E_kin= 10.529 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 25.127 [deg] transit time factor=  0.9996 dE= 0.082705 [MeV] E_kin= 10.612 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 33.07 [deg] transit time factor=  0.99961 dE= 0.076682 [MeV] E_kin= 10.688 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 24.847 [deg] transit time factor=  0.99961 dE= 0.083116 [MeV] E_kin= 10.771 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 33.272 [deg] transit time factor=  0.99961 dE= 0.076724 [MeV] E_kin= 10.848 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 18, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 18 (local frame) at integration step 12960
+OPAL{0}> * T = 2196.8 ns, Live Particles: 102192
+OPAL{0}> * E = 10.892 MeV, beta * gamma = 0.1079
+OPAL{0}> * Bunch position: R =  589.36 mm, Theta = -139.14 Deg, Z = 1.5547 mm
+OPAL{0}> * Local Azimuth = 223.25 Deg, Local Elevation = 0.15953 Deg
+OPAL{0}> * Cavity RF3B Phase= 25.177 [deg] transit time factor=  0.99961 dE= 0.083124 [MeV] E_kin= 10.931 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 33.768 [deg] transit time factor=  0.99962 dE= 0.076468 [MeV] E_kin= 11.008 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 25.54 [deg] transit time factor=  0.99962 dE= 0.083052 [MeV] E_kin= 11.091 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 33.576 [deg] transit time factor=  0.99962 dE= 0.076797 [MeV] E_kin= 11.167 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 25.155 [deg] transit time factor=  0.99963 dE= 0.083502 [MeV] E_kin= 11.251 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 33.138 [deg] transit time factor=  0.99963 dE= 0.077395 [MeV] E_kin= 11.328 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 24.833 [deg] transit time factor=  0.99963 dE= 0.083974 [MeV] E_kin= 11.412 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 33.514 [deg] transit time factor=  0.99963 dE= 0.077304 [MeV] E_kin= 11.49 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 19, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 19 (local frame) at integration step 13680
+OPAL{0}> * T = 2318.9 ns, Live Particles: 102192
+OPAL{0}> * E = 11.54 MeV, beta * gamma = 0.11107
+OPAL{0}> * Bunch position: R =  606.24 mm, Theta = -139.2 Deg, Z = -3.0089 mm
+OPAL{0}> * Local Azimuth = 223.28 Deg, Local Elevation = -0.080699 Deg
+OPAL{0}> * Cavity RF3B Phase= 25.378 [deg] transit time factor=  0.99964 dE= 0.083849 [MeV] E_kin= 11.574 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 34.222 [deg] transit time factor=  0.99964 dE= 0.076852 [MeV] E_kin= 11.65 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 25.928 [deg] transit time factor=  0.99964 dE= 0.083641 [MeV] E_kin= 11.734 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 34.127 [deg] transit time factor=  0.99964 dE= 0.077095 [MeV] E_kin= 11.811 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 25.615 [deg] transit time factor=  0.99965 dE= 0.084051 [MeV] E_kin= 11.895 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 33.705 [deg] transit time factor=  0.99965 dE= 0.077696 [MeV] E_kin= 11.973 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 25.282 [deg] transit time factor=  0.99965 dE= 0.084545 [MeV] E_kin= 12.057 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 33.962 [deg] transit time factor=  0.99965 dE= 0.077709 [MeV] E_kin= 12.135 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 20, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 20 (local frame) at integration step 14400
+OPAL{0}> * T = 2440.9 ns, Live Particles: 102192
+OPAL{0}> * E = 12.192 MeV, beta * gamma = 0.11417
+OPAL{0}> * Bunch position: R =  622.2 mm, Theta = -139.27 Deg, Z = 3.3883 mm
+OPAL{0}> * Local Azimuth = 223.32 Deg, Local Elevation = -0.017397 Deg
+OPAL{0}> * Cavity RF3B Phase= 25.648 [deg] transit time factor=  0.99965 dE= 0.084537 [MeV] E_kin= 12.22 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 34.309 [deg] transit time factor=  0.99966 dE= 0.077578 [MeV] E_kin= 12.297 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 25.808 [deg] transit time factor=  0.99966 dE= 0.084609 [MeV] E_kin= 12.382 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 33.868 [deg] transit time factor=  0.99966 dE= 0.078161 [MeV] E_kin= 12.46 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 25.217 [deg] transit time factor=  0.99966 dE= 0.085247 [MeV] E_kin= 12.545 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 33.415 [deg] transit time factor=  0.99967 dE= 0.078828 [MeV] E_kin= 12.624 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 24.928 [deg] transit time factor=  0.99967 dE= 0.085747 [MeV] E_kin= 12.71 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 33.796 [deg] transit time factor=  0.99967 dE= 0.078749 [MeV] E_kin= 12.789 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 21, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 21 (local frame) at integration step 15120
+OPAL{0}> * T = 2563 ns, Live Particles: 102192
+OPAL{0}> * E = 12.852 MeV, beta * gamma = 0.11723
+OPAL{0}> * Bunch position: R =  638.17 mm, Theta = -139.24 Deg, Z = -2.4519 mm
+OPAL{0}> * Local Azimuth = 223.38 Deg, Local Elevation = 0.11764 Deg
+OPAL{0}> * Cavity RF3B Phase= 25.405 [deg] transit time factor=  0.99967 dE= 0.085677 [MeV] E_kin= 12.874 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 34.142 [deg] transit time factor=  0.99967 dE= 0.078624 [MeV] E_kin= 12.953 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 25.536 [deg] transit time factor=  0.99968 dE= 0.085778 [MeV] E_kin= 13.039 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 33.681 [deg] transit time factor=  0.99968 dE= 0.079246 [MeV] E_kin= 13.118 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 24.957 [deg] transit time factor=  0.99968 dE= 0.086436 [MeV] E_kin= 13.204 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 33.339 [deg] transit time factor=  0.99968 dE= 0.079843 [MeV] E_kin= 13.284 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 24.775 [deg] transit time factor=  0.99968 dE= 0.086885 [MeV] E_kin= 13.371 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 33.674 [deg] transit time factor=  0.99969 dE= 0.079805 [MeV] E_kin= 13.451 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 22, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 22 (local frame) at integration step 15840
+OPAL{0}> * T = 2685 ns, Live Particles: 102192
+OPAL{0}> * E = 13.521 MeV, beta * gamma = 0.12026
+OPAL{0}> * Bunch position: R =  653.57 mm, Theta = -139.19 Deg, Z = 0.47956 mm
+OPAL{0}> * Local Azimuth = 223.44 Deg, Local Elevation = -0.16641 Deg
+OPAL{0}> * Cavity RF3B Phase= 25.121 [deg] transit time factor=  0.99969 dE= 0.0869 [MeV] E_kin= 13.538 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 33.678 [deg] transit time factor=  0.99969 dE= 0.08 [MeV] E_kin= 13.618 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 24.916 [deg] transit time factor=  0.99969 dE= 0.087262 [MeV] E_kin= 13.705 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 33.119 [deg] transit time factor=  0.99969 dE= 0.080758 [MeV] E_kin= 13.786 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 24.367 [deg] transit time factor=  0.9997 dE= 0.087949 [MeV] E_kin= 13.874 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 33.097 [deg] transit time factor=  0.9997 dE= 0.081091 [MeV] E_kin= 13.955 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 24.514 [deg] transit time factor=  0.9997 dE= 0.088177 [MeV] E_kin= 14.043 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 33.509 [deg] transit time factor=  0.9997 dE= 0.080956 [MeV] E_kin= 14.124 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 23, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 23 (local frame) at integration step 16560
+OPAL{0}> * T = 2807.1 ns, Live Particles: 102192
+OPAL{0}> * E = 14.201 MeV, beta * gamma = 0.12326
+OPAL{0}> * Bunch position: R =  668.76 mm, Theta = -139.13 Deg, Z = 1.8055 mm
+OPAL{0}> * Local Azimuth = 223.5 Deg, Local Elevation = 0.13605 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.801 [deg] transit time factor=  0.9997 dE= 0.088201 [MeV] E_kin= 14.212 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 33.145 [deg] transit time factor=  0.9997 dE= 0.081484 [MeV] E_kin= 14.294 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 24.214 [deg] transit time factor=  0.99971 dE= 0.088845 [MeV] E_kin= 14.382 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.435 [deg] transit time factor=  0.99971 dE= 0.082421 [MeV] E_kin= 14.465 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 23.627 [deg] transit time factor=  0.99971 dE= 0.089602 [MeV] E_kin= 14.554 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.609 [deg] transit time factor=  0.99971 dE= 0.082603 [MeV] E_kin= 14.637 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 23.989 [deg] transit time factor=  0.99971 dE= 0.089694 [MeV] E_kin= 14.727 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 33.118 [deg] transit time factor=  0.99971 dE= 0.082371 [MeV] E_kin= 14.809 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 24, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 24 (local frame) at integration step 17280
+OPAL{0}> * T = 2929.1 ns, Live Particles: 102192
+OPAL{0}> * E = 14.894 MeV, beta * gamma = 0.12624
+OPAL{0}> * Bunch position: R =  684.22 mm, Theta = -139.06 Deg, Z = -3.2585 mm
+OPAL{0}> * Local Azimuth = 223.54 Deg, Local Elevation = -0.02756 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.339 [deg] transit time factor=  0.99972 dE= 0.089673 [MeV] E_kin= 14.899 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.806 [deg] transit time factor=  0.99972 dE= 0.082864 [MeV] E_kin= 14.982 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 23.845 [deg] transit time factor=  0.99972 dE= 0.090273 [MeV] E_kin= 15.072 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.366 [deg] transit time factor=  0.99972 dE= 0.083581 [MeV] E_kin= 15.156 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 23.561 [deg] transit time factor=  0.99972 dE= 0.090839 [MeV] E_kin= 15.246 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.781 [deg] transit time factor=  0.99972 dE= 0.083525 [MeV] E_kin= 15.33 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 24.085 [deg] transit time factor=  0.99973 dE= 0.09079 [MeV] E_kin= 15.421 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 33.167 [deg] transit time factor=  0.99973 dE= 0.083379 [MeV] E_kin= 15.504 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 25, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 25 (local frame) at integration step 18000
+OPAL{0}> * T = 3051.1 ns, Live Particles: 102192
+OPAL{0}> * E = 15.596 MeV, beta * gamma = 0.12919
+OPAL{0}> * Bunch position: R =  699.25 mm, Theta = -139.04 Deg, Z = 2.7947 mm
+OPAL{0}> * Local Azimuth = 223.56 Deg, Local Elevation = -0.089484 Deg
+OPAL{0}> * Cavity RF3B Phase= 24.246 [deg] transit time factor=  0.99973 dE= 0.090885 [MeV] E_kin= 15.595 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.678 [deg] transit time factor=  0.99973 dE= 0.084056 [MeV] E_kin= 15.679 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 23.636 [deg] transit time factor=  0.99973 dE= 0.091598 [MeV] E_kin= 15.771 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.324 [deg] transit time factor=  0.99973 dE= 0.084717 [MeV] E_kin= 15.855 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 23.457 [deg] transit time factor=  0.99973 dE= 0.092096 [MeV] E_kin= 15.947 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.699 [deg] transit time factor=  0.99974 dE= 0.084673 [MeV] E_kin= 16.032 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 23.853 [deg] transit time factor=  0.99974 dE= 0.092106 [MeV] E_kin= 16.124 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.751 [deg] transit time factor=  0.99974 dE= 0.084834 [MeV] E_kin= 16.209 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 26, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 26 (local frame) at integration step 18720
+OPAL{0}> * T = 3173.2 ns, Live Particles: 102192
+OPAL{0}> * E = 16.309 MeV, beta * gamma = 0.13212
+OPAL{0}> * Bunch position: R =  714.26 mm, Theta = -138.95 Deg, Z = -0.49832 mm
+OPAL{0}> * Local Azimuth = 223.57 Deg, Local Elevation = 0.15531 Deg
+OPAL{0}> * Cavity RF3B Phase= 23.692 [deg] transit time factor=  0.99974 dE= 0.092447 [MeV] E_kin= 16.301 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.199 [deg] transit time factor=  0.99974 dE= 0.085615 [MeV] E_kin= 16.387 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 23.145 [deg] transit time factor=  0.99974 dE= 0.093161 [MeV] E_kin= 16.48 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.174 [deg] transit time factor=  0.99974 dE= 0.08599 [MeV] E_kin= 16.566 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 23.314 [deg] transit time factor=  0.99975 dE= 0.093417 [MeV] E_kin= 16.66 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.726 [deg] transit time factor=  0.99975 dE= 0.085744 [MeV] E_kin= 16.745 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 23.796 [deg] transit time factor=  0.99975 dE= 0.093329 [MeV] E_kin= 16.839 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.656 [deg] transit time factor=  0.99975 dE= 0.086008 [MeV] E_kin= 16.925 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 27, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 27 (local frame) at integration step 19440
+OPAL{0}> * T = 3295.2 ns, Live Particles: 102192
+OPAL{0}> * E = 17.033 MeV, beta * gamma = 0.13504
+OPAL{0}> * Bunch position: R =  729.2 mm, Theta = -138.92 Deg, Z = -2.1316 mm
+OPAL{0}> * Local Azimuth = 223.58 Deg, Local Elevation = -0.11443 Deg
+OPAL{0}> * Cavity RF3B Phase= 23.5 [deg] transit time factor=  0.99975 dE= 0.093769 [MeV] E_kin= 17.019 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.099 [deg] transit time factor=  0.99975 dE= 0.086818 [MeV] E_kin= 17.105 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 23.003 [deg] transit time factor=  0.99975 dE= 0.094469 [MeV] E_kin= 17.2 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.208 [deg] transit time factor=  0.99976 dE= 0.087063 [MeV] E_kin= 17.287 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 23.276 [deg] transit time factor=  0.99976 dE= 0.094632 [MeV] E_kin= 17.382 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.655 [deg] transit time factor=  0.99976 dE= 0.086886 [MeV] E_kin= 17.468 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 23.596 [deg] transit time factor=  0.99976 dE= 0.094638 [MeV] E_kin= 17.563 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.391 [deg] transit time factor=  0.99976 dE= 0.087345 [MeV] E_kin= 17.65 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 28, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 28 (local frame) at integration step 20160
+OPAL{0}> * T = 3417.3 ns, Live Particles: 102192
+OPAL{0}> * E = 17.767 MeV, beta * gamma = 0.13793
+OPAL{0}> * Bunch position: R =  744.11 mm, Theta = -138.85 Deg, Z = 3.2949 mm
+OPAL{0}> * Local Azimuth = 223.59 Deg, Local Elevation = 0.00040154 Deg
+OPAL{0}> * Cavity RF3B Phase= 23.154 [deg] transit time factor=  0.99976 dE= 0.095204 [MeV] E_kin= 17.746 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.867 [deg] transit time factor=  0.99976 dE= 0.088149 [MeV] E_kin= 17.834 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.732 [deg] transit time factor=  0.99976 dE= 0.095861 [MeV] E_kin= 17.93 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.099 [deg] transit time factor=  0.99977 dE= 0.088253 [MeV] E_kin= 18.018 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 23.07 [deg] transit time factor=  0.99977 dE= 0.095942 [MeV] E_kin= 18.114 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.329 [deg] transit time factor=  0.99977 dE= 0.088254 [MeV] E_kin= 18.202 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 23.131 [deg] transit time factor=  0.99977 dE= 0.096116 [MeV] E_kin= 18.298 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.839 [deg] transit time factor=  0.99977 dE= 0.088945 [MeV] E_kin= 18.387 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 29, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 29 (local frame) at integration step 20880
+OPAL{0}> * T = 3539.3 ns, Live Particles: 102192
+OPAL{0}> * E = 18.512 MeV, beta * gamma = 0.1408
+OPAL{0}> * Bunch position: R =  759.12 mm, Theta = -138.76 Deg, Z = -2.0233 mm
+OPAL{0}> * Local Azimuth = 223.6 Deg, Local Elevation = 0.11768 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.54 [deg] transit time factor=  0.99977 dE= 0.096806 [MeV] E_kin= 18.484 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.513 [deg] transit time factor=  0.99977 dE= 0.089569 [MeV] E_kin= 18.573 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.375 [deg] transit time factor=  0.99977 dE= 0.097275 [MeV] E_kin= 18.671 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.902 [deg] transit time factor=  0.99977 dE= 0.089489 [MeV] E_kin= 18.76 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.817 [deg] transit time factor=  0.99978 dE= 0.09724 [MeV] E_kin= 18.857 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.155 [deg] transit time factor=  0.99978 dE= 0.089439 [MeV] E_kin= 18.947 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.846 [deg] transit time factor=  0.99978 dE= 0.097423 [MeV] E_kin= 19.044 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.727 [deg] transit time factor=  0.99978 dE= 0.090079 [MeV] E_kin= 19.134 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 30, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 30 (local frame) at integration step 21600
+OPAL{0}> * T = 3661.4 ns, Live Particles: 102192
+OPAL{0}> * E = 19.267 MeV, beta * gamma = 0.14366
+OPAL{0}> * Bunch position: R =  774.2 mm, Theta = -138.76 Deg, Z = -0.86111 mm
+OPAL{0}> * Local Azimuth = 223.62 Deg, Local Elevation = -0.13817 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.422 [deg] transit time factor=  0.99978 dE= 0.098006 [MeV] E_kin= 19.232 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.679 [deg] transit time factor=  0.99978 dE= 0.090428 [MeV] E_kin= 19.323 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.529 [deg] transit time factor=  0.99978 dE= 0.098256 [MeV] E_kin= 19.421 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.164 [deg] transit time factor=  0.99978 dE= 0.090197 [MeV] E_kin= 19.511 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.911 [deg] transit time factor=  0.99978 dE= 0.098204 [MeV] E_kin= 19.61 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.024 [deg] transit time factor=  0.99979 dE= 0.090504 [MeV] E_kin= 19.7 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.562 [deg] transit time factor=  0.99979 dE= 0.098653 [MeV] E_kin= 19.799 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.394 [deg] transit time factor=  0.99979 dE= 0.091369 [MeV] E_kin= 19.89 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 31, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 31 (local frame) at integration step 22320
+OPAL{0}> * T = 3783.4 ns, Live Particles: 102192
+OPAL{0}> * E = 20.031 MeV, beta * gamma = 0.1465
+OPAL{0}> * Bunch position: R =  789.02 mm, Theta = -138.7 Deg, Z = 2.9833 mm
+OPAL{0}> * Local Azimuth = 223.64 Deg, Local Elevation = 0.051544 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.036 [deg] transit time factor=  0.99979 dE= 0.099338 [MeV] E_kin= 19.989 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.477 [deg] transit time factor=  0.99979 dE= 0.091601 [MeV] E_kin= 20.081 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.29 [deg] transit time factor=  0.99979 dE= 0.099477 [MeV] E_kin= 20.18 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.919 [deg] transit time factor=  0.99979 dE= 0.091388 [MeV] E_kin= 20.272 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.605 [deg] transit time factor=  0.99979 dE= 0.099449 [MeV] E_kin= 20.371 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.624 [deg] transit time factor=  0.99979 dE= 0.09185 [MeV] E_kin= 20.463 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.135 [deg] transit time factor=  0.99979 dE= 0.1 [MeV] E_kin= 20.563 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.155 [deg] transit time factor=  0.99979 dE= 0.09259 [MeV] E_kin= 20.656 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 32, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 32 (local frame) at integration step 23040
+OPAL{0}> * T = 3905.5 ns, Live Particles: 102192
+OPAL{0}> * E = 20.805 MeV, beta * gamma = 0.14931
+OPAL{0}> * Bunch position: R =  804 mm, Theta = -138.69 Deg, Z = -2.5432 mm
+OPAL{0}> * Local Azimuth = 223.67 Deg, Local Elevation = 0.088504 Deg
+OPAL{0}> * Cavity RF3B Phase= 21.812 [deg] transit time factor=  0.9998 dE= 0.10057 [MeV] E_kin= 20.756 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.538 [deg] transit time factor=  0.9998 dE= 0.092531 [MeV] E_kin= 20.849 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.341 [deg] transit time factor=  0.9998 dE= 0.1005 [MeV] E_kin= 20.949 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.102 [deg] transit time factor=  0.9998 dE= 0.092169 [MeV] E_kin= 21.042 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.692 [deg] transit time factor=  0.9998 dE= 0.10044 [MeV] E_kin= 21.142 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.798 [deg] transit time factor=  0.9998 dE= 0.092659 [MeV] E_kin= 21.235 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.297 [deg] transit time factor=  0.9998 dE= 0.10097 [MeV] E_kin= 21.336 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.572 [deg] transit time factor=  0.9998 dE= 0.093185 [MeV] E_kin= 21.429 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 33, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 33 (local frame) at integration step 23760
+OPAL{0}> * T = 4027.5 ns, Live Particles: 102192
+OPAL{0}> * E = 21.585 MeV, beta * gamma = 0.15211
+OPAL{0}> * Bunch position: R =  818.57 mm, Theta = -138.77 Deg, Z = -0.25423 mm
+OPAL{0}> * Local Azimuth = 223.69 Deg, Local Elevation = -0.13683 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.229 [deg] transit time factor=  0.9998 dE= 0.10137 [MeV] E_kin= 21.53 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.097 [deg] transit time factor=  0.9998 dE= 0.09295 [MeV] E_kin= 21.623 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.757 [deg] transit time factor=  0.9998 dE= 0.10125 [MeV] E_kin= 21.724 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.336 [deg] transit time factor=  0.99981 dE= 0.092892 [MeV] E_kin= 21.817 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.794 [deg] transit time factor=  0.99981 dE= 0.10142 [MeV] E_kin= 21.919 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.884 [deg] transit time factor=  0.99981 dE= 0.09358 [MeV] E_kin= 22.012 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.351 [deg] transit time factor=  0.99981 dE= 0.10205 [MeV] E_kin= 22.114 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.837 [deg] transit time factor=  0.99981 dE= 0.093957 [MeV] E_kin= 22.208 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 34, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 34 (local frame) at integration step 24480
+OPAL{0}> * T = 4149.6 ns, Live Particles: 102192
+OPAL{0}> * E = 22.373 MeV, beta * gamma = 0.15487
+OPAL{0}> * Bunch position: R =  832.7 mm, Theta = -138.81 Deg, Z = 2.7731 mm
+OPAL{0}> * Local Azimuth = 223.73 Deg, Local Elevation = 0.066714 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.458 [deg] transit time factor=  0.99981 dE= 0.10232 [MeV] E_kin= 22.311 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.279 [deg] transit time factor=  0.99981 dE= 0.09377 [MeV] E_kin= 22.404 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.792 [deg] transit time factor=  0.99981 dE= 0.10232 [MeV] E_kin= 22.507 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.118 [deg] transit time factor=  0.99981 dE= 0.094128 [MeV] E_kin= 22.601 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.451 [deg] transit time factor=  0.99981 dE= 0.1028 [MeV] E_kin= 22.704 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.583 [deg] transit time factor=  0.99981 dE= 0.094971 [MeV] E_kin= 22.799 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.037 [deg] transit time factor=  0.99981 dE= 0.10348 [MeV] E_kin= 22.902 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.743 [deg] transit time factor=  0.99982 dE= 0.095172 [MeV] E_kin= 22.997 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 35, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 35 (local frame) at integration step 25200
+OPAL{0}> * T = 4271.6 ns, Live Particles: 102192
+OPAL{0}> * E = 23.172 MeV, beta * gamma = 0.15763
+OPAL{0}> * Bunch position: R =  846.85 mm, Theta = -138.8 Deg, Z = -2.7382 mm
+OPAL{0}> * Local Azimuth = 223.77 Deg, Local Elevation = 0.07084 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.335 [deg] transit time factor=  0.99982 dE= 0.10363 [MeV] E_kin= 23.101 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.165 [deg] transit time factor=  0.99982 dE= 0.094993 [MeV] E_kin= 23.196 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.591 [deg] transit time factor=  0.99982 dE= 0.10367 [MeV] E_kin= 23.299 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.875 [deg] transit time factor=  0.99982 dE= 0.095521 [MeV] E_kin= 23.395 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.226 [deg] transit time factor=  0.99982 dE= 0.10424 [MeV] E_kin= 23.499 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.634 [deg] transit time factor=  0.99982 dE= 0.09613 [MeV] E_kin= 23.595 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.13 [deg] transit time factor=  0.99982 dE= 0.10474 [MeV] E_kin= 23.7 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.135 [deg] transit time factor=  0.99982 dE= 0.095974 [MeV] E_kin= 23.796 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 36, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 36 (local frame) at integration step 25920
+OPAL{0}> * T = 4393.6 ns, Live Particles: 102192
+OPAL{0}> * E = 23.979 MeV, beta * gamma = 0.16037
+OPAL{0}> * Bunch position: R =  860.75 mm, Theta = -138.87 Deg, Z = -0.077664 mm
+OPAL{0}> * Local Azimuth = 223.79 Deg, Local Elevation = -0.13087 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.651 [deg] transit time factor=  0.99982 dE= 0.10469 [MeV] E_kin= 23.901 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.421 [deg] transit time factor=  0.99982 dE= 0.095899 [MeV] E_kin= 23.997 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.741 [deg] transit time factor=  0.99982 dE= 0.10485 [MeV] E_kin= 24.102 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.019 [deg] transit time factor=  0.99982 dE= 0.096584 [MeV] E_kin= 24.198 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.29 [deg] transit time factor=  0.99983 dE= 0.10554 [MeV] E_kin= 24.304 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.889 [deg] transit time factor=  0.99983 dE= 0.097128 [MeV] E_kin= 24.401 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.369 [deg] transit time factor=  0.99983 dE= 0.10593 [MeV] E_kin= 24.507 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.405 [deg] transit time factor=  0.99983 dE= 0.096915 [MeV] E_kin= 24.604 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 37, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 37 (local frame) at integration step 26640
+OPAL{0}> * T = 4515.7 ns, Live Particles: 102192
+OPAL{0}> * E = 24.797 MeV, beta * gamma = 0.1631
+OPAL{0}> * Bunch position: R =  874.26 mm, Theta = -138.88 Deg, Z = 2.7641 mm
+OPAL{0}> * Local Azimuth = 223.81 Deg, Local Elevation = 0.060106 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.807 [deg] transit time factor=  0.99983 dE= 0.10589 [MeV] E_kin= 24.71 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.367 [deg] transit time factor=  0.99983 dE= 0.097171 [MeV] E_kin= 24.807 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.572 [deg] transit time factor=  0.99983 dE= 0.10633 [MeV] E_kin= 24.913 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.839 [deg] transit time factor=  0.99983 dE= 0.098066 [MeV] E_kin= 25.011 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.146 [deg] transit time factor=  0.99983 dE= 0.10708 [MeV] E_kin= 25.118 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.046 [deg] transit time factor=  0.99983 dE= 0.098283 [MeV] E_kin= 25.216 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.483 [deg] transit time factor=  0.99983 dE= 0.10727 [MeV] E_kin= 25.324 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.578 [deg] transit time factor=  0.99983 dE= 0.09801 [MeV] E_kin= 25.422 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 38, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 38 (local frame) at integration step 27360
+OPAL{0}> * T = 4637.7 ns, Live Particles: 102192
+OPAL{0}> * E = 25.625 MeV, beta * gamma = 0.16582
+OPAL{0}> * Bunch position: R =  887.96 mm, Theta = -138.9 Deg, Z = -2.5685 mm
+OPAL{0}> * Local Azimuth = 223.8 Deg, Local Elevation = 0.077185 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.901 [deg] transit time factor=  0.99983 dE= 0.10721 [MeV] E_kin= 25.529 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.418 [deg] transit time factor=  0.99983 dE= 0.098409 [MeV] E_kin= 25.627 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.581 [deg] transit time factor=  0.99983 dE= 0.10776 [MeV] E_kin= 25.735 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.095 [deg] transit time factor=  0.99984 dE= 0.099144 [MeV] E_kin= 25.834 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.39 [deg] transit time factor=  0.99984 dE= 0.10838 [MeV] E_kin= 25.943 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.525 [deg] transit time factor=  0.99984 dE= 0.099099 [MeV] E_kin= 26.042 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.925 [deg] transit time factor=  0.99984 dE= 0.10836 [MeV] E_kin= 26.15 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.939 [deg] transit time factor=  0.99984 dE= 0.098892 [MeV] E_kin= 26.249 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 39, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 39 (local frame) at integration step 28080
+OPAL{0}> * T = 4759.8 ns, Live Particles: 102192
+OPAL{0}> * E = 26.462 MeV, beta * gamma = 0.16852
+OPAL{0}> * Bunch position: R =  901.42 mm, Theta = -138.94 Deg, Z = -0.41293 mm
+OPAL{0}> * Local Azimuth = 223.79 Deg, Local Elevation = -0.12421 Deg
+OPAL{0}> * Cavity RF3B Phase= 23.197 [deg] transit time factor=  0.99984 dE= 0.10838 [MeV] E_kin= 26.357 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.594 [deg] transit time factor=  0.99984 dE= 0.099529 [MeV] E_kin= 26.457 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.716 [deg] transit time factor=  0.99984 dE= 0.10911 [MeV] E_kin= 26.566 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.424 [deg] transit time factor=  0.99984 dE= 0.10014 [MeV] E_kin= 26.666 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.711 [deg] transit time factor=  0.99984 dE= 0.1096 [MeV] E_kin= 26.776 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.894 [deg] transit time factor=  0.99984 dE= 0.099993 [MeV] E_kin= 26.876 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 23.232 [deg] transit time factor=  0.99984 dE= 0.10952 [MeV] E_kin= 26.985 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.993 [deg] transit time factor=  0.99984 dE= 0.10011 [MeV] E_kin= 27.085 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 40, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 40 (local frame) at integration step 28800
+OPAL{0}> * T = 4881.8 ns, Live Particles: 102192
+OPAL{0}> * E = 27.31 MeV, beta * gamma = 0.17122
+OPAL{0}> * Bunch position: R =  914.87 mm, Theta = -138.92 Deg, Z = 2.9387 mm
+OPAL{0}> * Local Azimuth = 223.78 Deg, Local Elevation = 0.044214 Deg
+OPAL{0}> * Cavity RF3B Phase= 23.139 [deg] transit time factor=  0.99984 dE= 0.10984 [MeV] E_kin= 27.195 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.553 [deg] transit time factor=  0.99984 dE= 0.10092 [MeV] E_kin= 27.296 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.666 [deg] transit time factor=  0.99984 dE= 0.11064 [MeV] E_kin= 27.407 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.575 [deg] transit time factor=  0.99985 dE= 0.10132 [MeV] E_kin= 27.508 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.82 [deg] transit time factor=  0.99985 dE= 0.11096 [MeV] E_kin= 27.619 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.867 [deg] transit time factor=  0.99985 dE= 0.10129 [MeV] E_kin= 27.72 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 23.046 [deg] transit time factor=  0.99985 dE= 0.11104 [MeV] E_kin= 27.831 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.508 [deg] transit time factor=  0.99985 dE= 0.10193 [MeV] E_kin= 27.933 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 41, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 41 (local frame) at integration step 29520
+OPAL{0}> * T = 5003.9 ns, Live Particles: 102192
+OPAL{0}> * E = 28.17 MeV, beta * gamma = 0.17392
+OPAL{0}> * Bunch position: R =  928.47 mm, Theta = -138.81 Deg, Z = -2.3383 mm
+OPAL{0}> * Local Azimuth = 223.78 Deg, Local Elevation = 0.084393 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.496 [deg] transit time factor=  0.99985 dE= 0.11179 [MeV] E_kin= 28.045 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.023 [deg] transit time factor=  0.99985 dE= 0.10286 [MeV] E_kin= 28.148 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.145 [deg] transit time factor=  0.99985 dE= 0.11255 [MeV] E_kin= 28.261 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.284 [deg] transit time factor=  0.99985 dE= 0.103 [MeV] E_kin= 28.364 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.519 [deg] transit time factor=  0.99985 dE= 0.11266 [MeV] E_kin= 28.476 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.597 [deg] transit time factor=  0.99985 dE= 0.10291 [MeV] E_kin= 28.579 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.674 [deg] transit time factor=  0.99985 dE= 0.11278 [MeV] E_kin= 28.692 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.236 [deg] transit time factor=  0.99985 dE= 0.10357 [MeV] E_kin= 28.795 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 42, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 42 (local frame) at integration step 30240
+OPAL{0}> * T = 5125.9 ns, Live Particles: 102192
+OPAL{0}> * E = 29.044 MeV, beta * gamma = 0.17661
+OPAL{0}> * Bunch position: R =  942.45 mm, Theta = -138.79 Deg, Z = -1.0454 mm
+OPAL{0}> * Local Azimuth = 223.78 Deg, Local Elevation = -0.11326 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.23 [deg] transit time factor=  0.99985 dE= 0.11349 [MeV] E_kin= 28.909 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.035 [deg] transit time factor=  0.99985 dE= 0.10422 [MeV] E_kin= 29.013 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.192 [deg] transit time factor=  0.99985 dE= 0.11399 [MeV] E_kin= 29.127 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.489 [deg] transit time factor=  0.99985 dE= 0.10407 [MeV] E_kin= 29.231 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.661 [deg] transit time factor=  0.99985 dE= 0.11394 [MeV] E_kin= 29.345 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.586 [deg] transit time factor=  0.99986 dE= 0.10417 [MeV] E_kin= 29.449 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.558 [deg] transit time factor=  0.99986 dE= 0.11425 [MeV] E_kin= 29.564 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.098 [deg] transit time factor=  0.99986 dE= 0.10503 [MeV] E_kin= 29.669 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 43, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 43 (local frame) at integration step 30960
+OPAL{0}> * T = 5248 ns, Live Particles: 102192
+OPAL{0}> * E = 29.929 MeV, beta * gamma = 0.1793
+OPAL{0}> * Bunch position: R =  956.35 mm, Theta = -138.77 Deg, Z = 3.115 mm
+OPAL{0}> * Local Azimuth = 223.79 Deg, Local Elevation = 0.0056748 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.079 [deg] transit time factor=  0.99986 dE= 0.11505 [MeV] E_kin= 29.784 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.106 [deg] transit time factor=  0.99986 dE= 0.10546 [MeV] E_kin= 29.889 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.262 [deg] transit time factor=  0.99986 dE= 0.11536 [MeV] E_kin= 30.004 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.592 [deg] transit time factor=  0.99986 dE= 0.10522 [MeV] E_kin= 30.11 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.681 [deg] transit time factor=  0.99986 dE= 0.11529 [MeV] E_kin= 30.225 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.499 [deg] transit time factor=  0.99986 dE= 0.10554 [MeV] E_kin= 30.33 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.415 [deg] transit time factor=  0.99986 dE= 0.11578 [MeV] E_kin= 30.446 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.099 [deg] transit time factor=  0.99986 dE= 0.10636 [MeV] E_kin= 30.553 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 44, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 44 (local frame) at integration step 31680
+OPAL{0}> * T = 5370 ns, Live Particles: 102192
+OPAL{0}> * E = 30.825 MeV, beta * gamma = 0.18199
+OPAL{0}> * Bunch position: R =  970.26 mm, Theta = -138.78 Deg, Z = -1.3666 mm
+OPAL{0}> * Local Azimuth = 223.8 Deg, Local Elevation = 0.10817 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.104 [deg] transit time factor=  0.99986 dE= 0.11649 [MeV] E_kin= 30.669 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.351 [deg] transit time factor=  0.99986 dE= 0.10649 [MeV] E_kin= 30.776 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.477 [deg] transit time factor=  0.99986 dE= 0.1166 [MeV] E_kin= 30.892 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.725 [deg] transit time factor=  0.99986 dE= 0.10632 [MeV] E_kin= 30.999 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.709 [deg] transit time factor=  0.99986 dE= 0.11665 [MeV] E_kin= 31.115 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.437 [deg] transit time factor=  0.99986 dE= 0.10691 [MeV] E_kin= 31.222 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.322 [deg] transit time factor=  0.99986 dE= 0.11732 [MeV] E_kin= 31.339 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.229 [deg] transit time factor=  0.99986 dE= 0.10757 [MeV] E_kin= 31.447 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 45, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 45 (local frame) at integration step 32400
+OPAL{0}> * T = 5492.1 ns, Live Particles: 102192
+OPAL{0}> * E = 31.731 MeV, beta * gamma = 0.18467
+OPAL{0}> * Bunch position: R =  984.06 mm, Theta = -138.83 Deg, Z = -2.0487 mm
+OPAL{0}> * Local Azimuth = 223.82 Deg, Local Elevation = -0.086038 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.268 [deg] transit time factor=  0.99986 dE= 0.11785 [MeV] E_kin= 31.565 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.69 [deg] transit time factor=  0.99987 dE= 0.10742 [MeV] E_kin= 31.672 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.762 [deg] transit time factor=  0.99987 dE= 0.11778 [MeV] E_kin= 31.79 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.852 [deg] transit time factor=  0.99987 dE= 0.10744 [MeV] E_kin= 31.897 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.719 [deg] transit time factor=  0.99987 dE= 0.11804 [MeV] E_kin= 32.016 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.346 [deg] transit time factor=  0.99987 dE= 0.10833 [MeV] E_kin= 32.124 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 22.191 [deg] transit time factor=  0.99987 dE= 0.11889 [MeV] E_kin= 32.243 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.235 [deg] transit time factor=  0.99987 dE= 0.10892 [MeV] E_kin= 32.352 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 46, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 46 (local frame) at integration step 33120
+OPAL{0}> * T = 5614.1 ns, Live Particles: 102192
+OPAL{0}> * E = 32.65 MeV, beta * gamma = 0.18735
+OPAL{0}> * Bunch position: R =  997.55 mm, Theta = -138.81 Deg, Z = 2.9731 mm
+OPAL{0}> * Local Azimuth = 223.86 Deg, Local Elevation = -0.037296 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.25 [deg] transit time factor=  0.99987 dE= 0.11933 [MeV] E_kin= 32.471 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.641 [deg] transit time factor=  0.99987 dE= 0.10878 [MeV] E_kin= 32.58 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.612 [deg] transit time factor=  0.99987 dE= 0.11933 [MeV] E_kin= 32.699 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.538 [deg] transit time factor=  0.99987 dE= 0.10912 [MeV] E_kin= 32.808 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.336 [deg] transit time factor=  0.99987 dE= 0.11983 [MeV] E_kin= 32.928 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.071 [deg] transit time factor=  0.99987 dE= 0.11004 [MeV] E_kin= 33.038 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.938 [deg] transit time factor=  0.99987 dE= 0.12063 [MeV] E_kin= 33.159 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.203 [deg] transit time factor=  0.99987 dE= 0.11034 [MeV] E_kin= 33.269 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 47, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 47 (local frame) at integration step 33840
+OPAL{0}> * T = 5736.1 ns, Live Particles: 102192
+OPAL{0}> * E = 33.581 MeV, beta * gamma = 0.19002
+OPAL{0}> * Bunch position: R =  1011 mm, Theta = -138.8 Deg, Z = -0.088787 mm
+OPAL{0}> * Local Azimuth = 223.89 Deg, Local Elevation = 0.11459 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.201 [deg] transit time factor=  0.99987 dE= 0.12086 [MeV] E_kin= 33.39 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.548 [deg] transit time factor=  0.99987 dE= 0.11022 [MeV] E_kin= 33.5 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.434 [deg] transit time factor=  0.99987 dE= 0.12093 [MeV] E_kin= 33.621 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.3 [deg] transit time factor=  0.99987 dE= 0.11077 [MeV] E_kin= 33.732 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 22.079 [deg] transit time factor=  0.99987 dE= 0.12157 [MeV] E_kin= 33.853 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 32.047 [deg] transit time factor=  0.99987 dE= 0.11149 [MeV] E_kin= 33.965 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.956 [deg] transit time factor=  0.99987 dE= 0.12217 [MeV] E_kin= 34.087 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.409 [deg] transit time factor=  0.99987 dE= 0.11146 [MeV] E_kin= 34.199 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 48, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 48 (local frame) at integration step 34560
+OPAL{0}> * T = 5858.2 ns, Live Particles: 102192
+OPAL{0}> * E = 34.525 MeV, beta * gamma = 0.1927
+OPAL{0}> * Bunch position: R =  1024.1 mm, Theta = -138.8 Deg, Z = -2.8587 mm
+OPAL{0}> * Local Azimuth = 223.92 Deg, Local Elevation = -0.041433 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.362 [deg] transit time factor=  0.99988 dE= 0.1222 [MeV] E_kin= 34.321 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.553 [deg] transit time factor=  0.99988 dE= 0.11152 [MeV] E_kin= 34.432 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 22.323 [deg] transit time factor=  0.99988 dE= 0.12247 [MeV] E_kin= 34.555 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 32.075 [deg] transit time factor=  0.99988 dE= 0.1124 [MeV] E_kin= 34.667 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.816 [deg] transit time factor=  0.99988 dE= 0.12332 [MeV] E_kin= 34.79 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.887 [deg] transit time factor=  0.99988 dE= 0.1131 [MeV] E_kin= 34.904 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.829 [deg] transit time factor=  0.99988 dE= 0.12381 [MeV] E_kin= 35.027 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.285 [deg] transit time factor=  0.99988 dE= 0.11297 [MeV] E_kin= 35.14 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 49, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 49 (local frame) at integration step 35280
+OPAL{0}> * T = 5980.2 ns, Live Particles: 102192
+OPAL{0}> * E = 35.483 MeV, beta * gamma = 0.19538
+OPAL{0}> * Bunch position: R =  1037.2 mm, Theta = -138.75 Deg, Z = 2.1612 mm
+OPAL{0}> * Local Azimuth = 223.94 Deg, Local Elevation = -0.082021 Deg
+OPAL{0}> * Cavity RF3B Phase= 22.153 [deg] transit time factor=  0.99988 dE= 0.12385 [MeV] E_kin= 35.264 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 32.208 [deg] transit time factor=  0.99988 dE= 0.1133 [MeV] E_kin= 35.377 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 21.919 [deg] transit time factor=  0.99988 dE= 0.12433 [MeV] E_kin= 35.502 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.735 [deg] transit time factor=  0.99988 dE= 0.11425 [MeV] E_kin= 35.616 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.541 [deg] transit time factor=  0.99988 dE= 0.12512 [MeV] E_kin= 35.741 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.802 [deg] transit time factor=  0.99988 dE= 0.11461 [MeV] E_kin= 35.856 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.711 [deg] transit time factor=  0.99988 dE= 0.12542 [MeV] E_kin= 35.981 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 32.044 [deg] transit time factor=  0.99988 dE= 0.11461 [MeV] E_kin= 36.096 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 50, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 50 (local frame) at integration step 36000
+OPAL{0}> * T = 6102.3 ns, Live Particles: 102192
+OPAL{0}> * E = 36.455 MeV, beta * gamma = 0.19806
+OPAL{0}> * Bunch position: R =  1050.2 mm, Theta = -138.67 Deg, Z = 1.3788 mm
+OPAL{0}> * Local Azimuth = 223.96 Deg, Local Elevation = 0.097424 Deg
+OPAL{0}> * Cavity RF3B Phase= 21.798 [deg] transit time factor=  0.99988 dE= 0.12562 [MeV] E_kin= 36.221 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.656 [deg] transit time factor=  0.99988 dE= 0.11536 [MeV] E_kin= 36.337 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 21.367 [deg] transit time factor=  0.99988 dE= 0.12635 [MeV] E_kin= 36.463 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.347 [deg] transit time factor=  0.99988 dE= 0.11617 [MeV] E_kin= 36.579 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.173 [deg] transit time factor=  0.99988 dE= 0.12702 [MeV] E_kin= 36.706 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.559 [deg] transit time factor=  0.99988 dE= 0.11632 [MeV] E_kin= 36.823 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.424 [deg] transit time factor=  0.99988 dE= 0.12718 [MeV] E_kin= 36.95 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.626 [deg] transit time factor=  0.99988 dE= 0.11651 [MeV] E_kin= 37.066 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 51, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 51 (local frame) at integration step 36720
+OPAL{0}> * T = 6224.3 ns, Live Particles: 102192
+OPAL{0}> * E = 37.441 MeV, beta * gamma = 0.20075
+OPAL{0}> * Bunch position: R =  1063.7 mm, Theta = -138.63 Deg, Z = -2.9788 mm
+OPAL{0}> * Local Azimuth = 223.95 Deg, Local Elevation = 0.029175 Deg
+OPAL{0}> * Cavity RF3B Phase= 21.367 [deg] transit time factor=  0.99988 dE= 0.12752 [MeV] E_kin= 37.194 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.301 [deg] transit time factor=  0.99989 dE= 0.11724 [MeV] E_kin= 37.311 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 21.043 [deg] transit time factor=  0.99989 dE= 0.12823 [MeV] E_kin= 37.439 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.32 [deg] transit time factor=  0.99989 dE= 0.11767 [MeV] E_kin= 37.557 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.192 [deg] transit time factor=  0.99989 dE= 0.12858 [MeV] E_kin= 37.686 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.727 [deg] transit time factor=  0.99989 dE= 0.11752 [MeV] E_kin= 37.803 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.562 [deg] transit time factor=  0.99989 dE= 0.12858 [MeV] E_kin= 37.932 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.742 [deg] transit time factor=  0.99989 dE= 0.11775 [MeV] E_kin= 38.049 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 52, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 52 (local frame) at integration step 37440
+OPAL{0}> * T = 6346.4 ns, Live Particles: 102192
+OPAL{0}> * E = 38.439 MeV, beta * gamma = 0.20343
+OPAL{0}> * Bunch position: R =  1077 mm, Theta = -138.66 Deg, Z = 0.20359 mm
+OPAL{0}> * Local Azimuth = 223.93 Deg, Local Elevation = -0.10778 Deg
+OPAL{0}> * Cavity RF3B Phase= 21.449 [deg] transit time factor=  0.99989 dE= 0.12898 [MeV] E_kin= 38.178 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.501 [deg] transit time factor=  0.99989 dE= 0.11841 [MeV] E_kin= 38.297 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 21.258 [deg] transit time factor=  0.99989 dE= 0.1296 [MeV] E_kin= 38.426 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.685 [deg] transit time factor=  0.99989 dE= 0.11861 [MeV] E_kin= 38.545 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.521 [deg] transit time factor=  0.99989 dE= 0.12979 [MeV] E_kin= 38.675 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.948 [deg] transit time factor=  0.99989 dE= 0.11857 [MeV] E_kin= 38.793 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.689 [deg] transit time factor=  0.99989 dE= 0.12993 [MeV] E_kin= 38.923 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.773 [deg] transit time factor=  0.99989 dE= 0.11907 [MeV] E_kin= 39.042 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 53, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 53 (local frame) at integration step 38160
+OPAL{0}> * T = 6468.4 ns, Live Particles: 102192
+OPAL{0}> * E = 39.447 MeV, beta * gamma = 0.20611
+OPAL{0}> * Bunch position: R =  1090.5 mm, Theta = -138.66 Deg, Z = 2.8427 mm
+OPAL{0}> * Local Azimuth = 223.92 Deg, Local Elevation = 0.040614 Deg
+OPAL{0}> * Cavity RF3B Phase= 21.452 [deg] transit time factor=  0.99989 dE= 0.1305 [MeV] E_kin= 39.173 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.665 [deg] transit time factor=  0.99989 dE= 0.11962 [MeV] E_kin= 39.293 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 21.437 [deg] transit time factor=  0.99989 dE= 0.13098 [MeV] E_kin= 39.423 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.942 [deg] transit time factor=  0.99989 dE= 0.11964 [MeV] E_kin= 39.543 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.711 [deg] transit time factor=  0.99989 dE= 0.13107 [MeV] E_kin= 39.674 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.946 [deg] transit time factor=  0.99989 dE= 0.11988 [MeV] E_kin= 39.794 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.582 [deg] transit time factor=  0.99989 dE= 0.13147 [MeV] E_kin= 39.926 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.577 [deg] transit time factor=  0.99989 dE= 0.12068 [MeV] E_kin= 40.046 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 54, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 54 (local frame) at integration step 38880
+OPAL{0}> * T = 6590.5 ns, Live Particles: 102192
+OPAL{0}> * E = 40.467 MeV, beta * gamma = 0.20879
+OPAL{0}> * Bunch position: R =  1104.1 mm, Theta = -138.61 Deg, Z = -2.0486 mm
+OPAL{0}> * Local Azimuth = 223.92 Deg, Local Elevation = 0.081622 Deg
+OPAL{0}> * Cavity RF3B Phase= 21.224 [deg] transit time factor=  0.99989 dE= 0.13221 [MeV] E_kin= 40.178 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.548 [deg] transit time factor=  0.99989 dE= 0.12116 [MeV] E_kin= 40.3 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 21.302 [deg] transit time factor=  0.99989 dE= 0.1326 [MeV] E_kin= 40.432 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.798 [deg] transit time factor=  0.99989 dE= 0.12117 [MeV] E_kin= 40.553 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.505 [deg] transit time factor=  0.99989 dE= 0.13273 [MeV] E_kin= 40.686 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.684 [deg] transit time factor=  0.99989 dE= 0.12158 [MeV] E_kin= 40.808 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.296 [deg] transit time factor=  0.99989 dE= 0.13324 [MeV] E_kin= 40.941 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.448 [deg] transit time factor=  0.9999 dE= 0.12227 [MeV] E_kin= 41.063 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 55, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 55 (local frame) at integration step 39600
+OPAL{0}> * T = 6712.5 ns, Live Particles: 102192
+OPAL{0}> * E = 41.5 MeV, beta * gamma = 0.21146
+OPAL{0}> * Bunch position: R =  1117.7 mm, Theta = -138.62 Deg, Z = -1.6518 mm
+OPAL{0}> * Local Azimuth = 223.93 Deg, Local Elevation = -0.086693 Deg
+OPAL{0}> * Cavity RF3B Phase= 21.128 [deg] transit time factor=  0.9999 dE= 0.13385 [MeV] E_kin= 41.197 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.639 [deg] transit time factor=  0.9999 dE= 0.12243 [MeV] E_kin= 41.319 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 21.378 [deg] transit time factor=  0.9999 dE= 0.13403 [MeV] E_kin= 41.453 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.819 [deg] transit time factor=  0.9999 dE= 0.12248 [MeV] E_kin= 41.576 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.447 [deg] transit time factor=  0.9999 dE= 0.13424 [MeV] E_kin= 41.71 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.537 [deg] transit time factor=  0.9999 dE= 0.12313 [MeV] E_kin= 41.833 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.108 [deg] transit time factor=  0.9999 dE= 0.13491 [MeV] E_kin= 41.968 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.353 [deg] transit time factor=  0.9999 dE= 0.12379 [MeV] E_kin= 42.092 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 56, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 56 (local frame) at integration step 40320
+OPAL{0}> * T = 6834.6 ns, Live Particles: 102192
+OPAL{0}> * E = 42.545 MeV, beta * gamma = 0.21414
+OPAL{0}> * Bunch position: R =  1131.4 mm, Theta = -138.62 Deg, Z = 2.9568 mm
+OPAL{0}> * Local Azimuth = 223.95 Deg, Local Elevation = -0.032573 Deg
+OPAL{0}> * Cavity RF3B Phase= 21.027 [deg] transit time factor=  0.9999 dE= 0.13546 [MeV] E_kin= 42.227 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.593 [deg] transit time factor=  0.9999 dE= 0.12386 [MeV] E_kin= 42.351 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 21.29 [deg] transit time factor=  0.9999 dE= 0.13559 [MeV] E_kin= 42.487 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.685 [deg] transit time factor=  0.9999 dE= 0.12401 [MeV] E_kin= 42.611 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.276 [deg] transit time factor=  0.9999 dE= 0.1359 [MeV] E_kin= 42.747 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.445 [deg] transit time factor=  0.9999 dE= 0.12465 [MeV] E_kin= 42.871 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.028 [deg] transit time factor=  0.9999 dE= 0.13653 [MeV] E_kin= 43.008 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.418 [deg] transit time factor=  0.9999 dE= 0.1251 [MeV] E_kin= 43.133 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 57, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 57 (local frame) at integration step 41040
+OPAL{0}> * T = 6956.6 ns, Live Particles: 102192
+OPAL{0}> * E = 43.602 MeV, beta * gamma = 0.21681
+OPAL{0}> * Bunch position: R =  1144.7 mm, Theta = -138.63 Deg, Z = 0.055094 mm
+OPAL{0}> * Local Azimuth = 223.98 Deg, Local Elevation = 0.10284 Deg
+OPAL{0}> * Cavity RF3B Phase= 21.076 [deg] transit time factor=  0.9999 dE= 0.13692 [MeV] E_kin= 43.27 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.589 [deg] transit time factor=  0.9999 dE= 0.12521 [MeV] E_kin= 43.395 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 21.207 [deg] transit time factor=  0.9999 dE= 0.13713 [MeV] E_kin= 43.532 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.48 [deg] transit time factor=  0.9999 dE= 0.12564 [MeV] E_kin= 43.658 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.028 [deg] transit time factor=  0.9999 dE= 0.13764 [MeV] E_kin= 43.796 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.298 [deg] transit time factor=  0.9999 dE= 0.12626 [MeV] E_kin= 43.922 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 20.903 [deg] transit time factor=  0.9999 dE= 0.1382 [MeV] E_kin= 44.06 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.455 [deg] transit time factor=  0.9999 dE= 0.12646 [MeV] E_kin= 44.187 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 58, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 58 (local frame) at integration step 41760
+OPAL{0}> * T = 7078.7 ns, Live Particles: 102192
+OPAL{0}> * E = 44.671 MeV, beta * gamma = 0.21949
+OPAL{0}> * Bunch position: R =  1157.8 mm, Theta = -138.66 Deg, Z = -3.001 mm
+OPAL{0}> * Local Azimuth = 224.01 Deg, Local Elevation = -0.023804 Deg
+OPAL{0}> * Cavity RF3B Phase= 21.105 [deg] transit time factor=  0.9999 dE= 0.13842 [MeV] E_kin= 44.325 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.603 [deg] transit time factor=  0.9999 dE= 0.12656 [MeV] E_kin= 44.452 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 21.17 [deg] transit time factor=  0.9999 dE= 0.13866 [MeV] E_kin= 44.59 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.409 [deg] transit time factor=  0.9999 dE= 0.12712 [MeV] E_kin= 44.717 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 20.932 [deg] transit time factor=  0.9999 dE= 0.13926 [MeV] E_kin= 44.857 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.28 [deg] transit time factor=  0.9999 dE= 0.1277 [MeV] E_kin= 44.984 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 20.862 [deg] transit time factor=  0.9999 dE= 0.13977 [MeV] E_kin= 45.124 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.371 [deg] transit time factor=  0.9999 dE= 0.12794 [MeV] E_kin= 45.252 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 59, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 59 (local frame) at integration step 42480
+OPAL{0}> * T = 7200.7 ns, Live Particles: 102192
+OPAL{0}> * E = 45.753 MeV, beta * gamma = 0.22216
+OPAL{0}> * Bunch position: R =  1170.6 mm, Theta = -138.63 Deg, Z = 1.5621 mm
+OPAL{0}> * Local Azimuth = 224.03 Deg, Local Elevation = -0.088964 Deg
+OPAL{0}> * Cavity RF3B Phase= 20.936 [deg] transit time factor=  0.9999 dE= 0.14006 [MeV] E_kin= 45.392 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.25 [deg] transit time factor=  0.99991 dE= 0.1284 [MeV] E_kin= 45.52 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 20.739 [deg] transit time factor=  0.99991 dE= 0.14057 [MeV] E_kin= 45.661 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 30.976 [deg] transit time factor=  0.99991 dE= 0.12914 [MeV] E_kin= 45.79 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 20.503 [deg] transit time factor=  0.99991 dE= 0.14125 [MeV] E_kin= 45.931 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.027 [deg] transit time factor=  0.99991 dE= 0.12951 [MeV] E_kin= 46.061 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 20.631 [deg] transit time factor=  0.99991 dE= 0.14158 [MeV] E_kin= 46.203 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.234 [deg] transit time factor=  0.99991 dE= 0.12957 [MeV] E_kin= 46.332 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 60, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 60 (local frame) at integration step 43200
+OPAL{0}> * T = 7322.7 ns, Live Particles: 102192
+OPAL{0}> * E = 46.848 MeV, beta * gamma = 0.22484
+OPAL{0}> * Bunch position: R =  1183.6 mm, Theta = -138.64 Deg, Z = 2.2779 mm
+OPAL{0}> * Local Azimuth = 224.03 Deg, Local Elevation = 0.06373 Deg
+OPAL{0}> * Cavity RF3B Phase= 20.786 [deg] transit time factor=  0.99991 dE= 0.14177 [MeV] E_kin= 46.474 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.135 [deg] transit time factor=  0.99991 dE= 0.13 [MeV] E_kin= 46.604 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 20.622 [deg] transit time factor=  0.99991 dE= 0.14228 [MeV] E_kin= 46.746 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 30.994 [deg] transit time factor=  0.99991 dE= 0.1306 [MeV] E_kin= 46.877 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 20.54 [deg] transit time factor=  0.99991 dE= 0.14283 [MeV] E_kin= 47.02 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.171 [deg] transit time factor=  0.99991 dE= 0.13077 [MeV] E_kin= 47.15 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 20.752 [deg] transit time factor=  0.99991 dE= 0.14304 [MeV] E_kin= 47.293 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.313 [deg] transit time factor=  0.99991 dE= 0.13089 [MeV] E_kin= 47.424 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 61, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 61 (local frame) at integration step 43920
+OPAL{0}> * T = 7444.8 ns, Live Particles: 102192
+OPAL{0}> * E = 47.954 MeV, beta * gamma = 0.22751
+OPAL{0}> * Bunch position: R =  1196.6 mm, Theta = -138.68 Deg, Z = -2.486 mm
+OPAL{0}> * Local Azimuth = 224.01 Deg, Local Elevation = 0.06035 Deg
+OPAL{0}> * Cavity RF3B Phase= 20.823 [deg] transit time factor=  0.99991 dE= 0.14331 [MeV] E_kin= 47.568 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.206 [deg] transit time factor=  0.99991 dE= 0.13138 [MeV] E_kin= 47.699 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 20.706 [deg] transit time factor=  0.99991 dE= 0.14384 [MeV] E_kin= 47.843 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.272 [deg] transit time factor=  0.99991 dE= 0.13172 [MeV] E_kin= 47.975 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 20.846 [deg] transit time factor=  0.99991 dE= 0.14418 [MeV] E_kin= 48.119 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.562 [deg] transit time factor=  0.99991 dE= 0.13169 [MeV] E_kin= 48.25 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.107 [deg] transit time factor=  0.99991 dE= 0.14428 [MeV] E_kin= 48.395 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.58 [deg] transit time factor=  0.99991 dE= 0.13195 [MeV] E_kin= 48.527 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 62, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 62 (local frame) at integration step 44640
+OPAL{0}> * T = 7566.8 ns, Live Particles: 102192
+OPAL{0}> * E = 49.07 MeV, beta * gamma = 0.23017
+OPAL{0}> * Bunch position: R =  1209.5 mm, Theta = -138.69 Deg, Z = -0.95596 mm
+OPAL{0}> * Local Azimuth = 223.98 Deg, Local Elevation = -0.09049 Deg
+OPAL{0}> * Cavity RF3B Phase= 21.038 [deg] transit time factor=  0.99991 dE= 0.14468 [MeV] E_kin= 48.671 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.424 [deg] transit time factor=  0.99991 dE= 0.13255 [MeV] E_kin= 48.804 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 20.915 [deg] transit time factor=  0.99991 dE= 0.14526 [MeV] E_kin= 48.949 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.56 [deg] transit time factor=  0.99991 dE= 0.13279 [MeV] E_kin= 49.082 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.106 [deg] transit time factor=  0.99991 dE= 0.14552 [MeV] E_kin= 49.227 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.742 [deg] transit time factor=  0.99991 dE= 0.13285 [MeV] E_kin= 49.36 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 21.211 [deg] transit time factor=  0.99991 dE= 0.14573 [MeV] E_kin= 49.506 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.566 [deg] transit time factor=  0.99991 dE= 0.1334 [MeV] E_kin= 49.639 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 63, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 63 (local frame) at integration step 45360
+OPAL{0}> * T = 7688.9 ns, Live Particles: 102192
+OPAL{0}> * E = 50.197 MeV, beta * gamma = 0.23284
+OPAL{0}> * Bunch position: R =  1222.6 mm, Theta = -138.65 Deg, Z = 3.0775 mm
+OPAL{0}> * Local Azimuth = 223.96 Deg, Local Elevation = -0.0062372 Deg
+OPAL{0}> * Cavity RF3B Phase= 20.978 [deg] transit time factor=  0.99991 dE= 0.14634 [MeV] E_kin= 49.786 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.402 [deg] transit time factor=  0.99991 dE= 0.13406 [MeV] E_kin= 49.92 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 20.879 [deg] transit time factor=  0.99991 dE= 0.14692 [MeV] E_kin= 50.067 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.532 [deg] transit time factor=  0.99991 dE= 0.13429 [MeV] E_kin= 50.201 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 21.028 [deg] transit time factor=  0.99991 dE= 0.14718 [MeV] E_kin= 50.348 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.562 [deg] transit time factor=  0.99991 dE= 0.13456 [MeV] E_kin= 50.483 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 20.984 [deg] transit time factor=  0.99991 dE= 0.14756 [MeV] E_kin= 50.63 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.372 [deg] transit time factor=  0.99991 dE= 0.13519 [MeV] E_kin= 50.765 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 64, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 64 (local frame) at integration step 46080
+OPAL{0}> * T = 7810.9 ns, Live Particles: 102192
+OPAL{0}> * E = 51.338 MeV, beta * gamma = 0.2355
+OPAL{0}> * Bunch position: R =  1236 mm, Theta = -138.63 Deg, Z = -0.6216 mm
+OPAL{0}> * Local Azimuth = 223.96 Deg, Local Elevation = 0.094204 Deg
+OPAL{0}> * Cavity RF3B Phase= 20.797 [deg] transit time factor=  0.99991 dE= 0.14819 [MeV] E_kin= 50.914 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.375 [deg] transit time factor=  0.99992 dE= 0.13563 [MeV] E_kin= 51.049 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 20.859 [deg] transit time factor=  0.99992 dE= 0.14859 [MeV] E_kin= 51.198 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.519 [deg] transit time factor=  0.99992 dE= 0.13578 [MeV] E_kin= 51.334 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 20.964 [deg] transit time factor=  0.99992 dE= 0.14884 [MeV] E_kin= 51.483 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.407 [deg] transit time factor=  0.99992 dE= 0.13626 [MeV] E_kin= 51.619 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 20.793 [deg] transit time factor=  0.99992 dE= 0.14938 [MeV] E_kin= 51.768 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.242 [deg] transit time factor=  0.99992 dE= 0.13691 [MeV] E_kin= 51.905 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 65, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 65 (local frame) at integration step 46800
+OPAL{0}> * T = 7933 ns, Live Particles: 102192
+OPAL{0}> * E = 52.492 MeV, beta * gamma = 0.23817
+OPAL{0}> * Bunch position: R =  1249.5 mm, Theta = -138.62 Deg, Z = -2.7619 mm
+OPAL{0}> * Local Azimuth = 223.97 Deg, Local Elevation = -0.039323 Deg
+OPAL{0}> * Cavity RF3B Phase= 20.68 [deg] transit time factor=  0.99992 dE= 0.14998 [MeV] E_kin= 52.055 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.366 [deg] transit time factor=  0.99992 dE= 0.13716 [MeV] E_kin= 52.192 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 20.835 [deg] transit time factor=  0.99992 dE= 0.15026 [MeV] E_kin= 52.342 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.438 [deg] transit time factor=  0.99992 dE= 0.13737 [MeV] E_kin= 52.48 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 20.826 [deg] transit time factor=  0.99992 dE= 0.15059 [MeV] E_kin= 52.63 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 31.204 [deg] transit time factor=  0.99992 dE= 0.13805 [MeV] E_kin= 52.768 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 20.568 [deg] transit time factor=  0.99992 dE= 0.15127 [MeV] E_kin= 52.92 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 31.097 [deg] transit time factor=  0.99992 dE= 0.13866 [MeV] E_kin= 53.058 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 66, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 66 (local frame) at integration step 47520
+OPAL{0}> * T = 8055 ns, Live Particles: 102192
+OPAL{0}> * E = 53.66 MeV, beta * gamma = 0.24084
+OPAL{0}> * Bunch position: R =  1262.9 mm, Theta = -138.61 Deg, Z = 2.0372 mm
+OPAL{0}> * Local Azimuth = 224 Deg, Local Elevation = -0.072706 Deg
+OPAL{0}> * Cavity RF3B Phase= 20.534 [deg] transit time factor=  0.99992 dE= 0.1518 [MeV] E_kin= 53.21 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.242 [deg] transit time factor=  0.99992 dE= 0.13884 [MeV] E_kin= 53.349 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 20.666 [deg] transit time factor=  0.99992 dE= 0.15205 [MeV] E_kin= 53.501 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 31.165 [deg] transit time factor=  0.99992 dE= 0.13925 [MeV] E_kin= 53.64 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 20.505 [deg] transit time factor=  0.99992 dE= 0.15254 [MeV] E_kin= 53.793 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 30.89 [deg] transit time factor=  0.99992 dE= 0.14004 [MeV] E_kin= 53.933 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 20.257 [deg] transit time factor=  0.99992 dE= 0.15326 [MeV] E_kin= 54.086 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 30.899 [deg] transit time factor=  0.99992 dE= 0.14048 [MeV] E_kin= 54.227 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 67, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 67 (local frame) at integration step 48240
+OPAL{0}> * T = 8177.1 ns, Live Particles: 102192
+OPAL{0}> * E = 54.843 MeV, beta * gamma = 0.24352
+OPAL{0}> * Bunch position: R =  1276.1 mm, Theta = -138.61 Deg, Z = 1.7587 mm
+OPAL{0}> * Local Azimuth = 224.03 Deg, Local Elevation = 0.07422 Deg
+OPAL{0}> * Cavity RF3B Phase= 20.337 [deg] transit time factor=  0.99992 dE= 0.15366 [MeV] E_kin= 54.38 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 31.046 [deg] transit time factor=  0.99992 dE= 0.14062 [MeV] E_kin= 54.521 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 20.432 [deg] transit time factor=  0.99992 dE= 0.1539 [MeV] E_kin= 54.675 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 30.89 [deg] transit time factor=  0.99992 dE= 0.14115 [MeV] E_kin= 54.816 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 20.214 [deg] transit time factor=  0.99992 dE= 0.15449 [MeV] E_kin= 54.971 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 30.687 [deg] transit time factor=  0.99992 dE= 0.14187 [MeV] E_kin= 55.112 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 20.067 [deg] transit time factor=  0.99992 dE= 0.15512 [MeV] E_kin= 55.267 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 30.778 [deg] transit time factor=  0.99992 dE= 0.14216 [MeV] E_kin= 55.41 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 68, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 68 (local frame) at integration step 48960
+OPAL{0}> * T = 8299.1 ns, Live Particles: 102192
+OPAL{0}> * E = 56.04 MeV, beta * gamma = 0.2462
+OPAL{0}> * Bunch position: R =  1289 mm, Theta = -138.6 Deg, Z = -2.8606 mm
+OPAL{0}> * Local Azimuth = 224.06 Deg, Local Elevation = 0.036299 Deg
+OPAL{0}> * Cavity RF3B Phase= 20.186 [deg] transit time factor=  0.99992 dE= 0.15542 [MeV] E_kin= 55.565 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 30.797 [deg] transit time factor=  0.99992 dE= 0.14244 [MeV] E_kin= 55.708 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 20.126 [deg] transit time factor=  0.99992 dE= 0.15581 [MeV] E_kin= 55.863 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 30.541 [deg] transit time factor=  0.99992 dE= 0.14316 [MeV] E_kin= 56.006 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 19.811 [deg] transit time factor=  0.99992 dE= 0.15654 [MeV] E_kin= 56.163 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 30.464 [deg] transit time factor=  0.99992 dE= 0.14373 [MeV] E_kin= 56.307 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 19.813 [deg] transit time factor=  0.99992 dE= 0.15703 [MeV] E_kin= 56.464 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 30.636 [deg] transit time factor=  0.99992 dE= 0.14386 [MeV] E_kin= 56.608 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 69, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 69 (local frame) at integration step 49680
+OPAL{0}> * T = 8421.2 ns, Live Particles: 102192
+OPAL{0}> * E = 57.251 MeV, beta * gamma = 0.24889
+OPAL{0}> * Bunch position: R =  1301.5 mm, Theta = -138.58 Deg, Z = -0.3975 mm
+OPAL{0}> * Local Azimuth = 224.08 Deg, Local Elevation = -0.090112 Deg
+OPAL{0}> * Cavity RF3B Phase= 20.018 [deg] transit time factor=  0.99992 dE= 0.1572 [MeV] E_kin= 56.765 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 30.567 [deg] transit time factor=  0.99992 dE= 0.14425 [MeV] E_kin= 56.909 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 19.816 [deg] transit time factor=  0.99992 dE= 0.15773 [MeV] E_kin= 57.067 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 30.322 [deg] transit time factor=  0.99992 dE= 0.14499 [MeV] E_kin= 57.212 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 19.606 [deg] transit time factor=  0.99992 dE= 0.1584 [MeV] E_kin= 57.37 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 30.364 [deg] transit time factor=  0.99992 dE= 0.14538 [MeV] E_kin= 57.516 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 19.704 [deg] transit time factor=  0.99992 dE= 0.15875 [MeV] E_kin= 57.674 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 30.469 [deg] transit time factor=  0.99992 dE= 0.14555 [MeV] E_kin= 57.82 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 70, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 70 (local frame) at integration step 50400
+OPAL{0}> * T = 8543.2 ns, Live Particles: 102192
+OPAL{0}> * E = 58.476 MeV, beta * gamma = 0.25158
+OPAL{0}> * Bunch position: R =  1314.5 mm, Theta = -138.56 Deg, Z = 3.0487 mm
+OPAL{0}> * Local Azimuth = 224.07 Deg, Local Elevation = -0.00086547 Deg
+OPAL{0}> * Cavity RF3B Phase= 19.751 [deg] transit time factor=  0.99992 dE= 0.15903 [MeV] E_kin= 57.979 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 30.294 [deg] transit time factor=  0.99993 dE= 0.14613 [MeV] E_kin= 58.125 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 19.546 [deg] transit time factor=  0.99993 dE= 0.15963 [MeV] E_kin= 58.285 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 30.225 [deg] transit time factor=  0.99993 dE= 0.14668 [MeV] E_kin= 58.431 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 19.566 [deg] transit time factor=  0.99993 dE= 0.16012 [MeV] E_kin= 58.591 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 19.877 [deg] transit time factor=  0.99993 dE= 0.16019 [MeV] E_kin= 58.898 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 30.655 [deg] transit time factor=  0.99993 dE= 0.14672 [MeV] E_kin= 59.045 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 71, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 71 (local frame) at integration step 51120
+OPAL{0}> * T = 8665.2 ns, Live Particles: 102192
+OPAL{0}> * E = 59.712 MeV, beta * gamma = 0.25426
+OPAL{0}> * Bunch position: R =  1327 mm, Theta = -138.58 Deg, Z = -0.97974 mm
+OPAL{0}> * Local Azimuth = 224.05 Deg, Local Elevation = 0.085497 Deg
+OPAL{0}> * Cavity RF3B Phase= 19.917 [deg] transit time factor=  0.99993 dE= 0.16045 [MeV] E_kin= 59.205 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 30.479 [deg] transit time factor=  0.99993 dE= 0.14732 [MeV] E_kin= 59.353 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 19.741 [deg] transit time factor=  0.99993 dE= 0.16105 [MeV] E_kin= 59.514 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 30.531 [deg] transit time factor=  0.99993 dE= 0.14768 [MeV] E_kin= 59.662 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 19.864 [deg] transit time factor=  0.99993 dE= 0.16138 [MeV] E_kin= 59.823 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 30.724 [deg] transit time factor=  0.99993 dE= 0.14771 [MeV] E_kin= 59.971 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 20.044 [deg] transit time factor=  0.99993 dE= 0.1615 [MeV] E_kin= 60.132 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 30.532 [deg] transit time factor=  0.99993 dE= 0.14826 [MeV] E_kin= 60.28 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 72, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 72 (local frame) at integration step 51840
+OPAL{0}> * T = 8787.3 ns, Live Particles: 102192
+OPAL{0}> * E = 60.96 MeV, beta * gamma = 0.25695
+OPAL{0}> * Bunch position: R =  1340.1 mm, Theta = -138.52 Deg, Z = -2.5669 mm
+OPAL{0}> * Local Azimuth = 224.03 Deg, Local Elevation = -0.046842 Deg
+OPAL{0}> * Cavity RF3B Phase= 19.724 [deg] transit time factor=  0.99993 dE= 0.16216 [MeV] E_kin= 60.443 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 30.283 [deg] transit time factor=  0.99993 dE= 0.14906 [MeV] E_kin= 60.592 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 19.556 [deg] transit time factor=  0.99993 dE= 0.16283 [MeV] E_kin= 60.754 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 30.455 [deg] transit time factor=  0.99993 dE= 0.14923 [MeV] E_kin= 60.904 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 19.785 [deg] transit time factor=  0.99993 dE= 0.16301 [MeV] E_kin= 61.067 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 30.592 [deg] transit time factor=  0.99993 dE= 0.1493 [MeV] E_kin= 61.216 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 19.822 [deg] transit time factor=  0.99993 dE= 0.16324 [MeV] E_kin= 61.379 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 30.326 [deg] transit time factor=  0.99993 dE= 0.14999 [MeV] E_kin= 61.529 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 73, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 73 (local frame) at integration step 52560
+OPAL{0}> * T = 8909.3 ns, Live Particles: 102192
+OPAL{0}> * E = 62.221 MeV, beta * gamma = 0.25963
+OPAL{0}> * Bunch position: R =  1353.4 mm, Theta = -138.49 Deg, Z = 2.2744 mm
+OPAL{0}> * Local Azimuth = 224.02 Deg, Local Elevation = -0.062429 Deg
+OPAL{0}> * Cavity RF3B Phase= 19.527 [deg] transit time factor=  0.99993 dE= 0.16393 [MeV] E_kin= 61.693 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 30.233 [deg] transit time factor=  0.99993 dE= 0.15058 [MeV] E_kin= 61.844 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 19.537 [deg] transit time factor=  0.99993 dE= 0.16441 [MeV] E_kin= 62.008 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 30.482 [deg] transit time factor=  0.99993 dE= 0.15057 [MeV] E_kin= 62.159 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 19.774 [deg] transit time factor=  0.99993 dE= 0.1645 [MeV] E_kin= 62.323 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 30.444 [deg] transit time factor=  0.99993 dE= 0.15087 [MeV] E_kin= 62.474 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 19.632 [deg] transit time factor=  0.99993 dE= 0.16493 [MeV] E_kin= 62.639 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 30.169 [deg] transit time factor=  0.99993 dE= 0.15166 [MeV] E_kin= 62.791 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 74, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 74 (local frame) at integration step 53280
+OPAL{0}> * T = 9031.4 ns, Live Particles: 102192
+OPAL{0}> * E = 63.495 MeV, beta * gamma = 0.26232
+OPAL{0}> * Bunch position: R =  1366.8 mm, Theta = -138.46 Deg, Z = 1.3242 mm
+OPAL{0}> * Local Azimuth = 224.03 Deg, Local Elevation = 0.077218 Deg
+OPAL{0}> * Cavity RF3B Phase= 19.402 [deg] transit time factor=  0.99993 dE= 0.16563 [MeV] E_kin= 62.956 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 30.271 [deg] transit time factor=  0.99993 dE= 0.15196 [MeV] E_kin= 63.108 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 19.581 [deg] transit time factor=  0.99993 dE= 0.16589 [MeV] E_kin= 63.274 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 30.437 [deg] transit time factor=  0.99993 dE= 0.15199 [MeV] E_kin= 63.426 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 19.651 [deg] transit time factor=  0.99993 dE= 0.16608 [MeV] E_kin= 63.592 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 30.129 [deg] transit time factor=  0.99993 dE= 0.15272 [MeV] E_kin= 63.745 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 19.278 [deg] transit time factor=  0.99993 dE= 0.16682 [MeV] E_kin= 63.912 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 29.885 [deg] transit time factor=  0.99993 dE= 0.15355 [MeV] E_kin= 64.065 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 75, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 75 (local frame) at integration step 54000
+OPAL{0}> * T = 9153.4 ns, Live Particles: 102192
+OPAL{0}> * E = 64.783 MeV, beta * gamma = 0.26501
+OPAL{0}> * Bunch position: R =  1380.2 mm, Theta = -138.41 Deg, Z = -3.0328 mm
+OPAL{0}> * Local Azimuth = 224.06 Deg, Local Elevation = 0.018734 Deg
+OPAL{0}> * Cavity RF3B Phase= 19.143 [deg] transit time factor=  0.99993 dE= 0.16748 [MeV] E_kin= 64.233 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 30.075 [deg] transit time factor=  0.99993 dE= 0.15367 [MeV] E_kin= 64.386 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 19.351 [deg] transit time factor=  0.99993 dE= 0.16764 [MeV] E_kin= 64.554 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 30.042 [deg] transit time factor=  0.99993 dE= 0.15396 [MeV] E_kin= 64.708 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 19.2 [deg] transit time factor=  0.99993 dE= 0.16806 [MeV] E_kin= 64.876 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 29.665 [deg] transit time factor=  0.99993 dE= 0.15489 [MeV] E_kin= 65.031 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 18.849 [deg] transit time factor=  0.99993 dE= 0.16888 [MeV] E_kin= 65.2 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 29.664 [deg] transit time factor=  0.99993 dE= 0.15539 [MeV] E_kin= 65.355 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 76, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 76 (local frame) at integration step 54720
+OPAL{0}> * T = 9275.5 ns, Live Particles: 102192
+OPAL{0}> * E = 66.087 MeV, beta * gamma = 0.26771
+OPAL{0}> * Bunch position: R =  1393.4 mm, Theta = -138.39 Deg, Z = 0.12578 mm
+OPAL{0}> * Local Azimuth = 224.09 Deg, Local Elevation = -0.086625 Deg
+OPAL{0}> * Cavity RF3B Phase= 18.965 [deg] transit time factor=  0.99993 dE= 0.16927 [MeV] E_kin= 65.525 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 29.922 [deg] transit time factor=  0.99993 dE= 0.15532 [MeV] E_kin= 65.68 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 19.16 [deg] transit time factor=  0.99993 dE= 0.16935 [MeV] E_kin= 65.849 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 29.726 [deg] transit time factor=  0.99993 dE= 0.15586 [MeV] E_kin= 66.005 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 18.863 [deg] transit time factor=  0.99993 dE= 0.16997 [MeV] E_kin= 66.175 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 29.415 [deg] transit time factor=  0.99993 dE= 0.15677 [MeV] E_kin= 66.332 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 18.642 [deg] transit time factor=  0.99993 dE= 0.17072 [MeV] E_kin= 66.503 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 29.594 [deg] transit time factor=  0.99993 dE= 0.15697 [MeV] E_kin= 66.66 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 77, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 77 (local frame) at integration step 55440
+OPAL{0}> * T = 9397.5 ns, Live Particles: 102192
+OPAL{0}> * E = 67.405 MeV, beta * gamma = 0.27042
+OPAL{0}> * Bunch position: R =  1406.4 mm, Theta = -138.39 Deg, Z = 2.9935 mm
+OPAL{0}> * Local Azimuth = 224.12 Deg, Local Elevation = 0.018427 Deg
+OPAL{0}> * Cavity RF3B Phase= 18.899 [deg] transit time factor=  0.99993 dE= 0.1709 [MeV] E_kin= 66.83 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 29.787 [deg] transit time factor=  0.99993 dE= 0.15695 [MeV] E_kin= 66.987 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 18.994 [deg] transit time factor=  0.99993 dE= 0.17107 [MeV] E_kin= 67.158 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 29.562 [deg] transit time factor=  0.99993 dE= 0.15759 [MeV] E_kin= 67.316 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 18.733 [deg] transit time factor=  0.99994 dE= 0.17173 [MeV] E_kin= 67.488 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 29.483 [deg] transit time factor=  0.99994 dE= 0.15818 [MeV] E_kin= 67.646 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 18.758 [deg] transit time factor=  0.99994 dE= 0.17222 [MeV] E_kin= 67.818 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 29.759 [deg] transit time factor=  0.99994 dE= 0.15814 [MeV] E_kin= 67.976 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 78, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 78 (local frame) at integration step 56160
+OPAL{0}> * T = 9519.6 ns, Live Particles: 102192
+OPAL{0}> * E = 68.735 MeV, beta * gamma = 0.27312
+OPAL{0}> * Bunch position: R =  1418.9 mm, Theta = -138.39 Deg, Z = -1.6297 mm
+OPAL{0}> * Local Azimuth = 224.13 Deg, Local Elevation = 0.073892 Deg
+OPAL{0}> * Cavity RF3B Phase= 19.03 [deg] transit time factor=  0.99994 dE= 0.17229 [MeV] E_kin= 68.149 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 29.774 [deg] transit time factor=  0.99994 dE= 0.15836 [MeV] E_kin= 68.307 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 18.942 [deg] transit time factor=  0.99994 dE= 0.17267 [MeV] E_kin= 68.48 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 29.527 [deg] transit time factor=  0.99994 dE= 0.15911 [MeV] E_kin= 68.639 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 18.727 [deg] transit time factor=  0.99994 dE= 0.17336 [MeV] E_kin= 68.812 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 29.597 [deg] transit time factor=  0.99994 dE= 0.15946 [MeV] E_kin= 68.972 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 18.873 [deg] transit time factor=  0.99994 dE= 0.17366 [MeV] E_kin= 69.145 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 29.772 [deg] transit time factor=  0.99994 dE= 0.1595 [MeV] E_kin= 69.305 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 79, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 79 (local frame) at integration step 56880
+OPAL{0}> * T = 9641.6 ns, Live Particles: 102192
+OPAL{0}> * E = 70.079 MeV, beta * gamma = 0.27583
+OPAL{0}> * Bunch position: R =  1431.6 mm, Theta = -138.36 Deg, Z = -2.1401 mm
+OPAL{0}> * Local Azimuth = 224.12 Deg, Local Elevation = -0.058394 Deg
+OPAL{0}> * Cavity RF3B Phase= 18.983 [deg] transit time factor=  0.99994 dE= 0.17384 [MeV] E_kin= 69.479 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 29.596 [deg] transit time factor=  0.99994 dE= 0.16006 [MeV] E_kin= 69.639 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 18.755 [deg] transit time factor=  0.99994 dE= 0.17444 [MeV] E_kin= 69.813 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 29.451 [deg] transit time factor=  0.99994 dE= 0.16072 [MeV] E_kin= 69.974 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 18.698 [deg] transit time factor=  0.99994 dE= 0.175 [MeV] E_kin= 70.149 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 29.676 [deg] transit time factor=  0.99994 dE= 0.16078 [MeV] E_kin= 70.31 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 18.954 [deg] transit time factor=  0.99994 dE= 0.17512 [MeV] E_kin= 70.485 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 29.785 [deg] transit time factor=  0.99994 dE= 0.16087 [MeV] E_kin= 70.646 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 80, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 80 (local frame) at integration step 57600
+OPAL{0}> * T = 9763.7 ns, Live Particles: 102192
+OPAL{0}> * E = 71.435 MeV, beta * gamma = 0.27853
+OPAL{0}> * Bunch position: R =  1444.3 mm, Theta = -138.34 Deg, Z = 2.8122 mm
+OPAL{0}> * Local Azimuth = 224.11 Deg, Local Elevation = -0.039959 Deg
+OPAL{0}> * Cavity RF3B Phase= 18.972 [deg] transit time factor=  0.99994 dE= 0.17538 [MeV] E_kin= 70.821 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 29.585 [deg] transit time factor=  0.99994 dE= 0.16152 [MeV] E_kin= 70.982 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 18.771 [deg] transit time factor=  0.99994 dE= 0.17601 [MeV] E_kin= 71.158 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 29.594 [deg] transit time factor=  0.99994 dE= 0.16195 [MeV] E_kin= 71.32 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 18.863 [deg] transit time factor=  0.99994 dE= 0.17638 [MeV] E_kin= 71.497 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 29.818 [deg] transit time factor=  0.99994 dE= 0.16193 [MeV] E_kin= 71.659 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 19.056 [deg] transit time factor=  0.99994 dE= 0.1765 [MeV] E_kin= 71.835 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 29.753 [deg] transit time factor=  0.99994 dE= 0.16229 [MeV] E_kin= 71.998 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 81, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 81 (local frame) at integration step 58320
+OPAL{0}> * T = 9885.7 ns, Live Particles: 102192
+OPAL{0}> * E = 72.804 MeV, beta * gamma = 0.28124
+OPAL{0}> * Bunch position: R =  1457 mm, Theta = -138.27 Deg, Z = 0.24116 mm
+OPAL{0}> * Local Azimuth = 224.1 Deg, Local Elevation = 0.081455 Deg
+OPAL{0}> * Cavity RF3B Phase= 18.912 [deg] transit time factor=  0.99994 dE= 0.17696 [MeV] E_kin= 72.174 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 29.541 [deg] transit time factor=  0.99994 dE= 0.163 [MeV] E_kin= 72.337 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 18.74 [deg] transit time factor=  0.99994 dE= 0.17758 [MeV] E_kin= 72.515 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 29.581 [deg] transit time factor=  0.99994 dE= 0.16334 [MeV] E_kin= 72.678 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 18.814 [deg] transit time factor=  0.99994 dE= 0.1779 [MeV] E_kin= 72.856 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 29.568 [deg] transit time factor=  0.99994 dE= 0.16365 [MeV] E_kin= 73.02 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 18.729 [deg] transit time factor=  0.99994 dE= 0.17828 [MeV] E_kin= 73.198 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 29.277 [deg] transit time factor=  0.99994 dE= 0.16443 [MeV] E_kin= 73.363 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 82, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 82 (local frame) at integration step 59040
+OPAL{0}> * T = 10008 ns, Live Particles: 102192
+OPAL{0}> * E = 74.19 MeV, beta * gamma = 0.28395
+OPAL{0}> * Bunch position: R =  1470.4 mm, Theta = -138.18 Deg, Z = -3.0357 mm
+OPAL{0}> * Local Azimuth = 224.11 Deg, Local Elevation = -0.015229 Deg
+OPAL{0}> * Cavity RF3B Phase= 18.425 [deg] transit time factor=  0.99994 dE= 0.17899 [MeV] E_kin= 73.542 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 29.13 [deg] transit time factor=  0.99994 dE= 0.16509 [MeV] E_kin= 73.707 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 18.36 [deg] transit time factor=  0.99994 dE= 0.17953 [MeV] E_kin= 73.886 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 29.243 [deg] transit time factor=  0.99994 dE= 0.16528 [MeV] E_kin= 74.052 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 18.469 [deg] transit time factor=  0.99994 dE= 0.17976 [MeV] E_kin= 74.231 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 29.155 [deg] transit time factor=  0.99994 dE= 0.16569 [MeV] E_kin= 74.397 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 18.304 [deg] transit time factor=  0.99994 dE= 0.18023 [MeV] E_kin= 74.577 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 28.812 [deg] transit time factor=  0.99994 dE= 0.16658 [MeV] E_kin= 74.744 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 83, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 83 (local frame) at integration step 59760
+OPAL{0}> * T = 10130 ns, Live Particles: 102192
+OPAL{0}> * E = 75.592 MeV, beta * gamma = 0.28668
+OPAL{0}> * Bunch position: R =  1483.7 mm, Theta = -138.08 Deg, Z = 1.7022 mm
+OPAL{0}> * Local Azimuth = 224.13 Deg, Local Elevation = -0.06916 Deg
+OPAL{0}> * Cavity RF3B Phase= 18.025 [deg] transit time factor=  0.99994 dE= 0.18094 [MeV] E_kin= 74.925 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 28.721 [deg] transit time factor=  0.99994 dE= 0.16715 [MeV] E_kin= 75.092 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 17.988 [deg] transit time factor=  0.99994 dE= 0.1814 [MeV] E_kin= 75.273 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 28.707 [deg] transit time factor=  0.99994 dE= 0.16749 [MeV] E_kin= 75.441 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 17.934 [deg] transit time factor=  0.99994 dE= 0.18177 [MeV] E_kin= 75.623 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 28.463 [deg] transit time factor=  0.99994 dE= 0.16818 [MeV] E_kin= 75.791 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 17.657 [deg] transit time factor=  0.99994 dE= 0.18242 [MeV] E_kin= 75.973 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 28.248 [deg] transit time factor=  0.99994 dE= 0.16892 [MeV] E_kin= 76.142 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 84, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 84 (local frame) at integration step 60480
+OPAL{0}> * T = 10252 ns, Live Particles: 102192
+OPAL{0}> * E = 77.011 MeV, beta * gamma = 0.28941
+OPAL{0}> * Bunch position: R =  1497 mm, Theta = -138 Deg, Z = 1.8817 mm
+OPAL{0}> * Local Azimuth = 224.16 Deg, Local Elevation = 0.061617 Deg
+OPAL{0}> * Cavity RF3B Phase= 17.502 [deg] transit time factor=  0.99994 dE= 0.18303 [MeV] E_kin= 76.325 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 28.262 [deg] transit time factor=  0.99994 dE= 0.16928 [MeV] E_kin= 76.494 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 17.522 [deg] transit time factor=  0.99994 dE= 0.18336 [MeV] E_kin= 76.678 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 28.121 [deg] transit time factor=  0.99994 dE= 0.16977 [MeV] E_kin= 76.847 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 17.306 [deg] transit time factor=  0.99994 dE= 0.18387 [MeV] E_kin= 77.031 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 27.75 [deg] transit time factor=  0.99994 dE= 0.17069 [MeV] E_kin= 77.202 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 16.898 [deg] transit time factor=  0.99994 dE= 0.18469 [MeV] E_kin= 77.387 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 27.596 [deg] transit time factor=  0.99994 dE= 0.17137 [MeV] E_kin= 77.558 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 85, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 85 (local frame) at integration step 61200
+OPAL{0}> * T = 10374 ns, Live Particles: 102192
+OPAL{0}> * E = 78.447 MeV, beta * gamma = 0.29215
+OPAL{0}> * Bunch position: R =  1510.3 mm, Theta = -137.93 Deg, Z = -2.9335 mm
+OPAL{0}> * Local Azimuth = 224.2 Deg, Local Elevation = 0.02889 Deg
+OPAL{0}> * Cavity RF3B Phase= 16.826 [deg] transit time factor=  0.99994 dE= 0.18522 [MeV] E_kin= 77.743 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 27.659 [deg] transit time factor=  0.99994 dE= 0.17162 [MeV] E_kin= 77.915 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 16.875 [deg] transit time factor=  0.99994 dE= 0.18551 [MeV] E_kin= 78.1 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 27.509 [deg] transit time factor=  0.99994 dE= 0.17213 [MeV] E_kin= 78.273 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 16.664 [deg] transit time factor=  0.99994 dE= 0.18603 [MeV] E_kin= 78.459 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 27.242 [deg] transit time factor=  0.99994 dE= 0.17291 [MeV] E_kin= 78.632 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 16.437 [deg] transit time factor=  0.99994 dE= 0.18669 [MeV] E_kin= 78.818 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 27.218 [deg] transit time factor=  0.99994 dE= 0.17336 [MeV] E_kin= 78.992 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 86, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 86 (local frame) at integration step 61920
+OPAL{0}> * T = 10496 ns, Live Particles: 102192
+OPAL{0}> * E = 79.899 MeV, beta * gamma = 0.2949
+OPAL{0}> * Bunch position: R =  1523.1 mm, Theta = -137.85 Deg, Z = 0.072984 mm
+OPAL{0}> * Local Azimuth = 224.24 Deg, Local Elevation = -0.078786 Deg
+OPAL{0}> * Cavity RF3B Phase= 16.457 [deg] transit time factor=  0.99994 dE= 0.18707 [MeV] E_kin= 79.179 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 27.19 [deg] transit time factor=  0.99994 dE= 0.17369 [MeV] E_kin= 79.352 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 16.369 [deg] transit time factor=  0.99994 dE= 0.18744 [MeV] E_kin= 79.54 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 26.902 [deg] transit time factor=  0.99994 dE= 0.17444 [MeV] E_kin= 79.714 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 16.065 [deg] transit time factor=  0.99994 dE= 0.18811 [MeV] E_kin= 79.902 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 26.728 [deg] transit time factor=  0.99994 dE= 0.17513 [MeV] E_kin= 80.077 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 15.97 [deg] transit time factor=  0.99994 dE= 0.18866 [MeV] E_kin= 80.266 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 26.812 [deg] transit time factor=  0.99994 dE= 0.17537 [MeV] E_kin= 80.441 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 87, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 87 (local frame) at integration step 62640
+OPAL{0}> * T = 10618 ns, Live Particles: 102192
+OPAL{0}> * E = 81.368 MeV, beta * gamma = 0.29765
+OPAL{0}> * Bunch position: R =  1535.7 mm, Theta = -137.76 Deg, Z = 2.8673 mm
+OPAL{0}> * Local Azimuth = 224.27 Deg, Local Elevation = 0.028321 Deg
+OPAL{0}> * Cavity RF3B Phase= 16.058 [deg] transit time factor=  0.99995 dE= 0.18891 [MeV] E_kin= 80.63 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 26.726 [deg] transit time factor=  0.99995 dE= 0.17576 [MeV] E_kin= 80.806 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 15.901 [deg] transit time factor=  0.99995 dE= 0.18935 [MeV] E_kin= 80.995 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 26.442 [deg] transit time factor=  0.99995 dE= 0.17653 [MeV] E_kin= 81.172 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 15.637 [deg] transit time factor=  0.99995 dE= 0.19 [MeV] E_kin= 81.362 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 26.353 [deg] transit time factor=  0.99995 dE= 0.17707 [MeV] E_kin= 81.539 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 15.597 [deg] transit time factor=  0.99995 dE= 0.19044 [MeV] E_kin= 81.73 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 26.312 [deg] transit time factor=  0.99995 dE= 0.17743 [MeV] E_kin= 81.907 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 88, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 88 (local frame) at integration step 63360
+OPAL{0}> * T = 10740 ns, Live Particles: 102192
+OPAL{0}> * E = 82.855 MeV, beta * gamma = 0.30042
+OPAL{0}> * Bunch position: R =  1548.4 mm, Theta = -137.61 Deg, Z = -2.191 mm
+OPAL{0}> * Local Azimuth = 224.29 Deg, Local Elevation = 0.056443 Deg
+OPAL{0}> * Cavity RF3B Phase= 15.508 [deg] transit time factor=  0.99995 dE= 0.19081 [MeV] E_kin= 82.098 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 26.003 [deg] transit time factor=  0.99995 dE= 0.17817 [MeV] E_kin= 82.276 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 15.161 [deg] transit time factor=  0.99995 dE= 0.19146 [MeV] E_kin= 82.467 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 25.653 [deg] transit time factor=  0.99995 dE= 0.17909 [MeV] E_kin= 82.646 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 14.92 [deg] transit time factor=  0.99995 dE= 0.19211 [MeV] E_kin= 82.839 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 25.604 [deg] transit time factor=  0.99995 dE= 0.17954 [MeV] E_kin= 83.018 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 14.903 [deg] transit time factor=  0.99995 dE= 0.1925 [MeV] E_kin= 83.211 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 25.512 [deg] transit time factor=  0.99995 dE= 0.17996 [MeV] E_kin= 83.391 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 89, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 89 (local frame) at integration step 64080
+OPAL{0}> * T = 10862 ns, Live Particles: 102192
+OPAL{0}> * E = 84.359 MeV, beta * gamma = 0.30319
+OPAL{0}> * Bunch position: R =  1561.6 mm, Theta = -137.52 Deg, Z = -1.2783 mm
+OPAL{0}> * Local Azimuth = 224.3 Deg, Local Elevation = -0.067525 Deg
+OPAL{0}> * Cavity RF3B Phase= 14.763 [deg] transit time factor=  0.99995 dE= 0.19292 [MeV] E_kin= 83.584 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 25.242 [deg] transit time factor=  0.99995 dE= 0.18068 [MeV] E_kin= 83.764 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 14.502 [deg] transit time factor=  0.99995 dE= 0.19353 [MeV] E_kin= 83.958 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 25.131 [deg] transit time factor=  0.99995 dE= 0.18125 [MeV] E_kin= 84.139 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 14.459 [deg] transit time factor=  0.99995 dE= 0.19399 [MeV] E_kin= 84.333 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 25.185 [deg] transit time factor=  0.99995 dE= 0.18151 [MeV] E_kin= 84.514 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 14.493 [deg] transit time factor=  0.99995 dE= 0.19427 [MeV] E_kin= 84.709 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 25.018 [deg] transit time factor=  0.99995 dE= 0.18201 [MeV] E_kin= 84.891 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 90, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 90 (local frame) at integration step 64800
+OPAL{0}> * T = 10984 ns, Live Particles: 102192
+OPAL{0}> * E = 85.878 MeV, beta * gamma = 0.30597
+OPAL{0}> * Bunch position: R =  1574.5 mm, Theta = -137.38 Deg, Z = 3.1009 mm
+OPAL{0}> * Local Azimuth = 224.3 Deg, Local Elevation = 0.0061314 Deg
+OPAL{0}> * Cavity RF3B Phase= 14.265 [deg] transit time factor=  0.99995 dE= 0.19477 [MeV] E_kin= 85.086 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 24.719 [deg] transit time factor=  0.99995 dE= 0.1828 [MeV] E_kin= 85.268 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 13.949 [deg] transit time factor=  0.99995 dE= 0.19545 [MeV] E_kin= 85.464 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 24.617 [deg] transit time factor=  0.99995 dE= 0.18334 [MeV] E_kin= 85.647 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 13.882 [deg] transit time factor=  0.99995 dE= 0.19588 [MeV] E_kin= 85.843 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 24.489 [deg] transit time factor=  0.99995 dE= 0.18381 [MeV] E_kin= 86.027 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 13.7 [deg] transit time factor=  0.99995 dE= 0.19632 [MeV] E_kin= 86.223 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 24.123 [deg] transit time factor=  0.99995 dE= 0.18465 [MeV] E_kin= 86.408 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 91, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 91 (local frame) at integration step 65520
+OPAL{0}> * T = 11106 ns, Live Particles: 102192
+OPAL{0}> * E = 87.415 MeV, beta * gamma = 0.30876
+OPAL{0}> * Bunch position: R =  1588.1 mm, Theta = -137.22 Deg, Z = -1.5775 mm
+OPAL{0}> * Local Azimuth = 224.33 Deg, Local Elevation = 0.065827 Deg
+OPAL{0}> * Cavity RF3B Phase= 13.322 [deg] transit time factor=  0.99995 dE= 0.197 [MeV] E_kin= 86.605 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 23.865 [deg] transit time factor=  0.99995 dE= 0.18543 [MeV] E_kin= 86.79 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 13.14 [deg] transit time factor=  0.99995 dE= 0.1976 [MeV] E_kin= 86.988 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 23.84 [deg] transit time factor=  0.99995 dE= 0.18583 [MeV] E_kin= 87.174 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 13.121 [deg] transit time factor=  0.99995 dE= 0.19795 [MeV] E_kin= 87.372 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 23.665 [deg] transit time factor=  0.99995 dE= 0.18635 [MeV] E_kin= 87.558 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 12.889 [deg] transit time factor=  0.99995 dE= 0.19843 [MeV] E_kin= 87.756 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 23.336 [deg] transit time factor=  0.99995 dE= 0.18716 [MeV] E_kin= 87.944 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 92, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 92 (local frame) at integration step 66240
+OPAL{0}> * T = 11228 ns, Live Particles: 102192
+OPAL{0}> * E = 88.97 MeV, beta * gamma = 0.31156
+OPAL{0}> * Bunch position: R =  1602.1 mm, Theta = -137.1 Deg, Z = -1.9262 mm
+OPAL{0}> * Local Azimuth = 224.36 Deg, Local Elevation = -0.056572 Deg
+OPAL{0}> * Cavity RF3B Phase= 12.59 [deg] transit time factor=  0.99995 dE= 0.19907 [MeV] E_kin= 88.143 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 23.224 [deg] transit time factor=  0.99995 dE= 0.18773 [MeV] E_kin= 88.33 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 12.543 [deg] transit time factor=  0.99995 dE= 0.19953 [MeV] E_kin= 88.53 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 23.224 [deg] transit time factor=  0.99995 dE= 0.18805 [MeV] E_kin= 88.718 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 12.518 [deg] transit time factor=  0.99995 dE= 0.19985 [MeV] E_kin= 88.918 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 23.022 [deg] transit time factor=  0.99995 dE= 0.18861 [MeV] E_kin= 89.106 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 12.285 [deg] transit time factor=  0.99995 dE= 0.20036 [MeV] E_kin= 89.307 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 22.763 [deg] transit time factor=  0.99995 dE= 0.18935 [MeV] E_kin= 89.496 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 93, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 93 (local frame) at integration step 66960
+OPAL{0}> * T = 11350 ns, Live Particles: 102192
+OPAL{0}> * E = 90.541 MeV, beta * gamma = 0.31436
+OPAL{0}> * Bunch position: R =  1615.8 mm, Theta = -137.03 Deg, Z = 3.0456 mm
+OPAL{0}> * Local Azimuth = 224.39 Deg, Local Elevation = -0.016231 Deg
+OPAL{0}> * Cavity RF3B Phase= 12.128 [deg] transit time factor=  0.99995 dE= 0.20089 [MeV] E_kin= 89.697 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 22.775 [deg] transit time factor=  0.99995 dE= 0.1897 [MeV] E_kin= 89.887 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 12.169 [deg] transit time factor=  0.99995 dE= 0.20122 [MeV] E_kin= 90.088 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 22.723 [deg] transit time factor=  0.99995 dE= 0.19004 [MeV] E_kin= 90.278 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 12.059 [deg] transit time factor=  0.99995 dE= 0.20157 [MeV] E_kin= 90.48 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 22.437 [deg] transit time factor=  0.99995 dE= 0.19073 [MeV] E_kin= 90.67 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 11.766 [deg] transit time factor=  0.99995 dE= 0.20213 [MeV] E_kin= 90.872 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 22.253 [deg] transit time factor=  0.99995 dE= 0.19136 [MeV] E_kin= 91.064 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 94, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 94 (local frame) at integration step 67680
+OPAL{0}> * T = 11472 ns, Live Particles: 102192
+OPAL{0}> * E = 92.127 MeV, beta * gamma = 0.31716
+OPAL{0}> * Bunch position: R =  1629.6 mm, Theta = -136.97 Deg, Z = -0.73258 mm
+OPAL{0}> * Local Azimuth = 224.42 Deg, Local Elevation = 0.071934 Deg
+OPAL{0}> * Cavity RF3B Phase= 11.65 [deg] transit time factor=  0.99995 dE= 0.20262 [MeV] E_kin= 91.266 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 22.256 [deg] transit time factor=  0.99995 dE= 0.19169 [MeV] E_kin= 91.458 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 11.659 [deg] transit time factor=  0.99995 dE= 0.20293 [MeV] E_kin= 91.661 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 22.14 [deg] transit time factor=  0.99995 dE= 0.19211 [MeV] E_kin= 91.853 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 11.505 [deg] transit time factor=  0.99995 dE= 0.20333 [MeV] E_kin= 92.056 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 21.933 [deg] transit time factor=  0.99995 dE= 0.19272 [MeV] E_kin= 92.249 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 11.334 [deg] transit time factor=  0.99995 dE= 0.20383 [MeV] E_kin= 92.453 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 21.923 [deg] transit time factor=  0.99995 dE= 0.19309 [MeV] E_kin= 92.646 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 95, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 95 (local frame) at integration step 68400
+OPAL{0}> * T = 11594 ns, Live Particles: 102192
+OPAL{0}> * E = 93.724 MeV, beta * gamma = 0.31997
+OPAL{0}> * Bunch position: R =  1642.9 mm, Theta = -136.96 Deg, Z = -2.311 mm
+OPAL{0}> * Local Azimuth = 224.44 Deg, Local Elevation = -0.046783 Deg
+OPAL{0}> * Cavity RF3B Phase= 11.377 [deg] transit time factor=  0.99995 dE= 0.20415 [MeV] E_kin= 92.85 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 21.971 [deg] transit time factor=  0.99995 dE= 0.1933 [MeV] E_kin= 93.043 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 11.394 [deg] transit time factor=  0.99995 dE= 0.2044 [MeV] E_kin= 93.248 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 21.818 [deg] transit time factor=  0.99995 dE= 0.19375 [MeV] E_kin= 93.442 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 11.218 [deg] transit time factor=  0.99995 dE= 0.20482 [MeV] E_kin= 93.646 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 21.677 [deg] transit time factor=  0.99995 dE= 0.19427 [MeV] E_kin= 93.841 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 11.133 [deg] transit time factor=  0.99995 dE= 0.20524 [MeV] E_kin= 94.046 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 21.727 [deg] transit time factor=  0.99995 dE= 0.19451 [MeV] E_kin= 94.24 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 96, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 96 (local frame) at integration step 69120
+OPAL{0}> * T = 11716 ns, Live Particles: 102192
+OPAL{0}> * E = 95.333 MeV, beta * gamma = 0.32277
+OPAL{0}> * Bunch position: R =  1655.5 mm, Theta = -136.9 Deg, Z = 3.1462 mm
+OPAL{0}> * Local Azimuth = 224.46 Deg, Local Elevation = -0.011966 Deg
+OPAL{0}> * Cavity RF3B Phase= 11.201 [deg] transit time factor=  0.99995 dE= 0.20548 [MeV] E_kin= 94.446 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 21.671 [deg] transit time factor=  0.99995 dE= 0.19481 [MeV] E_kin= 94.641 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 11.086 [deg] transit time factor=  0.99995 dE= 0.20578 [MeV] E_kin= 94.847 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 21.401 [deg] transit time factor=  0.99995 dE= 0.19542 [MeV] E_kin= 95.042 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 10.773 [deg] transit time factor=  0.99995 dE= 0.20629 [MeV] E_kin= 95.248 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 21.252 [deg] transit time factor=  0.99995 dE= 0.19591 [MeV] E_kin= 95.444 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 10.683 [deg] transit time factor=  0.99995 dE= 0.20665 [MeV] E_kin= 95.651 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 21.212 [deg] transit time factor=  0.99995 dE= 0.19619 [MeV] E_kin= 95.847 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 97, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 97 (local frame) at integration step 69840
+OPAL{0}> * T = 11838 ns, Live Particles: 102192
+OPAL{0}> * E = 96.954 MeV, beta * gamma = 0.32557
+OPAL{0}> * Bunch position: R =  1668.4 mm, Theta = -136.77 Deg, Z = -1.3607 mm
+OPAL{0}> * Local Azimuth = 224.48 Deg, Local Elevation = 0.064764 Deg
+OPAL{0}> * Cavity RF3B Phase= 10.622 [deg] transit time factor=  0.99995 dE= 0.20689 [MeV] E_kin= 96.054 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 20.969 [deg] transit time factor=  0.99995 dE= 0.19668 [MeV] E_kin= 96.251 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 10.34 [deg] transit time factor=  0.99995 dE= 0.20727 [MeV] E_kin= 96.458 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 20.675 [deg] transit time factor=  0.99995 dE= 0.19728 [MeV] E_kin= 96.655 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 10.103 [deg] transit time factor=  0.99995 dE= 0.20766 [MeV] E_kin= 96.863 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 20.616 [deg] transit time factor=  0.99995 dE= 0.19756 [MeV] E_kin= 97.06 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 10.092 [deg] transit time factor=  0.99995 dE= 0.20786 [MeV] E_kin= 97.268 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 20.563 [deg] transit time factor=  0.99995 dE= 0.19777 [MeV] E_kin= 97.466 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 98, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 98 (local frame) at integration step 70560
+OPAL{0}> * T = 11960 ns, Live Particles: 102192
+OPAL{0}> * E = 98.586 MeV, beta * gamma = 0.32837
+OPAL{0}> * Bunch position: R =  1681.7 mm, Theta = -136.65 Deg, Z = -1.7617 mm
+OPAL{0}> * Local Azimuth = 224.5 Deg, Local Elevation = -0.056579 Deg
+OPAL{0}> * Cavity RF3B Phase= 9.9994 [deg] transit time factor=  0.99995 dE= 0.20806 [MeV] E_kin= 97.674 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 20.307 [deg] transit time factor=  0.99995 dE= 0.19824 [MeV] E_kin= 97.872 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 9.7367 [deg] transit time factor=  0.99995 dE= 0.20838 [MeV] E_kin= 98.081 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 20.126 [deg] transit time factor=  0.99995 dE= 0.19864 [MeV] E_kin= 98.279 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 9.6262 [deg] transit time factor=  0.99995 dE= 0.20863 [MeV] E_kin= 98.488 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 20.145 [deg] transit time factor=  0.99995 dE= 0.19876 [MeV] E_kin= 98.687 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 9.6626 [deg] transit time factor=  0.99995 dE= 0.20874 [MeV] E_kin= 98.895 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 20.066 [deg] transit time factor=  0.99995 dE= 0.19897 [MeV] E_kin= 99.094 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 99, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 99 (local frame) at integration step 71280
+OPAL{0}> * T = 12083 ns, Live Particles: 102192
+OPAL{0}> * E = 100.23 MeV, beta * gamma = 0.33116
+OPAL{0}> * Bunch position: R =  1695.2 mm, Theta = -136.57 Deg, Z = 3.108 mm
+OPAL{0}> * Local Azimuth = 224.5 Deg, Local Elevation = -0.0030013 Deg
+OPAL{0}> * Cavity RF3B Phase= 9.5445 [deg] transit time factor=  0.99995 dE= 0.20893 [MeV] E_kin= 99.303 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 19.814 [deg] transit time factor=  0.99995 dE= 0.19942 [MeV] E_kin= 99.503 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 9.3638 [deg] transit time factor=  0.99995 dE= 0.20919 [MeV] E_kin= 99.712 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 19.765 [deg] transit time factor=  0.99996 dE= 0.19963 [MeV] E_kin= 99.912 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 9.3722 [deg] transit time factor=  0.99996 dE= 0.20934 [MeV] E_kin= 100.12 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 19.795 [deg] transit time factor=  0.99996 dE= 0.19972 [MeV] E_kin= 100.32 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 9.3798 [deg] transit time factor=  0.99996 dE= 0.20945 [MeV] E_kin= 100.53 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 19.627 [deg] transit time factor=  0.99996 dE= 0.20004 [MeV] E_kin= 100.73 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 100, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 100 (local frame) at integration step 72000
+OPAL{0}> * T = 12205 ns, Live Particles: 102192
+OPAL{0}> * E = 101.87 MeV, beta * gamma = 0.33394
+OPAL{0}> * Bunch position: R =  1708.9 mm, Theta = -136.49 Deg, Z = -1.839 mm
+OPAL{0}> * Local Azimuth = 224.5 Deg, Local Elevation = 0.056176 Deg
+OPAL{0}> * Cavity RF3B Phase= 9.1803 [deg] transit time factor=  0.99996 dE= 0.2097 [MeV] E_kin= 100.94 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 19.415 [deg] transit time factor=  0.99996 dE= 0.20046 [MeV] E_kin= 101.14 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 9.0191 [deg] transit time factor=  0.99996 dE= 0.20997 [MeV] E_kin= 101.35 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 19.39 [deg] transit time factor=  0.99996 dE= 0.20066 [MeV] E_kin= 101.55 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 9.0362 [deg] transit time factor=  0.99996 dE= 0.21014 [MeV] E_kin= 101.76 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 19.366 [deg] transit time factor=  0.99996 dE= 0.20084 [MeV] E_kin= 101.96 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 8.9846 [deg] transit time factor=  0.99996 dE= 0.21031 [MeV] E_kin= 102.17 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 19.185 [deg] transit time factor=  0.99996 dE= 0.20122 [MeV] E_kin= 102.37 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 101, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 101 (local frame) at integration step 72720
+OPAL{0}> * T = 12327 ns, Live Particles: 102192
+OPAL{0}> * E = 103.53 MeV, beta * gamma = 0.33672
+OPAL{0}> * Bunch position: R =  1722.7 mm, Theta = -136.43 Deg, Z = -0.74592 mm
+OPAL{0}> * Local Azimuth = 224.51 Deg, Local Elevation = -0.065052 Deg
+OPAL{0}> * Cavity RF3B Phase= 8.8038 [deg] transit time factor=  0.99996 dE= 0.21061 [MeV] E_kin= 102.58 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 19.063 [deg] transit time factor=  0.99996 dE= 0.20159 [MeV] E_kin= 102.79 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 8.7364 [deg] transit time factor=  0.99996 dE= 0.21088 [MeV] E_kin= 103 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 19.068 [deg] transit time factor=  0.99996 dE= 0.2018 [MeV] E_kin= 103.2 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 8.7485 [deg] transit time factor=  0.99996 dE= 0.21109 [MeV] E_kin= 103.41 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 18.958 [deg] transit time factor=  0.99996 dE= 0.20213 [MeV] E_kin= 103.61 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 8.607 [deg] transit time factor=  0.99996 dE= 0.21138 [MeV] E_kin= 103.82 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 18.745 [deg] transit time factor=  0.99996 dE= 0.20264 [MeV] E_kin= 104.03 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 102, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 102 (local frame) at integration step 73440
+OPAL{0}> * T = 12449 ns, Live Particles: 102192
+OPAL{0}> * E = 105.19 MeV, beta * gamma = 0.33949
+OPAL{0}> * Bunch position: R =  1736.6 mm, Theta = -136.37 Deg, Z = 2.7753 mm
+OPAL{0}> * Local Azimuth = 224.52 Deg, Local Elevation = 0.027803 Deg
+OPAL{0}> * Cavity RF3B Phase= 8.4256 [deg] transit time factor=  0.99996 dE= 0.21179 [MeV] E_kin= 104.24 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 18.676 [deg] transit time factor=  0.99996 dE= 0.20305 [MeV] E_kin= 104.44 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 8.4125 [deg] transit time factor=  0.99996 dE= 0.21213 [MeV] E_kin= 104.65 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 18.68 [deg] transit time factor=  0.99996 dE= 0.20334 [MeV] E_kin= 104.86 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 8.4039 [deg] transit time factor=  0.99996 dE= 0.21242 [MeV] E_kin= 105.07 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 18.532 [deg] transit time factor=  0.99996 dE= 0.20381 [MeV] E_kin= 105.27 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 8.2402 [deg] transit time factor=  0.99996 dE= 0.21285 [MeV] E_kin= 105.48 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 18.375 [deg] transit time factor=  0.99996 dE= 0.20441 [MeV] E_kin= 105.69 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 103, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 103 (local frame) at integration step 74160
+OPAL{0}> * T = 12571 ns, Live Particles: 102192
+OPAL{0}> * E = 106.87 MeV, beta * gamma = 0.34226
+OPAL{0}> * Bunch position: R =  1750.6 mm, Theta = -136.36 Deg, Z = -2.7385 mm
+OPAL{0}> * Local Azimuth = 224.53 Deg, Local Elevation = 0.032079 Deg
+OPAL{0}> * Cavity RF3B Phase= 8.1412 [deg] transit time factor=  0.99996 dE= 0.21337 [MeV] E_kin= 105.9 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4A Phase= 18.406 [deg] transit time factor=  0.99996 dE= 0.20483 [MeV] E_kin= 106.11 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 8.2152 [deg] transit time factor=  0.99996 dE= 0.21379 [MeV] E_kin= 106.32 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 18.421 [deg] transit time factor=  0.99996 dE= 0.2052 [MeV] E_kin= 106.53 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 8.2002 [deg] transit time factor=  0.99996 dE= 0.21419 [MeV] E_kin= 106.74 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 18.273 [deg] transit time factor=  0.99996 dE= 0.20582 [MeV] E_kin= 106.95 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 8.0625 [deg] transit time factor=  0.99996 dE= 0.2148 [MeV] E_kin= 107.16 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF3A Phase= 18.225 [deg] transit time factor=  0.99996 dE= 0.20651 [MeV] E_kin= 107.37 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 104, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 104 (local frame) at integration step 74880
+OPAL{0}> * T = 12693 ns, Live Particles: 102192
+OPAL{0}> * E = 108.57 MeV, beta * gamma = 0.34504
+OPAL{0}> * Bunch position: R =  1764.8 mm, Theta = -136.4 Deg, Z = 0.41827 mm
+OPAL{0}> * Local Azimuth = 224.53 Deg, Local Elevation = -0.0673 Deg
+OPAL{0}> * Cavity RF3B Phase= 8.0922 [deg] transit time factor=  0.99996 dE= 0.21547 [MeV] E_kin= 107.58 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 8.2608 [deg] transit time factor=  0.99996 dE= 0.216 [MeV] E_kin= 108.01 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 18.431 [deg] transit time factor=  0.99996 dE= 0.20746 [MeV] E_kin= 108.21 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 8.295 [deg] transit time factor=  0.99996 dE= 0.21659 [MeV] E_kin= 108.43 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2A Phase= 18.386 [deg] transit time factor=  0.99996 dE= 0.20825 [MeV] E_kin= 108.64 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 8.2891 [deg] transit time factor=  0.99996 dE= 0.21746 [MeV] E_kin= 108.86 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 105, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 105 (local frame) at integration step 75600
+OPAL{0}> * T = 12815 ns, Live Particles: 102192
+OPAL{0}> * E = 110.29 MeV, beta * gamma = 0.34784
+OPAL{0}> * Bunch position: R =  1778.7 mm, Theta = -136.52 Deg, Z = 2.0454 mm
+OPAL{0}> * Local Azimuth = 224.5 Deg, Local Elevation = 0.047903 Deg
+OPAL{0}> * Cavity RF3B Phase= 8.4961 [deg] transit time factor=  0.99996 dE= 0.21832 [MeV] E_kin= 109.28 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 8.7379 [deg] transit time factor=  0.99996 dE= 0.21894 [MeV] E_kin= 109.71 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1A Phase= 18.835 [deg] transit time factor=  0.99996 dE= 0.21017 [MeV] E_kin= 109.92 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 8.7714 [deg] transit time factor=  0.99996 dE= 0.21973 [MeV] E_kin= 110.14 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 8.8223 [deg] transit time factor=  0.99996 dE= 0.22086 [MeV] E_kin= 110.57 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 106, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 106 (local frame) at integration step 76320
+OPAL{0}> * T = 12937 ns, Live Particles: 102192
+OPAL{0}> * E = 112.03 MeV, beta * gamma = 0.35066
+OPAL{0}> * Bunch position: R =  1792.9 mm, Theta = -136.67 Deg, Z = -3.0695 mm
+OPAL{0}> * Local Azimuth = 224.46 Deg, Local Elevation = 0.0044286 Deg
+OPAL{0}> * Cavity RF3B Phase= 9.0803 [deg] transit time factor=  0.99996 dE= 0.22184 [MeV] E_kin= 111.01 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 9.3028 [deg] transit time factor=  0.99996 dE= 0.22262 [MeV] E_kin= 111.44 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 9.4074 [deg] transit time factor=  0.99996 dE= 0.22367 [MeV] E_kin= 111.88 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF2B Phase= 9.6706 [deg] transit time factor=  0.99996 dE= 0.22487 [MeV] E_kin= 112.32 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 107, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 107 (local frame) at integration step 77040
+OPAL{0}> * T = 13059 ns, Live Particles: 102192
+OPAL{0}> * E = 113.81 MeV, beta * gamma = 0.3535
+OPAL{0}> * Bunch position: R =  1807.1 mm, Theta = -136.86 Deg, Z = 1.9556 mm
+OPAL{0}> * Local Azimuth = 224.4 Deg, Local Elevation = -0.053579 Deg
+OPAL{0}> * Cavity RF3B Phase= 10.081 [deg] transit time factor=  0.99996 dE= 0.22569 [MeV] E_kin= 112.76 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF4B Phase= 10.314 [deg] transit time factor=  0.99996 dE= 0.22643 [MeV] E_kin= 113.2 [MeV] Time dep freq = 1
+OPAL{0}> * Cavity RF1B Phase= 10.433 [deg] transit time factor=  0.99996 dE= 0.2276 [MeV] E_kin= 113.65 [MeV] Time dep freq = 1
+OPAL{0}> 
+OPAL{0}> *** Finished turn 108, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 108 (local frame) at integration step 77760
+OPAL{0}> * T = 13181 ns, Live Particles: 102192
+OPAL{0}> * E = 115.61 MeV, beta * gamma = 0.35637
+OPAL{0}> * Bunch position: R =  1822 mm, Theta = -137.15 Deg, Z = 0.7484 mm
+OPAL{0}> * Local Azimuth = 224.31 Deg, Local Elevation = 0.063974 Deg
+OPAL{0}> 
+OPAL{0}> *** Finished turn 109, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 109 (local frame) at integration step 78480
+OPAL{0}> * T = 13303 ns, Live Particles: 102192
+OPAL{0}> * E = 117.42 MeV, beta * gamma = 0.35925
+OPAL{0}> * Bunch position: R =  1837.3 mm, Theta = -137.55 Deg, Z = -2.7471 mm
+OPAL{0}> * Local Azimuth = 224.17 Deg, Local Elevation = -0.017506 Deg
+OPAL{0}> 
+OPAL{0}> *** Finished turn 110, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 110 (local frame) at integration step 79200
+OPAL{0}> * T = 13425 ns, Live Particles: 102192
+OPAL{0}> * E = 119.24 MeV, beta * gamma = 0.3621
+OPAL{0}> * Bunch position: R =  1853.8 mm, Theta = -138.12 Deg, Z = 1.9939 mm
+OPAL{0}> * Local Azimuth = 223.96 Deg, Local Elevation = -0.053958 Deg
+OPAL{0}> 
+OPAL{0}> *** Finished turn 111, Total number of live particles: 102192
+OPAL{0}> 
+OPAL{0}> * Phase space dump 111 (local frame) at integration step 79920
+OPAL{0}> * T = 13547 ns, Live Particles: 102192
+OPAL{0}> * E = 121.03 MeV, beta * gamma = 0.36489
+OPAL{0}> * Bunch position: R =  1870.6 mm, Theta = -138.92 Deg, Z = 1.364 mm
+OPAL{0}> * Local Azimuth = 223.68 Deg, Local Elevation = 0.057933 Deg
+OPAL{0}> 
+OPAL{0}> * ---------------------------- DONE TRACKING PARTICLES -------------------------------- * 
+OPAL{0}> *
+OPAL{0}> * Finished during turn 112 (111 turns completed)
+OPAL{0}> * Cave: Turn number is not correct for restart mode
+OPAL{0}> 
+OPAL{0}> * *********************** Bunch information in global frame: ***********************
+OPAL{0}> * ************** B U N C H ********************************************************* 
+OPAL{0}> * NP              =   102192
+OPAL{0}> * Qtot            =    1.03934e-01 [nC]       Qi    =  1.01705e-06 [nC]
+OPAL{0}> * Ekin            =    1.21031e+02 [MeV]      dEkin =  1.69150e-01 [MeV]
+OPAL{0}> * rmax            = (  5.89434e-02 ,  3.85107e-02 ,  8.45383e-03 ) [m]
+OPAL{0}> * rmin            = ( -2.12978e-02 , -2.46655e-01 , -9.07355e-03 ) [m]
+OPAL{0}> * rms beam size   = (  5.98455e-03 ,  4.78249e-03 ,  1.63058e-03 ) [m]
+OPAL{0}> * rms momenta     = (  8.10557e-04 ,  8.97242e-04 ,  2.62949e-04 ) [beta gamma]
+OPAL{0}> * mean position   = ( -1.40994e+00 , -1.22924e+00 ,  1.36402e-03 ) [m]
+OPAL{0}> * mean momenta    = (  2.51994e-01 , -2.63898e-01 ,  3.68949e-04 ) [beta gamma]
+OPAL{0}> * rms emittance   = (  9.15463e-06 ,  8.76440e-06 ,  1.16564e-06 ) (not normalized)
+OPAL{0}> * rms correlation = ( -7.25107e-01 ,  6.66746e-01 , -1.26159e-01 )
+OPAL{0}> * hr              = (  2.58843e-03 ,  9.19889e-03 ,  5.65399e-04 ) [m]
+OPAL{0}> * dh              =    2.00000e+00 [%]
+OPAL{0}> * t               =    1.35471e-05 [s]        dT    =  2.82513e-11 [s]
+OPAL{0}> * spos            =    1.36402e-03 [m]
+OPAL{0}> * ********************************************************************************** 
+OPAL{0}> 
+OPAL{0}> * ----------------------------------------------- *
+OPAL{0}> * Finalizing i.e. write data and close files :
+OPAL{0}> * Finalize cyclotron
+Ippl{0}> Save COL1_64.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL2_64.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL1_65.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL2_65.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL1_66.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL2_66.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL1_67.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL2_67.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL1_68.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL2_68.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL1_69.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL2_69.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL1_70.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL2_70.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL1_71.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save COL2_71.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save PROBE_864.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save PROBE_865.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save PROBE_866.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save PROBE_867.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save PROBE_868.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save PROBE_869.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save PROBE_870.h5
+OPAL{0}> * Finalize probe
+Ippl{0}> Save PROBE_871.h5
+OPAL{0}> * Finalize probe
+OPAL{0}> * ----------------------------------------------- *
+OPAL{0}> * End of input stream "Accelerated.in".
+Timings{0}> -----------------------------------------------------------------
+Timings{0}>      Timing results for 4 nodes:
+Timings{0}> -----------------------------------------------------------------
+Timings{0}> mainTimer........... Wall tot =    13821.4, CPU tot =    13807.2
+Timings{0}> 
+Timings{0}> Binaryrepart........ Wall max =    266.347, CPU max =     266.62
+Timings{0}>                      Wall avg =    266.338, CPU avg =    266.263
+Timings{0}>                      Wall min =    266.331, CPU min =     266.06
+Timings{0}> 
+Timings{0}> Boundingbox......... Wall max =    1042.33, CPU max =    1043.03
+Timings{0}>                      Wall avg =    1040.61, CPU avg =    1040.45
+Timings{0}>                      Wall min =    1038.51, CPU min =    1038.17
+Timings{0}> 
+Timings{0}> ComputePotential.... Wall max =    1282.22, CPU max =    1284.77
+Timings{0}>                      Wall avg =    1282.12, CPU avg =    1282.06
+Timings{0}>                      Wall min =    1281.96, CPU min =    1280.13
+Timings{0}> 
+Timings{0}> Create Distr........ Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> Dump................ Wall max =    132.895, CPU max =     122.51
+Timings{0}>                      Wall avg =    132.829, CPU avg =      100.8
+Timings{0}>                      Wall min =    132.791, CPU min =      36.48
+Timings{0}> 
+Timings{0}> Fast inside test.... Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> Frametransform...... Wall max =    1177.99, CPU max =     1177.6
+Timings{0}>                      Wall avg =    1172.73, CPU avg =    1172.61
+Timings{0}>                      Wall min =    1168.31, CPU min =    1170.67
+Timings{0}> 
+Timings{0}> H5PartTimer......... Wall max =    12.0264, CPU max =       2.21
+Timings{0}>                      Wall avg =    11.9882, CPU avg =     1.6025
+Timings{0}>                      Wall min =    11.9265, CPU min =       1.31
+Timings{0}> 
+Timings{0}> Histogram........... Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> Initialize geometry. Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> Inside test......... Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> Integration......... Wall max =    4359.04, CPU max =    4348.65
+Timings{0}>                      Wall avg =    4084.44, CPU avg =     4081.5
+Timings{0}>                      Wall min =    3828.36, CPU min =    3831.98
+Timings{0}> 
+Timings{0}> Load Distr.......... Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> Particle Inside..... Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> Ray tracing......... Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> RC-CC1Dfft.......... Wall max =    194.437, CPU max =     195.52
+Timings{0}>                      Wall avg =    184.054, CPU avg =    184.302
+Timings{0}>                      Wall min =    174.768, CPU min =     174.78
+Timings{0}> 
+Timings{0}> RC-CCtranspose...... Wall max =     441.86, CPU max =     445.61
+Timings{0}>                      Wall avg =     432.08, CPU avg =    433.157
+Timings{0}>                      Wall min =    425.595, CPU min =     424.38
+Timings{0}> 
+Timings{0}> RC-RC1Dfft.......... Wall max =    126.936, CPU max =     126.82
+Timings{0}>                      Wall avg =    126.033, CPU avg =    125.785
+Timings{0}>                      Wall min =    124.166, CPU min =     124.35
+Timings{0}> 
+Timings{0}> RC-RRtranspose...... Wall max =    123.964, CPU max =     123.26
+Timings{0}>                      Wall avg =    114.725, CPU avg =    114.075
+Timings{0}>                      Wall min =    103.677, CPU min =     104.14
+Timings{0}> 
+Timings{0}> RC-total............ Wall max =    883.875, CPU max =     886.55
+Timings{0}>                      Wall avg =     866.19, CPU avg =    866.337
+Timings{0}>                      Wall min =     838.53, CPU min =     837.52
+Timings{0}> 
+Timings{0}> Secondary emission.. Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> SelfField total..... Wall max =    2091.97, CPU max =    2092.77
+Timings{0}>                      Wall avg =    2070.19, CPU avg =    2069.96
+Timings{0}>                      Wall min =    2051.89, CPU min =    2051.44
+Timings{0}> 
+Timings{0}> SF: GreensFTotal.... Wall max =    666.879, CPU max =     667.62
+Timings{0}>                      Wall avg =    662.897, CPU avg =    662.467
+Timings{0}>                      Wall min =    659.646, CPU min =      659.3
+Timings{0}> 
+Timings{0}> SF: IntGreenF1...... Wall max =    242.161, CPU max =     241.55
+Timings{0}>                      Wall avg =     231.53, CPU avg =    231.312
+Timings{0}>                      Wall min =     221.06, CPU min =     220.76
+Timings{0}> 
+Timings{0}> SF: IntGreenF2...... Wall max =    121.073, CPU max =     122.21
+Timings{0}>                      Wall avg =    91.6063, CPU avg =      92.16
+Timings{0}>                      Wall min =    75.1017, CPU min =      75.41
+Timings{0}> 
+Timings{0}> SF: IntGreenF3...... Wall max =    312.824, CPU max =     310.65
+Timings{0}>                      Wall avg =    304.697, CPU avg =    304.392
+Timings{0}>                      Wall min =    293.625, CPU min =     294.28
+Timings{0}> 
+Timings{0}> SF: MirrorRho1...... Wall max =    38.1371, CPU max =      38.58
+Timings{0}>                      Wall avg =    34.2069, CPU avg =    33.8725
+Timings{0}>                      Wall min =    30.2457, CPU min =       29.7
+Timings{0}> 
+Timings{0}> SF: MirrorRho2...... Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> SF: Potential....... Wall max =    1282.71, CPU max =    1285.12
+Timings{0}>                      Wall avg =    1282.62, CPU avg =    1282.48
+Timings{0}>                      Wall min =    1282.47, CPU min =    1280.57
+Timings{0}> 
+Timings{0}> SF: ShIntGreenF1.... Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> SF: ShIntGreenF2.... Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> SF: ShIntGreenF3.... Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> SF: ShIntGreenF4.... Wall max =          0, CPU max =          0
+Timings{0}>                      Wall avg =          0, CPU avg =          0
+Timings{0}>                      Wall min =          0, CPU min =          0
+Timings{0}> 
+Timings{0}> Statistics.......... Wall max =    12.8992, CPU max =      13.44
+Timings{0}>                      Wall avg =    12.8622, CPU avg =    13.0875
+Timings{0}>                      Wall min =    12.8038, CPU min =      12.42
+Timings{0}> 
+Timings{0}> StatMarkerTimer..... Wall max =    73.4466, CPU max =       7.42
+Timings{0}>                      Wall avg =     22.483, CPU avg =       5.45
+Timings{0}>                      Wall min =    4.11808, CPU min =       4.07
+Timings{0}> 
+Timings{0}> -----------------------------------------------------------------
