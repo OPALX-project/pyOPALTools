@@ -57,36 +57,61 @@ def calcTurnSeparation(filename):
     ts_m=np.diff(mx)
 
 def getTurnSeparation():
-	return ts_m
+    return ts_m
 
 def getTurnCount():
-	return len(ts_m)
+    return len(ts_m)
 
 def writeTurnSeparationToFile(fn):
-        out_file = open(fn, 'w')
-	for turn_sep in ts_m:
-  		out_file.write("%s\n" % turn_sep)
+    out_file = open(fn, 'w')
+    for turn_sep in ts_m:
+          out_file.write("%s\n" % turn_sep)
 
 def plotTurnSeparation(fn=''):
-	fig=plt.figure(figsize=(8,6))
-	ax=plt.subplot(111)
-	x = np.arange(getTurnCount())
-	plt.plot(x,getTurnSeparation(), linewidth=3)
-	plt.show()
+    fig=plt.figure(figsize=(8,6))
+    ax=plt.subplot(111)
+    x = np.arange(getTurnCount())
+    plt.plot(x,getTurnSeparation(), linewidth=3)
+    plt.show()
 
 def calcRFphases(fn,RFcavity):
-	global phases_m
-	global phaseProbeNames_m
-	phases_m = []
-	phaseProbeNames_m = RFcavity
+    """ Calculate the phases of individual cavities in the simulation
+    
 
-       	file = open(fn, "r")
+    Parameters
+    ----------
+    fn : the filename with the std out of OPAL
+    RFcavity: name of the RFcavity as specifed in the input file
+    Returns
+    -------
+    none
+    
 
-	for line in file:
+    Notes
+    -----
+    set the internal data structure phases_m
+
+    References
+    ----------
+    none
+
+    Examples
+    --------
+    Check testCycl-2.py in the test directory
+
+    """
+    global phases_m
+    global phaseProbeNames_m
+    phases_m = []
+    phaseProbeNames_m = RFcavity
+
+    file = open(fn, "r")
+
+    for line in file:
             for cname in phaseProbeNames_m:
                 if re.search(cname, line):
-			phases_m.append(float(line.split()[5]))
-			
+                    phases_m.append(float(line.split()[5]))
+            
 def getRFphaseProbeNames():
         return phaseProbeNames_m
 
@@ -94,11 +119,11 @@ def getRFphases():
         return phases_m
 
 def plotRFphases(fn=''):
-	fig=plt.figure(figsize=(8,6))
-	ax=plt.subplot(111)
-	x = np.arange(len(getRFphases()))
-	plt.plot(x,getRFphases(), linewidth=3)
-	plt.show()
+    fig=plt.figure(figsize=(8,6))
+    ax=plt.subplot(111)
+    x = np.arange(len(getRFphases()))
+    plt.plot(x,getRFphases(), linewidth=3)
+    plt.show()
 
 # Using detect_peaks module for peak detedction
 

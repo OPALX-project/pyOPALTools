@@ -9,21 +9,48 @@ import matplotlib.pylab as plt
 enu = ['a) ','b) ', 'c)' ]    
 
 def opalStatOverviewPlot(fns, title="", pdfFn="", addData=[], myLoc=2):
-    '''
-    Purpose: Plot an overview of results form possible 
+    
+    """ 
+    Plot an overview of results form possible 
     several stat files. If pdfFn is given a PDF-File is written
 
     Example:
 
-    import opalTools as ot
+    import statPlots as statpl
     
     fns = []
     fns.append('xxx/foo1.stat')
     fns.append('xxx/foo2.stat')
 
-    ot.opalStatOverviewPlot(fns)
+    statpl.opalStatOverviewPlot(fns)
     
-    '''
+    
+    Parameters
+    ----------
+    fns
+    title
+    pdfFn 
+    addData=[]
+    myLoc=2
+    
+    Returns
+    -------
+    none
+    
+
+    Notes
+    -----
+    
+
+    References
+    ----------
+    none
+
+    Examples
+    --------
+    Check testStat-1.py in the test directory
+    """
+    
     for i in range(len(tableau20)):
         r, g, b = tableau20[i]
         tableau20[i] = (r / 255., g / 255., b / 255.)
@@ -200,15 +227,16 @@ def opalStatOverviewPlot(fns, title="", pdfFn="", addData=[], myLoc=2):
 
 def opalStatPlot(x,y,ylegend,xaxis="",yaxis="",title="", pdfFn=""):
     '''
-    Purpose: Plot several collumns from an OPAL stat file. If
+    Plot several collumns from an OPAL stat file. If
     pdfFn is given a PDF-File is written
 
     Example:
 
-    import opalTools as ot
-
+    import statPlots as statpl
+    from utils import SddsReader
+    
     fn = 'xxx/foo.stat'
-    parser = ot.SddsReader(fn)
+    parser = SddsReader(fn)
 
     x = parser.getColumn("s")
     y = []
@@ -224,7 +252,32 @@ def opalStatPlot(x,y,ylegend,xaxis="",yaxis="",title="", pdfFn=""):
     xlabel = "s (m)"
     ylabel = "Beamsize (m)"
     title  = "My Plot"
-    ot.opalStatPlot(x,y,ylegend,xlabel,ylabel,title,plotfn)
+    statpl.opalStatPlot(x,y,ylegend,xlabel,ylabel,title,plotfn)
+    
+    Parameters
+    ----------
+    fns
+    title
+    pdfFn 
+    addData=[]
+    myLoc=2
+    
+    Returns
+    -------
+    none
+    
+
+    Notes
+    -----
+    
+
+    References
+    ----------
+    none
+
+    Examples
+    --------
+    Check testStat-2.py in the test directory
     '''
     for i in range(len(tableau20)):
         r, g, b = tableau20[i]
