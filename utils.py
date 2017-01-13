@@ -96,14 +96,17 @@ class H5Reader:
         x = self.__hf.get(dataStr)
         return x[:]
 
-    def printH5Info(self):
+    def printInfo(self):
         print('List of arrays in this file: ', self.__hf.keys())
         data = self.__hf.get('Step#0')
         np_data = np.array(data)
         print('Shape of the array Step#0: ', np_data.shape)
 
-    def getH5Steps(self):
-        return len(self.__hf.keys())
+    def getSteps(self):
+        """
+        0 .... N-1
+        """
+        return len(self.__hf.keys())-1
 
 
 
