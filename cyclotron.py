@@ -5,13 +5,13 @@ import numpy as np
 from matplotlib import rc
 import matplotlib.pylab as plt
 
-import pandas as pd
 import glob
 import re
 
-# stores the turnseparation                                                                                                                                        
+# stores the turnseparation
 
 global ts_m
+global energy_m
 global phases_m
 global phaseProbeNames_m
 
@@ -44,10 +44,14 @@ def calcTurnSeparation(filename):
 
     """
 
-    global ts_m
-    df = pd.read_csv(filename,sep='\s+',header=2,skiprows=0)
-    
-    x=df.values[:,1]
+    global ts_m, energy_m
+    headers = ["ID","x","betx","y","bety","z","betz"]
+    df = np.genfromtxt(filename,
+                       dtype       = None,
+                       names       = headers,
+                       skip_header = 2) # skip first two lines
+
+    x=df['x']
     
     # Get x-axis crossings
     pksx = detect_peaks(x, mph=0.04, mpd=100)
@@ -56,23 +60,41 @@ def calcTurnSeparation(filename):
     # Turn separation is the difference between crossings
     ts_m=np.diff(mx)
 
+    # Particle energy
+    p_mass = 938.28 # proton mass in MeV / c^2
+    # Beta*gamma
+    beta_gamma = np.sqrt(df['betx']*df['betx']+df['bety']*df['bety'])
+    # Gamma
+    gamma = np.sqrt(1+beta_gamma*beta_gamma)
+    # Energy
+    energy = (gamma - 1) * p_mass
+    # Mask
+    energy_m = energy[pksx]
+
 def getTurnSeparation():
     return ts_m
 
 def getTurnCount():
     return len(ts_m)
 
+def getEnergy():
+    return energy_m
+
 def writeTurnSeparationToFile(fn):
     out_file = open(fn, 'w')
     for turn_sep in ts_m:
           out_file.write("%s\n" % turn_sep)
 
-def plotTurnSeparation(figureNumber=1,label=''):
+def plotTurnSeparation(figureNumber=1, label='', asFunctionOfTurnNumber=True):
     fig=plt.figure(figureNumber,figsize=(18,6))
     ax=plt.subplot(111)
-    x = np.arange(getTurnCount())
-    plt.plot(x,getTurnSeparation(), linewidth=2, label=label)
-    plt.xlabel('Turn Number')
+    if asFunctionOfTurnNumber:
+        x = np.arange(getTurnCount())
+        plt.xlabel('Turn Number')
+    else:
+        x = getEnergy()[1:] # From second turn
+        plt.xlabel('Energy [MeV]')
+    plt.plot(x,getTurnSeparation(), 'o-', linewidth=2, label=label)
     plt.ylabel('Turn Separation [mm]')
     plt.show()
 
