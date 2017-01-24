@@ -120,11 +120,27 @@ def getRFphaseProbeNames():
 def getRFphases():
         return phases_m
 
-def plotRFphases(fn=''):
+def plotRFphases():
     fig=plt.figure(figsize=(8,6))
     ax=plt.subplot(111)
     x = np.arange(len(getRFphases()))
     plt.plot(x,getRFphases(), linewidth=3)
+    plt.show()
+
+def plotOrbit(filename, figureNumber=1):
+    """Plots orbit in x-y from OPAL trackOrbit.dat
+
+    """
+    headers = ["ID","x","betx","y","bety","z","betz"]
+    data = np.genfromtxt(filename,
+                         dtype       = None,
+                         names       = headers,
+                         skip_header = 2) # skip first two lines
+
+    fig = plt.figure(figureNumber,figsize=(8,8))
+    plt.plot(data['x']/1000, data['y']/1000, linewidth=1)
+    plt.xlabel("x [m]")
+    plt.ylabel("y [m]")
     plt.show()
 
 # Using detect_peaks module for peak detection
