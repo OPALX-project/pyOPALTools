@@ -23,7 +23,7 @@ def calcTurnSeparation(filename):
 
     Parameters
     ----------
-    fielname : the xxx--trackOrbit.dat
+    filename : the xxx--trackOrbit.dat
     
     Returns
     -------
@@ -32,7 +32,7 @@ def calcTurnSeparation(filename):
 
     Notes
     -----
-    set the internal data sttructure ts_m
+    set the internal data structure ts_m
 
     References
     ----------
@@ -67,11 +67,13 @@ def writeTurnSeparationToFile(fn):
     for turn_sep in ts_m:
           out_file.write("%s\n" % turn_sep)
 
-def plotTurnSeparation(fn=''):
-    fig=plt.figure(figsize=(8,6))
+def plotTurnSeparation(figureNumber=1,label=''):
+    fig=plt.figure(figureNumber,figsize=(18,6))
     ax=plt.subplot(111)
     x = np.arange(getTurnCount())
-    plt.plot(x,getTurnSeparation(), linewidth=3)
+    plt.plot(x,getTurnSeparation(), linewidth=2, label=label)
+    plt.xlabel('Turn Number')
+    plt.ylabel('Turn Separation [mm]')
     plt.show()
 
 def calcRFphases(fn,RFcavity):
@@ -125,7 +127,7 @@ def plotRFphases(fn=''):
     plt.plot(x,getRFphases(), linewidth=3)
     plt.show()
 
-# Using detect_peaks module for peak detedction
+# Using detect_peaks module for peak detection
 
 __author__ = "Marcos Duarte, https://github.com/demotu/BMC"
 __version__ = "1.0.4"

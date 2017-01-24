@@ -2,5 +2,11 @@ Setup:
 
 export PYTHONPATH=xxx/pyOPALTools:$PYTHONPATH
 
+Then checkout the test directory
 
-Then checkout the test direcotry
+Python Package Dependencies  
+===========================
+h5py  
+numpy  
+matplotlib  
+pandas  
