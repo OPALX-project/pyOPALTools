@@ -184,7 +184,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     folder = args.directory[0]
-    step   = args.step
+    step   = args.step[0]
     xlim   = args.xlim[0]
     ylim   = args.ylim[0]
     zlim   = args.zlim[0]
@@ -209,7 +209,7 @@ if __name__ == "__main__":
     grids.plot(plt.gca(), 0)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
-    plt.savefig('ParticlePlot_x_y.png', bbox_inches='tight')
+    plt.savefig('ParticlePlot_x_y_step-' + str(step) + '.png', bbox_inches='tight')
     
     plt.figure()
     plt.xlim(xlim)
@@ -218,7 +218,7 @@ if __name__ == "__main__":
     grids.plot(plt.gca(), 1)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
-    plt.savefig('ParticlePlot_x_z.png', bbox_inches='tight')
+    plt.savefig('ParticlePlot_x_z_step-' + str(step) + '.png', bbox_inches='tight')
     
     plt.figure()
     plt.xlim(ylim)
@@ -227,4 +227,4 @@ if __name__ == "__main__":
     grids.plot(plt.gca(), 2)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
-    plt.savefig('ParticlePlot_y_z.png', bbox_inches='tight')
+    plt.savefig('ParticlePlot_y_z_step-' + str(step) + '.png', bbox_inches='tight')
