@@ -135,39 +135,71 @@ class Particles:
         node, \
         self._xcoord, \
         self._ycoord, \
-        self._zcoord = np.loadtxt(filename,
-                                  unpack=True,
-                                  dtype={'names': ('node',
-                                                   'xcoord',
-                                                   'ycoord',
-                                                   'zcoord'),
-                                         'formats': ('|S15',
-                                                     np.float,
-                                                     np.float,
-                                                     np.float)
-                                         }
-                                  )
+        self._zcoord, \
+        self._pxcoord, \
+        self._pycoord, \
+        self._pzcoord = np.loadtxt(filename,
+                                   unpack=True,
+                                   dtype={'names': ('node',
+                                                    'xcoord',
+                                                    'ycoord',
+                                                    'zcoord',
+                                                    'pxcoord',
+                                                    'pycoord',
+                                                    'pzcoord'),
+                                          'formats': ('|S15',
+                                                      np.float,
+                                                      np.float,
+                                                      np.float,
+                                                      np.float,
+                                                      np.float,
+                                                      np.float)
+                                          }
+                                   )
         print ( '#Particles: ', len(self._xcoord) )
     
     ## Plot all grids on all levels
     # @param ax is the axis to plot on
-    # @param plane is either x-y, x-z or y-z
-    #        specified by 0, 1, or 2
-    def plot(self, ax, plane):
+    # @param var1 first variable to plot ('x', 'y', 'z', 'px', 'py' or 'pz')
+    # @param var2 second variable to plot ('x', 'y', 'z', 'px', 'py' or 'pz')
+    def plot(self, ax, var1, var2):
+        
+        xvar, xlab = self._getArray(var1)
+        yvar, ylab = self._getArray(var2)
+        
         # 3. Dec. 2016,
         # http://stackoverflow.com/questions/17819502/how-can-you-put-a-matplotlib-artist-in-the-background-to-overlay-a-plot-on-top
-        if plane == 0:
-            ax.scatter(self._xcoord, self._ycoord, s=1, marker='.', color='gray', zorder=0)
-            ax.set_xlabel("x [m]", fontsize=18)
-            ax.set_ylabel("y [m]", fontsize=18)
-        elif plane == 1:
-            ax.scatter(self._xcoord, self._zcoord, s=1, marker='.', color='gray', zorder=0)
-            ax.set_xlabel("x [m]", fontsize=18)
-            ax.set_ylabel("z [m]", fontsize=18)
-        else:
-            ax.scatter(self._ycoord, self._zcoord, s=1, marker='.', color='gray', zorder=0)
-            ax.set_xlabel("y [m]", fontsize=18)
-            ax.set_ylabel("z [m]", fontsize=18)
+        ax.scatter(xvar, yvar, s=1, marker='.', color='gray', zorder=0)
+        ax.set_xlabel(xlab, fontsize=18)
+        ax.set_ylabel(ylab, fontsize=18)
+    
+        
+    ##
+    # @returns the data of one variable 'x', 'y', 'z', 'px', 'py' or 'pz') and its label
+    def _getArray(self, var):
+        vlab = ''
+        vcoord = []
+        
+        if var == 'x':
+            vcoord = self._xcoord
+            vlab = 'x [m]'
+        elif var == 'y':
+            vcoord = self._ycoord
+            vlab = 'y [m]'
+        elif var == 'z':
+            vcoord = self._zcoord
+            vlab = 'z [m]'
+        elif var == 'px':
+            vcoord = self._pxcoord
+            vlab = 'px []'
+        elif var == 'py':
+            vcoord = self._pycoord
+            vlab = 'py []'
+        elif var == 'pz':
+            vcoord = self._pzcoord
+            vlab = 'pz []'
+        return vcoord, vlab
+
 
 if __name__ == "__main__":
     
@@ -180,32 +212,45 @@ if __name__ == "__main__":
                         action='append')
     parser.add_argument('--zlim', help='longitudinal boundary', type=float, nargs=2,
                         action='append')
+    parser.add_argument('--pxlim', help='horizontal boundary', type=float, nargs=2,
+                        action='append')
+    parser.add_argument('--pylim', help='vertical boundary', type=float, nargs=2,
+                        action='append')
+    parser.add_argument('--pzlim', help='longitudinal boundary', type=float, nargs=2,
+                        action='append')
+    
     
     args = parser.parse_args()
     
-    folder = args.directory[0]
-    step   = args.step[0]
-    xlim   = args.xlim[0]
-    ylim   = args.ylim[0]
-    zlim   = args.zlim[0]
+    directory  = args.directory[0]
+    step       = args.step[0]
+    xlim       = args.xlim[0]
+    ylim       = args.ylim[0]
+    zlim       = args.zlim[0]
+    pxlim      = args.pxlim[0]
+    pylim      = args.pylim[0]
+    pzlim      = args.pzlim[0]
     
-    print ("Folder: ", folder)
-    print ("Step: ", step)
-    print ("xlim: ", xlim)
-    print ("ylim: ", ylim)
-    print ("zlim: ", zlim)
+    print ("Directory: ", directory)
+    print ("Step:      ", step)
+    print ("xlim:      ", xlim)
+    print ("ylim:      ", ylim)
+    print ("zlim:      ", zlim)
+    print ("pxlim:     ", pxlim)
+    print ("pylim:     ", pylim)
+    print ("pzlim:     ", pzlim)
     
     particles = Particles()
-    particles.read(folder + "pyplot_particles_" + str(step) + ".dat")
+    particles.read(directory + "pyplot_particles_" + str(step) + ".dat")
 
     grids = Grids()
-    grids.read(folder + "pyplot_grids_" + str(step) + ".dat")
+    grids.read(directory + "pyplot_grids_" + str(step) + ".dat")
     
     
     plt.figure()
     plt.xlim(xlim)
     plt.ylim(ylim)
-    particles.plot(plt.gca(), 0)
+    particles.plot(plt.gca(), 'x', 'y')
     grids.plot(plt.gca(), 0)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
@@ -214,7 +259,7 @@ if __name__ == "__main__":
     plt.figure()
     plt.xlim(xlim)
     plt.ylim(zlim)
-    particles.plot(plt.gca(), 1)
+    particles.plot(plt.gca(), 'x', 'z')
     grids.plot(plt.gca(), 1)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
@@ -223,8 +268,35 @@ if __name__ == "__main__":
     plt.figure()
     plt.xlim(ylim)
     plt.ylim(zlim)
-    particles.plot(plt.gca(), 2)
+    particles.plot(plt.gca(), 'y', 'z')
     grids.plot(plt.gca(), 2)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
     plt.savefig('ParticlePlot_y_z_step-' + str(step) + '.png', bbox_inches='tight')
+    
+    plt.figure()
+    plt.xlim(xlim)
+    plt.ylim(pxlim)
+    particles.plot(plt.gca(), 'x', 'px')
+    grids.plot(plt.gca(), 2)
+    plt.xticks(fontsize=18)
+    plt.yticks(fontsize=18)
+    plt.savefig('ParticlePlot_x_px_step-' + str(step) + '.png', bbox_inches='tight')
+    
+    plt.figure()
+    plt.xlim(ylim)
+    plt.ylim(pylim)
+    particles.plot(plt.gca(), 'y', 'py')
+    grids.plot(plt.gca(), 2)
+    plt.xticks(fontsize=18)
+    plt.yticks(fontsize=18)
+    plt.savefig('ParticlePlot_y_py_step-' + str(step) + '.png', bbox_inches='tight')
+    
+    plt.figure()
+    plt.xlim(zlim)
+    plt.ylim(pzlim)
+    particles.plot(plt.gca(), 'z', 'pz')
+    grids.plot(plt.gca(), 2)
+    plt.xticks(fontsize=18)
+    plt.yticks(fontsize=18)
+    plt.savefig('ParticlePlot_z_pz_step-' + str(step) + '.png', bbox_inches='tight')
