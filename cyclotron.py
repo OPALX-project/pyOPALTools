@@ -5,7 +5,6 @@ import numpy as np
 from matplotlib import rc
 import matplotlib.pylab as plt
 
-import glob
 import re
 
 # stores the turnseparation
@@ -129,24 +128,37 @@ def calcRFphases(fn,RFcavity):
     phases_m = []
     phaseProbeNames_m = RFcavity
 
-    file = open(fn, "r")
-
-    for line in file:
-            for cname in phaseProbeNames_m:
-                if re.search(cname, line):
-                    phases_m.append(float(line.split()[5]))
+    for i,cname in enumerate(getRFphaseProbeNames()):
+        turnNumber = 1
+        file = open(fn, "r")
+        turns  = []
+        phases = []
+        for line in file:
+            if re.search("Finished turn",line):
+                turnNumber += 1
+            if re.search(cname, line):
+                phase = float(line.split()[5])
+                turns.append(turnNumber)
+                phases.append(phase)
+        phases_m.append([turns,phases])
+        file.close()
             
 def getRFphaseProbeNames():
         return phaseProbeNames_m
 
-def getRFphases():
-        return phases_m
+def getRFphases(i):
+        return phases_m[i]
 
 def plotRFphases():
     fig=plt.figure(figsize=(8,6))
     ax=plt.subplot(111)
-    x = np.arange(len(getRFphases()))
-    plt.plot(x,getRFphases(), linewidth=3)
+    for i,cname in enumerate(getRFphaseProbeNames()):
+        turns  = getRFphases(i)[0]
+        phases = getRFphases(i)[1]
+        plt.plot(turns, phases, linewidth=3, label=cname)
+    plt.xlabel("Turn number")
+    plt.ylabel("RF phase [deg]")
+    plt.legend(loc=0)
     plt.show()
 
 def plotOrbit(filename, figureNumber=1):
