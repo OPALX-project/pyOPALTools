@@ -2,17 +2,9 @@
 #
 #
 import mmap
-import pandas as pd
 import numpy as np
-import re
 import sys
-import glob
 import h5py
-
-from math import cos, sin, fmod
-
-import matplotlib.pylab as plt
-import matplotlib.gridspec as gridspec
 
 from matplotlib.pyplot import *
 from matplotlib import rc
@@ -24,9 +16,6 @@ if sys.version_info < (3, 0):
     import commands as subprocess
 else:
     import subprocess
-
-from scipy.stats import kurtosis
-
 
 def set_colors(npar):
     """ Sets a list of different colors of requested length"""
@@ -42,9 +31,9 @@ def set_colors(npar):
     
     return colors
 
-#                                                                                                                                                                  
-# All about plotting                                                                                                                                               
-#                                                                                                                                                                  
+#
+# All about plotting
+#
 
 rc('xtick.major', pad=10)
 rc('savefig', dpi=800)

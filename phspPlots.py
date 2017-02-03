@@ -12,7 +12,7 @@ import numpy as np
 
 def plotOPALPhaseSpaceContours(fn, what=['x','px'], scale=[1000.,1000.], step=1, label='', xlim=[1820,1860], xlabel='x (mm)', ylabel='px (beta gamma) * 1e3', pdfFn='Hist1d.pdf', bins=500) :
     """ 
-    Plot phase sapce with 3 contours levels (['99.7 %','95 %','68 %'])
+    Plot phase space with 3 contours levels (['99.7 %','95 %','68 %'])
     If pdfFn is given a PDF-File is written
     
     Parameters
@@ -79,7 +79,7 @@ def plotOPALPhaseSpaceContours(fn, what=['x','px'], scale=[1000.,1000.], step=1,
     
 def plotOPALPhaseSpace(fn, what=['x','px'], scale=[1000.,1000.], step=1, label='', xlim=[1820,1860], xlabel='x (mm)', ylabel='px (beta gamma) * 1e3', pdfFn='phaseSpace.pdf') :
     """ 
-    Plot phase sapce 
+    Plot phase space 
     If pdfFn is given a PDF-File is written
     
     Parameters

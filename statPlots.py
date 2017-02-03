@@ -11,7 +11,7 @@ enu = ['a) ','b) ', 'c)' ]
 def opalStatOverviewPlot(fns, title="", pdfFn="", addData=[], myLoc=2):
     
     """ 
-    Plot an overview of results form possible 
+    Plot an overview of results from possible 
     several stat files. If pdfFn is given a PDF-File is written
 
     Example:
@@ -81,13 +81,17 @@ def opalStatOverviewPlot(fns, title="", pdfFn="", addData=[], myLoc=2):
     x     = []
 
     additionalData = []
-
-    dataSrc = []
     
-
+    dataSrc = [] # for use in legend
+    
     for i in range(len(fns)):
+        # add last directory and
+        splitfns = fns[i].split("/")
+        legendName = splitfns[-1]
+        if len(splitfns) > 1: 
+            legendName = splitfns[-2] + legendName
+        dataSrc.append(legendName)
         
-        dataSrc.append(fns[i].split("/")[-2]+'/'+fns[i].split("/")[-1])
         parser = SddsReader(fns[i])
 
         if not x:

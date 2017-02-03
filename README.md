@@ -9,4 +9,3 @@ Python Package Dependencies
 h5py  
 numpy  
 matplotlib  
-pandas  
