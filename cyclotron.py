@@ -84,7 +84,7 @@ def writeTurnSeparationToFile(fn):
     for turn_sep in ts_m:
           out_file.write("%s\n" % turn_sep)
 
-def plotTurnSeparation(figureNumber=1, label='', asFunctionOfTurnNumber=True):
+def plotTurnSeparation(figureNumber=1, asFunctionOfTurnNumber=True, **kwargs):
     fig=plt.figure(figureNumber,figsize=(18,6))
     ax=plt.subplot(111)
     if asFunctionOfTurnNumber:
@@ -93,7 +93,7 @@ def plotTurnSeparation(figureNumber=1, label='', asFunctionOfTurnNumber=True):
     else:
         x = getEnergy()[1:] # From second turn
         plt.xlabel('Energy [MeV]')
-    plt.plot(x,getTurnSeparation(), 'o-', linewidth=2, label=label)
+    plt.plot(x,getTurnSeparation(), 'o-', linewidth=2, **kwargs)
     plt.ylabel('Turn Separation [mm]')
     plt.show()
 
@@ -149,19 +149,19 @@ def getRFphaseProbeNames():
 def getRFphases(i):
         return phases_m[i]
 
-def plotRFphases():
+def plotRFphases(**kwargs):
     fig=plt.figure(figsize=(8,6))
     ax=plt.subplot(111)
     for i,cname in enumerate(getRFphaseProbeNames()):
         turns  = getRFphases(i)[0]
         phases = getRFphases(i)[1]
-        plt.plot(turns, phases, linewidth=3, label=cname)
+        plt.plot(turns, phases, linewidth=3, label=cname, **kwargs)
     plt.xlabel("Turn number")
     plt.ylabel("RF phase [deg]")
     plt.legend(loc=0)
     plt.show()
 
-def plotOrbit(filename, figureNumber=1):
+def plotOrbit(filename, figureNumber=1, **kwargs):
     """Plots orbit in x-y from OPAL trackOrbit.dat
 
     """
@@ -172,7 +172,7 @@ def plotOrbit(filename, figureNumber=1):
                          skip_header = 2) # skip first two lines
 
     fig = plt.figure(figureNumber,figsize=(8,8))
-    plt.plot(data['x']/1000, data['y']/1000, linewidth=1)
+    plt.plot(data['x']/1000, data['y']/1000, linewidth=1, **kwargs)
     plt.xlabel("x [m]")
     plt.ylabel("y [m]")
     plt.show()
