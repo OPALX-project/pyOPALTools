@@ -13,6 +13,7 @@ global ts_m
 global energy_m
 global phases_m
 global phaseProbeNames_m
+global radius_m
 
 #
 # functions associated with track-orbit computations
@@ -43,7 +44,7 @@ def calcTurnSeparation(filename):
 
     """
 
-    global ts_m, energy_m
+    global ts_m, energy_m, radius_m
     headers = ["ID","x","betx","y","bety","z","betz"]
     df = np.genfromtxt(filename,
                        dtype       = None,
@@ -51,6 +52,7 @@ def calcTurnSeparation(filename):
                        skip_header = 2) # skip first two lines
 
     x=df['x']
+    y=df['y']
     
     # Get x-axis crossings
     pksx = detect_peaks(x, mph=0.04, mpd=100)
@@ -67,8 +69,12 @@ def calcTurnSeparation(filename):
     gamma = np.sqrt(1+beta_gamma*beta_gamma)
     # Energy
     energy = (gamma - 1) * p_mass
+    # Radius
+    radius = np.sqrt(x*x+y*y)
+
     # Mask
     energy_m = energy[pksx]
+    radius_m = radius[pksx]
 
 def getTurnSeparation():
     return ts_m
@@ -79,20 +85,27 @@ def getTurnCount():
 def getEnergy():
     return energy_m
 
+def getRadius():
+    return radius_m
+
 def writeTurnSeparationToFile(fn):
     out_file = open(fn, 'w')
     for turn_sep in ts_m:
           out_file.write("%s\n" % turn_sep)
 
-def plotTurnSeparation(figureNumber=1, asFunctionOfTurnNumber=True, **kwargs):
+def plotTurnSeparation(figureNumber=1, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
     fig=plt.figure(figureNumber,figsize=(18,6))
     ax=plt.subplot(111)
     if asFunctionOfTurnNumber:
-        x = np.arange(getTurnCount())
+        x = np.arange(2, getTurnCount()+2) # From second turn
         plt.xlabel('Turn Number')
-    else:
+    elif asFunctionOfEnergy:
         x = getEnergy()[1:] # From second turn
         plt.xlabel('Energy [MeV]')
+    else:
+        x = getRadius()[1:] / 1000. # From second turn, in meters
+        plt.xlabel('Radius [m]')
+
     plt.plot(x,getTurnSeparation(), 'o-', linewidth=2, **kwargs)
     plt.ylabel('Turn Separation [mm]')
     plt.show()
