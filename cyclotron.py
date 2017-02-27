@@ -14,6 +14,7 @@ global energy_m
 global phases_m
 global phaseProbeNames_m
 global radius_m
+global phi_r_m
 
 #
 # functions associated with track-orbit computations
@@ -44,7 +45,7 @@ def calcTurnSeparation(filename):
 
     """
 
-    global ts_m, energy_m, radius_m
+    global ts_m, energy_m, phi_r_m, radius_m
     headers = ["ID","x","betx","y","bety","z","betz"]
     df = np.genfromtxt(filename,
                        dtype       = None,
@@ -64,17 +65,20 @@ def calcTurnSeparation(filename):
     # Particle energy
     p_mass = 938.28 # proton mass in MeV / c^2
     # Beta*gamma
-    beta_gamma = np.sqrt(df['betx']*df['betx']+df['bety']*df['bety'])
+    beta_gamma = np.sqrt(df['betx']*df['betx']+df['bety']*df['bety']+df['betz']*df['betz'])
     # Gamma
     gamma = np.sqrt(1+beta_gamma*beta_gamma)
     # Energy
     energy = (gamma - 1) * p_mass
     # Radius
     radius = np.sqrt(x*x+y*y)
-
+    # Radial direction v_r (normalise with momentum?)
+    phi_r = np.arctan(df['betx']/df['bety']) - np.arctan(y/x)
+    
     # Mask
     energy_m = energy[pksx]
     radius_m = radius[pksx]
+    phi_r_m  = phi_r[pksx]
 
 def getTurnSeparation():
     return ts_m
@@ -88,6 +92,9 @@ def getEnergy():
 def getRadius():
     return radius_m
 
+def getRadialDirection():
+    return phi_r_m
+
 def writeTurnSeparationToFile(fn):
     out_file = open(fn, 'w')
     for turn_sep in ts_m:
@@ -95,7 +102,7 @@ def writeTurnSeparationToFile(fn):
 
 def plotTurnSeparation(figureNumber=1, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
     fig=plt.figure(figureNumber,figsize=(18,6))
-    ax=plt.subplot(111)
+    #ax=plt.subplot(111)
     if asFunctionOfTurnNumber:
         x = np.arange(2, getTurnCount()+2) # From second turn
         plt.xlabel('Turn Number')
@@ -108,6 +115,14 @@ def plotTurnSeparation(figureNumber=1, asFunctionOfTurnNumber=True, asFunctionOf
 
     plt.plot(x,getTurnSeparation(), 'o-', linewidth=2, **kwargs)
     plt.ylabel('Turn Separation [mm]')
+    plt.show()
+
+def plotBetaBeat(figureNumber=1, **kwargs):
+    fig=plt.figure(figureNumber,figsize=(18,6))
+    x = getRadius() / 1000. # in meters
+    plt.plot(x,getRadialDirection(), 'o-', linewidth=2, **kwargs)
+    plt.xlabel('Radius [m]')
+    plt.ylabel('Radial Direction [rad]')
     plt.show()
 
 def calcRFphases(fn,RFcavity):
