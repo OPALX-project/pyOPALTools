@@ -9,3 +9,4 @@ Python Package Dependencies
 h5py  
 numpy  
 matplotlib  
+scipy

@@ -1,6 +1,7 @@
 from utils import tableau20
 
 import numpy as np
+import scipy as sp
 
 from matplotlib import rc
 import matplotlib.pylab as plt
@@ -30,7 +31,6 @@ def calcTurnSeparation(filename):
     -------
     none
     
-
     Notes
     -----
     set the internal data structure ts_m
@@ -80,6 +80,90 @@ def calcTurnSeparation(filename):
     radius_m = radius[pksx]
     phi_r_m  = phi_r[pksx]
 
+def calcCenteringExtraction(turnCorrection=1.35,phaseCorrection=0.0,amplitudeCorrection=1):
+    """ Calculate betatron tune values and zentrierung
+
+    Based on Fortran routine from Martin Humbel
+    "Bestimmung der horizontalen Betatronschwingungsgroessen R0, DR, A und B mit der Methode der Normalengleichung"
+
+    Parameters
+    ----------
+    turnCorrection      : Betatron oscillations per turn (tune), default value based on PSI Ring
+    phaseCorrection     : Phase correction for betatron calculation in grad (radial angle between measurement and extraction)
+    amplitudeCorrection : Amplitude correction for betatron calculation
+
+    Returns
+    -------
+    None
+
+    Notes
+    -----
+    Sets the internal data structure centering_m
+
+    Examples
+    --------
+    TODO
+
+    """
+
+    global centering_m, radius_m
+
+    # Use last 7 turns
+    totalTurns = len(radius_m)
+    turnsToAnalyse = min(7,totalTurns)
+     
+    centering_m = np.zeros(4) # R0, DR, sine (aka E), cosine (aka F)
+    if (turnsToAnalyse < 2):
+        return
+
+    # Fill matrix
+    dim = 4
+    A = np.zeros((dim,dim))
+    B = np.zeros(dim)
+    for i in range(0,turnsToAnalyse):
+        turnsFromExtraction = i - totalTurns + 1;
+        turnNumber          = totalTurns - turnsToAnalyse + i;
+        sinq = np.sin(turnsFromExtraction * 2 * np.pi * turnCorrection)
+        cosq = np.cos(turnsFromExtraction * 2 * np.pi * turnCorrection)
+        A[0][0] += 1
+        A[0][1] += turnsFromExtraction
+        A[0][2] += cosq
+        A[0][3] += sinq
+        A[1][1] += turnsFromExtraction * turnsFromExtraction
+        A[1][2] += turnsFromExtraction * cosq
+        A[1][3] += turnsFromExtraction * sinq
+        A[2][2] += cosq * cosq
+        A[2][3] += cosq * sinq
+        A[3][3] += sinq * sinq
+
+        B[0] += radius_m[turnNumber]
+        B[1] += radius_m[turnNumber] * turnsFromExtraction
+        B[2] += radius_m[turnNumber] * cosq
+        B[3] += radius_m[turnNumber] * sinq
+
+    # Make A symmetric
+    for i in range(0,dim):
+        for j in range(i+1,dim):
+            A[j][i] = A[i][j]
+    
+    # No solution for 3 and 4 turns
+    if (turnsToAnalyse == 3 or turnsToAnalyse == 4):
+        centering_m[0] = radius_m[turnsToAnalyse-1]
+        centering_m[1] = radius_m[turnsToAnalyse-1] - radius_m[turnsToAnalyse-2]
+        return
+    
+    # Solve linear equations Ax = B
+    (lu,piv)  = sp.linalg.lu_factor(A)
+    centering = sp.linalg.lu_solve((lu,piv),B)
+    
+    # Correction factors
+    phaseCorrInRad = phaseCorrection * np.pi / 180.;
+    centering_m[0] = centering[0]
+    centering_m[1] = centering[1]
+    centering_m[2] = amplitudeCorrection * ( centering[2]*np.cos(phaseCorrInRad) + centering[3]*np.sin(phaseCorrInRad))
+    centering_m[3] = amplitudeCorrection * (-centering[2]*np.sin(phaseCorrInRad) + centering[3]*np.cos(phaseCorrInRad))
+    print 'Centering values [R0,DR,E,F] =',centering_m
+
 def getTurnSeparation():
     return ts_m
 
@@ -94,6 +178,9 @@ def getRadius():
 
 def getRadialDirection():
     return phi_r_m
+
+def getCentering():
+    return centering_m
 
 def writeTurnSeparationToFile(fn):
     out_file = open(fn, 'w')
@@ -123,6 +210,37 @@ def plotBetaBeat(figureNumber=1, **kwargs):
     plt.plot(x,getRadialDirection(), 'o-', linewidth=2, **kwargs)
     plt.xlabel('Radius [m]')
     plt.ylabel('Radial Direction [rad]')
+    plt.show()
+
+def plotCentering(figureNumber=1, **kwargs):
+    fig=plt.figure(figureNumber,figsize=(8,8))
+    ax = fig.add_subplot(1, 1, 1)
+    x = getCentering()
+    plt.plot(x[2], x[3], 'o', **kwargs)
+    # Add circles
+    circle1 = plt.Circle((0, 0), radius=2, fc='black', fill=False)
+    plt.gca().add_artist(circle1)
+    circle2 = plt.Circle((0, 0), radius=4, fc='black', fill=False)
+    plt.gca().add_artist(circle2)
+    
+    # Move left y-axis and bottim x-axis to centre, passing through (0,0)
+    ax.set_xlim(-5,5)
+    ax.set_ylim(-5,5)
+    ax.spines['left'].set_position('center')
+    ax.spines['bottom'].set_position('center')
+    # Eliminate upper and right axes
+    ax.spines['right'].set_color('none')
+    ax.spines['top'].set_color('none')
+    
+    # Show ticks in the left and lower axes only
+    ax.xaxis.set_ticks_position('bottom')
+    ax.yaxis.set_ticks_position('left')
+
+    plt.xlabel('E')
+    plt.ylabel('F')
+    ax.xaxis.set_label_coords(0.9, -0.025)
+    ax.yaxis.set_label_coords(-0.025,0.9)
+
     plt.show()
 
 def calcRFphases(fn,RFcavity):
