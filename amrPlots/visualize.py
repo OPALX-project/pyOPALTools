@@ -4,7 +4,7 @@
 # @date 14. October 2016, LBNL
 # @version 1.1 (21. Dec. 2016)
 # 
-# @pre Environment variable OPAL_BUILD has to be set. Python >= 2.7
+# @pre Python >= 2.7
 # @details Plot the electric self-field, density and self-field
 # potential using the yt framework.
 # 1. mpirun -np #cores testSolver
@@ -24,12 +24,20 @@ try:
                         default=1,
                         type=float,
                         nargs=1)
+    
+    parser.add_argument('--pltfile',
+                        help='plot file',
+                        type=str)
+    
     args = parser.parse_args()
     
     zoom = args.zoom
     
-    opal = os.environ['OPAL_BUILD']
-    ds = yt.load(opal + "ippl/test/AMR/plt0000", dataset_type='opal')
+    pltfile = args.pltfile
+    
+    print ( pltfile )
+    
+    ds = yt.load(pltfile, dataset_type='opal')
     
     ds.print_stats()
     
@@ -73,7 +81,5 @@ try:
     print ( ad.quantities.extrema("Ex").in_units('V/m') )
     print ( ad.quantities.extrema("potential").in_units('V') )
     
-except KeyError:
-    print ("Please export the environment variable 'OPAL_BUILD'.")
 except IOError as e:
     print (e.strerror)
