@@ -202,12 +202,15 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single):
 
     plt.title(prefix)
 
-    #margin = (vmax-vmin)/10
-    #clow = int(vmin + margin)
-    #chigh = int(vmax - margin)
-    #cmiddle = int(vmin + ((vmax-vmin)/2))
-    #cbar = plt.colorbar(im)
-    #cbar.set_ticks([clow, cmiddle, chigh])
+    margin = (vmax-vmin)/10
+    clow = int(vmin + margin)
+    chigh = int(vmax - margin)
+    cmiddle = int(vmin + ((vmax-vmin)/2))
+    cbar = plt.colorbar(im)
+    cbar.set_ticks([clow, cmiddle, chigh])
+    cbarlabel_text = selected_obj[2]
+    cbarlabel_text = cbarlabel_text.replace('_', '\_')
+    cbar.set_label(cbarlabel_text, labelpad=10)
 
     if show_single:
         fig.canvas.mpl_connect('pick_event', onpick)
@@ -215,7 +218,7 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single):
     else:
         pl.savefig(prefix + '/' + num.zfill(3) + '.png')
 
-    pl.close(fig)
+    # pl.close(fig)
 
 
 # Helpers
@@ -273,24 +276,28 @@ def main(argv):
             for obj in str.split(objectives, ","):
                 selected_ids.append(obj)
 
-        if arg.startswith("--dvars"):
+        elif arg.startswith("--dvars"):
             dvars = str.split(arg, "=")[1]
             selected_ids.append(str.split(dvars, ","))
 
-        if arg.startswith("--path"):
+        elif arg.startswith("--path"):
             path = str.split(arg, "=")[1]
 
-        if arg.startswith("--filename-postfix"):
+        elif arg.startswith("--filename-postfix"):
             filename_postfix = str.split(arg, "=")[1]
 
-        if arg.startswith("--outpath"):
+        elif arg.startswith("--outpath"):
             outpath = str.split(arg, "=")[1]
 
-        if arg.startswith("--video"):
+        elif arg.startswith("--video"):
             videoname = str.split(arg, "=")[1]
 
-        if arg.startswith("--generation"):
+        elif arg.startswith("--generation"):
             generation = str.split(arg, "=")[1]
+        
+        else:
+            print arg,"is not a valid argument"
+            return
 
     if path == "":
         print("ERROR: no path for input data specified")

@@ -69,20 +69,19 @@ class AnnoteFinder:
         if event.inaxes:
             clickX = event.xdata
             clickY = event.ydata
-        if self.axis is None or self.axis == event.inaxes:
-            annotes = []
-        for x, y, idx in self.data:
-            if clickX - self.x_tol < x < clickX + self.x_tol and \
-               clickY - self.y_tol < y < clickY + self.y_tol:
-                d = distance(x, clickX, y, clickY)
-                annotes.append((d, x, y, idx))
-        if annotes:
-            annotes.sort()
-            _ , x, y, annote_idx = annotes[0]
-            self.drawAnnote(event.inaxes, x, y, annote_idx)
-            for l in self.links:
-                l.drawSpecificAnnote(annote_idx)
-
+            if self.axis is None or self.axis == event.inaxes:
+                annotes = []
+            for x, y, idx in self.data:
+                if clickX - self.x_tol < x < clickX + self.x_tol and \
+                   clickY - self.y_tol < y < clickY + self.y_tol:
+                    d = distance(x, clickX, y, clickY)
+                    annotes.append((d, x, y, idx))
+            if annotes:
+                annotes.sort()
+                _ , x, y, annote_idx = annotes[0]
+                self.drawAnnote(event.inaxes, x, y, annote_idx)
+                for l in self.links:
+                    l.drawSpecificAnnote(annote_idx)
 
     def getAnchor(self, x, y):
 
@@ -135,6 +134,7 @@ class AnnoteFinder:
         data = self.rdata[idx, :]
         for i, d in self.name_to_column_map.items():
             name = i.lstrip('%')
+            name = name.replace('_', '\_')
             pretty_data[d] = ("$" + name + " = " + str(data[d]) + "$ \\\\")
 
         return "".join(pretty_data)
