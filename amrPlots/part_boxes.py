@@ -254,7 +254,8 @@ if __name__ == "__main__":
     grids.plot(plt.gca(), 0)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
-    plt.savefig('ParticlePlot_x_y_step-' + str(step) + '.png', bbox_inches='tight')
+    plt.tight_layout()
+    plt.savefig('ParticlePlot_x_y_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
     
     plt.figure()
     plt.xlim(xlim)
@@ -263,7 +264,8 @@ if __name__ == "__main__":
     grids.plot(plt.gca(), 1)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
-    plt.savefig('ParticlePlot_x_z_step-' + str(step) + '.png', bbox_inches='tight')
+    plt.tight_layout()
+    plt.savefig('ParticlePlot_x_z_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
     
     plt.figure()
     plt.xlim(ylim)
@@ -272,7 +274,8 @@ if __name__ == "__main__":
     grids.plot(plt.gca(), 2)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
-    plt.savefig('ParticlePlot_y_z_step-' + str(step) + '.png', bbox_inches='tight')
+    plt.tight_layout()
+    plt.savefig('ParticlePlot_y_z_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
     
     plt.figure()
     plt.xlim(xlim)
@@ -281,7 +284,8 @@ if __name__ == "__main__":
     grids.plot(plt.gca(), 2)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
-    plt.savefig('ParticlePlot_x_px_step-' + str(step) + '.png', bbox_inches='tight')
+    plt.tight_layout()
+    plt.savefig('ParticlePlot_x_px_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
     
     plt.figure()
     plt.xlim(ylim)
@@ -290,7 +294,8 @@ if __name__ == "__main__":
     grids.plot(plt.gca(), 2)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
-    plt.savefig('ParticlePlot_y_py_step-' + str(step) + '.png', bbox_inches='tight')
+    plt.tight_layout()
+    plt.savefig('ParticlePlot_y_py_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
     
     plt.figure()
     plt.xlim(zlim)
@@ -299,4 +304,5 @@ if __name__ == "__main__":
     grids.plot(plt.gca(), 2)
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
-    plt.savefig('ParticlePlot_z_pz_step-' + str(step) + '.png', bbox_inches='tight')
+    plt.tight_layout()
+    plt.savefig('ParticlePlot_z_pz_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
