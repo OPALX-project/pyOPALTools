@@ -1,0 +1,89 @@
+# opt-pilot Visualization
+
+This simple python script helps visualize the results (Pareto front) generated
+by the opt-pilot framework.
+
+The visualization is pretty basic, no fancy 3D stuff and by using x and y axis
+plus a box size of result points we can display 3 objectives (3 dimensions).
+
+## Installation
+
+To run the visualization tool the following Python libraries are required:
+
+* python     >= 2.7
+* numpy      >= 1.7.0
+* scipy      >= 1.7.0
+* matplotlib >= 1.2.0
+
+### LINUX (Arch)
+
+On Arch Linux the following command can be used to install all required
+packages to run the visualizer:
+
+    pacman -S python2 python2-numpy python2-matplotlib python2-scipy
+
+
+### LINUX (Ubuntu)
+
+On a recent Ubuntu Linux (>= 10.4) the following command can be used to
+install all required packages to run the visualizer:
+
+    apt-get install python python-numpy python-matplotlib python-scipy
+
+
+### MAC OSX
+
+On OSX the libraries can be installed using e.g. port:
+
+    port install python27 py27-numpy py27-scipy py27-matplotlib
+
+
+## Arguments
+
+* objectives: specify 3 objectives you want to visualize (check header of
+  result file for available objectives)
+* path: specify the path of the result files
+* filename-postfix (default: results.dat): specify a custom file postfix of
+  result files
+* outpath: path for storing resulting pngs
+* video (un-tested): name of the video
+
+
+## Using
+
+    python2 visualize_pf.py --objectives=%OBJ1,%OBJ2,%OBJ3 \
+                            --path=/path/to/data \
+                            --outpath=/path/to/results \
+                            [--generation=n]
+
+The `--generation` argument only displays the `n`'th generation.
+
+To visualize the old data files (not JSON) use the
+
+    --filename-prefix=results.dat
+
+argument. By default result files are assumed to be in the (new) JSON format.
+
+
+## Finding Design Variables
+
+There are two ways to find design variables for a given individual:
+
+* click on the colored box (click again to hide)
+* open the matching result file (see below)
+
+After selecting a point the given ID can be used to find the corresponding
+design variables. In order to do that open the result file of the
+corresponding generation and find the ID on the left-most column. After the
+objective values all design variables (in the order as hinted in the header)
+are listed.
+
+
+## Example
+
+There is an example result file in the `data` directory. To display, use
+
+    python2 visualize_pf.py --objectives=%obj1,%obj2,%obj3 \
+                            --path=./data/ \
+                            --generation=995
+
