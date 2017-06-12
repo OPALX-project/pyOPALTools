@@ -43,20 +43,24 @@ On OSX the libraries can be installed using e.g. port:
 * objectives: specify 3 objectives you want to visualize (check header of
   result file for available objectives)
 * path: specify the path of the result files
-* filename-postfix (default: results.dat): specify a custom file postfix of
+* filename-postfix (default: `results.json`): specify a custom file postfix of
   result files
 * outpath: path for storing resulting pngs
-* video (un-tested): name of the video
-
+* plot-all : display additional histogram distributions for the design variables and objectives (for a specific generation only)
+* video (untested): name of the video
 
 ## Using
 
     python2 visualize_pf.py --objectives=%OBJ1,%OBJ2,%OBJ3 \
                             --path=/path/to/data \
-                            --outpath=/path/to/results \
+                            [--outpath=/path/to/results] \
+                            [--video=name] \
+                            [--plot-all] \
                             [--generation=n]
 
 The `--generation` argument only displays the `n`'th generation.
+
+The `--video` argument make a video out of the pareto-front figures.
 
 To visualize the old data files (not JSON) use the
 
