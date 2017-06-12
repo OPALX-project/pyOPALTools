@@ -28,13 +28,13 @@ class AnnoteFinder:
 
         self.name_to_column_map = name_to_column_map
 
-        max_varname_len = 0
+        self.max_varname_len = 0
         for i, _ in name_to_column_map.items():
-            max_varname_len = max(max_varname_len, len(i))
+            self.max_varname_len = max(self.max_varname_len, len(i))
 
         #FIXME: take into account figure width/height
         self.item_height = 0.013
-        self.box_width = (max_varname_len + 8) * 0.013
+        self.box_width = (self.max_varname_len + 8) * 0.013
 
 
         self.rdata = rdata
@@ -115,9 +115,11 @@ class AnnoteFinder:
             (x_shifted, y_shifted) = self.getAnchor(x, y)
 
             t = axis.text(x_shifted, y_shifted,
-                          "%s"%(self.listifyData(annote_idx)),
-                          bbox=dict(boxstyle='round,pad=0.3',
-                          fc='orange', alpha=0.9))
+                          self.listifyData(annote_idx),
+                          bbox = dict(boxstyle='round,pad=0.3',
+                          fc='orange', alpha=0.9),
+                          family='monospace',
+                          horizontalalignment = 'left')
             m = axis.scatter([x], [y], marker='d', c='r', zorder=100)
             self.drawnAnnotations[(x, y)] = (t, m)
             self.axis.figure.canvas.draw()
@@ -132,9 +134,10 @@ class AnnoteFinder:
     def listifyData(self, idx):
         pretty_data = [""] * len(self.name_to_column_map)
         data = self.rdata[idx, :]
-        for i, d in self.name_to_column_map.items():
-            name = i.lstrip('%')
-            name = name.replace('_', '\_')
-            pretty_data[d] = ("$" + name + " = " + str(data[d]) + "$ \\\\")
+        for name, d in self.name_to_column_map.items():
+            # Left aligned with width of varname + 9 (for "$\mathtt{"). Spaces need to be escaped
+            # TODO: Unfortunately spaces seem not to be mono-spaced
+            # TODO: Escapes in name need to be accounted for
+            pretty_data[d] = (("$\mathtt{" + name).ljust(self.max_varname_len + 9) + " = " + str(data[d])  + "}$\\\\").replace(" ","\ ")
 
         return "".join(pretty_data)
