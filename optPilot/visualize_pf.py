@@ -102,7 +102,7 @@ def onpick(event):
     print 'onpick points:', zip(xdata[ind], ydata[ind])
 
 
-def plot(data, xlim, ylim, num, prefix, selected_obj, show_single):
+def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
     fig = pl.figure()
     ax  = fig.add_subplot(1, 1, 1)
 
@@ -192,7 +192,13 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single):
     else:
         pl.savefig(prefix + '/' + num.zfill(3) + '.png')
 
-    # pl.close(fig)
+    if show_single and plotAll:
+        nrIDs = max(np.shape(data))
+        for name,i in nameToColumnMap.iteritems():
+            pl.figure()
+            pl.hist(data[:,i],bins=nrIDs/10)
+            pl.xlabel(name)
+            pl.show()
 
 
 # Helpers
@@ -252,6 +258,7 @@ def main(argv):
     outpath = "output"
     filename_postfix = "results.json"
     generation = -1
+    plotAll = False
 
     for arg in argv:
         if arg.startswith("--objectives"):
@@ -281,6 +288,8 @@ def main(argv):
         elif arg.startswith("--generation"):
             generation = str.split(arg, "=")[1]
         
+        elif arg.startswith("--plot-all"):
+            plotAll = True
         else:
             print arg,"is not a valid argument"
             return
@@ -314,7 +323,7 @@ def main(argv):
         for i, _ in data.items():
             print " >> saving " + str(i)
             plot(data[str(i)], xlim, ylim,
-                 str(i), outpath, selected_ids, show_single=False)
+                 str(i), outpath, selected_ids, show_single=False, plotAll=plotAll)
     else:
         buildNameToColumnMap(path + '/' + str(generation) + '_' +
                              filename_postfix )
@@ -324,7 +333,7 @@ def main(argv):
         (xlim, ylim) = computeLimits(data, selected_ids)
         plot(data[str(generation)], xlim, ylim,
              str(generation), outpath, selected_ids,
-             show_single=True)
+             show_single=True, plotAll=plotAll)
 
     if videoname:
         saveVideo(outpath, videoname)
