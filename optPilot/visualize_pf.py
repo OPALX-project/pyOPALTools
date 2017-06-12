@@ -11,6 +11,7 @@ import matplotlib.cm     as cm
 import matplotlib.pyplot as plt
 #import matplotlib.mlab   as mlab
 #from   matplotlib.backends.backend_pdf import PdfPages
+from collections import OrderedDict
 
 from Annotate import AnnoteFinder
 
@@ -22,7 +23,7 @@ from Annotate import AnnoteFinder
 nameToColumnMap = {}
 
 def buildNameToColumnMapJSON(filename):
-    data = json.load(open(filename))
+    data = json.load(open(filename), object_pairs_hook=OrderedDict)
 
     for idx, name in enumerate(data["solutions"][0].keys()):
         # name improvement
@@ -30,7 +31,7 @@ def buildNameToColumnMapJSON(filename):
         nameToColumnMap[name] = idx
 
 def readJSONData(filename):
-    data      = json.load(open(filename))
+    data      = json.load(open(filename), object_pairs_hook=OrderedDict)
     solutions = data["solutions"]
     table     = np.zeros((len(solutions), len(nameToColumnMap)))
 
