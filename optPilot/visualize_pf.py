@@ -25,9 +25,9 @@ def buildNameToColumnMapJSON(filename):
     data = json.load(open(filename))
 
     for idx, name in enumerate(data["solutions"][0].keys()):
-        name = name.replace(" ", "")
+        # name improvement
+        name = improveName(name)
         nameToColumnMap[name] = idx
-
 
 def readJSONData(filename):
     data      = json.load(open(filename))
@@ -55,13 +55,9 @@ def buildNameToColumnMap(filename):
 
     col_idx = 0
     for col_name in formats:
-        col_name.lstrip().rstrip()
-        col_name = col_name.replace('\n', '')
-        if col_name == "%ID":
-            col_name = "ID"
+        col_name = improveName(col_name)
         nameToColumnMap[col_name] = col_idx
         col_idx += 1
-
 
 def readData(filename):
 
@@ -189,18 +185,14 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single):
         plt.connect('button_press_event', af)
 
     plt.xlim(xlim[0], xlim[1])
-    xlabel_text = selected_obj[0].lstrip('%')
-    xlabel_text = xlabel_text.replace('_', '\_')
-    plt.xlabel(xlabel_text)
-
-    ylabel_text = selected_obj[1].lstrip('%')
-    ylabel_text = ylabel_text.replace('_', '\_')
     plt.ylim(ylim[0], ylim[1])
-    plt.ylabel(ylabel_text)
+
+    plt.xlabel(selected_obj[0])
+    plt.ylabel(selected_obj[1])
 
     ax.yaxis.set_major_formatter(pl.ScalarFormatter(useMathText=True))
 
-    title_text = ('Generation ' + num).replace('_', '\_')
+    title_text = ('Generation ' + num)
     plt.title(title_text)
 
     margin = (vmax-vmin)/10
@@ -210,7 +202,6 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single):
     cbar = plt.colorbar(im)
     cbar.set_ticks([clow, cmiddle, chigh])
     cbarlabel_text = selected_obj[2]
-    cbarlabel_text = cbarlabel_text.replace('_', '\_')
     cbar.set_label(cbarlabel_text, labelpad=10)
 
     if show_single:
@@ -259,6 +250,15 @@ def computeLimits(data, selected_ids):
     return (xlim, ylim)
 
 
+def improveName(name):
+    name.lstrip().rstrip()        # remove trailing and leading whitespace
+    name = name.lstrip('%')       # remove leading %
+    name = name.replace(" ", "")  # remove spaces
+    name = name.replace('_','\_') # latex handling of underscore
+    name = name.replace('\n', '') # remove newlines
+    return name
+
+
 # Main
 ##############################################################################
 
@@ -275,6 +275,7 @@ def main(argv):
         if arg.startswith("--objectives"):
             objectives = str.split(arg, "=")[1]
             for obj in str.split(objectives, ","):
+                obj = improveName(obj)
                 selected_ids.append(obj)
 
         elif arg.startswith("--dvars"):
