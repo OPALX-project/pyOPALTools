@@ -190,7 +190,8 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
         fig.canvas.mpl_connect('pick_event', onpick)
         pl.show()
     else:
-        pl.savefig(prefix + '/' + num.zfill(3) + '.png')
+        pl.savefig(prefix + '/' + num.zfill(4) + '.png')
+        pl.close(fig)
 
     if show_single and plotAll:
         nrIDs = max(np.shape(data))
@@ -207,9 +208,10 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
 def saveVideo(img_path, video_name):
 
     import commands
+    # TODO, check if ffmpeg exists - not working
     commands.getoutput("rm " + video_name)
-    commands.getoutput("ffmpeg -r 0.7 -bv 1800 -i " + img_path +
-                       "/%03d.png " + video_name)
+    commands.getoutput("ffmpeg -r 0.7 -i " + img_path +
+                       "/%04d.png -b:v 1800 " + video_name)
 
 
 def computeLimits(data, selected_ids):
