@@ -52,10 +52,12 @@ def buildNameToColumnMap(filename):
         return buildNameToColumnMapJSON(filename)
 
     data_format = open(filename, "r").readlines()[0]
-    formats = str.split(data_format, ",")
+    formats = str.split(data_format)
 
     col_idx = 0
     for col_name in formats:
+        if col_name == 'DVAR:' :
+            continue
         col_name = improveName(col_name)
         nameToColumnMap[col_name] = col_idx
         col_idx += 1
@@ -65,28 +67,7 @@ def readData(filename):
     if filename.find("json") > 0:
         return readJSONData(filename)
 
-    lines = open(filename,"r").readlines()
-    numIndividuals = len(lines) - 1
-
-    numValues = len(nameToColumnMap)
-
-    data = np.zeros((numIndividuals, numValues))
-
-    i = 0
-    for line in lines:
-        if line.startswith('%'):
-            continue
-        j = 0
-        vals = str.split(line.strip(), ' ')
-        for val in vals:
-            if j == 1:
-                data[i, j] = float(val)
-            else:
-                data[i, j] = float(val)
-                #data[i,j] = float('{:+E}'.format(float(val)))
-            j += 1
-
-        i += 1
+    data = np.loadtxt(filename, skiprows=1)
 
     return data
 
@@ -281,7 +262,9 @@ def main(argv):
 
         elif arg.startswith("--dvars"):
             dvars = str.split(arg, "=")[1]
-            selected_ids.append(str.split(dvars, ","))
+            for obj in str.split(dvars, ","):
+                obj = improveName(obj)
+                selected_ids.append(obj)
 
         elif arg.startswith("--path"):
             path = str.split(arg, "=")[1]
