@@ -200,7 +200,8 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single):
 
     ax.yaxis.set_major_formatter(pl.ScalarFormatter(useMathText=True))
 
-    plt.title(prefix)
+    title_text = ('Generation ' + num).replace('_', '\_')
+    plt.title(title_text)
 
     margin = (vmax-vmin)/10
     clow = int(vmin + margin)
@@ -313,12 +314,14 @@ def main(argv):
 
     data = {}
     if generation == -1:
+        if not os.path.isdir(outpath):
+            os.mkdir(outpath)
         buildNameToColumnMap(path + '/' + '2_' + filename_postfix)
         for infile in glob.glob(os.path.join(path + '/',
                                 '*_' + filename_postfix)):
             print("Reading data file " + infile)
-            num       = str.rsplit(infile, "_", 1)[0]
-            num       = str.rsplit(num, "/", 1)[1]
+            num       = str.rsplit(infile, "/", 1)[1]
+            num       = str.split (num,    "_", 1)[0]
             data[num] = readData(infile)
 
         setupPlot()
@@ -335,8 +338,8 @@ def main(argv):
         setupPlot(867.8)
         (xlim, ylim) = computeLimits(data, selected_ids)
         plot(data[str(generation)], xlim, ylim,
-             str(generation), "Generation " + str(generation), selected_ids,
-                 show_single=True)
+             str(generation), outpath, selected_ids,
+             show_single=True)
 
     if videoname:
         saveVideo(outpath, videoname)
