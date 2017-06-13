@@ -208,11 +208,16 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
 def saveVideo(img_path, video_name):
 
     import commands
-    # TODO, check if ffmpeg exists - not working
-    commands.getoutput("rm " + video_name)
-    commands.getoutput("ffmpeg -r 0.7 -i " + img_path +
-                       "/%04d.png -b:v 1800 " + video_name)
-
+    import distutils
+    from distutils import spawn
+    video_name = video_name + ".mp4"
+    if distutils.spawn.find_executable("ffmpeg") != None:
+        output = commands.getoutput("ffmpeg -y -framerate 0.7 -i " + img_path + "/%04d.png " +
+                                    "-qscale 0 -r 0.7 " + video_name)
+        # For debug:
+        #print output
+    else:
+        print 'Video exporting is not possible, ffmpeg is not installed.'
 
 def computeLimits(data, selected_ids):
 
