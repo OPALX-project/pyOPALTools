@@ -85,7 +85,7 @@ def setupPlot(width = 1388.5):
     fig_size      = [fig_width, fig_height]
     params        = {'backend': 'ps',
                      'axes.labelsize': 14,
-                     'text.fontsize': 14,
+                     'font.size': 14,
                      'legend.fontsize': 14,
                      'xtick.labelsize': 14,
                      'ytick.labelsize': 14,
