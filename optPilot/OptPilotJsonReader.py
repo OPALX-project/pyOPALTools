@@ -204,7 +204,7 @@ class OptPilotJsonReader:
             raise RuntimeError("No json file found in directory '" + directory + "'.")
         
         # get mapping from first file (all others are the same)
-        self.__buildNameToColumnMap(testfile)
+        self.__buildNameToColumnMap(self.__directory + testfile)
         
         print ( "Found " + str(self.__nJsonFiles) + " json files." )
     
