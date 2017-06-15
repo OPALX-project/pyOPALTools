@@ -3,6 +3,10 @@
 # @author Matthias Frey
 # @date 16. Nov. 2016
 # @brief Plot particles and grids in a plane
+# @details This script is able to read and visualize
+# the output files of AMR-OPAL in the simulation
+# subdirectory data/python
+#
 
 # 16. Nov. 2016, http://stackoverflow.com/questions/21445005/drawing-rectangle-with-border-only-in-matplotlib
 
@@ -69,40 +73,55 @@ class Grids:
     
     ## Plot all grids on all levels
     # @param ax is the axis to plot on
-    # @param plane is either x-y, x-z or y-z
-    #        specified by 0, 1, or 2
-    def plot(self, ax, plane):
+    # @param xaxis 'x', 'y' or 'z'
+    # @param yaxis 'x', 'y' or 'z'
+    def plot(self, ax, xaxis, yaxis):
         
         if np.ndim(self._level) == 0:
             l = 0
         else:
             l = len(self._level)
+            
+        xlo = np.zeros(l)
+        xhi = np.zeros(l)
+        ylo = np.zeros(l)
+        yhi = np.zeros(l)
+        
+        if 'x' in xaxis:
+            for i in range(0, l):
+                xlo[i] = self._xlo[i]
+                xhi[i] = self._xhi[i]
+        elif 'y' in xaxis:
+            for i in range(0, l):
+                xlo[i] = self._ylo[i]
+                xhi[i] = self._yhi[i]
+        elif 'z' in xaxis:
+            for i in range(0, l):
+                xlo[i] = self._zlo[i]
+                xhi[i] = self._zhi[i]
+        else:
+            raise RuntimeError("Unknown axis '" + xaxis + "'.")
+        
+        if 'x' in yaxis:
+            for i in range(0, l):
+                ylo[i] = self._xlo[i]
+                yhi[i] = self._xhi[i]
+        elif 'y' in yaxis:
+            for i in range(0, l):
+                ylo[i] = self._ylo[i]
+                yhi[i] = self._yhi[i]
+        elif 'z' in yaxis:
+            for i in range(0, l):
+                ylo[i] = self._zlo[i]
+                yhi[i] = self._zhi[i]
+        else:
+            raise RuntimeError("Unknown axis '" + yaxis + "'.")
         
         for i in range(0, l):
-            if plane == 0:
-                self._add(self._xlo[i],
-                          self._ylo[i],
-                          self._xhi[i],
-                          self._yhi[i],
-                          ax,
-                          self._colors[ self._level[i] ]
-                          )
-            elif plane == 1:
-                self._add(self._xlo[i],
-                          self._zlo[i],
-                          self._xhi[i],
-                          self._zhi[i],
-                          ax,
-                          self._colors[ self._level[i] ]
-                          )
-            else:
-                self._add(self._ylo[i],
-                          self._zlo[i],
-                          self._yhi[i],
-                          self._zhi[i],
-                          ax,
-                          self._colors[ self._level[i] ]
-                          )
+            self._add(xlo[i], ylo[i], xhi[i], yhi[i], ax,
+                      self._colors[ self._level[i] ]
+                      )
+    
     
     ## Add one grid (called in self.plot)
     # @param x1 is the bottom horizontal value
@@ -201,29 +220,86 @@ class Particles:
         return vcoord, vlab
 
 
+def createPlot(xaxis, yaxis, xlim, ylim, saveas):
+    """ Export a plot
+    
+    Parameters
+    ----------
+    xaxis(str)  : what to plot on the x-axis
+    yaxis(str)  : what to plot on the y-axis
+    xlim        : limits on x-axis
+    ylim        : limits on y-axis
+    saveas(str) : filename
+    
+    Returns
+    -------
+    Saves a plot
+    
+    """
+    plt.figure()
+    plt.xlim(xlim)
+    plt.ylim(ylim)
+    particles.plot(plt.gca(), xaxis, yaxis)
+    grids.plot(plt.gca(), xaxis, yaxis)
+    plt.xticks(fontsize=18)
+    plt.yticks(fontsize=18)
+    plt.tight_layout()
+    plt.savefig(saveas, bbox_inches='tight')
+
+
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description='Visualization of particles and grids.')
-    parser.add_argument('-d', '--directory', help='directory to files', default='.', type=str, nargs=1)
-    parser.add_argument('-s', '--step', help='step file in directory', default=0, type=int, nargs=1)
-    parser.add_argument('--xlim', help='horizontal boundary', type=float, nargs=2,
+    parser.add_argument('-d',
+                        '--directory',
+                        help='directory to files',
+                        default="./",
+                        type=str,
+                        nargs='?',
+                        const=1)
+    parser.add_argument('-s',
+                        '--step',
+                        help='step file in directory',
+                        default=0,
+                        type=int,
+                        nargs='?',
+                        const=1)
+    parser.add_argument('--xlim',
+                        help='horizontal boundary', 
+                        type=float,
+                        nargs=2,
                         action='append')
-    parser.add_argument('--ylim', help='vertical boundary', type=float, nargs=2,
+    parser.add_argument('--ylim',
+                        help='vertical boundary',
+                        type=float,
+                        nargs=2,
                         action='append')
-    parser.add_argument('--zlim', help='longitudinal boundary', type=float, nargs=2,
+    parser.add_argument('--zlim',
+                        help='longitudinal boundary',
+                        type=float,
+                        nargs=2,
                         action='append')
-    parser.add_argument('--pxlim', help='horizontal boundary', type=float, nargs=2,
+    parser.add_argument('--pxlim',
+                        help='horizontal boundary',
+                        type=float,
+                        nargs=2,
                         action='append')
-    parser.add_argument('--pylim', help='vertical boundary', type=float, nargs=2,
+    parser.add_argument('--pylim',
+                        help='vertical boundary',
+                        type=float,
+                        nargs=2,
                         action='append')
-    parser.add_argument('--pzlim', help='longitudinal boundary', type=float, nargs=2,
+    parser.add_argument('--pzlim',
+                        help='longitudinal boundary',
+                        type=float,
+                        nargs=2,
                         action='append')
     
     
     args = parser.parse_args()
     
-    directory  = args.directory[0]
-    step       = args.step[0]
+    directory  = args.directory
+    step       = args.step
     xlim       = args.xlim[0]
     ylim       = args.ylim[0]
     zlim       = args.zlim[0]
@@ -240,69 +316,25 @@ if __name__ == "__main__":
     print ("pylim:     ", pylim)
     print ("pzlim:     ", pzlim)
     
+    sstep = str(step).zfill(10)
+    
+    
     particles = Particles()
-    particles.read(directory + "pyplot_particles_" + str(step) + ".dat")
+    particles.read(directory + "bunch_" + sstep + ".dat")
 
     grids = Grids()
-    grids.read(directory + "pyplot_grids_" + str(step) + ".dat")
+    grids.read(directory + "grids_" + sstep + ".dat")
     
     
-    plt.figure()
-    plt.xlim(xlim)
-    plt.ylim(ylim)
-    particles.plot(plt.gca(), 'x', 'y')
-    grids.plot(plt.gca(), 0)
-    plt.xticks(fontsize=18)
-    plt.yticks(fontsize=18)
-    plt.tight_layout()
-    plt.savefig('ParticlePlot_x_y_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
     
-    plt.figure()
-    plt.xlim(xlim)
-    plt.ylim(zlim)
-    particles.plot(plt.gca(), 'x', 'z')
-    grids.plot(plt.gca(), 1)
-    plt.xticks(fontsize=18)
-    plt.yticks(fontsize=18)
-    plt.tight_layout()
-    plt.savefig('ParticlePlot_x_z_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
+    createPlot('x', 'y', xlim, ylim, 'ParticlePlot_x_y_step-' + sstep + '.png')
     
-    plt.figure()
-    plt.xlim(ylim)
-    plt.ylim(zlim)
-    particles.plot(plt.gca(), 'y', 'z')
-    grids.plot(plt.gca(), 2)
-    plt.xticks(fontsize=18)
-    plt.yticks(fontsize=18)
-    plt.tight_layout()
-    plt.savefig('ParticlePlot_y_z_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
+    createPlot('x', 'z', xlim, zlim, 'ParticlePlot_x_z_step-' + sstep + '.png')
     
-    plt.figure()
-    plt.xlim(xlim)
-    plt.ylim(pxlim)
-    particles.plot(plt.gca(), 'x', 'px')
-    grids.plot(plt.gca(), 2)
-    plt.xticks(fontsize=18)
-    plt.yticks(fontsize=18)
-    plt.tight_layout()
-    plt.savefig('ParticlePlot_x_px_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
+    createPlot('y', 'z', ylim, zlim, 'ParticlePlot_y_z_step-' + sstep + '.png')
     
-    plt.figure()
-    plt.xlim(ylim)
-    plt.ylim(pylim)
-    particles.plot(plt.gca(), 'y', 'py')
-    grids.plot(plt.gca(), 2)
-    plt.xticks(fontsize=18)
-    plt.yticks(fontsize=18)
-    plt.tight_layout()
-    plt.savefig('ParticlePlot_y_py_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
+    createPlot('x', 'px', xlim, pxlim, 'ParticlePlot_x_px_step-' + sstep + '.png')
     
-    plt.figure()
-    plt.xlim(zlim)
-    plt.ylim(pzlim)
-    particles.plot(plt.gca(), 'z', 'pz')
-    grids.plot(plt.gca(), 2)
-    plt.xticks(fontsize=18)
-    plt.yticks(fontsize=18)
-    plt.tight_layout()
-    plt.savefig('ParticlePlot_z_pz_step-' + str(step).zfill(4) + '.png', bbox_inches='tight')
+    createPlot('y', 'py', ylim, pylim, 'ParticlePlot_y_py_step-' + sstep + '.png')
+    
+    createPlot('z', 'pz', zlim, pzlim, 'ParticlePlot_z_pz_step-' + sstep + '.png')
