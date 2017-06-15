@@ -56,14 +56,14 @@ def doProjectionPlot(ds, direct, field, unit, zfactor = 1, method='mip', col = '
 
 ##
 # Take an integer and transform it
-# to a string of four characters, e.g.\n
+# to a string of ten characters, e.g.\n
 # \f$ 1 \rightarrow 0001 \f$ \n
 # \f$ 12 \rightarrow 0012 \f$ \n
 # \f$ 586 \rightarrow 0586 \f$ \n
 # @param step is an integer
 def concatenate(step):
     res = str(step)
-    while len(res) < 4:
+    while len(res) < 10:
         res = '0' + res
     return res
 
