@@ -32,7 +32,8 @@ class OptPilotJsonReader:
     getDesignVariables  : Returns all design variable names
     getObjectives       : Returns all objective names
     getBounds           : Returns all or design variable specific lower and upper bound
-
+    getConstraints      : Returns all constraints (strings) in a list
+    
     Returns
     -------
     None
@@ -53,7 +54,13 @@ class OptPilotJsonReader:
                 "phiinit": [ 106, 114 ],
                 "prinit": [ -0.02, -0.01 ],
                 "rinit": [ 2000, 2060 ]
-        },
+        }
+        ,
+        "constraints": [
+                "dpeak1 > 0.0",
+                "dpeak2 > 0.0"
+        ]
+        ,
         "solutions": [
         {
                 "ID": 0,
@@ -148,10 +155,15 @@ class OptPilotJsonReader:
         
         print ( "Objectives: ", objs )
         
-        # 6. Get an individual
+        # 6. Get all constraints
+        constr = optjson.getConstraints()
+    
+        print ("Constraints:\n\t" + constr[0] + "\n\t" + constr[1])
+        
+        # 7. Get an individual
         print ( optjson.getIndividual(0) )
         
-        # 7. Get an individual with specific ID
+        # 8. Get an individual with specific ID
         print ( optjson.getIndividualWithID(18) )
         
         # raise error
@@ -197,6 +209,7 @@ class OptPilotJsonReader:
         self.__objNameToColumnMap = {}
         self.__dvarNameToColumnMap = {}
         self.__dvarBounds = {} # for each generation file the same
+        self.__constraints = [] # for each generation file the same
         
         self.__nDvars = 0
         self.__nObjs  = 0
@@ -255,7 +268,7 @@ class OptPilotJsonReader:
         filename = self.__directory + str(gen) + self.__basename
         
         if not os.path.isfile(filename):
-            raise RuntimeError("File '" + filename + "' does not exist.")
+            raise IOError("File '" + filename + "' does not exist.")
         
         self.__table = self.__readJSONData(filename)
     
@@ -394,6 +407,30 @@ class OptPilotJsonReader:
         
     
     ##
+    def getConstraints(self):
+        """ Obtain the constraints of the simulation. They are
+            formulas written as strings
+            
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        A list of strings containing the constraints
+        
+        Notes
+        -----
+        None
+        
+        Examples
+        --------
+        None
+        """
+        return self.__constraints
+    
+    
+    ##
     def __buildNameToColumnMap(self, filename):
         """ Build data structures
 
@@ -415,9 +452,18 @@ class OptPilotJsonReader:
         """
         
         if not os.path.isfile(filename):
-            raise RuntimeError("File '" + filename + "' does not exist.")
+            raise IOError("File '" + filename + "' does not exist.")
         
         data = json.load(open(filename))
+        
+        # check validation
+        if "dvar-bounds" not in data:
+            raise KeyError("Error in JSON format: " \
+                           "Design variable bounds are not present.")
+        
+        if "constraints" not in data:
+            raise KeyError("Error in JSON format: " \
+                           "Constraints are not present.")
     
         for idx, name in enumerate(data["solutions"][0].keys()):
             name = name.replace(" ", "")
@@ -461,7 +507,9 @@ class OptPilotJsonReader:
         """
         
         data      = json.load(open(filename))
+        
         self.__dvarBounds = data["dvar-bounds"]
+        self.__constraints = data["constraints"]
         solutions = data["solutions"]
         
         table     = np.zeros((self.__nIndividuals, self.__nColumns))
