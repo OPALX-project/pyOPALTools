@@ -31,6 +31,7 @@ class OptPilotJsonReader:
     getIndividualWithID : Obtain an individual with a specific ID [design variables, objectives, ID]
     getDesignVariables  : Returns all design variable names
     getObjectives       : Returns all objective names
+    getBounds           : Returns all or design variable specific lower and upper bound
 
     Returns
     -------
@@ -47,6 +48,12 @@ class OptPilotJsonReader:
     =====================================================
     {
         "name": "opt-pilot",
+        "dvar-bounds": {
+                "benergy": [ 0.071, 0.072 ],
+                "phiinit": [ 106, 114 ],
+                "prinit": [ -0.02, -0.01 ],
+                "rinit": [ 2000, 2060 ]
+        },
         "solutions": [
         {
                 "ID": 0,
@@ -122,15 +129,29 @@ class OptPilotJsonReader:
         
         print ( "Design variables: ", dvars )
         
-        # 4. Get all objectives
+        # 4. Get design variable bounds
+        bounds = optjson.getBounds()
+        
+        print ( "Bounds: ", bounds )
+        
+        # 4a. Get only bounds of a specific design variable
+        bound = optjson.getBounds(dvars[2])
+        lower = bound[0]
+        upper = bound[1]
+    
+        print ( "dvar: " + dvars[1] + "\n"
+                " lower bound: " + str(lower) + "\n"
+                " upper bound: " + str(upper))
+        
+        # 5. Get all objectives
         objs = optjson.getObjectives()
         
         print ( "Objectives: ", objs )
         
-        # 5. Get an individual
+        # 6. Get an individual
         print ( optjson.getIndividual(0) )
         
-        # 6. Get an individual with specific ID
+        # 7. Get an individual with specific ID
         print ( optjson.getIndividualWithID(18) )
         
         # raise error
@@ -175,6 +196,7 @@ class OptPilotJsonReader:
         #self.__nameToColumnMap = {}
         self.__objNameToColumnMap = {}
         self.__dvarNameToColumnMap = {}
+        self.__dvarBounds = {} # for each generation file the same
         
         self.__nDvars = 0
         self.__nObjs  = 0
@@ -342,6 +364,36 @@ class OptPilotJsonReader:
     
     
     ##
+    def getBounds(self, dvar = ''):
+        """ Obtain the design variable bounds
+        
+        Parameters
+        ----------
+        dvar(str)   : design variable or ''
+        
+        Returns
+        -------
+        If dvar == '' it returns the whole dictionary of
+        design variables and their bounds otherwise
+        it returns the bounds of the given design varible
+        
+        Notes
+        -----
+        Raises an exception if design variable unknown
+        
+        Examples
+        --------
+        None
+        """
+        if dvar == '':
+            return self.__dvarBounds
+        elif dvar not in self.__dvarBounds:
+            raise RuntimeError("Unknown design variable '" + dvar + "'.")
+        else:
+            return self.__dvarBounds[dvar]
+        
+    
+    ##
     def __buildNameToColumnMap(self, filename):
         """ Build data structures
 
@@ -409,6 +461,7 @@ class OptPilotJsonReader:
         """
         
         data      = json.load(open(filename))
+        self.__dvarBounds = data["dvar-bounds"]
         solutions = data["solutions"]
         
         table     = np.zeros((self.__nIndividuals, self.__nColumns))
