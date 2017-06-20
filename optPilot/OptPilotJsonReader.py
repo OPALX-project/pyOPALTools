@@ -1,21 +1,3 @@
-##
-# Usage of OptPilotJsonReader
-#
-# 1. Find all .json files of a directory, e.g. "./"
-#   
-#   optjson = OptPilotJsonReader("./")
-#
-# 2. Read in a generation file, e.g. 450
-#   
-#   optjson.readGeneration(450)
-#
-# 3. Obtain an individual
-#
-#   print ( optjson.getVariableNames() )
-#   var = optjson.getVariableNames()[0]
-#   print ( optjson.getIndividual(1, var) )
-#
-
 import json
 import os
 import numpy as np
@@ -33,6 +15,8 @@ class OptPilotJsonReader:
     getObjectives       : Returns all objective names
     getBounds           : Returns all or design variable specific lower and upper bound
     getConstraints      : Returns all constraints (strings) in a list
+    getAllInput         : Returns all design variable values as a matrix,
+                          each column is design variable
     
     Returns
     -------
@@ -214,7 +198,7 @@ class OptPilotJsonReader:
         self.__nDvars = 0
         self.__nObjs  = 0
         self.__nColumns = 0
-        self.__nIndividuals = 0
+        self.__nIndividuals = 0 # the number of individuals varies per generation
         
         tbasename = ""
         testfile = ""
@@ -431,6 +415,30 @@ class OptPilotJsonReader:
     
     
     ##
+    def getAllInput(self):
+        """ Obtain all design variable input.
+        
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        a ndarray where each column corresponds to the values
+        of a design variable
+        
+        Notes
+        -----
+        None
+        
+        Examples
+        --------
+        None
+        """
+        return self.__table[0:self.__nDvars, :]
+    
+    
+    ##
     def __buildNameToColumnMap(self, filename):
         """ Build data structures
 
@@ -464,7 +472,7 @@ class OptPilotJsonReader:
         if "constraints" not in data:
             raise KeyError("Error in JSON format: " \
                            "Constraints are not present.")
-    
+        
         for idx, name in enumerate(data["solutions"][0].keys()):
             name = name.replace(" ", "")
             #self.__nameToColumnMap[name] = idx
@@ -482,7 +490,6 @@ class OptPilotJsonReader:
         self.__nDvars       = len(self.__dvarNameToColumnMap)
         self.__nObjs        = len(self.__objNameToColumnMap)
         self.__nColumns     = self.__nDvars + self.__nObjs + 1 # + ID
-        self.__nIndividuals = len(data["solutions"])
         
         
     ##
@@ -511,8 +518,10 @@ class OptPilotJsonReader:
         self.__dvarBounds = data["dvar-bounds"]
         self.__constraints = data["constraints"]
         solutions = data["solutions"]
+        self.__nIndividuals = len(data["solutions"])
         
         table     = np.zeros((self.__nIndividuals, self.__nColumns))
+        
         for i, solution in enumerate(solutions):
             for j, key in enumerate(solution):
                 if key == 'dvar':
