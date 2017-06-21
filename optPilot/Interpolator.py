@@ -38,7 +38,7 @@ class Interpolator:
         # 21. June 2017
         # https://stackoverflow.com/questions/27046533/unpack-numpy-array-by-column
         # https://stackoverflow.com/questions/12720450/unpacking-arguments-only-named-arguments-may-follow-expression
-        self.__rbfi = Rbf(*coord.T, values, function=function, smooth=smooth)
+        self.__rbfi = Rbf(*coords.T, values, function=function, smooth=smooth)
     
     
     ##
