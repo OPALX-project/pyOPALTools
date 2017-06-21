@@ -15,8 +15,10 @@ class OptPilotJsonReader:
     getObjectives       : Returns all objective names
     getBounds           : Returns all or design variable specific lower and upper bound
     getConstraints      : Returns all constraints (strings) in a list
-    getAllInput         : Returns all design variable values as a matrix,
-                          each column is design variable
+    getAllInput         : Returns all design variable values,
+                          each column is a design variable
+    getAllOutput        : Returns all objective values,
+                          each column is an objective
     
     Returns
     -------
@@ -435,8 +437,32 @@ class OptPilotJsonReader:
         --------
         None
         """
-        return self.__table[0:self.__nDvars, :]
+        return self.__table[:, 0:self.__nDvars]
     
+    
+    ##
+    def getAllOutput(self):
+        """ Obtain all objective output.
+        
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        a ndarray where each column corresponds to the values
+        of an objective
+        
+        Notes
+        -----
+        None
+        
+        Examples
+        --------
+        None
+        """
+        return self.__table[:, self.__nDvars:self.__nDvars+self.__nObjs]
+        
     
     ##
     def __buildNameToColumnMap(self, filename):
@@ -477,10 +503,10 @@ class OptPilotJsonReader:
             name = name.replace(" ", "")
             #self.__nameToColumnMap[name] = idx
             if name == 'dvar':
-                for jdx, dvars in enumerate(data["solutions"][0][name].keys()):
+                for jdx, dvars in enumerate(sorted(data["solutions"][0][name].keys())):
                     self.__dvarNameToColumnMap[dvars] = jdx
             elif name == 'obj':
-                for jdx, objs in enumerate(data["solutions"][0][name].keys()):
+                for jdx, objs in enumerate(sorted(data["solutions"][0][name].keys())):
                     self.__objNameToColumnMap[objs] = jdx
             elif name == 'ID':
                 pass
@@ -526,12 +552,12 @@ class OptPilotJsonReader:
             for j, key in enumerate(solution):
                 if key == 'dvar':
                     k = 0
-                    for dvar, value in solution[key].iteritems():
+                    for dvar, value in sorted(solution[key].items()):
                         table[i, k] = float(value)
                         k += 1
                 elif key == 'obj':
                     k = self.__nDvars
-                    for obj, value in solution[key].iteritems():
+                    for obj, value in sorted(solution[key].items()):
                         table[i, k] = float(value)
                         k += 1
                 elif key == 'ID':
