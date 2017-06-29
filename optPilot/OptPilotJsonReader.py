@@ -19,6 +19,7 @@ class OptPilotJsonReader:
                           each column is a design variable
     getAllOutput        : Returns all objective values,
                           each column is an objective
+    getIDs              : Return all IDs of all individuals
     
     Returns
     -------
@@ -336,7 +337,7 @@ class OptPilotJsonReader:
         --------
         None
         """
-        return self.__dvarNameToColumnMap.keys()
+        return sorted(self.__dvarNameToColumnMap.keys())
     
     
     ##
@@ -359,7 +360,7 @@ class OptPilotJsonReader:
         --------
         None
         """
-        return self.__objNameToColumnMap.keys()
+        return sorted(self.__objNameToColumnMap.keys())
     
     
     ##
@@ -462,7 +463,25 @@ class OptPilotJsonReader:
         None
         """
         return self.__table[:, self.__nDvars:self.__nDvars+self.__nObjs]
+    
+    
+    ##
+    def getIDs(self):
+        """ Obtain all individual IDs.
         
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        a list of IDs
+        
+        Examples
+        --------
+        None
+        """
+        return self.__table[:, self.__nDvars + self.__nObjs].tolist()
     
     ##
     def __buildNameToColumnMap(self, filename):

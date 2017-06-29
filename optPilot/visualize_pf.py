@@ -15,6 +15,8 @@ from collections import OrderedDict
 
 from Annotate import AnnoteFinder
 
+import OptPilotJsonReader as jsonreader
+
 
 # Data parsing
 ##############################################################################
@@ -31,26 +33,45 @@ def buildNameToColumnMapJSON(filename):
         nameToColumnMap[name] = idx
 
 def readJSONData(filename):
-    data      = json.load(open(filename), object_pairs_hook=OrderedDict)
-    solutions = data["solutions"]
-    table     = np.zeros((len(solutions), len(nameToColumnMap)))
+    dirname = os.path.dirname(filename)
+    optjson = jsonreader.OptPilotJsonReader(dirname + '/')
+    
+    # get the generation from the filename
+    basename = os.path.basename(filename)    
+    generation = int( str.split(basename, "_", 1)[0] )
+    optjson.readGeneration(generation)
+    
+    #
+    # make plain format
+    #
+    
+    # build name to column map
+    dvars = optjson.getDesignVariables()
+    objs  = optjson.getObjectives()
+    idname   = "ID"
+    
+    idx = 0
+    for name in dvars:
+        nameToColumnMap[name] = idx
+        idx += 1
+    
+    for name in objs:
+        nameToColumnMap[name] = idx
+        idx += 1
+    
+    nameToColumnMap[idname] = idx
+    
+    # build data matrix by stacking columns [dvars objsval ids]
+    dvarval = optjson.getAllInput()
+    objsval = optjson.getAllOutput()
+    ids     = optjson.getIDs()
+    
+    data = np.column_stack((dvarval, objsval, ids))
+    
+    return data
 
-    for i, solution in enumerate(solutions):
-        for j, key in enumerate(solution):
-            #nameToColumnMap[key] = j
-            try:
-                val = float(solution[key])
-            except TypeError:
-                val = 0.0
-            table[i, j] = val
 
-    return table
-
-
-def buildNameToColumnMap(filename):
-    if filename.find("json") > 0:
-        return buildNameToColumnMapJSON(filename)
-
+def readDAT_0(filename):
     data_format = open(filename, "r").readlines()[0]
     formats = str.split(data_format)
 
@@ -61,15 +82,18 @@ def buildNameToColumnMap(filename):
         col_name = improveName(col_name)
         nameToColumnMap[col_name] = col_idx
         col_idx += 1
+    
+    data = np.loadtxt(filename, skiprows=1)
+    
+    return data
+
 
 def readData(filename):
 
     if filename.find("json") > 0:
         return readJSONData(filename)
 
-    data = np.loadtxt(filename, skiprows=1)
-
-    return data
+    return readDAT_0(filename)
 
 
 # Plotting
@@ -266,87 +290,86 @@ def main(argv):
     filename_postfix = "results.json"
     generation = -1
     plotAll = False
-
-    for arg in argv:
-        if arg.startswith("--objectives"):
-            objectives = str.split(arg, "=")[1]
-            for obj in str.split(objectives, ","):
-                obj = improveName(obj)
-                selected_ids.append(obj)
-
-        elif arg.startswith("--dvars"):
-            dvars = str.split(arg, "=")[1]
-            for obj in str.split(dvars, ","):
-                obj = improveName(obj)
-                selected_ids.append(obj)
-
-        elif arg.startswith("--path"):
-            path = str.split(arg, "=")[1]
-
-        elif arg.startswith("--filename-postfix"):
-            filename_postfix = str.split(arg, "=")[1]
-
-        elif arg.startswith("--outpath"):
-            outpath = str.split(arg, "=")[1]
-
-        elif arg.startswith("--video"):
-            videoname = str.split(arg, "=")[1]
-
-        elif arg.startswith("--generation"):
-            generation = str.split(arg, "=")[1]
-        
-        elif arg.startswith("--plot-all"):
-            plotAll = True
-        else:
-            print arg,"is not a valid argument"
+    
+    try:
+        for arg in argv:
+            if arg.startswith("--objectives"):
+                objectives = str.split(arg, "=")[1]
+                for obj in str.split(objectives, ","):
+                    obj = improveName(obj)
+                    selected_ids.append(obj)
+    
+            elif arg.startswith("--dvars"):
+                dvars = str.split(arg, "=")[1]
+                for obj in str.split(dvars, ","):
+                    obj = improveName(obj)
+                    selected_ids.append(obj)
+    
+            elif arg.startswith("--path"):
+                path = str.split(arg, "=")[1]
+    
+            elif arg.startswith("--filename-postfix"):
+                filename_postfix = str.split(arg, "=")[1]
+    
+            elif arg.startswith("--outpath"):
+                outpath = str.split(arg, "=")[1]
+    
+            elif arg.startswith("--video"):
+                videoname = str.split(arg, "=")[1]
+    
+            elif arg.startswith("--generation"):
+                generation = str.split(arg, "=")[1]
+            
+            elif arg.startswith("--plot-all"):
+                plotAll = True
+            else:
+                raise SyntaxError(arg + ' is not a valid argument')
+                return
+    
+        if path == "":
+            raise SyntaxError('No path for input data specified')
+    
+        if len(selected_ids) != 3:
+            raise SyntaxError('Please select 3 things to visualize')
             return
-
-    if path == "":
-        print("ERROR: no path for input data specified")
-        return
-
-    if len(selected_ids) != 3:
-        print("Please select 3 things to visualize")
-        return
-
-    if generation != -1:
-        print("Show generation " + generation)
-
-
-    data = {}
-    if generation == -1:
-        if not os.path.isdir(outpath):
-            os.mkdir(outpath)
-        buildNameToColumnMap(path + '/' + '2_' + filename_postfix)
-        for infile in glob.glob(os.path.join(path + '/',
-                                '*_' + filename_postfix)):
-            print("Reading data file " + infile)
-            num       = str.rsplit(infile, "/", 1)[1]
-            num       = str.split (num,    "_", 1)[0]
-            data[num] = readData(infile)
-
-        setupPlot()
-        (xlim, ylim) = computeLimits(data, selected_ids)
-        for i, _ in data.items():
-            print " >> saving " + str(i)
-            plot(data[str(i)], xlim, ylim,
-                 str(i), outpath, selected_ids, show_single=False, plotAll=plotAll)
-    else:
-        buildNameToColumnMap(path + '/' + str(generation) + '_' +
-                             filename_postfix )
-        data[str(generation)] = readData(path + '/' + str(generation) + '_' +
-                                         filename_postfix)
-        setupPlot(867.8)
-        (xlim, ylim) = computeLimits(data, selected_ids)
-        plot(data[str(generation)], xlim, ylim,
-             str(generation), outpath, selected_ids,
-             show_single=True, plotAll=plotAll)
-
-    if videoname:
-        saveVideo(outpath, videoname)
+        
+        if generation != -1:
+            print("Show generation " + generation)
+    
+    
+        data = {}
+        if generation == -1:
+            if not os.path.isdir(outpath):
+                os.mkdir(outpath)
+            for infile in glob.glob(os.path.join(path + '/',
+                                    '*_' + filename_postfix)):
+                print("Reading data file " + infile)
+                num       = str.rsplit(infile, "/", 1)[1]
+                num       = str.split (num,    "_", 1)[0]
+                data[num] = readData(infile)
+    
+            setupPlot()
+            (xlim, ylim) = computeLimits(data, selected_ids)
+            for i, _ in data.items():
+                print " >> saving " + str(i)
+                plot(data[str(i)], xlim, ylim,
+                    str(i), outpath, selected_ids, show_single=False, plotAll=plotAll)
+        else:
+            data[str(generation)] = readData(path + '/' + str(generation) + '_' +
+                                            filename_postfix)
+            setupPlot(867.8)
+            (xlim, ylim) = computeLimits(data, selected_ids)
+            plot(data[str(generation)], xlim, ylim,
+                str(generation), outpath, selected_ids,
+                show_single=True, plotAll=plotAll)
+    
+        if videoname:
+            saveVideo(outpath, videoname)
+    
+    except:
+        print ( '\n\t\033[01;31mError: ' + str(sys.exc_info()[1]) + '\n' )
 
 
 #call main
 if __name__ == "__main__":
     main(sys.argv[1:])
-
