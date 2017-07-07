@@ -8,7 +8,8 @@ class Canvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         self._fig = Figure(figsize=(width, height), dpi=dpi)
         self._axes = self._fig.add_subplot(111)
-        
+        self._fig.patch.set_alpha(0)
+        self._fig.set_tight_layout(True)
         FigureCanvas.__init__(self, self._fig)
         self.setParent(parent)
  
@@ -32,8 +33,14 @@ class Canvas(FigureCanvas):
         self._legends = []
     
     
-    def save(self, filename):
-        self._fig.savefig(filename, bbox_inches='tight')
+    def save(self, filename, format=''):
+        # catch case where filename already contains
+        # the file extension
+        if '.' in filename:
+            format = ''
+        
+        self._fig.savefig(filename=filename + format)
+                          #bbox_inches='tight')
     
     
     def getAxes(self):

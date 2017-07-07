@@ -100,6 +100,7 @@ class PH5MainFrame(QMainWindow):
         
         self.saveButton = QPushButton("Save", self)
         self.saveButton.setCheckable(True)
+        self.saveButton.setEnabled(False)
         self.saveButton.clicked.connect(self._savePlot)
         self.saveButton.move(115, 300 + 385 + 10)
         layout.addWidget(self.saveButton)
@@ -193,6 +194,8 @@ class PH5MainFrame(QMainWindow):
             
             self._canvas.show()
             
+            self.saveButton.setEnabled(True)
+            
         elif entryField and not entryStat:
             idx = self.PlotterType.FIELD
             self._canvas.clear()
@@ -205,6 +208,8 @@ class PH5MainFrame(QMainWindow):
             self._plotter[idx].lineplot(self._canvas)
             
             self._canvas.show()
+            
+            self.saveButton.setEnabled(True)
             
         else:
             msg = QMessageBox(self)
@@ -223,11 +228,39 @@ class PH5MainFrame(QMainWindow):
         xvar = str(self._xcombobox.currentText())
         yvar = str(self._ycombobox.currentText())
         
-        plotname = xvar + '_' + yvar + '.png'
+        formats = plt.gcf().canvas.get_supported_filetypes()
+        
+        nItems = len( formats )
+        
+        extension = []
+        description = ""
+        i = 0
+        for ext, desc in formats.items():
+            extension.append('.' + ext)
+            description += desc + ' (*.' + ext + ')'
+            
+            if i < nItems - 1:
+                description += ';;'
+            i += 1
+        
+        # empty string if nothing plotted
+        plotname = ''
+        if xvar:
+            plotname = xvar + '_' + yvar
+        
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        filename, _ = QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()",
-                                                  plotname,"All Files (*);;Text Files (*.png)",
-                                                  options=options)
+        filename, filetype = QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()",
+                                                         plotname,"All Files (*);;" + description,
+                                                         options=options)
         
-        self._canvas.save(filename)
+        # 7. July 2017
+        # https://stackoverflow.com/questions/14849293/python-find-index-postion-in-list-based-of-partial-string
+        idx = [idx for idx, s in enumerate(extension) if s in filetype]
+        
+        # catch case where user add extension by hand
+        # to the filename
+        if idx:
+            self._canvas.save(filename, extension[idx[0]])
+        else:
+            self._canvas.save(filename)
