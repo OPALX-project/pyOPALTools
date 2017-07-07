@@ -1,11 +1,11 @@
 from Plotter import *
-import StatFileParser as statparser
+import SDDSParser as statparser
 
 
-class StatPlotter(Plotter):
+class SDDSPlotter(Plotter):
     
     def __init__(self):
-        super(StatPlotter, self).__init__()
+        super(SDDSPlotter, self).__init__()
     
     
     def plot(self, xvar, yvar, canvas):

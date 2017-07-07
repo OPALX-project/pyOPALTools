@@ -8,8 +8,8 @@ from PyQt5.QtWidgets import *
 import os
 
 from Plotter import *
-from StatFileParser import *
-from StatPlotter import *
+from SDDSParser import *
+from SDDSPlotter import *
 from FieldParser import *
 from FieldPlotter import *
 from Canvas import *
@@ -31,7 +31,7 @@ class PH5MainFrame(QMainWindow):
         
         self._statfiles = []
         self._fieldfiles = []
-        self._plotter = [StatPlotter(), FieldPlotter()]
+        self._plotter = [SDDSPlotter(), FieldPlotter()]
         
         self._initMenuBar()
         self._initRightFrame()
@@ -50,21 +50,21 @@ class PH5MainFrame(QMainWindow):
         #helpMenu = mainMenu.addMenu('Help')
         
         
-        loadStatButton = QAction('Load stat file', self)
-        loadStatButton.setShortcut('Ctrl+S')
-        loadStatButton.setStatusTip('Load an OPAL statistic file')
-        loadStatButton.triggered.connect(self._loadStatFile)
-        fileMenu.addAction(loadStatButton)
+        loadSDDSButton = QAction('Load stat file', self)
+        loadSDDSButton.setShortcut('Ctrl+S')
+        loadSDDSButton.setSDDSusTip('Load an OPAL statistic file')
+        loadSDDSButton.triggered.connect(self._loadSDDS)
+        fileMenu.addAction(loadSDDSButton)
         
         loadFieldButton = QAction('Load field file', self)
         loadFieldButton.setShortcut('Ctrl+F')
-        loadFieldButton.setStatusTip('Load an OPAL field file')
+        loadFieldButton.setSDDSusTip('Load an OPAL field file')
         loadFieldButton.triggered.connect(self._loadFieldFile)
         fileMenu.addAction(loadFieldButton)
         
         exitButton = QAction('Exit', self)
         exitButton.setShortcut('Ctrl+Q')
-        exitButton.setStatusTip('Exit application')
+        exitButton.setSDDSusTip('Exit application')
         exitButton.triggered.connect(self.close)
         fileMenu.addAction(exitButton)
     
@@ -72,11 +72,11 @@ class PH5MainFrame(QMainWindow):
         
         layout = QVBoxLayout()
         
-        self._listStat = QListWidget(self)
-        self._listStat.resize(250, 300)
-        self._listStat.move(10, 35)
-        self._listStat.show()
-        layout.addWidget(self._listStat)
+        self._listSDDS = QListWidget(self)
+        self._listSDDS.resize(250, 300)
+        self._listSDDS.move(10, 35)
+        self._listSDDS.show()
+        layout.addWidget(self._listSDDS)
         
         self._xcombobox = QComboBox(self)
         self._xcombobox.move(10, 345)
@@ -111,12 +111,12 @@ class PH5MainFrame(QMainWindow):
         self._canvas.move(275, 35)
     
     
-    def _loadStatFile(self):
+    def _loadSDDS(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         filename, _ = QFileDialog.getOpenFileName(self,
                                                   "QFileDialog.getOpenFileName()",
-                                                  "","Stat Files (*.stat);;All Files (*)",
+                                                  "","SDDS Files (*.stat);;All Files (*)",
                                                   options=options)
         if filename:
             self._statfiles.append(filename)
@@ -124,11 +124,11 @@ class PH5MainFrame(QMainWindow):
             # 3. June 2017
             # https://stackoverflow.com/questions/26199374/add-qwidget-to-qlistwidget
             item = QListWidgetItem() 
-            self._listStat.addItem(item)
-            self._listStat.setItemWidget(item, QCheckBox(os.path.basename(filename)))
+            self._listSDDS.addItem(item)
+            self._listSDDS.setItemWidget(item, QCheckBox(os.path.basename(filename)))
             
             if str(self._ycombobox.currentText()) == '':
-                parser = StatFileParser()
+                parser = SDDSParser()
                 parser.parse(self._statfiles[0])
                 varnames = parser.getVariables()
                 for name in varnames:
@@ -162,13 +162,13 @@ class PH5MainFrame(QMainWindow):
     def _plot(self):
         self.plotButton.toggle()
         
-        entryStat = []
+        entrySDDS = []
         # check what is selected
-        for r in range(0, self._listStat.count()):
-            item = self._listStat.item(r)
-            checkbox = self._listStat.itemWidget(item)
+        for r in range(0, self._listSDDS.count()):
+            item = self._listSDDS.item(r)
+            checkbox = self._listSDDS.itemWidget(item)
             if checkbox.isChecked():
-                entryStat.append(r)
+                entrySDDS.append(r)
         
         entryField = []
         for r in range(0, self._listField.count()):
@@ -177,15 +177,15 @@ class PH5MainFrame(QMainWindow):
             if checkbox.isChecked():
                 entryField.append(r)
         
-        if entryStat and not entryField:
+        if entrySDDS and not entryField:
             idx = self.PlotterType.STAT
             
             self._canvas.clear()
             self._canvas.show()
             self._plotter[idx].clear()
             
-            for i in entryStat:
-                self._plotter[idx].addDataset(self._statfiles[i], StatFileParser())
+            for i in entrySDDS:
+                self._plotter[idx].addDataset(self._statfiles[i], SDDSParser())
             
             xvar = str(self._xcombobox.currentText())
             yvar = str(self._ycombobox.currentText())
@@ -196,7 +196,7 @@ class PH5MainFrame(QMainWindow):
             
             self.saveButton.setEnabled(True)
             
-        elif entryField and not entryStat:
+        elif entryField and not entrySDDS:
             idx = self.PlotterType.FIELD
             self._canvas.clear()
             self._canvas.show()

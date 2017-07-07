@@ -1,6 +1,6 @@
 import numpy as np
 
-class StatFileParser:
+class SDDSParser:
     
     def parse(self, filename):
         self._nParameters = 0
