@@ -24,7 +24,9 @@ class Canvas(FigureCanvas):
         self._legends.append(legend)
     
     def show(self):
-        self._axes.legend(self._legends, loc='best')
+        self._axes.legend(self._legends,
+                          loc='best',
+                          prop={'size':10})
         self.draw()
     
     

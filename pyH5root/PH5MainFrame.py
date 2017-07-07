@@ -10,8 +10,6 @@ import os
 from Plotter import *
 from SDDSParser import *
 from SDDSPlotter import *
-from FieldParser import *
-from FieldPlotter import *
 from Canvas import *
 from enum import IntEnum
 
@@ -19,8 +17,7 @@ from enum import IntEnum
 class PH5MainFrame(QMainWindow):
     
     class PlotterType(IntEnum):
-        SDDS = 0,
-        FIELD = 1
+        SDDS = 0
     
     def __init__(self, parent=None):
         super(PH5MainFrame, self).__init__(parent)
@@ -30,8 +27,8 @@ class PH5MainFrame(QMainWindow):
         self.setWindowTitle('pyH5root')   
         
         self._statfiles = []
-        self._fieldfiles = []
-        self._plotter = [SDDSPlotter(), FieldPlotter()]
+        self._plotter = [SDDSPlotter()]
+        self._yvars = []
         
         self._initMenuBar()
         self._initRightFrame()
@@ -56,12 +53,6 @@ class PH5MainFrame(QMainWindow):
         loadSDDSButton.triggered.connect(self._loadSDDS)
         fileMenu.addAction(loadSDDSButton)
         
-        loadFieldButton = QAction('Load field file', self)
-        loadFieldButton.setShortcut('Ctrl+F')
-        loadFieldButton.setStatusTip('Load an OPAL field file')
-        loadFieldButton.triggered.connect(self._loadFieldFile)
-        fileMenu.addAction(loadFieldButton)
-        
         exitButton = QAction('Exit', self)
         exitButton.setShortcut('Ctrl+Q')
         exitButton.setStatusTip('Exit application')
@@ -80,29 +71,32 @@ class PH5MainFrame(QMainWindow):
         
         self._xcombobox = QComboBox(self)
         self._xcombobox.move(10, 345)
+        self._xcombobox.setFixedWidth(120)
         self._xcombobox.show()
         
         self._ycombobox = QComboBox(self)
-        self._ycombobox.move(115, 345)
+        self._ycombobox.move(135, 345)
+        self._ycombobox.setFixedWidth(120)
         self._ycombobox.show()
-        
-        self._listField = QListWidget(self)
-        self._listField.resize(250, 300)
-        self._listField.move(10, 385)
-        self._listField.show()
-        layout.addWidget(self._listField)
         
         self.plotButton = QPushButton("Plot", self)
         self.plotButton.setCheckable(True)
         self.plotButton.clicked.connect(self._plot)
-        self.plotButton.move(10, 300 + 385 + 10)
+        self.plotButton.move(10, 385 + 10)
         layout.addWidget(self.plotButton)
+        
+        self.overlayCheckBox = QCheckBox("Overlay Plots", self)
+        self.overlayCheckBox.setCheckable(True)
+        self.overlayCheckBox.setFixedWidth(120)
+        self.overlayCheckBox.move(115, 385 + 10)
+        self.overlayCheckBox.clicked.connect(self._copyYvar)
+        layout.addWidget(self.overlayCheckBox)
         
         self.saveButton = QPushButton("Save", self)
         self.saveButton.setCheckable(True)
         self.saveButton.setEnabled(False)
         self.saveButton.clicked.connect(self._savePlot)
-        self.saveButton.move(115, 300 + 385 + 10)
+        self.saveButton.move(10, 385 + 10 + 35)
         layout.addWidget(self.saveButton)
         
     
@@ -143,73 +137,30 @@ class PH5MainFrame(QMainWindow):
                 self._ycombobox.model().sort(0)
     
     
-    def _loadFieldFile(self):
-        
-        potfile = "Potential (*-phi_scalar-*);;"
-        rhofile = "Charge density (*-rho_scalar-*);;"
-        efile   = "Electric field (*-e_field-*);;"
-        
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        filename, _ = QFileDialog.getOpenFileName(self,
-                                                  "QFileDialog.getOpenFileName()",
-                                                  "", potfile + rhofile + efile + "All Files (*)",
-                                                  options=options)
-        if filename:
-            self._fieldfiles.append(filename)
-            item = QListWidgetItem() 
-            self._listField.addItem(item)
-            self._listField.setItemWidget(item, QCheckBox(os.path.basename(filename)))
-    
-    
-    
     def _plot(self):
         self.plotButton.toggle()
         
-        entrySDDS = []
-        # check what is selected
-        for r in range(0, self._listSDDS.count()):
-            item = self._listSDDS.item(r)
-            checkbox = self._listSDDS.itemWidget(item)
-            if checkbox.isChecked():
-                entrySDDS.append(r)
+        entrySDDS = self._fillSDDS()
         
-        entryField = []
-        for r in range(0, self._listField.count()):
-            item = self._listField.item(r)
-            checkbox = self._listField.itemWidget(item)
-            if checkbox.isChecked():
-                entryField.append(r)
-        
-        if entrySDDS and not entryField:
+        if entrySDDS:
             idx = self.PlotterType.SDDS
             
             self._canvas.clear()
             self._canvas.show()
+            
+            if not self.overlayCheckBox.isChecked():
+                self._yvars.clear()
+                
+                
             self._plotter[idx].clear()
+            
+            xvar = str(self._xcombobox.currentText())
+            self._yvars.append( str(self._ycombobox.currentText()) )
             
             for i in entrySDDS:
                 self._plotter[idx].addDataset(self._statfiles[i], SDDSParser())
             
-            xvar = str(self._xcombobox.currentText())
-            yvar = str(self._ycombobox.currentText())
-            
-            self._plotter[idx].plot(xvar, yvar, self._canvas)
-            
-            self._canvas.show()
-            
-            self.saveButton.setEnabled(True)
-            
-        elif entryField and not entrySDDS:
-            idx = self.PlotterType.FIELD
-            self._canvas.clear()
-            self._canvas.show()
-            self._plotter[idx].clear()
-            
-            for i in entryField:
-                self._plotter[idx].addDataset(self._fieldfiles[i], FieldParser())
-            
-            self._plotter[idx].lineplot(self._canvas)
+            self._plotter[idx].plot(xvar, self._yvars, self._canvas)
             
             self._canvas.show()
             
@@ -268,3 +219,21 @@ class PH5MainFrame(QMainWindow):
             self._canvas.save(filename, extension[idx[0]])
         else:
             self._canvas.save(filename)
+    
+    
+    def _copyYvar(self):
+        self._yvars.clear()
+        if self.overlayCheckBox.isChecked():
+            self._plot()
+            self.plotButton.toggle()
+    
+    
+    def _fillSDDS(self):
+        entrySDDS = []
+        # check what is selected
+        for r in range(0, self._listSDDS.count()):
+            item = self._listSDDS.item(r)
+            checkbox = self._listSDDS.itemWidget(item)
+            if checkbox.isChecked():
+                entrySDDS.append(r)
+        return entrySDDS
