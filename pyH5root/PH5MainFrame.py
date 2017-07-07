@@ -19,7 +19,7 @@ from enum import IntEnum
 class PH5MainFrame(QMainWindow):
     
     class PlotterType(IntEnum):
-        STAT = 0,
+        SDDS = 0,
         FIELD = 1
     
     def __init__(self, parent=None):
@@ -50,21 +50,21 @@ class PH5MainFrame(QMainWindow):
         #helpMenu = mainMenu.addMenu('Help')
         
         
-        loadSDDSButton = QAction('Load stat file', self)
+        loadSDDSButton = QAction('Load SDDS file', self)
         loadSDDSButton.setShortcut('Ctrl+S')
-        loadSDDSButton.setSDDSusTip('Load an OPAL statistic file')
+        loadSDDSButton.setStatusTip('Load an OPAL statistic file')
         loadSDDSButton.triggered.connect(self._loadSDDS)
         fileMenu.addAction(loadSDDSButton)
         
         loadFieldButton = QAction('Load field file', self)
         loadFieldButton.setShortcut('Ctrl+F')
-        loadFieldButton.setSDDSusTip('Load an OPAL field file')
+        loadFieldButton.setStatusTip('Load an OPAL field file')
         loadFieldButton.triggered.connect(self._loadFieldFile)
         fileMenu.addAction(loadFieldButton)
         
         exitButton = QAction('Exit', self)
         exitButton.setShortcut('Ctrl+Q')
-        exitButton.setSDDSusTip('Exit application')
+        exitButton.setStatusTip('Exit application')
         exitButton.triggered.connect(self.close)
         fileMenu.addAction(exitButton)
     
@@ -112,11 +112,15 @@ class PH5MainFrame(QMainWindow):
     
     
     def _loadSDDS(self):
+        
+        filetypes = "SDDS Files (*.stat);;SDDS Files (*.lbal);;All Files (*)"
+        
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         filename, _ = QFileDialog.getOpenFileName(self,
                                                   "QFileDialog.getOpenFileName()",
-                                                  "","SDDS Files (*.stat);;All Files (*)",
+                                                  "",
+                                                  filetypes,
                                                   options=options)
         if filename:
             self._statfiles.append(filename)
@@ -178,7 +182,7 @@ class PH5MainFrame(QMainWindow):
                 entryField.append(r)
         
         if entrySDDS and not entryField:
-            idx = self.PlotterType.STAT
+            idx = self.PlotterType.SDDS
             
             self._canvas.clear()
             self._canvas.show()
