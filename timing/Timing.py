@@ -1,0 +1,572 @@
+##
+# @author Matthias Frey
+# @date 2016 - 2017
+#
+
+import cPickle as pickle
+import pprint
+import matplotlib.pyplot as plt
+from operator import itemgetter
+import numpy as np
+import os
+import re
+
+class Timing:
+
+    """
+    Read and write an Ippl timing file.
+    
+    Example:
+    
+    import Timing as timing
+    
+    time = timing.Timing()
+    
+    time.read_ippl_timing("/path/to/IpplTiming.dat")
+    
+    data = time.getTiming()
+    
+    print ( data )
+    
+    time.pie_plot('cpu avg'):
+    
+    
+    Parameters
+    ----------
+    _data ([])  list of dictionaries
+    
+    Notes
+    -----
+    It stores the data in a list of dictionary
+    where the main timing dictionary is
+    
+        main_dict = {'cpu tot':     [],
+                     'wall tot':    [],
+                     'what':        [],
+                     'cores':       []}
+        
+    and the specialized timings are in stored in a
+    dictionary with the structure
+    
+        special_dict = {'what':     [],
+                        'cpu max':  [],
+                        'wall max': [],
+                        'cpu min':  [],
+                        'wall min': [],
+                        'cpu avg':  [],
+                        'wall avg': []}
+        
+    The list of dictionaries looks then as follows:
+        
+        self._data = [main_dict,
+                      special_dict_1,
+                      ...,
+                      special_dict_N]
+    
+    Examples
+    --------
+    None
+    
+    """
+
+    def __init__(self):
+        # list of dictionaries
+        self._data = []
+    
+    
+    def _init_data_structure(self):
+        """
+        This is the way the timing is stored
+        
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        main_dict       the dictionary for the main timer
+        special_dict    the dictionary for all other timers
+        
+        References
+        ----------
+        None
+        
+        Examples
+        --------
+        None
+        """
+        
+        main_dict = {'cpu tot':     [],
+                     'wall tot':    [],
+                     'what':        [],
+                     'cores':       []}
+        
+        special_dict = {'what':     [],
+                        'cpu max':  [],
+                        'wall max': [],
+                        'cpu min':  [],
+                        'wall min': [],
+                        'cpu avg':  [],
+                        'wall avg': []}
+        return main_dict, special_dict
+    
+    
+    def read_output_file(self, f):
+        """
+        Read in the timing results from an OPAL
+        output file.
+        
+        Parameters
+        ----------
+        f (str) is the pathname (i.e. path + filename)
+        
+        Returns
+        -------
+        None
+        
+        References
+        ----------
+        None
+        
+        Examples
+        --------
+        None
+        
+        Notes
+        -----
+        Following format assumed:
+        
+        Timings{0}> -----------------------------------------------------------------
+        Timings{0}>      Timing results for 32 nodes:
+        Timings{0}> -----------------------------------------------------------------
+        Timings{0}> mainTimer........... Wall tot =    326.192, CPU tot =     325.76
+        Timings{0}> 
+        Timings{0}> my awesome timer.... Wall max =          0, CPU max =          0
+        Timings{0}>                      Wall avg =          0, CPU avg =          0
+        Timings{0}>                      Wall min =          0, CPU min =          0
+        Timings{0}>
+        Timings{0}> super timer......... Wall max =    14.6091, CPU max =      14.52
+        Timings{0}>                      Wall avg =    3.34291, CPU avg =    3.31844
+        Timings{0}>                      Wall min =   0.007039, CPU min =          0
+        Timings{0}>
+        Timings{0}> best timer.......... Wall max =    33.4165, CPU max =      32.93
+        Timings{0}>                      Wall avg =    23.0727, CPU avg =    22.8328
+        Timings{0}>                      Wall min =     19.989, CPU min =      19.67
+        Timings{0}>
+        Timings{0}> -----------------------------------------------------------------
+        """
+        
+        
+        self._data = []
+        
+        main_dict, special_dict = self._init_data_structure()
+        
+        # 13. July 2017
+        # https://stackoverflow.com/questions/2301789/read-a-file-in-reverse-order-using-python
+        lines = []
+        count = 0
+        
+        for line in reversed(open(f).readlines()):
+            if "Timings" in line:
+                lines.insert(0, line)
+        
+        # we parse it the right order
+        for line in lines:
+            if "Timing results for" in line:
+                    words = line.split()
+                    main_dict['cores'] = words[4]
+            
+            elif "Wall tot" in line:
+                # main timer
+                main_dict['what'], \
+                main_dict['wall tot'], \
+                main_dict['cpu tot'] = self._parseLine(line, 'tot')
+                self._data.append(dict(main_dict))
+                
+            elif "Wall max" in line:
+                # special timer
+                special_dict['what'], \
+                special_dict['wall max'], \
+                special_dict['cpu max'] = self._parseLine(line, 'max')
+                count += 1
+            elif "Wall min" in line:
+                special_dict['wall min'], \
+                special_dict['cpu min'] = self._parseLine(line, 'min')
+                count += 1
+            elif "Wall avg" in line:
+                special_dict['wall avg'], \
+                special_dict['cpu avg'] = self._parseLine(line, 'avg')
+                count += 1
+        
+            if count == 3:
+                count = 0
+                self._data.append(dict(special_dict))
+    
+    
+    def _parse_line(self, line, time):
+        """
+        Used in read_output_file() for getting the timing values
+        
+        Parameters
+        ----------
+        line (str)      to parse
+        time (str)      'tot', 'avg', 'min' or 'max'
+        
+        Returns
+        -------
+        wall  (float)   time number
+        cpu   (float)   time number
+        timer (str)     timer name (only if time == 'max')
+        
+        References
+        ----------
+        None
+        
+        Examples
+        --------
+        None
+        """
+        
+        pattern = ''
+        
+        if time == 'max' or time == 'tot':
+            pattern = '.*> (.*) Wall ' + time + ' = (.*), CPU ' + time + ' = (.*)'
+        elif time == 'min' or time == 'avg':
+            pattern = '.*> .* Wall ' + time + ' = (.*), CPU ' + time + ' = (.*)'
+        
+        match = re.match(pattern, line)
+        
+        if time == 'max' or time == 'tot':
+            timer = match.group(1).replace('.', '')
+            wall  = float(match.group(2))
+            cpu   = float(match.group(3))
+            return timer,  wall, cpu
+        else:
+            wall = float(match.group(1))
+            cpu  = float(match.group(2))
+            return wall, cpu
+    
+    
+    def read_ippl_timing(self, f):
+        
+        """
+        Read in an Ippl timing file created by
+        
+        std::string filename = "myTiming.dat";
+        Ippl:print(filename);
+        
+        Parameters
+        ----------
+        f (str) is the pathname (i.e. path + filename)
+        
+        Returns
+        -------
+        None
+        
+        References
+        ----------
+        None
+        
+        Examples
+        --------
+        None
+        """
+        
+        self._data = []
+        
+        main_dict, special_dict = self._init_data_structure()
+        
+        with open(f) as ff:
+            self._skip_lines(ff, 2)
+            
+            # get main timing
+            line = next(ff)
+            words = line.split()
+            
+            # remove appending dots "..." of timing names
+            main_dict['what']       = words[0].replace('.', '')
+            main_dict['cores']      = words[1]
+            main_dict['cpu tot']    = float(words[2])
+            main_dict['wall tot']   = float(words[3])
+
+            self._data.append(main_dict)
+            
+            # get special timings
+            self._skip_lines(ff, 3)
+            for line in ff:
+                words = line.split()
+                
+                special_dict['what']        = words[0].replace('.', '')
+                special_dict['cpu max']     = float(words[2])
+                special_dict['wall max']    = float(words[3])
+                special_dict['cpu min']     = float(words[4])
+                special_dict['wall min']    = float(words[5])
+                special_dict['cpu avg']     = float(words[6])
+                special_dict['wall avg']    = float(words[7])
+                
+                # we need to copy otherwise it overwrites the data
+                self._data.append(dict(special_dict))
+    
+    
+    def getTiming(self):
+        
+        """
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        the timing data
+        
+        Notes
+        -----
+        It is not checked if the container is empty.
+        
+        References
+        ----------
+        None
+        """
+        return self._data
+    
+    def read(self, pathname, info=False):
+        
+        """
+        Parameters
+        ----------
+        pathname (str)      path + filename of pickle file
+        info=False (bool)   print data when reading
+        
+        References
+        ----------
+        None
+        
+        Notes
+        -----
+        None
+        
+        Returns
+        -------
+        None
+        """
+        
+        self._data = []
+        
+        with open(pathname, 'rb') as f:
+            for data in self._load_pkl(f):
+                self._data.append(data)
+                if info:
+                    pprint.pprint(data)
+    
+    
+    def write(self, pathname, data, form="PICKLE"):
+        """
+        Export a timing data in a specific format
+        
+        Parameters
+        ----------
+        pathname        (str)   path + name of the written file
+        data            ([{}])  timing data
+        form="PICKLE"   (str)   in which format to write
+        
+        Returns
+        -------
+        None
+        
+        Notes
+        -----
+        Throws an exception if the format is unknown
+        """
+        
+        if 'PICKLE' in form:
+            self._exportPickle(pathname, data)
+        elif 'ASCII' in form:
+            self._exportAscii(pathname, data)
+        else:
+            raise RuntimeError('Not supported export format.')
+    
+    
+    def pie_plot(self, prop, first=None, saveas='pie_chart.png', cmap_name='YlGn'):
+        """
+        Create a pie plot of the first N most time consuming timings.
+        
+        Parameters
+        ----------
+        prop    (str)                   the key of the dictionary to plot
+                                        possible keys:
+                                            - cpu max
+                                            - cpu avg
+                                            - cpu min
+                                            - wall max
+                                            - wall avg
+                                            - wall min
+        first=None (int)                take only the first N specialized
+                                        timings
+        saveas='pie_chart.png'  (str)   export the pie chart
+        cmap_name='YlGn'        (str)   color scheme
+        
+        Notes
+        -----
+        Throws an exception if no data available or the key is not part
+        of the dictionary
+        
+        Returns
+        -------
+        None
+        """
+        
+        if not self._data:
+            raise RuntimeError('No data available.')
+        
+        if prop not in self._data[1]:
+            raise KeyError('This property is not part of the dictionary.')
+        
+        labels = []
+        times = []
+        
+        if first == None or first > len( self._data ) - 1:
+            # do all
+            first = len( self._data ) - 1 # without main timing --> -1
+        elif first < 1:
+            raise RuntimeError("Can't plot the first " + str(first) + " timings.")
+        
+        for data in self._data:
+            label = data['what']
+            
+            if not label == "main":
+                labels.append(label)
+                times.append(data[prop])
+            
+        # 15. Jan. 2017,
+        # http://stackoverflow.com/questions/9543211/sorting-a-list-in-python-using-the-result-from-sorting-another-list
+        times_sorted, labels_sorted = zip(*sorted(zip(times, labels),
+                                                  key=itemgetter(0),
+                                                  reverse=True))
+        
+        # 15. Jan. 2017, https://gist.github.com/vals/5257113
+        cmap = plt.get_cmap(cmap_name)
+        colors = cmap(np.linspace(0, 1, len(times_sorted)))
+        
+        fig = plt.figure(figsize=(12, 9))
+        ax = fig.add_axes([0.0, 0.01, 0.75, 0.98])
+
+        # 15. Jan. 2017,
+        # http://stackoverflow.com/questions/7082345/how-to-set-the-labels-size-on-a-pie-chart-in-python
+        patches, texts, autotexts = ax.pie(times_sorted[0:first],
+                                           autopct='%1.1f%%',
+                                           pctdistance=0.6,
+                                           startangle=90,
+                                           colors=colors,
+                                           radius=1.0,
+                                           shadow=False)
+        
+        # cosmetics
+        for t in texts:
+            t.set_fontsize(18)
+            
+        for at in autotexts:
+            at.set_fontsize(16)
+        
+        ax.legend(patches, labels[0:first], loc='best', bbox_to_anchor=(1.0, 0.98), borderaxespad=0.1)
+        #plt.tight_layout()
+        plt.axis('equal')
+        plt.savefig(saveas)
+    
+    
+    def _load_pkl(self, pkl_file):
+        """
+        Pickle file loading function
+        
+        Parameters
+        ----------
+        pkl_file    (str)   pickle timing file to load
+        
+        """
+        
+        # 14. Jan. 2017, http://stackoverflow.com/questions/18675863/load-data-from-python-pickle-file-in-a-loop
+        try:
+            while True:
+                yield pickle.load(pkl_file)
+        except EOFError:
+            pass
+    
+    
+    def _skip_lines(self, f, n):
+        """
+        Skip n lines of the opened file f
+        
+        Parameters
+        ----------
+        f   (str)   the opened file
+        n   (int)   the number of lines to skip
+        """
+        
+        for _ in range(n):
+            next(f)
+    
+    def _exportPickle(self, pathname, data):
+        """
+        Write a binary pickle file
+        
+        Parameters
+        ----------
+        pathname    (str)   path + filename of written file
+        data        ([{}])  timing data
+        
+        Notes
+        -----
+        If pathname has no extension the string ".pkl" is
+        appended
+        """
+        
+        if '.' not in pathname:
+            pathname = pathname + ".pkl"
+        
+        f = open(pathname, 'wb')
+        
+        for dic in data:
+            pickle.dump(dic, f)
+        
+        f.close()
+    
+    def _exportAscii(self, pathname, data):
+        """
+        Write a human readable file
+        
+        Parameters
+        ----------
+        pathname    (str)   path + filename of written file
+        data        ([{}])  timing data
+        
+        Notes
+        -----
+        If pathname has no extension the string ".dat" is
+        appended
+        """
+        
+        if '.dat' not in pathname:
+            pathname = pathname + ".dat"
+            
+        f = open(pathname, 'w')
+        
+        for dic in data:
+            if dic['what'] == 'main':
+                f.write("\t\t CPU tot\t Wall tot\n")
+                f.write("=" * 42 + "\n")
+                f.write(dic['what'] + "\t\t" + str(dic['cpu tot']) + "\t\t" + str(dic['wall tot']) + "\n")
+                f.write("")
+                f.write("\t\t\t CPU max\t Wall max\t CPU min\t Wall min\t CPU avg\t Wall avg\n")
+                f.write("=" * 115 + "\n")
+            else:
+                # 16. Jan. 2017
+                # http://stackoverflow.com/questions/20309255/how-to-pad-a-string-to-a-fixed-length-with-spaces-in-python
+                f.write("{:<20}".format(dic['what']) + "\t")
+                f.write("{:<10}".format(str(dic['cpu max'])) + "\t")
+                f.write("{:<10}".format(str(dic['wall max'])) + "\t")
+                f.write("{:<10}".format(str(dic['cpu min'])) + "\t")
+                f.write("{:<10}".format(str(dic['wall min'])) + "\t")
+                f.write("{:<10}".format(str(dic['cpu avg'])) + "\t")
+                f.write("{:<10}".format(str(dic['wall avg'])))
+                f.write("\n")
+        
+        f.close()
