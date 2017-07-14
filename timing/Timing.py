@@ -11,6 +11,7 @@ import numpy as np
 import os
 import re
 
+
 class Timing:
 
     """
@@ -72,6 +73,8 @@ class Timing:
     def __init__(self):
         # list of dictionaries
         self._data = []
+        self._format = ['PICKLE',
+                        'ASCII']
     
     
     def _init_data_structure(self):
@@ -180,22 +183,22 @@ class Timing:
                 # main timer
                 main_dict['what'], \
                 main_dict['wall tot'], \
-                main_dict['cpu tot'] = self._parseLine(line, 'tot')
+                main_dict['cpu tot'] = self._parse_line(line, 'tot')
                 self._data.append(dict(main_dict))
                 
             elif "Wall max" in line:
                 # special timer
                 special_dict['what'], \
                 special_dict['wall max'], \
-                special_dict['cpu max'] = self._parseLine(line, 'max')
+                special_dict['cpu max'] = self._parse_line(line, 'max')
                 count += 1
             elif "Wall min" in line:
                 special_dict['wall min'], \
-                special_dict['cpu min'] = self._parseLine(line, 'min')
+                special_dict['cpu min'] = self._parse_line(line, 'min')
                 count += 1
             elif "Wall avg" in line:
                 special_dict['wall avg'], \
-                special_dict['cpu avg'] = self._parseLine(line, 'avg')
+                special_dict['cpu avg'] = self._parse_line(line, 'avg')
                 count += 1
         
             if count == 3:
@@ -359,7 +362,7 @@ class Timing:
                     pprint.pprint(data)
     
     
-    def write(self, pathname, data, form="PICKLE"):
+    def write(self, pathname, form = 'PICKLE', data = None):
         """
         Export a timing data in a specific format
         
@@ -375,12 +378,18 @@ class Timing:
         
         Notes
         -----
-        Throws an exception if the format is unknown
+        Throws an exception if the format is unknown or
+        not available
         """
         
-        if 'PICKLE' in form:
+        if not data and not self._data:
+            raise RuntimeError('No data available.')
+        elif not data:
+            data = self._data
+        
+        if form == self._format[0]:
             self._exportPickle(pathname, data)
-        elif 'ASCII' in form:
+        elif form == self._format[1]:
             self._exportAscii(pathname, data)
         else:
             raise RuntimeError('Not supported export format.')
@@ -433,7 +442,7 @@ class Timing:
         for data in self._data:
             label = data['what']
             
-            if not label == "main":
+            if not 'main' in label:
                 labels.append(label)
                 times.append(data[prop])
             
@@ -550,7 +559,7 @@ class Timing:
         f = open(pathname, 'w')
         
         for dic in data:
-            if dic['what'] == 'main':
+            if 'main' in dic['what']:
                 f.write("\t\t CPU tot\t Wall tot\n")
                 f.write("=" * 42 + "\n")
                 f.write(dic['what'] + "\t\t" + str(dic['cpu tot']) + "\t\t" + str(dic['wall tot']) + "\n")
