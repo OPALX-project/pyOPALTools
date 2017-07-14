@@ -99,8 +99,6 @@ class Extractor:
             self._files = []
         
         self._files += files
-        
-        print ( self._files )
     
     
     def getFiles(self):
@@ -109,7 +107,7 @@ class Extractor:
         -------
         all collected files
         """
-        return self.files
+        return self._files
     
     
     def write(self, pathname = './', filetype='ASCII'):

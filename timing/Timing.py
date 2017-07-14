@@ -172,6 +172,8 @@ class Timing:
         for line in reversed(open(f).readlines()):
             if "Timings" in line:
                 lines.insert(0, line)
+            else:
+                break
         
         # we parse it the right order
         for line in lines:
