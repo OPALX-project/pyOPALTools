@@ -560,11 +560,11 @@ class Timing:
         
         for dic in data:
             if 'main' in dic['what']:
-                f.write("\t\t CPU tot\t Wall tot\n")
-                f.write("=" * 42 + "\n")
-                f.write(dic['what'] + "\t\t" + str(dic['cpu tot']) + "\t\t" + str(dic['wall tot']) + "\n")
-                f.write("")
-                f.write("\t\t\t CPU max\t Wall max\t CPU min\t Wall min\t CPU avg\t Wall avg\n")
+                f.write("\t\t num Nodes    CPU tot   Wall tot\n")
+                f.write("=" * 48 + "\n")
+                f.write(dic['what'] + "\t\t" + str(dic['cores']) + "    " + \
+                    str(dic['cpu tot']) + "    " + str(dic['wall tot']) + "\n")
+                f.write("\n\t\t\t CPU max\t Wall max\t CPU min\t Wall min\t CPU avg\t Wall avg\n")
                 f.write("=" * 115 + "\n")
             else:
                 # 16. Jan. 2017
