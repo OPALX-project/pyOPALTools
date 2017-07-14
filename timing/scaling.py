@@ -2,6 +2,7 @@ import argparse
 import os
 import matplotlib.pyplot as plt
 import numpy as np
+from cycler import cycler
 
 import Timing as timing
 import Extractor as extractor
@@ -69,7 +70,8 @@ def plot(time, nCores, cmap_name = 'tab20'):
     ax = plt.subplot(111)
     cmap = plt.get_cmap(cmap_name)
     nColors = len(time)
-    ax.set_color_cycle([cmap(1.*i/nColors) for i in range(nColors)])
+    
+    ax.set_prop_cycle(cycler('color', [cmap(1.*i/nColors) for i in range(nColors)]))
     i = 0
     
     # 14. July 2017
