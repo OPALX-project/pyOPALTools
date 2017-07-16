@@ -34,7 +34,6 @@ class SDDSPlotter(Plotter):
         
         axes.set_xlabel(xvar + ' [' + xunit + ']')
         axes.set_ylabel(yvar + ' [' + yunit + ']')
-        axes.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
     
     def lineplot(self, canvas):
         raise RuntimeError("Lineplot not implemented.")

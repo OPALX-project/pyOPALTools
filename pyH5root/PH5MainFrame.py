@@ -12,6 +12,7 @@ from SDDSParser import *
 from SDDSPlotter import *
 from Canvas import *
 from enum import IntEnum
+import matplotlib.ticker as ticker
 
 
 class PH5MainFrame(QMainWindow):
@@ -45,8 +46,9 @@ class PH5MainFrame(QMainWindow):
         #searchMenu = mainMenu.addMenu('Search')
         #toolsMenu = mainMenu.addMenu('Tools')
         #helpMenu = mainMenu.addMenu('Help')
+        optionMenu = mainMenu.addMenu('Options')
         
-        
+        # File menus
         loadSDDSButton = QAction('Load SDDS file', self)
         loadSDDSButton.setShortcut('Ctrl+S')
         loadSDDSButton.setStatusTip('Load an OPAL statistic file')
@@ -58,6 +60,33 @@ class PH5MainFrame(QMainWindow):
         exitButton.setStatusTip('Exit application')
         exitButton.triggered.connect(self.close)
         fileMenu.addAction(exitButton)
+        
+        # Option menus
+        self._action_logx = QAction('Logarithmic x-axis', self, checkable=True)
+        self._action_logx.setStatusTip('Plot with logarithmic x-axis')
+        self._action_logx.triggered.connect(self.applyOptions)
+        optionMenu.addAction(self._action_logx)
+        
+        self._action_logy = QAction('Logarithmic y-axis', self, checkable=True)
+        self._action_logy.setStatusTip('Plot with logarithmic y-axis')
+        self._action_logy.triggered.connect(self.applyOptions)
+        optionMenu.addAction(self._action_logy)
+        
+        self._action_grid = QAction('Grid', self, checkable=True)
+        self._action_grid.setStatusTip('Plot with grid')
+        self._action_grid.triggered.connect(self.applyOptions)
+        optionMenu.addAction(self._action_grid)
+        
+        self._action_scix = QAction('Scientific x-ticks', self, checkable=True)
+        self._action_scix.setStatusTip('Plot with scientific ticks for the x-axis')
+        self._action_scix.triggered.connect(self.applyOptions)
+        optionMenu.addAction(self._action_scix)
+        
+        self._action_sciy = QAction('Scientific y-ticks', self, checkable=True)
+        self._action_sciy.setStatusTip('Plot with scientific ticks for the y-axis')
+        self._action_sciy.triggered.connect(self.applyOptions)
+        optionMenu.addAction(self._action_sciy)
+        
     
     def _initRightFrame(self):
         
@@ -213,6 +242,10 @@ class PH5MainFrame(QMainWindow):
         # https://stackoverflow.com/questions/14849293/python-find-index-postion-in-list-based-of-partial-string
         idx = [idx for idx, s in enumerate(extension) if s in filetype]
         
+        # if user didn't save --> quit
+        if not filename:
+            return
+        
         # catch case where user add extension by hand
         # to the filename
         if idx:
@@ -237,3 +270,42 @@ class PH5MainFrame(QMainWindow):
             if checkbox.isChecked():
                 entrySDDS.append(r)
         return entrySDDS
+    
+    
+    def applyOptions(self):
+        
+        axes = self._canvas.getAxes()
+        
+        xscale = 'linear' 
+        if self._action_logx.isChecked():
+            xscale = 'log'
+        axes.set_xscale(xscale)
+        
+        yscale = 'linear'
+        if self._action_logy.isChecked():
+            yscale = 'log'
+        axes.set_yscale(yscale)
+        
+        xstyle = 'plain'
+        if self._action_scix.isChecked():
+            xstyle = 'scientific'
+        self._setAxisStyle(xstyle, 'x')
+        
+        ystyle = 'plain'
+        if self._action_sciy.isChecked():
+            ystyle = 'scientific'
+        self._setAxisStyle(ystyle, 'y')
+        
+        axes.grid(self._action_grid.isChecked())
+    
+    
+    def _setAxisStyle(self, style, axis):
+        axes = self._canvas.getAxes()
+        
+        if axis == 'y':
+            axes.yaxis.set_major_formatter(ticker.ScalarFormatter())
+        else:
+            axes.xaxis.set_major_formatter(ticker.ScalarFormatter())
+        
+        axes.ticklabel_format(style=style, axis=axis,
+                              scilimits=(0,0))

@@ -11,6 +11,8 @@ class Canvas(FigureCanvas):
         self._fig.patch.set_alpha(0)
         self._fig.set_tight_layout(True)
         FigureCanvas.__init__(self, self._fig)
+        
+        self._parent = parent
         self.setParent(parent)
  
         FigureCanvas.setSizePolicy(self,
@@ -24,9 +26,13 @@ class Canvas(FigureCanvas):
         self._legends.append(legend)
     
     def show(self):
-        self._axes.legend(self._legends,
-                          loc='best',
-                          prop={'size':10})
+        
+        self._parent.applyOptions()
+        
+        if self._legends:
+            self._axes.legend(self._legends,
+                              loc='best',
+                              prop={'size':10})
         self.draw()
     
     
