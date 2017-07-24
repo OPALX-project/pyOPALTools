@@ -61,7 +61,7 @@ def reorder(data):
     return newdata
 
 
-def plot(time, nCores, cmap_name = 'tab20'):
+def plot(time, nCores, cmap_name = 'terrain'):
     fig = plt.figure(figsize=(10, 10))
     legends = []
 
