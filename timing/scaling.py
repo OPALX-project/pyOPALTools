@@ -14,7 +14,8 @@ timings = ['mainTimer',
            'AMR update particle',
            'Integration',
            'SelfField total',
-           'SF: Potential'
+           'SF: Potential',
+           'Boundingbox'
            ]
 
 

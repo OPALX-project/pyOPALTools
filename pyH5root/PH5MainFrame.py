@@ -136,7 +136,7 @@ class PH5MainFrame(QMainWindow):
     
     def _loadSDDS(self):
         
-        filetypes = "SDDS Files (*.stat);;SDDS Files (*.lbal);;All Files (*)"
+        filetypes = "SDDS Files (*.stat);;SDDS Files (*.lbal);;SDDS Files (*.mem);;All Files (*)"
         
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
