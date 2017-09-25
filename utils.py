@@ -5,6 +5,7 @@ import mmap
 import numpy as np
 import sys
 import h5py
+import re
 
 from matplotlib.pyplot import *
 from matplotlib import rc
@@ -63,6 +64,24 @@ tableau20 = [(31, 119, 180), (174, 199, 232), (255, 127, 14), (255, 187, 120),
              (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]
 
 
+# to sort h5 dataset names
+
+def atof(text):
+    try:
+        retval = float(text)
+    except ValueError:
+        retval = text
+    return retval
+
+def natural_keys(text):
+    '''
+    alist.sort(key=natural_keys) sorts in human order
+    http://nedbatchelder.com/blog/200712/human_sorting.html
+    (See Toothy's implementation in the comments)
+    float regex comes from https://stackoverflow.com/a/12643073/190597
+    '''
+    return [ atof(c) for c in re.split(r'[+-]?([0-9]+(?:[.][0-9]*)?|[.][0-9]+)', text) ]
+
 
 """
 A very crude reader for H5hut data
@@ -74,11 +93,39 @@ class H5Reader:
         self.__filename = filename
         self.__hf = h5py.File(self.__filename,'r')
         if self.__hf:
+            self.__all_h5_objs = []
+            self.__hf.visit(self.__all_h5_objs.append)            
+            self.__all_groups   = [ obj for obj in self.__all_h5_objs if isinstance(self.__hf[obj],h5py.Group) ]
+            self.__all_datasets = [ obj for obj in self.__all_h5_objs if isinstance(self.__hf[obj],h5py.Dataset) ]
             print ("Open sucsessfully ",filename)
         else:
             print ("Give up on ",filename)
             sys.exit()
                 
+    def getKurtosis(self,s,n=0):
+        '''
+        s is the dataset identifier for example s='\\x'
+        n selects the number of dataset:
+        n == 0: claculates for all datasets
+        n = -1: calculates for the last dataset
+        n = k:  calculates for the k't dataset
+        '''
+        data = filter(lambda x: s in x, self.__all_datasets)
+        if (len(data) < n):
+            print ("Give up in getKurtosis, dataset does not exist ")
+            sys.exit()
+
+        data.sort(key=natural_keys)
+        r = []
+        if (n==0):
+            for m in data:
+                r.append(scipy.stats.kurtosis(self.__hf[m],bias=False))
+        else:
+            m = data[n]
+            r.append(scipy.stats.kurtosis(self.__hf[m],bias=False))
+
+        return r
+
     def getStepData(self, step, attrName):
         x = []
         dataStr = 'Step#'+str(step)+"/"+attrName
