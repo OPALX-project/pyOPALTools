@@ -23,7 +23,8 @@ try:
                         help='zoom factor of images (default: 1)',
                         default=1,
                         type=float,
-                        nargs=1)
+                        nargs='?',
+                        const=1)
     
     parser.add_argument('--pltfile',
                         help='plot file',
@@ -37,7 +38,7 @@ try:
     
     print ( pltfile )
     
-    ds = yt.load(pltfile, dataset_type='opal')
+    ds = yt.load(pltfile, dataset_type='boxlib_opal')
     
     ds.print_stats()
     
