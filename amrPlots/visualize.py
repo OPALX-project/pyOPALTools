@@ -14,6 +14,8 @@
 import os
 import yt
 import argparse
+import numpy
+import matplotlib.pyplot as plt
 
 from tools import doSlicePlot, doProjectionPlot
 
@@ -64,23 +66,36 @@ try:
     
     doSlicePlot(ds, 'x', 'Ez', 'V/m', zoom)
     
-    doSlicePlot(ds, 'z', 'potential', 'V', zoom)
+    doSlicePlot(ds, 'z', 'electrostatic_potential', 'V', zoom)
     
-    doSlicePlot(ds, 'y', 'potential', 'V', zoom)
+    doSlicePlot(ds, 'y', 'electrostatic_potential', 'V', zoom)
     
-    doSlicePlot(ds, 'x', 'potential', 'V', zoom)
+    doSlicePlot(ds, 'x', 'electrostatic_potential', 'V', zoom)
     
-    doProjectionPlot(ds, 'z', 'potential', 'V', zoom)
+    doProjectionPlot(ds, 'z', 'electrostatic_potential', 'V', zoom)
     
-    doProjectionPlot(ds, 'y', 'potential', 'V', zoom)
+    doProjectionPlot(ds, 'y', 'electrostatic_potential', 'V', zoom)
     
-    doProjectionPlot(ds, 'x', 'potential', 'V', zoom)
+    doProjectionPlot(ds, 'x', 'electrostatic_potential', 'V', zoom)
+    
+    
+    ax = 0 # take a line cut along the x axis
+    ray = ds.ortho_ray(ax, (0.5, 0.5, 0.5))
+    
+    srt = numpy.argsort(ray['x'])
+    
+    plt.plot(numpy.array(ray['x'][srt]),
+             numpy.array(ray['electrostatic_potential'][srt]))
+    plt.ylabel('electrostatic_potential (V)')
+    plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+    plt.xlabel('x-axis')
+    plt.savefig('line_plot_x_electrostatic_potential_3d.png')
 
     ad = ds.all_data()
     
     print ( ad.quantities.extrema("rho").in_units('C/m**3') )
     print ( ad.quantities.extrema("Ex").in_units('V/m') )
-    print ( ad.quantities.extrema("potential").in_units('V') )
+    print ( ad.quantities.extrema("electrostatic_potential").in_units('V') )
     
 except IOError as e:
     print (e.strerror)
