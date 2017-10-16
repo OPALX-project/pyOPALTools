@@ -38,6 +38,7 @@ pip install numpy
 pip install scipy
 pip install jupyter\[notebook\] matplotlib
 pip install h5py
+pip install pyQt5
 ```
 
 ### Run Jupyter
