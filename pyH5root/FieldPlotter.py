@@ -1,5 +1,5 @@
-from Plotter import *
-import FieldParser as fieldparser
+from pyH5root.Plotter import *
+import pyH5root.FieldParser as fieldparser
 import numpy as np
 
 class FieldPlotter(Plotter):

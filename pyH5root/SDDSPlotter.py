@@ -1,5 +1,5 @@
-from Plotter import *
-import SDDSParser as statparser
+from pyH5root.Plotter import *
+import pyH5root.SDDSParser as statparser
 
 
 class SDDSPlotter(Plotter):
