@@ -18,7 +18,7 @@ jupyter [notebook]
 Installation of a virtual Python environment
 ===========================
 It is recommended to create a virtual Python environment. You might need to install [Python3](https://www.python.org/) first.
-The PAM-1 environment is installed with following steps:
+The *pyOPALTools* environment is installed with following steps:
 
 ```bash
 virtualenv -p `which python3` pyOPALTools.venv
