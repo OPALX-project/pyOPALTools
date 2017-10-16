@@ -4,7 +4,7 @@ if sys.version_info[0] < 3:
         print ("Need at least python3")
         sys.exit()
 
-from PH5MainFrame import *
+from pyH5root import PH5MainFrame
 
 
 if __name__ == "__main__":

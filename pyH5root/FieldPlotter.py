@@ -1,12 +1,11 @@
-from pyH5root.Plotter import *
-import pyH5root.FieldParser as fieldparser
+from pyH5root import Plotter, FieldParser
 import numpy as np
 
 class FieldPlotter(Plotter):
     
     def __init__(self):
         super(FieldPlotter, self).__init__()
-        
+    
     def plot(self, xvar, yvar, canvas):
         raise RuntimeError("Not implemented.")
     
