@@ -80,7 +80,16 @@ try:
     
     
     ax = 0 # take a line cut along the x axis
-    ray = ds.ortho_ray(ax, (0.5, 0.5, 0.5))
+    
+    #c = ds.find_max('electrostatic_potential')[1]
+    #start = ((-1.0, "cm"), (-0.24, "cm"), (0.0, "cm"))
+    #end = ((1.0, "cm"), (-0.24, "cm"), (0.0, "cm"))
+    
+    start = ((-1.0, "cm"), (0.359375, "cm"), (0.0, "cm"))
+    end = ((1.0, "cm"), (0.359375, "cm"), (0.0, "cm"))
+    ray = ds.r[start:end]
+    
+    #print ( 'center : ', c )
     
     srt = numpy.argsort(ray['x'])
     
@@ -90,6 +99,17 @@ try:
     plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
     plt.xlabel('x-axis')
     plt.savefig('line_plot_x_electrostatic_potential_3d.png')
+    
+    
+    plt.close()
+    
+    plt.plot(numpy.array(ray['x'][srt]),
+             numpy.array(ray['Ex'][srt]))
+    
+    plt.ylabel(r'$\rm{E_x}$ (V/m)')
+    plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+    plt.xlabel('x-axis')
+    plt.savefig('line_plot_x_efield.png')
 
     ad = ds.all_data()
     
