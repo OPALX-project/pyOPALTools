@@ -32,7 +32,8 @@ class SDDSParser:
         
         with open(filename) as f:
             for line in f:
-                if 'OPAL' in line:
+                if 'OPAL' and 'git rev.' in line:
+                    line = line.replace('#', '')
                     obj = re.match(pattern, line)
                     v = self._version(obj.group(1))
                     break;
