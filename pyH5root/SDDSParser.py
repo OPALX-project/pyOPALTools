@@ -1,4 +1,5 @@
 import numpy as np
+import re
 
 class SDDSParser:
     
@@ -11,7 +12,70 @@ class SDDSParser:
         self.variables = {}
         self._units = {}
         
+        # check file version
+        version = self._checkVersion(filename)
+        
         # parse header
+        if version >= 10900:
+            self._parseHeader1_9(filename)
+        else:
+            self._parseHeader1_6(filename)
+        
+        # read data
+        self._dataset = np.genfromtxt(filename, skip_header = self._nRows, dtype=np.float64)
+    
+    def _checkVersion(self, filename):
+        
+        pattern = 'OPAL (.*) git'
+        
+        v = 0
+        
+        with open(filename) as f:
+            for line in f:
+                if 'OPAL' in line:
+                    obj = re.match(pattern, line)
+                    v = self._version(obj.group(1))
+                    break;
+        return v
+                    
+    
+    def _version(self, v):
+        digits = v.split('.')
+        
+        i1 = int(digits[0]) * 10000
+        i2 = int(digits[1]) * 100
+        return i1 + i2
+        
+    
+    def _parseHeader1_6(self, filename):
+        column_pattern = '&columnname=(.*),type=(.*),units=(.*),description=\"(.*)\"&end'
+        #parameter_pattern = '&parametername=(.*),type=(.*),description=\"(.*)\"&end'
+        
+        with open(filename) as f:
+            for line in f:
+                self._nRows += 1
+                line = line.replace(' ', '')
+                if 'SDDS' in line:
+                    continue
+                elif 'column' in line:
+                    self._nRows += 1
+                    obj = re.match(column_pattern, line)
+                    self.variables[obj.group(1)] = self._nColumns
+                    self._units[self._nColumns] = obj.group(3)
+                    self._nColumns += 1
+                elif 'parameter' in line:
+                    self._nRows += 1
+                    self._nParameters += 1
+                elif 'description' in line:
+                    self._nRows += 1
+                elif 'data' in line:
+                    self._nRows += 1
+                else:
+                    self._nRows += self._nParameters - 1
+                    break
+    
+    
+    def _parseHeader1_9(self, filename):
         with open(filename) as f:
             for line in f:
                 self._nRows += 1
@@ -30,10 +94,6 @@ class SDDSParser:
                 else:
                     self._nRows += self._nParameters - 1
                     break
-        
-        # read data
-        self._dataset = np.genfromtxt(filename, skip_header = self._nRows, dtype=np.float64)
-    
     
     # returns a column
     def getDataOfVariable(self, varname):
