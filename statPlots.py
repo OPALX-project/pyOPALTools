@@ -84,6 +84,8 @@ def opalStatOverviewPlot(fns, title="", pdfFn="", addData=[], myLoc=2):
     
     dataSrc = [] # for use in legend
     
+    
+    
     for i in range(len(fns)):
         # add last directory and
         splitfns = fns[i].split("/")
@@ -113,17 +115,17 @@ def opalStatOverviewPlot(fns, title="", pdfFn="", addData=[], myLoc=2):
 
     # rescale
 
-    exrms[0]  = map(lambda x: x * 1.0e6, exrms[0] )
-    eyrms[0]  = map(lambda x: x * 1.0e6, eyrms[0] )
-    ezrms[0]  = map(lambda x: x * 1.0e6, ezrms[0] )
+    exrms[0]  = list(map(lambda x: x * 1.0e6, exrms[0] ))
+    eyrms[0]  = list(map(lambda x: x * 1.0e6, eyrms[0] ))
+    ezrms[0]  = list(map(lambda x: x * 1.0e6, ezrms[0] ))
 
-    xrms[0]  = map(lambda x: x * 1.0e3, xrms[0] )
-    yrms[0]  = map(lambda x: x * 1.0e3, yrms[0] )
-    zrms[0]  = map(lambda x: x * 1.0e3, zrms[0] )
+    xrms[0]  = list(map(lambda x: x * 1.0e3, xrms[0] ))
+    yrms[0]  = list(map(lambda x: x * 1.0e3, yrms[0] ))
+    zrms[0]  = list(map(lambda x: x * 1.0e3, zrms[0] ))
 
     # plot with various axes scales
     fig = plt.figure(figsize=(20,15))
-    print dataSrc
+    print ( dataSrc )
     if len(dataSrc)>1:
         l = []
         l.append(title)
@@ -146,7 +148,6 @@ def opalStatOverviewPlot(fns, title="", pdfFn="", addData=[], myLoc=2):
         plt.plot(x, xrms[i], linewidth=3, color=tableau20[i])
         plt.plot(x, yrms[i], linewidth=3, color=tableau20[i+2])
         plt.plot(x, zrms[i], linewidth=3, color=tableau20[i+6])
-
     legend = plt.legend(getLegendStr(['x','y','z'],dataSrc,enu), loc=myLoc);
     frame = legend.get_frame()
     frame.set_facecolor('1.0')
