@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import os
 import sys
 import glob
@@ -9,11 +10,9 @@ import pylab as pl
 
 import matplotlib.cm     as cm
 import matplotlib.pyplot as plt
-#import matplotlib.mlab   as mlab
-#from   matplotlib.backends.backend_pdf import PdfPages
 from collections import OrderedDict
 
-from Annotate import AnnoteFinder
+from optPilot.Annotate import AnnoteFinder
 
 import OptPilotJsonReader as jsonreader
 
@@ -133,18 +132,9 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
     obj1_idx = nameToColumnMap[selected_obj[0]]
     obj2_idx = nameToColumnMap[selected_obj[1]]
     obj3_idx = nameToColumnMap[selected_obj[2]]
-    #obj4_idx = nameToColumnMap[selected_obj[2]]
 
     vmin = min(data[:, obj3_idx])
     vmax = max(data[:, obj3_idx])
-
-    #x_min = min(data[:, obj1_idx])
-    #x_max = max(data[:, obj1_idx])
-    #y_min = min(data[:, obj1_idx])
-    #y_max = max(data[:, obj1_idx])
-    #convert_to_x_axis_scale =  (x_max - x_min) / 1
-    #convert_to_y_axis_scale =  (y_max - y_min) / 1
-    #max_axis_scale = max(convert_to_x_axis_scale, convert_to_y_axis_scale)
 
     im  = ax.scatter(data[:, obj1_idx], data[:, obj2_idx],
                      c = data[:, obj3_idx],
@@ -225,12 +215,10 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
             pl.xlabel(name)
             pl.show()
 
-
 # Helpers
 ##############################################################################
 
 def saveVideo(img_path, video_name):
-
     import commands
     import distutils
     from distutils import spawn
@@ -238,8 +226,6 @@ def saveVideo(img_path, video_name):
     if distutils.spawn.find_executable("ffmpeg") != None:
         output = commands.getoutput("ffmpeg -y -framerate 0.7 -i " + img_path + "/%04d.png " +
                                     "-qscale 0 -r 0.7 " + video_name)
-        # For debug:
-        #print output
     else:
         print 'Video exporting is not possible, ffmpeg is not installed.'
 
@@ -286,7 +272,7 @@ def main(argv):
     selected_ids = []
     path = ""
     videoname = ""
-    outpath = "output"
+    outpath = "./"
     filename_postfix = "results.json"
     generation = -1
     plotAll = False
@@ -336,7 +322,6 @@ def main(argv):
         if generation != -1:
             print("Show generation " + generation)
     
-    
         data = {}
         if generation == -1:
             if not os.path.isdir(outpath):
@@ -363,8 +348,8 @@ def main(argv):
                 str(generation), outpath, selected_ids,
                 show_single=True, plotAll=plotAll)
     
-        if videoname:
-            saveVideo(outpath, videoname)
+        #if videoname:
+        saveVideo(outpath, videoname)
     
     except:
         print ( '\n\t\033[01;31mError: ' + str(sys.exc_info()[1]) + '\n' )
