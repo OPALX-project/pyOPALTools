@@ -511,7 +511,7 @@ class Timing:
         for at in autotexts:
             at.set_fontsize(16)
         
-        ax.legend(patches, labels[0:first], loc='best', bbox_to_anchor=(1.0, 0.98), borderaxespad=0.1)
+        ax.legend(patches, labels_sorted[0:first], loc='best', bbox_to_anchor=(1.0, 0.98), borderaxespad=0.1)
         #plt.tight_layout()
         plt.axis('equal')
         plt.savefig(saveas)
