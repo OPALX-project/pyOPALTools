@@ -300,14 +300,20 @@ class Timing:
             self._skip_lines(ff, 3)
             for line in ff:
                 words = line.split()
+                n = len(words)
                 
-                special_dict['what']        = words[0].replace('.', '')
-                special_dict['cpu max']     = float(words[2])
-                special_dict['wall max']    = float(words[3])
-                special_dict['cpu min']     = float(words[4])
-                special_dict['wall min']    = float(words[5])
-                special_dict['cpu avg']     = float(words[6])
-                special_dict['wall avg']    = float(words[7])
+                nName = n - 7
+                name = ''
+                for j in range(0, nName):
+                    name += words[j].replace('.', '')
+                
+                special_dict['what']        = name
+                special_dict['cpu max']     = float(words[n-6])
+                special_dict['wall max']    = float(words[n-5])
+                special_dict['cpu min']     = float(words[n-4])
+                special_dict['wall min']    = float(words[n-3])
+                special_dict['cpu avg']     = float(words[n-2])
+                special_dict['wall avg']    = float(words[n-1])
                 
                 # we need to copy otherwise it overwrites the data
                 self._data.append(dict(special_dict))
@@ -333,6 +339,33 @@ class Timing:
         None
         """
         return self._data
+    
+    def __str__(self):
+        if not self._data:
+            return 'There is no data loaded.'
+        else:
+            out = ''
+            for dic in self._data:
+                if 'mainTimer' == dic['what'] and 'cores' in dic:
+                    out += "\t\t num Nodes    CPU tot   Wall tot\n"
+                    out += "=" * 48 + "\n"
+                    out += dic['what'] + "\t\t" + str(dic['cores']) + "    " + \
+                        str(dic['cpu tot']) + "    " + str(dic['wall tot']) + "\n"
+                    out += "\n\t\t\t CPU max\t Wall max\t CPU min\t Wall min\t CPU avg\t Wall avg\n"
+                    out += "=" * 115 + "\n"
+                else:
+                    # 16. Jan. 2017
+                    # http://stackoverflow.com/questions/20309255/how-to-pad-a-string-to-a-fixed-length-with-spaces-in-python
+                    out += "{:<20}".format(dic['what']) + "\t"
+                    out += "{:<10}".format(str(dic['cpu max'])) + "\t"
+                    out += "{:<10}".format(str(dic['wall max'])) + "\t"
+                    out += "{:<10}".format(str(dic['cpu min'])) + "\t"
+                    out += "{:<10}".format(str(dic['wall min'])) + "\t"
+                    out += "{:<10}".format(str(dic['cpu avg'])) + "\t"
+                    out += "{:<10}".format(str(dic['wall avg']))
+                    out += "\n"
+            return out
+    
     
     def read(self, pathname, info=False):
         
@@ -561,7 +594,7 @@ class Timing:
         f = open(pathname, 'w')
         
         for dic in data:
-            if 'main' in dic['what']:
+            if 'mainTimer' == dic['what'] and 'cores' in dic:
                 f.write("\t\t num Nodes    CPU tot   Wall tot\n")
                 f.write("=" * 48 + "\n")
                 f.write(dic['what'] + "\t\t" + str(dic['cores']) + "    " + \
