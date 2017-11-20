@@ -7,32 +7,6 @@ import timing.Timing as timing
 
 class TimePlot:
     
-    
-    def boxplot(self, fnames, **kwargs):
-        """
-        Create a boxbplot of several timing files
-        """
-        
-        # get properties
-        saveas = kwargs.get('saveas', None)
-        cmap_name = kwargs.get('cmap', 'YlGn')
-        figsize = kwargs.get('figsize', (12, 9))
-        grid = kwargs.get('grid', False)
-        
-        
-        time = timing()
-        
-        for fname in fnames:
-            
-            if not os.path.isfile(fname):
-                raise RuntimeError("The file " + "'" + fname + "'" + " does not exist.")
-            
-            time.read_ippl_timing(fname)
-            data = time.getTiming()
-            
-            
-            
-    
     def summary_plot(self, fname, **kwargs):
         """
         Create a plot with minimum, maximum and average timings
