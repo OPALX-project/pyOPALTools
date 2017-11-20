@@ -1,0 +1,8 @@
+import timing.TimePlot as TimePlot
+
+tplot = TimePlot()
+
+tplot.pie_plot(fname = 'testData/timing.dat')
+
+tplot.summary_plot(fname='testData/timing.dat', grid=True)
+

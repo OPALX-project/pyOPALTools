@@ -5,10 +5,6 @@
 
 import pickle as pickle
 import pprint
-import matplotlib.pyplot as plt
-from operator import itemgetter
-import numpy as np
-import os
 import re
 
 
@@ -428,93 +424,6 @@ class Timing:
             self._exportAscii(pathname, data)
         else:
             raise RuntimeError('Not supported export format.')
-    
-    
-    def pie_plot(self, prop, first=None, saveas='pie_chart.png', cmap_name='YlGn'):
-        """
-        Create a pie plot of the first N most time consuming timings.
-        
-        Parameters
-        ----------
-        prop    (str)                   the key of the dictionary to plot
-                                        possible keys:
-                                            - cpu max
-                                            - cpu avg
-                                            - cpu min
-                                            - wall max
-                                            - wall avg
-                                            - wall min
-        first=None (int)                take only the first N specialized
-                                        timings
-        saveas='pie_chart.png'  (str)   export the pie chart
-        cmap_name='YlGn'        (str)   color scheme
-        
-        Notes
-        -----
-        Throws an exception if no data available or the key is not part
-        of the dictionary
-        
-        Returns
-        -------
-        None
-        """
-        
-        if not self._data:
-            raise RuntimeError('No data available.')
-        
-        if prop not in self._data[1]:
-            raise KeyError('This property is not part of the dictionary.')
-        
-        labels = []
-        times = []
-        
-        if first == None or first > len( self._data ) - 1:
-            # do all
-            first = len( self._data ) - 1 # without main timing --> -1
-        elif first < 1:
-            raise RuntimeError("Can't plot the first " + str(first) + " timings.")
-        
-        for data in self._data:
-            label = data['what']
-            
-            if not 'main' in label:
-                labels.append(label)
-                times.append(data[prop])
-            
-        # 15. Jan. 2017,
-        # http://stackoverflow.com/questions/9543211/sorting-a-list-in-python-using-the-result-from-sorting-another-list
-        times_sorted, labels_sorted = zip(*sorted(zip(times, labels),
-                                                  key=itemgetter(0),
-                                                  reverse=True))
-        
-        # 15. Jan. 2017, https://gist.github.com/vals/5257113
-        cmap = plt.get_cmap(cmap_name)
-        colors = cmap(np.linspace(0, 1, len(times_sorted)))
-        
-        fig = plt.figure(figsize=(12, 9))
-        ax = fig.add_axes([0.0, 0.01, 0.75, 0.98])
-
-        # 15. Jan. 2017,
-        # http://stackoverflow.com/questions/7082345/how-to-set-the-labels-size-on-a-pie-chart-in-python
-        patches, texts, autotexts = ax.pie(times_sorted[0:first],
-                                           autopct='%1.1f%%',
-                                           pctdistance=0.6,
-                                           startangle=90,
-                                           colors=colors,
-                                           radius=1.0,
-                                           shadow=False)
-        
-        # cosmetics
-        for t in texts:
-            t.set_fontsize(18)
-            
-        for at in autotexts:
-            at.set_fontsize(16)
-        
-        ax.legend(patches, labels_sorted[0:first], loc='best', bbox_to_anchor=(1.0, 0.98), borderaxespad=0.1)
-        #plt.tight_layout()
-        plt.axis('equal')
-        plt.savefig(saveas)
     
     
     def _load_pkl(self, pkl_file):
