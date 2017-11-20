@@ -224,12 +224,16 @@ class OptPilotJsonReader:
         
         if self.__nJsonFiles == 0:
             raise RuntimeError("No json file found in directory '" + directory + "'.")
-        
+
         # get mapping from first file (all others are the same)
         self.__buildNameToColumnMap(self.__directory + testfile)
         
         print ( "Found " + str(self.__nJsonFiles) + " json files." )
     
+
+    ##
+    def getNumOfGenerations(self):
+        return self.__nJsonFiles
     
     ##
     def readGeneration(self, gen):
