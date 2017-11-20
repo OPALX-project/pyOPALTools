@@ -3,7 +3,7 @@
 # @date July 2017
 #
 
-import Timing as timing
+import timing.Timing as timing
 import os
 import re
 
