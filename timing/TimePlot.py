@@ -56,7 +56,7 @@ class TimePlot:
         data = time.getTiming()
         
         # get first n most time consuming timing labels
-        _ , labels_sorted = self.__getMostTimeConsuming(first+1, data, 'cpu max', True)
+        times_sorted , labels_sorted = self.__getMostTimeConsuming(first+1, data, 'cpu max', True)
         
         
         tmin, tavg, tmax = self.__collect(data, labels_sorted)
@@ -67,9 +67,9 @@ class TimePlot:
         fdata = {}
         for i in range(len(tmin)):
             fdata[labels_sorted[i]] = []
-            fdata[labels_sorted[i]] = {'min': [float(tmin[i])],
-                                       'max': [float(tmax[i])],
-                                       'avg': [float(tavg[i])]}
+            fdata[labels_sorted[i]] = {'min': [tmin[i]],
+                                       'max': [tmax[i]],
+                                       'avg': [tavg[i]]}
         
         # collect data (skip first since alread read)
         for fname in fnames_sorted[1:]:
@@ -86,9 +86,9 @@ class TimePlot:
         fig = plt.figure(figsize=figsize)
         ax = fig.add_subplot(111)
         
-        for d in fdata:
-            ax.errorbar(cores_sorted, fdata[d]['avg'],
-                        yerr=[fdata[d]['min'], fdata[d]['max']], fmt='--o')
+        for label in labels_sorted:
+            ax.errorbar(cores_sorted, fdata[label]['avg'],
+                        yerr=[fdata[label]['min'], fdata[label]['max']], fmt='--o')
         
         ax.grid(grid)
         plt.xlabel('#cores')
@@ -108,13 +108,12 @@ class TimePlot:
         tmax = []
         tavg = []
         
-        for d in data:
-            label = d['what']
-            
-            if label in labels and 'cpu max' in d:
-                tmin.append(d['cpu min'])
-                tmax.append(d['cpu max'])
-                tavg.append(d['cpu avg'])
+        for label in labels:
+            for d in data:
+                if label == d['what'] and 'cpu max' in d: 
+                    tmin.append(d['cpu avg'] - d['cpu min'])
+                    tmax.append(d['cpu max'] - d['cpu avg'])
+                    tavg.append(d['cpu avg'])
         
         return tmin, tavg, tmax
     
@@ -161,8 +160,8 @@ class TimePlot:
             
             if not 'main' in label:
                 labels.append(label)
-                tmin.append(d['cpu min'])
-                tmax.append(d['cpu max'])
+                tmin.append(d['cpu avg'] - d['cpu min'])
+                tmax.append(d['cpu max'] - d['cpu avg'])
                 tavg.append(d['cpu avg'])
         
         fig = plt.figure(figsize=figsize)
@@ -172,7 +171,7 @@ class TimePlot:
         x = np.linspace(0, n-1, n) 
         ax.errorbar(x, tavg, yerr=[tmin, tmax], fmt='o')
         plt.xlim([-1, n])
-        plt.ylim([-10, 2 * max(tmax)])
+        plt.ylim([-10, max(tmax)+max(tavg)])
         plt.ylabel('time [s]')
         plt.xticks(x, labels, rotation='vertical')
         plt.grid(grid)
