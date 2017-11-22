@@ -16,9 +16,10 @@ class TimePlot:
         Parameters
         ----------
         fnames              (str)  timing files
-        saveas              (str)   export the summary plot
-        figsize=(12, 9)             size of the figure
-        grid=False          (bool)  show grid
+        saveas              (str)  export the summary plot
+        figsize=(12, 9)            size of the figure
+        grid=False          (bool) show grid
+        title               (str)  title of plot 
         
         Notes
         -----
@@ -34,6 +35,7 @@ class TimePlot:
         saveas = kwargs.get('saveas', None)
         figsize = kwargs.get('figsize', (12, 9))
         grid = kwargs.get('grid', False)
+        title = kwargs.get('title', None)
         
         # check if all files exist
         cores = []
@@ -95,6 +97,10 @@ class TimePlot:
         plt.ylabel('time [s]')
         plt.xlim([0.5*cores_sorted[0], 1.05*cores_sorted[-1]])
         ax.legend(labels_sorted, loc='best')
+        
+        if title:
+            plt.title(title)
+        
         plt.tight_layout()
         
         if saveas:
@@ -128,6 +134,7 @@ class TimePlot:
         saveas              (str)   export the summary plot
         figsize=(12, 9)             size of the figure
         grid=False          (bool)  show grid
+        title               (str)   title of plot
         
         Notes
         -----
@@ -145,6 +152,7 @@ class TimePlot:
         saveas = kwargs.get('saveas', None)
         figsize = kwargs.get('figsize', (12, 9))
         grid = kwargs.get('grid', False)
+        title = kwargs.get('title', None)
         
         time = timing()
         time.read_ippl_timing(fname)
@@ -175,6 +183,10 @@ class TimePlot:
         plt.ylabel('time [s]')
         plt.xticks(x, labels, rotation='vertical')
         plt.grid(grid)
+        
+        if title:
+            plt.title(title)
+        
         plt.tight_layout()
         
         if saveas:
@@ -229,6 +241,21 @@ class TimePlot:
         data = time.getTiming()
         
         times_sorted, labels_sorted = self.__getMostTimeConsuming(first, data, prop)
+        
+        # sum up all others
+        
+        labels_sorted.append('others')
+        t = 0.0
+        for d in data:
+            label = d['what']
+            if not 'main' in label and label not in labels_sorted:
+                t += d[prop]
+        
+        times_sorted.append(t)
+        
+        times_sorted, labels_sorted = zip(*sorted(zip(times_sorted, labels_sorted),
+                                                  key=itemgetter(0),
+                                                  reverse=True))
         
         # 15. Jan. 2017, https://gist.github.com/vals/5257113
         cmap = plt.get_cmap(cmap_name)
@@ -321,4 +348,4 @@ class TimePlot:
                                                   key=itemgetter(0),
                                                   reverse=True))
         
-        return times_sorted[0:n], labels_sorted[0:n]
+        return list(times_sorted[0:n]), list(labels_sorted[0:n])
