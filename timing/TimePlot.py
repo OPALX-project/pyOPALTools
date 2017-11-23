@@ -7,7 +7,7 @@ import timing.Timing as timing
 
 class TimePlot:
     
-    def line_plot(self, fnames, **kwargs):
+    def line_plot(self, fnames, title, **kwargs):
         """
         Create a plot of several timings containing same timers.
         Plot the first N most time consuming timings. Timing files
@@ -102,7 +102,7 @@ class TimePlot:
             plt.title(title)
         
         plt.tight_layout()
-        
+        plt.title(title)
         if saveas:
             plt.savefig(saveas)
         else:
@@ -124,7 +124,7 @@ class TimePlot:
         return tmin, tavg, tmax
     
     
-    def summary_plot(self, fname, **kwargs):
+    def summary_plot(self, fname, title, **kwargs):
         """
         Create a plot with minimum, maximum and average timings
         
@@ -188,14 +188,14 @@ class TimePlot:
             plt.title(title)
         
         plt.tight_layout()
-        
+        plt.title(title)
         if saveas:
             plt.savefig(saveas)
         else:
             plt.show()
     
     
-    def pie_plot(self, fname, **kwargs):
+    def pie_plot(self, fname, title, **kwargs):
         """
         Create a pie plot of the first N most time consuming timings.
         
@@ -284,7 +284,7 @@ class TimePlot:
         ax.legend(patches, labels_sorted, loc='best', bbox_to_anchor=(1.0, 0.98), borderaxespad=0.1)
         #plt.tight_layout()
         plt.axis('equal')
-        
+        plt.title(title)
         if saveas:
             plt.savefig(saveas)
         else:
