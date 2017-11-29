@@ -7,7 +7,7 @@ import timing.Timing as timing
 
 class TimePlot:
     
-    def line_plot(self, fnames, title, **kwargs):
+    def line_plot(self, fnames, **kwargs):
         """
         Create a plot of several timings containing same timers.
         Plot the first N most time consuming timings. Timing files
@@ -20,6 +20,10 @@ class TimePlot:
         figsize=(12, 9)            size of the figure
         grid=False          (bool) show grid
         title               (str)  title of plot 
+        ippl=True           (bool) if ippl timing file or OPAL
+                                   output file
+        yscale='linear'     (str)  scale of y-axis 'linear', 'log', etc
+        xscale='linear'     (str)  scale of x-axis 'linear', 'log', etc
         
         Notes
         -----
@@ -36,6 +40,8 @@ class TimePlot:
         figsize = kwargs.get('figsize', (12, 9))
         grid = kwargs.get('grid', False)
         title = kwargs.get('title', None)
+        ippl  = kwargs.get('ippl', True)
+        yscale = kwargs.get('yscale', 'linear')
         
         # check if all files exist
         cores = []
@@ -45,7 +51,10 @@ class TimePlot:
             
             # sort file first (inefficient) according to cores
             time = timing()
-            time.read_ippl_timing(fname)
+            if ippl:
+                time.read_ippl_timing(fname)
+            else:
+                time.read_output_file(fname)
             cores.append(int(time.getTiming()[0]['cores']))
         
         cores_sorted, fnames_sorted = zip(*sorted(zip(cores, fnames),
@@ -54,10 +63,16 @@ class TimePlot:
         
         # read first entry
         time = timing()
-        time.read_ippl_timing(fnames_sorted[0])
+        if ippl:
+            time.read_ippl_timing(fnames_sorted[0])
+        else:
+            time.read_output_file(fnames_sorted[0])
+        
         data = time.getTiming()
         
         # get first n most time consuming timing labels
+        if not first:
+            first = 1e6
         times_sorted , labels_sorted = self.__getMostTimeConsuming(first+1, data, 'cpu max', True)
         
         
@@ -75,7 +90,10 @@ class TimePlot:
         
         # collect data (skip first since alread read)
         for fname in fnames_sorted[1:]:
-            time.read_ippl_timing(fname)
+            if ippl:
+                time.read_ippl_timing(fname)
+            else:
+                time.read_output_file(fname)
             data = time.getTiming()
             
             tmin, tavg, tmax = self.__collect(data, labels_sorted)
@@ -97,12 +115,13 @@ class TimePlot:
         plt.ylabel('time [s]')
         plt.xlim([0.5*cores_sorted[0], 1.05*cores_sorted[-1]])
         ax.legend(labels_sorted, loc='best')
+        plt.yscale(yscale)
+        plt.xscale(xscale)
         
         if title:
             plt.title(title)
         
         plt.tight_layout()
-        plt.title(title)
         if saveas:
             plt.savefig(saveas)
         else:
@@ -124,7 +143,7 @@ class TimePlot:
         return tmin, tavg, tmax
     
     
-    def summary_plot(self, fname, title, **kwargs):
+    def summary_plot(self, fname, **kwargs):
         """
         Create a plot with minimum, maximum and average timings
         
@@ -135,7 +154,8 @@ class TimePlot:
         figsize=(12, 9)             size of the figure
         grid=False          (bool)  show grid
         title               (str)   title of plot
-        
+        ippl=True           (bool)  if ippl timing file or OPAL output file
+
         Notes
         -----
         Throws an exception if file does not exist.
@@ -155,7 +175,10 @@ class TimePlot:
         title = kwargs.get('title', None)
         
         time = timing()
-        time.read_ippl_timing(fname)
+        if ippl:
+            time.read_ippl_timing(fname)
+        else:
+            time.read_output_file(fname)
         data = time.getTiming()
         
         labels = []
@@ -188,7 +211,6 @@ class TimePlot:
             plt.title(title)
         
         plt.tight_layout()
-        plt.title(title)
         if saveas:
             plt.savefig(saveas)
         else:
@@ -215,7 +237,9 @@ class TimePlot:
         saveas              (str)   export the pie chart
         cmap_name='YlGn'    (str)   color scheme
         figsize=(12, 9)             size of the figure
-        
+        ippl=True           (bool)  if ippl timing file or OPAL output
+                                    file
+
         Notes
         -----
         Throws an exception if file not available or the key is not part
@@ -237,7 +261,10 @@ class TimePlot:
         figsize = kwargs.get('figsize', (12, 9))
         
         time = timing()
-        time.read_ippl_timing(fname)
+        if ippl:
+            time.read_ippl_timing(fname)
+        else:
+            time.read_output_file(fname)
         data = time.getTiming()
         
         times_sorted, labels_sorted = self.__getMostTimeConsuming(first, data, prop)
