@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from operator import itemgetter
 import os
+import seaborn as sns
 
 import timing.Timing as timing
 
@@ -24,7 +25,7 @@ class TimePlot:
                                    output file
         yscale='linear'     (str)  scale of y-axis 'linear', 'log', etc
         xscale='linear'     (str)  scale of x-axis 'linear', 'log', etc
-        
+        snsstype='white'    (str)
         Notes
         -----
         Throws an exception if a file does not exist.
@@ -42,6 +43,9 @@ class TimePlot:
         title = kwargs.get('title', None)
         ippl  = kwargs.get('ippl', True)
         yscale = kwargs.get('yscale', 'linear')
+        xscale = kwargs.get('xscale', 'linear')
+        
+        snsstype = kwargs.get('snsstype', 'white')
         
         # check if all files exist
         cores = []
@@ -60,6 +64,9 @@ class TimePlot:
         cores_sorted, fnames_sorted = zip(*sorted(zip(cores, fnames),
                                                       key=itemgetter(0),
                                                       reverse=False))
+        
+        sns.set_style(snsstype)
+        sns.set_context("notebook", font_scale=1.5, rc={"lines.linewidth": 2.5})
         
         # read first entry
         time = timing()
@@ -105,6 +112,7 @@ class TimePlot:
         
         fig = plt.figure(figsize=figsize)
         ax = fig.add_subplot(111)
+        sns.despine(left=True)
         
         for label in labels_sorted:
             ax.errorbar(cores_sorted, fdata[label]['avg'],
@@ -259,6 +267,7 @@ class TimePlot:
         saveas = kwargs.get('saveas', None)
         cmap_name = kwargs.get('cmap', 'YlGn')
         figsize = kwargs.get('figsize', (12, 9))
+        ippl = kwargs.get('ippl', True)
         
         time = timing()
         if ippl:
