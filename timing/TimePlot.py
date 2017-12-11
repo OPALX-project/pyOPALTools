@@ -26,6 +26,8 @@ class TimePlot:
         yscale='linear'     (str)  scale of y-axis 'linear', 'log', etc
         xscale='linear'     (str)  scale of x-axis 'linear', 'log', etc
         snsstype='white'    (str)
+        tag=''              (str)  take only timings containing this tag
+        
         Notes
         -----
         Throws an exception if a file does not exist.
@@ -36,14 +38,15 @@ class TimePlot:
         """
         
         # get kwargs arguments
-        first = kwargs.get('first', None)
-        saveas = kwargs.get('saveas', None)
+        first   = kwargs.get('first', None)
+        saveas  = kwargs.get('saveas', None)
         figsize = kwargs.get('figsize', (12, 9))
-        grid = kwargs.get('grid', False)
-        title = kwargs.get('title', None)
-        ippl  = kwargs.get('ippl', True)
-        yscale = kwargs.get('yscale', 'linear')
-        xscale = kwargs.get('xscale', 'linear')
+        grid    = kwargs.get('grid', False)
+        title   = kwargs.get('title', None)
+        ippl    = kwargs.get('ippl', True)
+        yscale  = kwargs.get('yscale', 'linear')
+        xscale  = kwargs.get('xscale', 'linear')
+        tag     = kwargs.get('tag', '')
         
         snsstype = kwargs.get('snsstype', 'white')
         
@@ -77,10 +80,13 @@ class TimePlot:
         
         data = time.getTiming()
         
+        data = self.__getWithNameTag(data, tag)
+        
         # get first n most time consuming timing labels
         if not first:
             first = 1e6
-        times_sorted , labels_sorted = self.__getMostTimeConsuming(first+1, data, 'cpu max', True)
+        
+        _ , labels_sorted = self.__getMostTimeConsuming(first+1, data, 'cpu max', True)
         
         
         tmin, tavg, tmax = self.__collect(data, labels_sorted)
@@ -326,6 +332,42 @@ class TimePlot:
         else:
             plt.show()
             
+    
+    def __getWithNameTag(self, data, tag):
+        """
+        Return reduced data set where we only have
+        timings with certain name tag.
+        
+        Parameters
+        ----------
+        n       (int)   number of timings
+        data    ([{}])  timing data of one file
+        tag     (str)   what tag should be in name
+        main    (bool)  use also main timer
+        
+        Returns
+        -------
+        reduced data set
+        """
+        
+        if not tag:
+            return data
+        
+        if not data:
+            raise RuntimeError('No data available.')
+        
+        new_data = []
+        for d in data:
+            label = d['what']
+            
+            if (tag in label) or ('main' in label):
+                new_data.append(d)
+        
+        if len(new_data) < 2:
+            raise KeyError('This name tag is not part of the timings.')
+        else:
+            return new_data
+    
     
     def __getMostTimeConsuming(self, n, data, prop, main=False):
         """
