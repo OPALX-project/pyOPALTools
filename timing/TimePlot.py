@@ -238,7 +238,7 @@ class TimePlot:
         Parameters
         ----------
         fname               (str)   timing file
-        property='cpu max'  (str)   the key of the dictionary to plot
+        prop='cpu max'      (str)   the key of the dictionary to plot
                                     possible keys:
                                         - cpu max
                                         - cpu avg
@@ -248,6 +248,7 @@ class TimePlot:
                                         - wall min
         first=None          (int)   take only the first N specialized
                                     timings
+        tag=''              (str)   what tag should be in name
         saveas              (str)   export the pie chart
         cmap_name='YlGn'    (str)   color scheme
         figsize=(12, 9)             size of the figure
@@ -268,12 +269,13 @@ class TimePlot:
             raise RuntimeError("The file " + "'" + fname + "'" + " does not exist.")
         
         # get properties
-        prop = kwargs.get('property', 'cpu max')
-        first = kwargs.get('first', None)
-        saveas = kwargs.get('saveas', None)
+        prop      = kwargs.get('prop', 'cpu max')
+        first     = kwargs.get('first', None)
+        saveas    = kwargs.get('saveas', None)
         cmap_name = kwargs.get('cmap', 'YlGn')
-        figsize = kwargs.get('figsize', (12, 9))
-        ippl = kwargs.get('ippl', True)
+        figsize   = kwargs.get('figsize', (12, 9))
+        ippl      = kwargs.get('ippl', True)
+        tag       = kwargs.get('tag', '')
         
         time = timing()
         if ippl:
@@ -282,7 +284,9 @@ class TimePlot:
             time.read_output_file(fname)
         data = time.getTiming()
         
-        times_sorted, labels_sorted = self.__getMostTimeConsuming(first, data, prop)
+        new_data = self.__getWithNameTag(data, tag)
+        
+        times_sorted, labels_sorted = self.__getMostTimeConsuming(first, new_data, prop)
         
         # sum up all others
         
@@ -343,7 +347,6 @@ class TimePlot:
         n       (int)   number of timings
         data    ([{}])  timing data of one file
         tag     (str)   what tag should be in name
-        main    (bool)  use also main timer
         
         Returns
         -------
