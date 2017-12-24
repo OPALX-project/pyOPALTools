@@ -1,4 +1,5 @@
-from pyH5root import Plotter, SDDSParser
+from pyH5root import Plotter
+from utilities import SDDSParser
 
 
 class SDDSPlotter(Plotter):

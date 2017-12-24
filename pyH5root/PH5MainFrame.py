@@ -7,7 +7,10 @@
 from PyQt5.QtWidgets import *
 import os
 
-from pyH5root import Plotter, SDDSParser, SDDSPlotter, Canvas
+from pyH5root.Plotter import Plotter
+from utilities.SDDSParser import SDDSParser
+from pyH5root.SDDSPlotter import SDDSPlotter
+from pyH5root.Canvas import Canvas
 from enum import IntEnum
 import matplotlib.ticker as ticker
 
