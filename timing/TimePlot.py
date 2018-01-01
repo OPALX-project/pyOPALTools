@@ -169,6 +169,7 @@ class TimePlot:
         grid=False          (bool)  show grid
         title               (str)   title of plot
         ippl=True           (bool)  if ippl timing file or OPAL output file
+        yscale='linear'     (str)   scale of y-axis 'linear', 'log', etc
 
         Notes
         -----
@@ -187,6 +188,8 @@ class TimePlot:
         figsize = kwargs.get('figsize', (12, 9))
         grid = kwargs.get('grid', False)
         title = kwargs.get('title', None)
+        ippl = kwargs.get('ippl', True)
+        yscale  = kwargs.get('yscale', 'linear')
         
         time = timing()
         if ippl:
@@ -220,6 +223,7 @@ class TimePlot:
         plt.ylabel('time [s]')
         plt.xticks(x, labels, rotation='vertical')
         plt.grid(grid)
+        plt.yscale(yscale)
         
         if title:
             plt.title(title)
