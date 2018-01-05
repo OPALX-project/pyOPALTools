@@ -361,6 +361,14 @@ class TimePlot:
         data    ([{}])  timing data of one file
         exclude ([])    list of strings of timings
                         to remove from the dataset
+                        
+        Note
+        ----
+        If a string in the list of exclude contains a '*'
+        then all timings with this substring are removed, e.g.
+        'build*' removes all timings that start with 'build' but
+        '*build*' removes all timings that contain somwhere the
+        substring 'build'
         
         Returns
         -------
@@ -373,12 +381,22 @@ class TimePlot:
         if not exclude:
             return data
         
+        # create special list and remove all '*'
+        sub = [s.replace('*', '') for s in exclude if '*' in s]
+        
         new_data = []
         for d in data:
             label = d['what']
             
             if not label in exclude:
-                new_data.append(d)
+                # special matching
+                put = True
+                for s in sub:
+                    if s in label:
+                        put = False
+                        break
+                if put:
+                    new_data.append(d)
         
         if len(new_data) == 0:
             raise KeyError('Nothing left in dataset.')
