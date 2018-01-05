@@ -124,7 +124,7 @@ class TimePlot:
             ax.errorbar(cores_sorted, fdata[label]['avg'],
                         yerr=[fdata[label]['min'], fdata[label]['max']], fmt='--o')
         
-        ax.grid(grid)
+        ax.grid(grid, which="both")
         plt.xlabel('#cores')
         plt.ylabel('time [s]')
         plt.xlim([0.5*cores_sorted[0], 1.05*cores_sorted[-1]])
@@ -222,7 +222,7 @@ class TimePlot:
         plt.ylim([-10, max(tmax)+max(tavg)])
         plt.ylabel('time [s]')
         plt.xticks(x, labels, rotation='vertical')
-        plt.grid(grid)
+        plt.grid(grid, which="both")
         plt.yscale(yscale)
         
         if title:
