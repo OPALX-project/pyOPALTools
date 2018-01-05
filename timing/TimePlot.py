@@ -366,9 +366,7 @@ class TimePlot:
         ----
         If a string in the list of exclude contains a '*'
         then all timings with this substring are removed, e.g.
-        'build*' removes all timings that start with 'build' but
-        '*build*' removes all timings that contain somwhere the
-        substring 'build'
+        'build*' removes all timings that contain 'build'
         
         Returns
         -------
