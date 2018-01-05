@@ -17,6 +17,9 @@ class TimePlot:
         Parameters
         ----------
         fnames              (str)  timing files
+        first=None          (int)  take only the first N specialized
+                                   timings
+        exclude             ([])   do not use *these* timings
         saveas              (str)  export the summary plot
         figsize=(12, 9)            size of the figure
         grid=False          (bool) show grid
@@ -39,6 +42,7 @@ class TimePlot:
         
         # get kwargs arguments
         first   = kwargs.get('first', None)
+        exclude = kwargs.get('exclude', [])
         saveas  = kwargs.get('saveas', None)
         figsize = kwargs.get('figsize', (12, 9))
         grid    = kwargs.get('grid', False)
@@ -79,6 +83,8 @@ class TimePlot:
             time.read_output_file(fnames_sorted[0])
         
         data = time.getTiming()
+        
+        data = self.__exclude(data, exclude)
         
         data = self.__getWithNameTag(data, tag)
         
@@ -252,6 +258,7 @@ class TimePlot:
                                         - wall min
         first=None          (int)   take only the first N specialized
                                     timings
+        exclude             ([])    do not use *these* timings
         tag=''              (str)   what tag should be in name
         saveas              (str)   export the pie chart
         cmap_name='YlGn'    (str)   color scheme
@@ -275,6 +282,7 @@ class TimePlot:
         # get properties
         prop      = kwargs.get('prop', 'cpu max')
         first     = kwargs.get('first', None)
+        exclude   = kwargs.get('exclude', [])
         saveas    = kwargs.get('saveas', None)
         cmap_name = kwargs.get('cmap', 'YlGn')
         figsize   = kwargs.get('figsize', (12, 9))
@@ -288,7 +296,9 @@ class TimePlot:
             time.read_output_file(fname)
         data = time.getTiming()
         
-        new_data = self.__getWithNameTag(data, tag)
+        new_data = self.__exclude(data, exclude)
+        
+        new_data = self.__getWithNameTag(new_data, tag)
         
         times_sorted, labels_sorted = self.__getMostTimeConsuming(first, new_data, prop)
         
@@ -341,6 +351,41 @@ class TimePlot:
             plt.show()
             
     
+    def __exclude(self, data, exclude):
+        """
+        Return reduced data set where all
+        timings are removed that are in *exclude*.
+        
+        Parameters
+        ----------
+        data    ([{}])  timing data of one file
+        exclude ([])    list of strings of timings
+                        to remove from the dataset
+        
+        Returns
+        -------
+        reduced data set
+        """
+        
+        if not data:
+            raise RuntimeError('No data available.')
+        
+        if not exclude:
+            return data
+        
+        new_data = []
+        for d in data:
+            label = d['what']
+            
+            if not label in exclude:
+                new_data.append(d)
+        
+        if len(new_data) == 0:
+            raise KeyError('Nothing left in dataset.')
+        else:
+            return new_data
+    
+    
     def __getWithNameTag(self, data, tag):
         """
         Return reduced data set where we only have
@@ -348,7 +393,6 @@ class TimePlot:
         
         Parameters
         ----------
-        n       (int)   number of timings
         data    ([{}])  timing data of one file
         tag     (str)   what tag should be in name
         
@@ -357,11 +401,11 @@ class TimePlot:
         reduced data set
         """
         
-        if not tag:
-            return data
-        
         if not data:
             raise RuntimeError('No data available.')
+        
+        if not tag:
+            return data
         
         new_data = []
         for d in data:
