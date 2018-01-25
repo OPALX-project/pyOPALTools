@@ -278,7 +278,7 @@ class Timing:
         
         self._data = []
         
-        _ , special_dict = self._init_data_structure()
+        main_dict, special_dict = self._init_data_structure()
         
         
         # obtain problem size parameter
@@ -288,10 +288,22 @@ class Timing:
         
         
         with open(f) as ff:
-            self._skip_lines(ff, 6 + toSkip)
+            
+            self._skip_lines(ff, 2 + toSkip)
+            
+            # get main timing
+            line = next(ff)
+            words = line.split()
+            
+            # remove appending dots "..." of timing names
+            main_dict['what']       = words[0].replace('.', '')
+            main_dict['cores']      = words[1]
+            main_dict['cpu tot']    = float(words[2])
+            main_dict['wall tot']   = float(words[3])
+
             
             # get special timings
-            #self._skip_lines(ff, 3)
+            self._skip_lines(ff, 3)
             for line in ff:
                 words = line.split()
                 n = len(words)
@@ -480,7 +492,7 @@ class Timing:
         """
         
         if not 'Problem size' in ff.readline():
-            return 1
+            return 0
         
         line = ff.readline()
         
