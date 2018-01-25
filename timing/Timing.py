@@ -68,6 +68,7 @@ class Timing:
 
     def __init__(self):
         # list of dictionaries
+        self._problem = {}
         self._data = []
         self._format = ['PICKLE',
                         'ASCII']
@@ -254,7 +255,9 @@ class Timing:
         Read in an Ippl timing file created by
         
         std::string filename = "myTiming.dat";
-        Ippl:print(filename);
+        Ippl:print(filename, problemSize);
+        
+        The problem size is optional.
         
         Parameters
         ----------
@@ -275,25 +278,20 @@ class Timing:
         
         self._data = []
         
-        main_dict, special_dict = self._init_data_structure()
+        _ , special_dict = self._init_data_structure()
+        
+        
+        # obtain problem size parameter
+        toSkip = 0
+        with open(f) as ff:
+            toSkip = self._problemsize(ff)
+        
         
         with open(f) as ff:
-            self._skip_lines(ff, 2)
-            
-            # get main timing
-            line = next(ff)
-            words = line.split()
-            
-            # remove appending dots "..." of timing names
-            main_dict['what']       = words[0].replace('.', '')
-            main_dict['cores']      = words[1]
-            main_dict['cpu tot']    = float(words[2])
-            main_dict['wall tot']   = float(words[3])
-
-            self._data.append(main_dict)
+            self._skip_lines(ff, 6 + toSkip)
             
             # get special timings
-            self._skip_lines(ff, 3)
+            #self._skip_lines(ff, 3)
             for line in ff:
                 words = line.split()
                 n = len(words)
@@ -335,6 +333,28 @@ class Timing:
         None
         """
         return self._data
+    
+    
+    def getProblemSize(self):
+        """
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        all problem specification in a dictionary
+        
+        Notes
+        -----
+        It is not checked if the container is empty.
+        
+        References
+        ----------
+        None
+        """
+        return self._problem
+    
     
     def __str__(self):
         if not self._data:
@@ -442,6 +462,44 @@ class Timing:
                 yield pickle.load(pkl_file)
         except EOFError:
             pass
+    
+    
+    def _problemsize(self, ff):
+        """
+        Read the problemsize.
+        
+        Parameters
+        ----------
+        ff   (str)  the opened file
+        n   (int)   the number of lines to skip
+        
+        Returns
+        -------
+        the number of read lines.
+        
+        """
+        
+        if not 'Problem size' in ff.readline():
+            return 1
+        
+        line = ff.readline()
+        
+        nLines = 2
+        
+        self._problem = {}
+        
+        while not line.isspace():
+            words = line.split()
+            
+            if len(words) == 2:
+                what = words[0].replace(':', '')
+                val  = words[1]
+                self._problem[what] = val
+            
+            line = ff.readline()
+            nLines += 1
+        
+        return nLines
     
     
     def _skip_lines(self, f, n):
