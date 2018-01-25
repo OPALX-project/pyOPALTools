@@ -289,37 +289,44 @@ class Timing:
         
         with open(f) as ff:
             
-            self._skip_lines(ff, 2 + toSkip)
+            line = self._skip_lines(ff, toSkip)
+            tag = self._order(line, 1)
             
             # get main timing
-            line = next(ff)
-            words = line.split()
+            line = self._skip_lines(ff, 1)
+            
+            # 25. Jan. 2018
+            # https://stackoverflow.com/questions/12866631/python-split-a-string-with-at-least-2-whitespaces
+            words = re.split(r'\s{2,}', line)
+            
+            if len(words) != 4:
+                raise RuntimeError('Not able to parse main timing')
             
             # remove appending dots "..." of timing names
             main_dict['what']       = words[0].replace('.', '')
-            main_dict['cores']      = words[1]
-            main_dict['cpu tot']    = float(words[2])
-            main_dict['wall tot']   = float(words[3])
-
+            main_dict['cores']      = words[tag['num nodes']].rstrip('\n')
+            main_dict['cpu tot']    = float(words[tag['cpu tot']].rstrip('\n'))
+            main_dict['wall tot']   = float(words[tag['wall tot']].rstrip('\n'))
+            
+            # we need to copy otherwise it overwrites the data
+            self._data.append(dict(main_dict))
             
             # get special timings
-            self._skip_lines(ff, 3)
+            line = self._skip_lines(ff, 1)
+            
+            tag = self._order(line, 1)
+            
+            line = self._skip_lines(ff, 0)
+            
             for line in ff:
-                words = line.split()
-                n = len(words)
-                
-                nName = n - 7
-                name = ''
-                for j in range(0, nName):
-                    name += words[j].replace('.', '')
-                
-                special_dict['what']        = name
-                special_dict['cpu max']     = float(words[n-6])
-                special_dict['wall max']    = float(words[n-5])
-                special_dict['cpu min']     = float(words[n-4])
-                special_dict['wall min']    = float(words[n-3])
-                special_dict['cpu avg']     = float(words[n-2])
-                special_dict['wall avg']    = float(words[n-1])
+                words = re.split(r'\s{2,}', line)
+                special_dict['what']        = words[0].replace('.', '')
+                special_dict['cpu max']     = float(words[tag['cpu max']].rstrip('\n'))
+                special_dict['wall max']    = float(words[tag['wall max']].rstrip('\n'))
+                special_dict['cpu min']     = float(words[tag['cpu min']].rstrip('\n'))
+                special_dict['wall min']    = float(words[tag['wall min']].rstrip('\n'))
+                special_dict['cpu avg']     = float(words[tag['cpu avg']].rstrip('\n'))
+                special_dict['wall avg']    = float(words[tag['wall avg']].rstrip('\n'))
                 
                 # we need to copy otherwise it overwrites the data
                 self._data.append(dict(special_dict))
@@ -374,7 +381,7 @@ class Timing:
         else:
             out = ''
             for dic in self._data:
-                if 'mainTimer' == dic['what'] and 'cores' in dic:
+                if ('mainTimer' == dic['what'] or 'main' == dic['what']) and 'cores' in dic:
                     out += "\t\t num Nodes    CPU tot   Wall tot\n"
                     out += "=" * 48 + "\n"
                     out += dic['what'] + "\t\t" + str(dic['cores']) + "    " + \
@@ -475,6 +482,34 @@ class Timing:
         except EOFError:
             pass
     
+    def _order(self, line, i):
+        """
+        Find the order of the tags, i.e. 'cpu min', etc.
+        and fill dictionary.
+        
+        Parameters
+        ----------
+        line    (str) of file
+        i       (int) start indexing
+        
+        Returns
+        -------
+        the a dictionary giving tag as key and
+        occurrence as number.
+        """
+        
+        line = line.lower()
+        
+        words = re.split(r'\s{2,}', line)
+        
+        order = {}
+        for w in words:
+            if w:
+                order[w.strip('\n')] = i
+                i += 1
+        
+        return order
+    
     
     def _problemsize(self, ff):
         """
@@ -498,15 +533,16 @@ class Timing:
         
         nLines = 2
         
+        pattern = '(.*):(.*)'
+        
         self._problem = {}
         
         while not line.isspace():
-            words = line.split()
             
-            if len(words) == 2:
-                what = words[0].replace(':', '')
-                val  = words[1]
-                self._problem[what] = val
+            obj = re.match(pattern, line)
+            
+            if obj:
+                self._problem[obj.group(1).lstrip()] = int(obj.group(2))
             
             line = ff.readline()
             nLines += 1
@@ -522,10 +558,17 @@ class Timing:
         ----------
         f   (str)   the opened file
         n   (int)   the number of lines to skip
+        
+        Returns
+        -------
+        new line
+        
         """
         
         for _ in range(n):
             next(f)
+        
+        return f.readline()
     
     def _exportPickle(self, pathname, data):
         """
