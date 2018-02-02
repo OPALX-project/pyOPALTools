@@ -98,7 +98,7 @@ class SDDSParser:
     
     # returns a column
     def getDataOfVariable(self, varname):
-        return self._dataset[:, self.variables[varname]]
+        return list(self._dataset[:, self.variables[varname]])
     
     
     def getUnitOfVariable(self, varname):
