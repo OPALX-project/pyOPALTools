@@ -156,7 +156,7 @@ class Timing:
         Timings{0}> -----------------------------------------------------------------
         """
         
-        
+        self._problem = {}
         self._data = []
         
         main_dict, special_dict = self._init_data_structure()
@@ -164,89 +164,73 @@ class Timing:
         # 13. July 2017
         # https://stackoverflow.com/questions/2301789/read-a-file-in-reverse-order-using-python
         lines = []
-        count = 0
+        special_count = 0
+        main_count = 0
         
         for line in reversed(open(f).readlines()):
-            if "Timings" in line:
+            if "Timings{" in line:
                 lines.insert(0, line)
             else:
                 break
         
+        core_pattern = '.*> .* Timing results for (.*) nodes:'
+        main_pattern = '.*> (.*) Wall tot = .* (.*), CPU tot = .* (.*)'
+        max_pattern = '.*> (.*) Wall max = .* (.*), CPU max = .* (.*)'
+        avg_pattern = '.*> .* Wall avg = .* (.*), CPU avg = .* (.*)'
+        min_pattern = '.*> .* Wall min = .* (.*), CPU min = .* (.*)'
+        
         # we parse it the right order
         for line in lines:
-            if "Timing results for" in line:
-                    words = line.split()
-                    main_dict['cores'] = words[4]
             
-            elif "Wall tot" in line:
+            obj = re.match(core_pattern, line)
+            
+            if obj:
+                main_dict['cores'] = obj.group(1)
+                main_count += 1
+                continue
+            
+            obj = re.match(main_pattern, line)
+            
+            if obj:
                 # main timer
-                main_dict['what'], \
-                main_dict['wall tot'], \
-                main_dict['cpu tot'] = self._parse_line(line, 'tot')
-                self._data.append(dict(main_dict))
+                main_dict['what'] = obj.group(1).replace('.', '')
+                main_dict['wall tot'] = float(obj.group(2))
+                main_dict['cpu tot'] = float(obj.group(3))
+                main_count += 1
+                continue
+            
+            # special timings have 3 lines
+            obj = re.match(max_pattern, line)
                 
-            elif "Wall max" in line:
-                # special timer
-                special_dict['what'], \
-                special_dict['wall max'], \
-                special_dict['cpu max'] = self._parse_line(line, 'max')
-                count += 1
-            elif "Wall min" in line:
-                special_dict['wall min'], \
-                special_dict['cpu min'] = self._parse_line(line, 'min')
-                count += 1
-            elif "Wall avg" in line:
-                special_dict['wall avg'], \
-                special_dict['cpu avg'] = self._parse_line(line, 'avg')
-                count += 1
-        
-            if count == 3:
-                count = 0
+            if obj:
+                special_dict['what'] = obj.group(1).replace('.', '')
+                special_dict['wall max'] = float(obj.group(2))
+                special_dict['cpu max'] = float(obj.group(3))
+                special_count += 1
+                continue
+                
+            obj = re.match(avg_pattern, line)
+            
+            if obj:
+                special_dict['wall avg'] = float(obj.group(1))
+                special_dict['cpu avg'] = float(obj.group(2))
+                special_count += 1
+                continue
+            
+            obj = re.match(min_pattern, line)
+            
+            if obj:
+                special_dict['wall min'] = float(obj.group(1))
+                special_dict['cpu min'] = float(obj.group(2))
+                special_count += 1
+            
+            if special_count == 3:
+                special_count = 0
                 self._data.append(dict(special_dict))
-    
-    
-    def _parse_line(self, line, time):
-        """
-        Used in read_output_file() for getting the timing values
-        
-        Parameters
-        ----------
-        line (str)      to parse
-        time (str)      'tot', 'avg', 'min' or 'max'
-        
-        Returns
-        -------
-        wall  (float)   time number
-        cpu   (float)   time number
-        timer (str)     timer name (only if time == 'max')
-        
-        References
-        ----------
-        None
-        
-        Examples
-        --------
-        None
-        """
-        
-        pattern = ''
-        
-        if time == 'max' or time == 'tot':
-            pattern = '.*> (.*) Wall ' + time + ' = (.*), CPU ' + time + ' = (.*)'
-        elif time == 'min' or time == 'avg':
-            pattern = '.*> .* Wall ' + time + ' = (.*), CPU ' + time + ' = (.*)'
-        
-        match = re.match(pattern, line)
-        
-        if time == 'max' or time == 'tot':
-            timer = match.group(1).replace('.', '')
-            wall  = float(match.group(2))
-            cpu   = float(match.group(3))
-            return timer,  wall, cpu
-        else:
-            wall = float(match.group(1))
-            cpu  = float(match.group(2))
-            return wall, cpu
+            
+            if main_count == 2:
+                main_count = 0
+                self._data.append(dict(main_dict))
     
     
     def read_ippl_timing(self, f):
@@ -276,60 +260,60 @@ class Timing:
         None
         """
         
+        self._problem = {}
         self._data = []
         
         main_dict, special_dict = self._init_data_structure()
         
+        problem_pattern = '(.*): (.*)'
+        main_pattern = '(.*) (.*) (.*) (.*)'
+        special_pattern = '(.*) (.*) (.*) (.*) (.*) (.*) (.*) (.*)'
         
-        # obtain problem size parameter
-        toSkip = 0
-        with open(f) as ff:
-            toSkip = self._problemsize(ff)
-        
-        
-        with open(f) as ff:
-            
-            line = self._skip_lines(ff, toSkip)
-            tag = self._order(line, 1)
-            
-            # get main timing
-            line = self._skip_lines(ff, 1)
-            
-            # 25. Jan. 2018
-            # https://stackoverflow.com/questions/12866631/python-split-a-string-with-at-least-2-whitespaces
-            words = re.split(r'\s{2,}', line)
-            
-            if len(words) != 4:
-                raise RuntimeError('Not able to parse main timing')
-            
-            # remove appending dots "..." of timing names
-            main_dict['what']       = words[0].replace('.', '')
-            main_dict['cores']      = words[tag['num nodes']].rstrip('\n')
-            main_dict['cpu tot']    = float(words[tag['cpu tot']].rstrip('\n'))
-            main_dict['wall tot']   = float(words[tag['wall tot']].rstrip('\n'))
-            
-            # we need to copy otherwise it overwrites the data
-            self._data.append(dict(main_dict))
-            
-            # get special timings
-            line = self._skip_lines(ff, 1)
-            
-            tag = self._order(line, 1)
-            
-            line = self._skip_lines(ff, 0)
+        with open(f, 'r') as ff:
             
             for line in ff:
-                words = re.split(r'\s{2,}', line)
-                special_dict['what']        = words[0].replace('.', '')
-                special_dict['cpu max']     = float(words[tag['cpu max']].rstrip('\n'))
-                special_dict['wall max']    = float(words[tag['wall max']].rstrip('\n'))
-                special_dict['cpu min']     = float(words[tag['cpu min']].rstrip('\n'))
-                special_dict['wall min']    = float(words[tag['wall min']].rstrip('\n'))
-                special_dict['cpu avg']     = float(words[tag['cpu avg']].rstrip('\n'))
-                special_dict['wall avg']    = float(words[tag['wall avg']].rstrip('\n'))
                 
-                # we need to copy otherwise it overwrites the data
-                self._data.append(dict(special_dict))
+                if 'num Nodes' in line:
+                    tag = self._order(line, 2)
+                    continue
+                
+                # 2. Feb. 2018
+                # https://stackoverflow.com/questions/2077897/substitute-multiple-whitespace-with-single-whitespace-in-python
+                line = ' '.join(line.split())
+                
+                obj = re.match(problem_pattern, line)
+                
+                if obj:
+                    self._problem[obj.group(1).lstrip()] = int(obj.group(2))
+                    continue
+                
+                obj = re.match(main_pattern, line)
+                
+                if obj:
+                    # remove appending dots "..." of timing names
+                    main_dict['what']       = obj.group(1).replace('.', '')
+                    main_dict['cores']      = obj.group(tag['num nodes'])
+                    main_dict['cpu tot']    = float(obj.group(tag['cpu tot']))
+                    main_dict['wall tot']   = float(obj.group(tag['wall tot']))
+                    # we need to copy otherwise it overwrites the data
+                    self._data.append(dict(main_dict))
+                    # clear pattern otherwise special timings go in here too
+                    main_pattern = '-1'
+                    continue
+                
+                obj = re.match(special_pattern, line)
+                
+                if obj:
+                    special_dict['what']        = obj.group(1).replace('.', '')
+                    special_dict['cpu max']     = float(obj.group(tag['cpu max']).strip())
+                    special_dict['wall max']    = float(obj.group(tag['wall max']).strip())
+                    special_dict['cpu min']     = float(obj.group(tag['cpu min']).strip())
+                    special_dict['wall min']    = float(obj.group(tag['wall min']).strip())
+                    special_dict['cpu avg']     = float(obj.group(tag['cpu avg']).strip())
+                    special_dict['wall avg']    = float(obj.group(tag['wall avg']).strip())
+                    # we need to copy otherwise it overwrites the data
+                    self._data.append(dict(special_dict))
+                    continue
     
     
     def getTiming(self):
@@ -510,65 +494,6 @@ class Timing:
         
         return order
     
-    
-    def _problemsize(self, ff):
-        """
-        Read the problemsize.
-        
-        Parameters
-        ----------
-        ff   (str)  the opened file
-        n   (int)   the number of lines to skip
-        
-        Returns
-        -------
-        the number of read lines.
-        
-        """
-        
-        if not 'Problem size' in ff.readline():
-            return 0
-        
-        line = ff.readline()
-        
-        nLines = 2
-        
-        pattern = '(.*):(.*)'
-        
-        self._problem = {}
-        
-        while not line.isspace():
-            
-            obj = re.match(pattern, line)
-            
-            if obj:
-                self._problem[obj.group(1).lstrip()] = int(obj.group(2))
-            
-            line = ff.readline()
-            nLines += 1
-        
-        return nLines
-    
-    
-    def _skip_lines(self, f, n):
-        """
-        Skip n lines of the opened file f
-        
-        Parameters
-        ----------
-        f   (str)   the opened file
-        n   (int)   the number of lines to skip
-        
-        Returns
-        -------
-        new line
-        
-        """
-        
-        for _ in range(n):
-            next(f)
-        
-        return f.readline()
     
     def _exportPickle(self, pathname, data):
         """
