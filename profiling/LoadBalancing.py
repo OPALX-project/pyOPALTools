@@ -33,6 +33,7 @@ class LoadBalancing:
         
         saveas   = kwargs.get('saveas', None)
         figsize  = kwargs.get('figsize', (12, 12))
+        dpi      = kwargs.get('dpi', None)
         grid     = kwargs.get('grid', False)
         title    = kwargs.get('title', None)
         yscale   = kwargs.get('yscale', 'linear')
@@ -57,7 +58,7 @@ class LoadBalancing:
         colStart = nTotal - nCols
         colEnd   = nCols + 1
         
-        fig = plt.figure(figsize=figsize)
+        fig = plt.figure(figsize=figsize, dpi=dpi)
         ax = fig.add_subplot(111)
         
         # percentages with respect to expected averaga number p / t
@@ -90,15 +91,15 @@ class LoadBalancing:
         
         for i in range(0, len(blower)):
             
-            common = str(blower[i]) + ', ' + str(bupper[i]) + ']'
+            common = str(blower[i] * 100) + ', ' + str(bupper[i] * 100) + '] %'
             lab = ']' + common
             
             if blower[i] == bupper[i]:
                 lab = '[' + common
             
-            plt.plot(stamps[:, i], label=lab)
+            plt.plot(time, stamps[:, i], label=lab)
         
-        plt.xlabel('time [' + time_unit + ']', fontsize=fontsize)
+        plt.xlabel('t [' + time_unit + ']', fontsize=fontsize)
         plt.xticks(fontsize=fontsize)
         plt.xscale(xscale)
         
