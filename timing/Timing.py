@@ -173,16 +173,19 @@ class Timing:
             else:
                 break
         
-        core_pattern = '.*> .* Timing results for (.*) nodes:'
-        main_pattern = '.*> (.*) Wall tot = .* (.*), CPU tot = .* (.*)'
-        max_pattern = '.*> (.*) Wall max = .* (.*), CPU max = .* (.*)'
-        avg_pattern = '.*> .* Wall avg = .* (.*), CPU avg = .* (.*)'
-        min_pattern = '.*> .* Wall min = .* (.*), CPU min = .* (.*)'
+        core_pattern = '.*> Timing results for (.*) nodes:'
+        main_pattern = '.*> (.*) Wall tot = (.*), CPU tot = (.*)'
+        max_pattern = '.*> (.*) Wall max = (.*), CPU max = (.*)'
+        avg_pattern = '.*> Wall avg = (.*), CPU avg = (.*)'
+        min_pattern = '.*> Wall min = (.*), CPU min = (.*)'
         
         # we parse it the right order
         for line in lines:
             
+            line = ' '.join(line.split())
+            
             obj = re.match(core_pattern, line)
+            
             
             if obj:
                 main_dict['cores'] = obj.group(1)
@@ -231,7 +234,6 @@ class Timing:
             if main_count == 2:
                 main_count = 0
                 self._data.append(dict(main_dict))
-    
     
     def read_ippl_timing(self, f):
         
