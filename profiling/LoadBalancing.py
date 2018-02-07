@@ -31,7 +31,6 @@ class LoadBalancing:
         
         self.__read(fname)
         
-        saveas   = kwargs.get('saveas', None)
         figsize  = kwargs.get('figsize', (12, 12))
         dpi      = kwargs.get('dpi', None)
         grid     = kwargs.get('grid', False)
@@ -115,10 +114,8 @@ class LoadBalancing:
             plt.title(title, fontsize=fontsize)
         
         plt.tight_layout()
-        if saveas:
-            plt.savefig(saveas)
-        else:
-            plt.show()
+        
+        return plt
     
     
     def summary(self, fname, **kwargs):
