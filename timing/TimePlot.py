@@ -177,6 +177,8 @@ class TimePlot:
         title               (str)   title of plot
         ippl=True           (bool)  if ippl timing file or OPAL output file
         yscale='linear'     (str)   scale of y-axis 'linear', 'log', etc
+        exclude             ([])    do not use *these* timings
+        tag=''              (str)   what tag should be in name
 
         Notes
         -----
@@ -198,6 +200,8 @@ class TimePlot:
         title = kwargs.get('title', None)
         ippl = kwargs.get('ippl', True)
         yscale  = kwargs.get('yscale', 'linear')
+        exclude   = kwargs.get('exclude', [])
+        tag       = kwargs.get('tag', '')
         
         time = timing()
         if ippl:
@@ -205,6 +209,10 @@ class TimePlot:
         else:
             time.read_output_file(fname)
         data = time.getTiming()
+        
+        data = self.__exclude(data, exclude)
+        
+        data = self.__getWithNameTag(data, tag)
         
         labels = []
         tmin = []
