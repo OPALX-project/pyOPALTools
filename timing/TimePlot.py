@@ -46,7 +46,7 @@ class TimePlot:
         exclude = kwargs.get('exclude', [])
         saveas  = kwargs.get('saveas', None)
         figsize = kwargs.get('figsize', (12, 9))
-        dpi     = kwrags.get('dpi', None)
+        dpi     = kwargs.get('dpi', None)
         grid    = kwargs.get('grid', False)
         title   = kwargs.get('title', None)
         ippl    = kwargs.get('ippl', True)
