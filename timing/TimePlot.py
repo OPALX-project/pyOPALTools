@@ -22,6 +22,7 @@ class TimePlot:
         exclude             ([])   do not use *these* timings
         saveas              (str)  export the line plot
         figsize=(12, 9)            size of the figure
+        dpi                 (int)  resolution
         grid=False          (bool) show grid
         title               (str)  title of plot 
         ippl=True           (bool) if ippl timing file or OPAL
@@ -45,6 +46,7 @@ class TimePlot:
         exclude = kwargs.get('exclude', [])
         saveas  = kwargs.get('saveas', None)
         figsize = kwargs.get('figsize', (12, 9))
+        dpi     = kwrags.get('dpi', None)
         grid    = kwargs.get('grid', False)
         title   = kwargs.get('title', None)
         ippl    = kwargs.get('ippl', True)
@@ -122,7 +124,7 @@ class TimePlot:
                 fdata[labels_sorted[i]]['max'].append(float(tmax[i]))
                 fdata[labels_sorted[i]]['avg'].append(float(tavg[i]))
         
-        fig = plt.figure(figsize=figsize)
+        fig = plt.figure(figsize=figsize, dpi=dpi)
         ax = fig.add_subplot(111)
         sns.despine(left=True)
         
