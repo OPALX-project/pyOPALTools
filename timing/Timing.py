@@ -170,8 +170,6 @@ class Timing:
         for line in reversed(open(f).readlines()):
             if "Timings{" in line:
                 lines.insert(0, line)
-            else:
-                break
         
         core_pattern = '.*> Timing results for (.*) nodes:'
         main_pattern = '.*> (.*) Wall tot = (.*), CPU tot = (.*)'
