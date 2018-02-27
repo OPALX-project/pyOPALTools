@@ -146,8 +146,8 @@ class TimePlot:
         plt.tight_layout()
         if saveas:
             plt.savefig(saveas)
-        else:
-            plt.show()
+        
+        return plt
             
         
     def __collect(self, data, labels):
