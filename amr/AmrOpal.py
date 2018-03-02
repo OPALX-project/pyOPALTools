@@ -1,0 +1,177 @@
+##
+# @author Matthias Frey
+# @date March 2018
+#
+
+import yt
+import matplotlib.pyplot as plt
+import numpy as np
+
+class AmrOpal:
+    """
+    Plotter class for AMR data comming from OPAL.
+    """
+    
+    def __init__(self):
+        # dataset
+        self.ds = ''
+    
+    
+    def load_file(self, dirname, showme=False):
+        """
+        dirname (list)  directory name that contains a Header file and Level_x
+                        (x = 0, 1, 2, ...) directories.
+        showme  (str)   print fields and derived fields in dataset
+        """
+        self.ds = yt.load(dirname, dataset_type='boxlib_opal')
+        
+        self.ds.print_stats()
+        
+        if showme:
+            print ( )
+            print ("Field list:")
+            for field in self.ds.field_list:
+                print ( '    ', field )
+            
+            print ( )
+            print ("Derived field list:")
+            derived_field_list = self.ds.derived_field_list
+            for dfield in self.ds.derived_field_list:
+                print ( '    ', dfield )
+    
+        
+    def line_plot(self, axis, field, **kwargs):
+        """
+        Plot a line plot of 3D data along an axis
+        
+        Parameters
+        ----------
+        axis    (str)   take a line cut along this axis
+                        ('x', 'y', 'z')
+        unit    (str)   of y-axis
+        figsize=(12, 9) size of the figure
+        dpi     (int)  resolution
+        """
+        
+        if not self.ds:
+            raise RuntimeError("AmrOpal.slice_plot: No dataset")
+        
+        unit    = kwargs.get("unit", None)
+        save    = kwargs.get("save", False)
+        figsize = kwargs.get('figsize', (12, 9))
+        dpi     = kwargs.get('dpi', None)
+        
+        ax = 0
+        if axis == 'y':
+            ax = 1
+        elif axis == 'z':
+            ax = 2
+        elif not axis == 'x':
+            raise RuntimeError("AmrOpal.line_plot: Use either 'x', 'y' or 'z' axis")
+        
+        c = self.ds.find_max(field)[1]
+        ray = self.ds.ortho_ray(ax, c)
+        
+        srt = np.argsort(ray[axis])
+        
+        fig = plt.figure(figsize=figsize, dpi=dpi)
+        plt.plot(np.array(ray[axis][srt]),
+                 np.array(ray[field][srt]))
+        plt.ylabel(field + ' (' + unit + ')')
+        plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+        plt.xlabel(axis)
+        
+        if save:
+            plt.savefig('line_plot_' + axis + '_' + field + '.png')
+        else:
+            plt.show()
+    
+    
+    def slice_plot(self, normal, field, **kwargs):
+        """
+        Plot a slice through 3D data
+        
+        Parameters
+        ----------
+        normal (str)        is the direction 'x', 'y' or 'z' (normal)
+        field  (str)        to plot
+        unit   (str)        the data should be converted to
+                            (otherwise it takes the default given by the data)
+        zoom (float)        is the zoom factor (default: 1, i.e. no zoom)
+        color   (str)       is the color for the time stamp and scale annotation
+        origin  (str)       location of the origin of the plot coordinate system
+        save    (bool)      show or save plot
+        """
+        
+        unit    = kwargs.get("unit", None)
+        zoom    = kwargs.get("zoom", 1.0)
+        color   = kwargs.get("color", 'white')
+        origin  = kwargs.get("origin", 'native')
+        save    = kwargs.get("save", False)
+            
+        if not self.ds:
+            raise RuntimeError("AmrOpal.slice_plot: No dataset")
+        
+        slc = yt.SlicePlot(self.ds, normal=normal,
+                           fields=field, origin=origin)
+        
+        if unit is not None:
+            slc.set_unit(field, unit)
+        
+        slc.zoom(zoom)
+        slc.annotate_grids()
+        slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
+        slc.annotate_scale(corner='upper_right', size_bar_args={'color':color})
+        
+        if save:
+            slc.save()
+        else:
+            slc.show()
+    
+    
+    def projection_plot(self, axis, field, **kwargs):
+        """
+        Plot a projection of 3D data
+        
+        Parameters
+        ----------
+        axis (str)          is the direction 'x', 'y' or 'z'
+        field  (str)        to plot
+        unit   (str)        the data should be converted to
+                            (otherwise it takes the default given by the data)
+        zoom (float)        is the zoom factor (default: 1, i.e. no zoom)
+        color   (str)       is the color for the time stamp and scale annotation
+        origin  (str)       location of the origin of the plot coordinate system
+        method  (str)       method of projection ('mip', 'sum', 'integrate')
+                            'mip':  maximum of field in the line of sight
+                            'sum':  summation of the field along the given axis
+                            'integrate': integrate the requested field along the line of sight
+        save    (bool)      show or save plot
+        """
+        
+        unit    = kwargs.get("unit", None)
+        zoom    = kwargs.get("zoom", 1.0)
+        color   = kwargs.get("color", 'white')
+        origin  = kwargs.get("origin", 'native')
+        method  = kwargs.get("method", 'mip')
+        save    = kwargs.get("save", False)
+            
+        if not self.ds:
+            raise RuntimeError("AmrOpal.slice_plot: No dataset")
+        
+        
+        slc = yt.ProjectionPlot(self.ds, axis, fields=field,
+                                origin=origin, method=method)
+        
+        if unit is not None:
+            slc.set_unit(field, unit)
+    
+        slc.zoom(zoom)
+        slc.annotate_grids()
+        slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
+        slc.annotate_scale(corner='upper_right', size_bar_args={'color':color})
+        
+        if save:
+            slc.save()
+        else:
+            slc.show()
