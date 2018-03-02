@@ -47,3 +47,12 @@ A Jupyter notebook is started by executing
 ```bash
 jupyter notebook
 ```
+
+
+
+Installation of yt
+==================
+Yt (http://yt-project.org/) is mainly developed for astrophysics simulations, thus, plots have all units in
+kpc or Mpc, etc.\ A repository that is a fork of yt and additional OPAL classes can be downloaded by
+
+git clone https://github.com/matt-frey/yt.git
