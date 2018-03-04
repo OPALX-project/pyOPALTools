@@ -20,8 +20,9 @@ class TimePlot:
         first=None          (int)  take only the first N specialized
                                    timings
         exclude             ([])   do not use *these* timings
-        saveas              (str)  export the summary plot
+        saveas              (str)  export the line plot
         figsize=(12, 9)            size of the figure
+        dpi                 (int)  resolution
         grid=False          (bool) show grid
         title               (str)  title of plot 
         ippl=True           (bool) if ippl timing file or OPAL
@@ -45,6 +46,7 @@ class TimePlot:
         exclude = kwargs.get('exclude', [])
         saveas  = kwargs.get('saveas', None)
         figsize = kwargs.get('figsize', (12, 9))
+        dpi     = kwargs.get('dpi', None)
         grid    = kwargs.get('grid', False)
         title   = kwargs.get('title', None)
         ippl    = kwargs.get('ippl', True)
@@ -122,7 +124,7 @@ class TimePlot:
                 fdata[labels_sorted[i]]['max'].append(float(tmax[i]))
                 fdata[labels_sorted[i]]['avg'].append(float(tavg[i]))
         
-        fig = plt.figure(figsize=figsize)
+        fig = plt.figure(figsize=figsize, dpi=dpi)
         ax = fig.add_subplot(111)
         sns.despine(left=True)
         
@@ -144,8 +146,8 @@ class TimePlot:
         plt.tight_layout()
         if saveas:
             plt.savefig(saveas)
-        else:
-            plt.show()
+        
+        return plt
             
         
     def __collect(self, data, labels):
@@ -172,10 +174,13 @@ class TimePlot:
         fname               (str)   timing file
         saveas              (str)   export the summary plot
         figsize=(12, 9)             size of the figure
+        dpi                         resolution
         grid=False          (bool)  show grid
         title               (str)   title of plot
         ippl=True           (bool)  if ippl timing file or OPAL output file
         yscale='linear'     (str)   scale of y-axis 'linear', 'log', etc
+        exclude             ([])    do not use *these* timings
+        tag=''              (str)   what tag should be in name
 
         Notes
         -----
@@ -192,10 +197,13 @@ class TimePlot:
         # get properties
         saveas = kwargs.get('saveas', None)
         figsize = kwargs.get('figsize', (12, 9))
+        dpi = kwargs.get('dpi', None)
         grid = kwargs.get('grid', False)
         title = kwargs.get('title', None)
         ippl = kwargs.get('ippl', True)
         yscale  = kwargs.get('yscale', 'linear')
+        exclude   = kwargs.get('exclude', [])
+        tag       = kwargs.get('tag', '')
         
         time = timing()
         if ippl:
@@ -203,6 +211,10 @@ class TimePlot:
         else:
             time.read_output_file(fname)
         data = time.getTiming()
+        
+        data = self.__exclude(data, exclude)
+        
+        data = self.__getWithNameTag(data, tag)
         
         labels = []
         tmin = []
@@ -218,7 +230,7 @@ class TimePlot:
                 tmax.append(d['cpu max'] - d['cpu avg'])
                 tavg.append(d['cpu avg'])
         
-        fig = plt.figure(figsize=figsize)
+        fig = plt.figure(figsize=figsize, dpi=dpi)
         ax = fig.add_subplot(111)
         
         n = len(tavg)
@@ -227,7 +239,9 @@ class TimePlot:
         plt.xlim([-1, n])
         plt.ylim([-10, max(tmax)+max(tavg)])
         plt.ylabel('time [s]')
-        plt.xticks(x, labels, rotation='vertical')
+        # 2. Feb. 2018
+        # https://stackoverflow.com/questions/14852821/aligning-rotated-xticklabels-with-their-respective-xticks
+        plt.xticks(x, labels, rotation=45, ha='right')
         plt.grid(grid, which="both")
         plt.yscale(yscale)
         
@@ -263,6 +277,7 @@ class TimePlot:
         saveas              (str)   export the pie chart
         cmap_name='YlGn'    (str)   color scheme
         figsize=(12, 9)             size of the figure
+        dpi                         resolution
         ippl=True           (bool)  if ippl timing file or OPAL output
                                     file
 
@@ -286,6 +301,7 @@ class TimePlot:
         saveas    = kwargs.get('saveas', None)
         cmap_name = kwargs.get('cmap', 'YlGn')
         figsize   = kwargs.get('figsize', (12, 9))
+        dpi       = kwargs.get('dpi', None)
         ippl      = kwargs.get('ippl', True)
         tag       = kwargs.get('tag', '')
         
@@ -303,15 +319,15 @@ class TimePlot:
         times_sorted, labels_sorted = self.__getMostTimeConsuming(first, new_data, prop)
         
         # sum up all others
-        
-        labels_sorted.append('others')
-        t = 0.0
-        for d in data:
-            label = d['what']
-            if not 'main' in label and label not in labels_sorted:
-                t += d[prop]
-        
-        times_sorted.append(t)
+        if first:
+            labels_sorted.append('others')
+            t = 0.0
+            for d in new_data:
+                label = d['what']
+                if not 'main' in label and label not in labels_sorted:
+                    t += d[prop]
+            
+            times_sorted.append(t)
         
         times_sorted, labels_sorted = zip(*sorted(zip(times_sorted, labels_sorted),
                                                   key=itemgetter(0),
@@ -321,28 +337,31 @@ class TimePlot:
         cmap = plt.get_cmap(cmap_name)
         colors = cmap(np.linspace(0, 1, len(times_sorted)))
         
-        fig = plt.figure(figsize=figsize)
+        fig = plt.figure(figsize=figsize, dpi=dpi)
         ax = fig.add_axes([0.0, 0.01, 0.75, 0.98])
+        
+        explode = [0.0] * len(times_sorted)
 
         # 15. Jan. 2017,
         # http://stackoverflow.com/questions/7082345/how-to-set-the-labels-size-on-a-pie-chart-in-python
         patches, texts, autotexts = ax.pie(times_sorted,
                                            autopct='%1.1f%%',
-                                           pctdistance=0.6,
+                                           pctdistance=0.7,
+                                           labeldistance=1.0,
                                            startangle=90,
+                                           explode=explode,
                                            colors=colors,
-                                           radius=1.0,
+                                           radius=1.1,
                                            shadow=False)
         
         # cosmetics
         for t in texts:
-            t.set_fontsize(18)
+            t.set_fontsize(16)
             
         for at in autotexts:
-            at.set_fontsize(16)
+            at.set_fontsize(10)
         
-        ax.legend(patches, labels_sorted, loc='best', bbox_to_anchor=(1.0, 0.98), borderaxespad=0.1)
-        #plt.tight_layout()
+        ax.legend(patches, labels_sorted, loc='best', bbox_to_anchor=(0.95, 0.98), borderaxespad=0.1)
         plt.axis('equal')
         plt.title(title)
         if saveas:
