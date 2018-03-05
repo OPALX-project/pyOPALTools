@@ -1,5 +1,5 @@
 import numpy as np
-import re
+import re,os,sys
 
 class SDDSParser:
     
@@ -158,3 +158,44 @@ class SDDSParser:
                 pass
             elif '&end' in line:
                 break
+
+    def collectStatFileData(self, baseFN, excludeList, root, yNames):
+
+        ''' 
+        Assumes runOPAL structure: optLinac_40nC_IBF=485.9269768907996_IM ...
+        where baseFN == optLinac_40nC in the example above.
+
+        This function finds all stat files that are one level
+        below root. An exclude list can be specified.
+ 
+        Two vectors are returned: x with the design variables names and values 
+        (IBF=485.9269768907996 ... from above) and the last value(s) of stat 
+        file data spcified via yNames.
+
+        Example: 
+        x        = []
+        y        = []
+        baseFN   = 'optLinac_40nC'
+        exclList = ['tmpl','extrData.py']
+        root     = "."
+        yNames   = ['s','energy']
+        p        = SDDSParser()
+        (x,y)    = p.makeData(baseFN, exclList, root, yNames)
+        '''
+        x       = []
+        y       = []
+        for item in os.listdir(root):
+            if item not in excludeList:
+                s = item.replace(baseFN+'_', '')
+                s = s.replace('_', ' ')
+                x.append(s)
+                fn=item+'/'+baseFN+'.stat'
+                if (os.path.isfile(fn)):
+                    self.parse(fn)
+                    yy = []
+                    for name in yNames:
+                        yy.append(self.getDataOfVariable(name))
+                    y.append(yy)
+                else:
+                    print ('file '+fn+' does not exists')
+        return (x,y)
