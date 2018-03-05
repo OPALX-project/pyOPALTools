@@ -110,7 +110,7 @@ class H5Reader:
         n = -1: calculates for the last dataset
         n = k:  calculates for the k't dataset
         '''
-        data = filter(lambda x: s in x, self.__all_datasets)
+        data = filter(lambda x: '/' + s in x, self.__all_datasets)
         if (len(data) < n):
             print ("Give up in getKurtosis, dataset does not exist ")
             sys.exit()
