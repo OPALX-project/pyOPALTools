@@ -1,4 +1,5 @@
 import sys
+from PyQt5.QtWidgets import *
 
 if sys.version_info[0] < 3:
         print ("Need at least python3")
