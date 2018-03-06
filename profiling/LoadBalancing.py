@@ -108,7 +108,7 @@ class LoadBalancing:
         
         plt.legend(fontsize=fontsize)
         
-        plt.grid(grid)
+        plt.grid(grid, which='both')
         
         if title:
             plt.title(title, fontsize=fontsize)
@@ -173,7 +173,7 @@ class LoadBalancing:
         
         plt.legend(fontsize=fontsize)
         
-        plt.grid(grid)
+        plt.grid(grid, which='both')
         
         if title:
             plt.title(title, fontsize=fontsize)
@@ -241,7 +241,7 @@ class LoadBalancing:
         plt.yticks(fontsize=fontsize)
         plt.yscale(yscale)
         
-        plt.grid(grid)
+        plt.grid(grid, which='both')
         
         if title:
             plt.title(title, fontsize=fontsize)
