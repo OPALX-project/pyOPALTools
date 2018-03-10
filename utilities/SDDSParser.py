@@ -159,7 +159,7 @@ class SDDSParser:
             elif '&end' in line:
                 break
 
-    def collectStatFileData(self, baseFN, excludeList, root, yNames):
+    def collectStatFileData(self, baseFN, root, yNames):
 
         ''' 
         Assumes runOPAL structure: optLinac_40nC_IBF=485.9269768907996_IM ...
@@ -182,20 +182,22 @@ class SDDSParser:
         p        = SDDSParser()
         (x,y)    = p.makeData(baseFN, exclList, root, yNames)
         '''
+
         x       = []
         y       = []
-        for item in os.listdir(root):
-            if item not in excludeList:
-                s = item.replace(baseFN+'_', '')
-                s = s.replace('_', ' ')
-                x.append(s)
-                fn=item+'/'+baseFN+'.stat'
-                if (os.path.isfile(fn)):
-                    self.parse(fn)
-                    yy = []
-                    for name in yNames:
-                        yy.append(self.getDataOfVariable(name))
-                    y.append(yy)
-                else:
-                    print ('file '+fn+' does not exists')
-        return (x,y)
+        fns     = [] # full qualified file names
+        for item in filter(os.path.isdir, os.listdir(root)): # os.listdir(root):
+            s = item.replace(baseFN+'_', '')
+            s = s.replace('_', ' ')
+            x.append(s)
+            fn=item+'/'+baseFN+'.stat'
+            if (os.path.isfile(fn)):
+                self.parse(fn)
+                yy = []
+                for name in yNames:
+                    yy.append(self.getDataOfVariable(name))
+                y.append(yy)
+                fns.append(fn)
+            else:
+                print ('file '+fn+' does not exists')
+        return (x,y,fns)
