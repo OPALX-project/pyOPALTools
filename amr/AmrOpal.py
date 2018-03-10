@@ -103,11 +103,12 @@ class AmrOpal:
         save    (bool)      show or save plot
         """
         
-        unit    = kwargs.get("unit", None)
-        zoom    = kwargs.get("zoom", 1.0)
-        color   = kwargs.get("color", 'white')
-        origin  = kwargs.get("origin", 'native')
-        save    = kwargs.get("save", False)
+        unit              = kwargs.get("unit", None)
+        zoom              = kwargs.get("zoom", 1.0)
+        color             = kwargs.get("color", 'white')
+        origin            = kwargs.get("origin", 'native')
+        save              = kwargs.get("save", False)
+        overlay_particles = kwargs.get("overlay_particles", False)
             
         if not self.ds:
             raise RuntimeError("AmrOpal.slice_plot: No dataset")
@@ -122,6 +123,9 @@ class AmrOpal:
         slc.annotate_grids()
         slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
         slc.annotate_scale(corner='upper_right', size_bar_args={'color':color})
+        
+        if overlay_particles:
+            slc.annotate_particles(1.0)
         
         if save:
             slc.save()
@@ -175,3 +179,87 @@ class AmrOpal:
             slc.save()
         else:
             slc.show()
+    
+    
+    def particle_plot(self, x_field, y_field, z_field=None, **kwargs):
+        """
+        Plot particle phase spaces etc of 3D data
+        
+        10. March 2018
+        http://yt-project.org/doc/reference/api/yt.visualization.particle_plots.html#yt.visualization.particle_plots.ParticlePlot
+        
+        Parameters
+        ----------
+        x_field       (str)   particle field plotted on x-axis
+        y_field       (str)   particle field plotted on y-axis
+        z_field=None  (str)   field to be displayed on the colorbar
+        """
+        
+        x_unit   = kwargs.get('x_unit', None)
+        y_unit   = kwargs.get('y_unit', None)
+        z_unit   = kwargs.get('z_unit', None)
+        color    = kwargs.get('color', 'b')
+        #origin   = kwargs.get('origin', 'native')
+        fontsize = kwargs.get('fontsize', 16)
+        save     = kwargs.get("save", False)
+        
+        pp = yt.ParticlePlot(self.ds, x_field, y_field, z_field,
+                             fontsize=fontsize) #, origin=origin)
+        
+        if x_unit:
+            pp.set_unit(x_field, x_unit)
+            
+        if y_unit:
+            pp.set_unit(y_field, y_unit)    
+        
+        if z_unit:
+            pp.set_unit(z_field, z_unit)
+        
+        if save:
+            pp.save()
+        else:
+            pp.show()
+    
+    
+    def particle_phase_space_plot(self, axis, **kwargs):
+        """
+        Plot particle phase spaces etc of 3D data
+        
+        10. March 2018
+        http://yt-project.org/doc/reference/api/yt.visualization.particle_plots.html#yt.visualization.particle_plots.ParticlePlot
+        
+        Parameters
+        ----------
+        axis    (str)   'x', 'y' or 'z'
+        """
+        
+        coordinate_unit = kwargs.get('coordinate_unit', None)
+        momentum_unit   = kwargs.get('momentum_unit', None)
+        color           = kwargs.get('color', 'b')
+        deposition      = kwargs.get('deposition', 'ngp') # or 'cic'
+        fontsize        = kwargs.get('fontsize', 16)
+        save            = kwargs.get('save', False)
+        
+        coordinate = 'particle_position_'
+        momentum   = 'particle_momentum_'
+        
+        if axis not in ['x', 'y', 'z']:
+            raise RuntimeError("Phase space should be either 'x', 'y' or 'z'.")
+        
+        coordinate += axis
+        momentum += axis
+        
+        pp = yt.ParticlePlot(self.ds, coordinate, momentum,
+                             fontsize=fontsize,
+                             deposition=deposition)
+        
+        if coordinate_unit:
+            pp.set_unit(coordinate, coordinate_unit)
+            
+        if momentum_unit:
+            pp.set_unit(momentum, momentum_unit)
+        
+        if save:
+            pp.save()
+        else:
+            pp.show()
