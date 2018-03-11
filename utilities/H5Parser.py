@@ -3,7 +3,7 @@
 
 import h5py
 import numpy as np
-from H5Error import *
+from utilities.H5Error import *
 
 class H5Parser:
     
