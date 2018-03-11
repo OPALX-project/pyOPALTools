@@ -1,5 +1,6 @@
 import numpy as np
 import sys
+import os
 from datetime import datetime
 from bisect   import bisect_left
 
@@ -47,9 +48,9 @@ class mldb:
     def __init__(self):
         print('OPAL ML Database Generator')
 
-    def build(self,path,filename_postfix):
+    def build(self,filename_postfix, path):
         self.trainingSet = []
-        optjson = jsonreader.OptPilotJsonRenumader(path + '/')
+        optjson = jsonreader.OptPilotJsonReader(path + '/')
         
         numGenerations = optjson.getNumOfGenerations()
 
@@ -80,9 +81,12 @@ class mldb:
         x   = []
         y   = []
         fns = []
-        
-        (x,y,fns) = p.collectStatFileData(baseFN, root, yNames)
-        
+
+        cwd       = os.getcwd()
+        os.chdir(root)        
+        (x,y,fns) = p.collectStatFileData(baseFN, '.', yNames)
+        os.chdir(cwd)
+
         lDataSets = len(x)
         xDim      = len(x[0].split())
         yDim      = len(yNames)

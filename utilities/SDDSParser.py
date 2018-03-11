@@ -186,6 +186,7 @@ class SDDSParser:
         x       = []
         y       = []
         fns     = [] # full qualified file names
+
         for item in filter(os.path.isdir, os.listdir(root)): # os.listdir(root):
             s = item.replace(baseFN+'_', '')
             s = s.replace('_', ' ')
