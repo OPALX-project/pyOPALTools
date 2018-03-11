@@ -1,0 +1,30 @@
+Version_Two_Dot_Zero_double
+3
+12
+momentum_x
+momentum_y
+momentum_z
+charge
+mass
+timestep
+electric_field_x
+electric_field_y
+electric_field_z
+magnetic_field_x
+magnetic_field_y
+magnetic_field_z
+1
+energy_bin
+1
+100000
+0
+0
+8
+0 14291 0
+0 10530 1886412
+1 10647 0
+1 14456 1405404
+2 14405 0
+2 10715 1901460
+3 10555 0
+3 14401 1393260
