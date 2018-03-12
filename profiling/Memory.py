@@ -52,7 +52,7 @@ class Memory:
         
         plt.plot(time, memory_usage)
         
-        ax.grid(grid)
+        ax.grid(grid, which='both')
         
         plt.xlabel('time [' + time_unit + ']', fontsize=fontsize)
         plt.xticks(fontsize=fontsize)
@@ -68,8 +68,8 @@ class Memory:
         plt.tight_layout()
         if saveas:
             plt.savefig(saveas)
-        else:
-            plt.show()
+        
+        return plt
     
     
     def summary(self, fname, **kwargs):
@@ -129,7 +129,7 @@ class Memory:
         
         plt.legend(fontsize=fontsize)
         
-        plt.grid(grid)
+        plt.grid(grid, which='both')
         
         if title:
             plt.title(title, fontsize=fontsize)
@@ -137,8 +137,8 @@ class Memory:
         plt.tight_layout()
         if saveas:
             plt.savefig(saveas)
-        else:
-            plt.show()
+        
+        return plt
     
     
     def boxplot(self, fname, **kwargs):
@@ -199,7 +199,7 @@ class Memory:
         plt.yticks(fontsize=fontsize)
         plt.yscale(yscale)
         
-        plt.grid(grid)
+        plt.grid(grid, which='both')
         
         if title:
             plt.title(title, fontsize=fontsize)
@@ -207,5 +207,5 @@ class Memory:
         plt.tight_layout()
         if saveas:
             plt.savefig(saveas)
-        else:
-            plt.show()
+        
+        return plt
