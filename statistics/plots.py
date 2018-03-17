@@ -6,8 +6,8 @@ import warnings
 
 
 def simple_kde_plot(xdata, ydata, **kwargs):
-    xlab         = kwargs.get('xlab', 'x-axis')
-    ylab         = kwargs.get('ylab', 'y-axis')
+    xlab         = kwargs.get('xlab', 'x')
+    ylab         = kwargs.get('ylab', 'y')
     size         = kwargs.get('size', 7)
     cmap         = kwargs.get('cmap', 'viridis')
     cbar         = kwargs.get('cbar', False)
@@ -51,3 +51,40 @@ def simple_kde_plot(xdata, ydata, **kwargs):
                          cmap=cmap)
         ax.set_xlabel(xlab)
         ax.set_ylabel(ylab)
+
+
+# https://seaborn.pydata.org/generated/seaborn.JointGrid.html
+def joint_plot(xdata, ydata, **kwargs):
+    xlab         = kwargs.get('xlab', 'x')
+    ylab         = kwargs.get('ylab', 'y')
+    #marginals    = kwargs.get('marginals')
+    
+    g = sns.JointGrid(x=xdata, y=ydata)
+    g.set_axis_labels(xlab, ylab)
+    
+    g = g.plot_marginals(sns.distplot, color="m")
+
+
+def classification_plot(xdata, ydata, value, **kwargs):
+    """
+    Scatter plot where the points are colored according
+    the value of the probability density function
+    pdf(x, y) computed through kernel density estimation.
+    """
+    xlab         = kwargs.get('xlab', 'x')
+    ylab         = kwargs.get('ylab', 'y')
+    
+    values = np.vstack([xdata, ydata])
+    
+    kde = stats.gaussian_kde(values)
+    pdf = kde.evaluate(values)
+    
+    lidx = np.where(pdf < value)
+    gidx = np.where(pdf >= value)
+    l = plt.scatter(xdata[lidx], ydata[lidx], c='r', s=20, edgecolor='', marker='.')
+    g = plt.scatter(xdata[gidx], ydata[gidx], c='k', s=20, edgecolor='', marker='.')
+    
+    label = r'$pdf\left(' + xlab + ', ' + ylab + r'\right)$'
+    plt.legend([l, g], [label + r'$ < $' + str(value), label + r'$ \geq $' + str(value)])
+    plt.xlabel(r'$' + xlab + '$')
+    plt.ylabel(r'$' + ylab + '$')
