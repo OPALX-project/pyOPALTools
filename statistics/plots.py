@@ -127,12 +127,17 @@ def classification_plot(xdata, ydata, value, **kwargs):
 
 
 def density_plot(xdata, ydata, **kwargs):
-    xlab  = kwargs.get('xlab', 'x')
-    ylab  = kwargs.get('ylab', 'y')
-    clab  = kwargs.get('clab', '')
-    nxbin = kwargs.get('nxbin', 300)
-    nybin = kwargs.get('nybin', 300)
-    cmap  = kwargs.get('cmap', 'viridis')
+    xlab      = kwargs.get('xlab', 'x')
+    ylab      = kwargs.get('ylab', 'y')
+    clab      = kwargs.get('clab', '')
+    nxbin     = kwargs.get('nxbin', 300)
+    nybin     = kwargs.get('nybin', 300)
+    cmap      = kwargs.get('cmap', 'viridis')
+    doShading = kwargs.get('shading', False)
+    
+    shading = 'flat'
+    if doShading:
+        shading = 'gouraud'
 
     # 19. March 2018
     # https://python-graph-gallery.com/85-density-plot-with-matplotlib/
@@ -142,10 +147,9 @@ def density_plot(xdata, ydata, **kwargs):
                       ydata.min():ydata.max():nybin*1j]
     zi = pdf(np.vstack([xi.flatten(), yi.flatten()]))
     
-    pc = plt.pcolormesh(xi, yi, zi.reshape(xi.shape), cmap=cmap)
+    pc = plt.pcolormesh(xi, yi, zi.reshape(xi.shape),
+                        cmap=cmap, shading=shading)
     cb = plt.colorbar(pc)
     plt.xlabel(r'$' + xlab + '$')
     plt.ylabel(r'$' + ylab + '$')
     cb.set_label(r'$' + clab + '$')
-    
-    
