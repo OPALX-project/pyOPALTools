@@ -145,19 +145,28 @@ def density_plot(xdata, ydata, **kwargs):
     # https://python-graph-gallery.com/85-density-plot-with-matplotlib/
     pdf = stats.gaussian_kde([xdata, ydata])
     
-    xi, yi = np.mgrid[xdata.min():xdata.max():nxbin*1j,
-                      ydata.min():ydata.max():nybin*1j]
+    xmin = xdata.min()
+    xmax = xdata.max()
+    if xlim:
+        xmin = xlim[0]
+        xmax = xlim[1]
+    
+    ymin = ydata.min()
+    ymax = ydata.max()
+    if ylim:
+        ymin = ylim[0]
+        ymax = ylim[1]
+    
+    
+    xi, yi = np.mgrid[xmin:xmax:nxbin*1j,
+                      ymin:ymax:nybin*1j]
     zi = pdf(np.vstack([xi.flatten(), yi.flatten()]))
     
     pc = plt.pcolormesh(xi, yi, zi.reshape(xi.shape),
                         cmap=cmap, shading=shading)
+    
+    plt.axis([xmin, xmax, ymin, ymax])
     cb = plt.colorbar(pc)
     plt.xlabel(r'$' + xlab + '$')
     plt.ylabel(r'$' + ylab + '$')
     cb.set_label(r'$' + clab + '$')
-    
-    if xlim:
-        plt.xlim(xlim)
-    
-    if ylim:
-        plt.ylim(ylim)
