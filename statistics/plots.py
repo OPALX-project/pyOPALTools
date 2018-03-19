@@ -124,3 +124,28 @@ def classification_plot(xdata, ydata, value, **kwargs):
     plt.legend([l, g], [label + r'$ < $' + str(value), label + r'$ \geq $' + str(value)])
     plt.xlabel(r'$' + xlab + '$')
     plt.ylabel(r'$' + ylab + '$')
+
+
+def density_plot(xdata, ydata, **kwargs):
+    xlab  = kwargs.get('xlab', 'x')
+    ylab  = kwargs.get('ylab', 'y')
+    clab  = kwargs.get('clab', '')
+    nxbin = kwargs.get('nxbin', 300)
+    nybin = kwargs.get('nybin', 300)
+    cmap  = kwargs.get('cmap', 'viridis')
+
+    # 19. March 2018
+    # https://python-graph-gallery.com/85-density-plot-with-matplotlib/
+    pdf = stats.gaussian_kde([xdata, ydata])
+    
+    xi, yi = np.mgrid[xdata.min():xdata.max():nxbin*1j,
+                      ydata.min():ydata.max():nybin*1j]
+    zi = pdf(np.vstack([xi.flatten(), yi.flatten()]))
+    
+    pc = plt.pcolormesh(xi, yi, zi.reshape(xi.shape), cmap=cmap)
+    cb = plt.colorbar(pc)
+    plt.xlabel(r'$' + xlab + '$')
+    plt.ylabel(r'$' + ylab + '$')
+    cb.set_label(r'$' + clab + '$')
+    
+    
