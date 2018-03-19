@@ -134,6 +134,8 @@ def density_plot(xdata, ydata, **kwargs):
     nybin     = kwargs.get('nybin', 300)
     cmap      = kwargs.get('cmap', 'viridis')
     doShading = kwargs.get('shading', False)
+    xlim      = kwargs.get('xlim', [])
+    ylim      = kwargs.get('ylim', [])
     
     shading = 'flat'
     if doShading:
@@ -153,3 +155,9 @@ def density_plot(xdata, ydata, **kwargs):
     plt.xlabel(r'$' + xlab + '$')
     plt.ylabel(r'$' + ylab + '$')
     cb.set_label(r'$' + clab + '$')
+    
+    if xlim:
+        plt.xlim(xlim)
+    
+    if ylim:
+        plt.ylim(ylim)
