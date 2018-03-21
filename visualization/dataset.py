@@ -1,6 +1,6 @@
 import os
 from enum import IntEnum, unique
-from utilities.H5Parser import H5Parser
+from utilities.H5Dataset import H5Dataset
 from utilities.SDDSParser import SDDSParser
 from timing.Timing import Timing
 
@@ -83,7 +83,7 @@ class Dataset:
         self.__directory = directory + '/'
         self.__files = files
         self.__ftype = FileType.extensionToFileType(files[0])
-        self.__parser = []
+        self.__dataset = []
         
         print ( self.__str__() )
         
@@ -91,14 +91,13 @@ class Dataset:
         for f in files:
             print ( '    ' + f )
             if self.__ftype == FileType.H5:
-                self.__parser.append(H5Parser())
-                self.__parser[-1].parse(self.__directory + f)
+                self.__dataset.append(H5Dataset(self.__directory, f))
             elif self.__ftype == FileType.STAT:
-                self.__parser.append(SDDSParser())
-                self.__parser[-1].parse(self.__directory + f)
+                self.__dataset.append(SDDSParser())
+                self.__dataset[-1].parse(self.__directory + f)
             elif self.__ftype == FileType.TIMING:
-                self.__parser.append(Timing())
-                self.__parser[-1].read_ippl_timing(self.__directory + f)
+                self.__dataset.append(Timing())
+                self.__dataset[-1].read_ippl_timing(self.__directory + f)
         
         print ( '\nDone.\n' )
     
@@ -117,7 +116,7 @@ class Dataset:
     
     
     def __getitem__(self, idx):
-        return self.__parser[idx]
+        return self.__dataset[idx]
     
     
     def filename(self, idx):
@@ -140,37 +139,37 @@ class Dataset:
         zvar = kwargs.get('zvar', '')
         
         if self.__ftype == FileType.TIMING:
-            return self.__parser[idx].getTiming()
+            return self.__dataset[idx].getTiming()
         elif self.__ftype == FileType.H5:
             
             step = kwargs.get('step', 0)
             
             xdata = []
             if xvar:
-                xdata = self.__parser[idx].getStepDataset(xvar, step)
+                xdata = self.__dataset[idx].getData(xvar, step)
             
             ydata = []
             if yvar:
-                ydata = self.__parser[idx].getStepDataset(yvar, step)
+                ydata = self.__dataset[idx].getData(yvar, step)
             
             zdata = []
             if zvar:
-                zdata = self.__parser[idx].getStepDataset(zvar, step)
+                zdata = self.__dataset[idx].getData(zvar, step)
                 
             return xdata, ydata, zdata
         
         elif self.__ftype == FileType.STAT:
             xdata = []
             if xvar:
-                xdata = self.__parser[idx].getDataOfVariable(xvar)
+                xdata = self.__dataset[idx].getDataOfVariable(xvar)
             
             ydata = []
             if yvar:
-                ydata = self.__parser[idx].getDataOfVariable(yvar)
+                ydata = self.__dataset[idx].getDataOfVariable(yvar)
             
             zdata = []
             if zvar:
-                zdata = self.__parser[idx].getDataOfVariable(zvar)
+                zdata = self.__dataset[idx].getDataOfVariable(zvar)
             
             
             return xdata, ydata, zdata
@@ -188,29 +187,29 @@ class Dataset:
             
             xunit = ''
             if xvar:
-                xunit = self.__parser[idx].getGlobalAttribute(xvar + 'Unit')
+                xunit = self.__dataset[idx].getUnit(xvar)
             
             yunit = ''
             if yvar:
-                yunit = self.__parser[idx].getGlobalAttribute(yvar + 'Unit')
+                yunit = self.__dataset[idx].getUnit(yvar)
             
             zunit = ''
             if zvar:
-                zunit = self.__parser[idx].getGlobalAttribute(zvar + 'Unit')
+                zunit = self.__dataset[idx].getUnit(zvar)
             
             return xunit, yunit, zunit
             
         elif self.__ftype == FileType.STAT:
             xunit = ''
             if xvar:
-                xunit = self.__parser[idx].getUnitOfVariable(xvar)
+                xunit = self.__dataset[idx].getUnitOfVariable(xvar)
             
             yunit = ''
             if yvar:
-                yunit = self.__parser[idx].getUnitOfVariable(yvar)
+                yunit = self.__dataset[idx].getUnitOfVariable(yvar)
             
             zunit = ''
             if zvar:
-                zunit = self.__parser[idx].getDataOfVariable(zvar)
+                zunit = self.__dataset[idx].getDataOfVariable(zvar)
             
             return xunit, yunit, zunit
