@@ -126,4 +126,91 @@ class Dataset:
     @property
     def size(self):
         return len(self.__files)
-
+    
+    
+    def getData(self, idx, **kwargs):
+        """
+        
+        Returns
+        -------
+        the data of a parsed file
+        """
+        xvar = kwargs.get('xvar', '')
+        yvar = kwargs.get('yvar', '')
+        zvar = kwargs.get('zvar', '')
+        
+        if self.__ftype == FileType.TIMING:
+            return self.__parser[idx].getTiming()
+        elif self.__ftype == FileType.H5:
+            
+            step = kwargs.get('step', 0)
+            
+            xdata = []
+            if xvar:
+                xdata = self.__parser[idx].getStepDataset(xvar, step)
+            
+            ydata = []
+            if yvar:
+                ydata = self.__parser[idx].getStepDataset(yvar, step)
+            
+            zdata = []
+            if zvar:
+                zdata = self.__parser[idx].getStepDataset(zvar, step)
+                
+            return xdata, ydata, zdata
+        
+        elif self.__ftype == FileType.STAT:
+            xdata = []
+            if xvar:
+                xdata = self.__parser[idx].getDataOfVariable(xvar)
+            
+            ydata = []
+            if yvar:
+                ydata = self.__parser[idx].getDataOfVariable(yvar)
+            
+            zdata = []
+            if zvar:
+                zdata = self.__parser[idx].getDataOfVariable(zvar)
+            
+            
+            return xdata, ydata, zdata
+    
+    def getUnit(self, idx, **kwargs):
+        xvar = kwargs.get('xvar', '')
+        yvar = kwargs.get('yvar', '')
+        zvar = kwargs.get('zvar', '')
+        
+        if self.__ftype == FileType.TIMING:
+            return None
+        elif self.__ftype == FileType.H5:
+            
+            step = kwargs.get('step', 0)
+            
+            xunit = ''
+            if xvar:
+                xunit = self.__parser[idx].getGlobalAttribute(xvar + 'Unit')
+            
+            yunit = ''
+            if yvar:
+                yunit = self.__parser[idx].getGlobalAttribute(yvar + 'Unit')
+            
+            zunit = ''
+            if zvar:
+                zunit = self.__parser[idx].getGlobalAttribute(zvar + 'Unit')
+            
+            return xunit, yunit, zunit
+            
+        elif self.__ftype == FileType.STAT:
+            xunit = ''
+            if xvar:
+                xunit = self.__parser[idx].getUnitOfVariable(xvar)
+            
+            yunit = ''
+            if yvar:
+                yunit = self.__parser[idx].getUnitOfVariable(yvar)
+            
+            zunit = ''
+            if zvar:
+                zunit = self.__parser[idx].getDataOfVariable(zvar)
+            
+            return xunit, yunit, zunit
