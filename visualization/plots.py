@@ -35,25 +35,28 @@ def plot_time(ds, kind='pie', **kwargs):
 
 def plot_profile1D(ds, xvar, yvar, **kwargs):
     
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+    figsize = kwargs.get('figsize', (7, 7))
+    dpi     = kwargs.get('dpi', 300)
     
-    yscale  = kwargs.get('yscale', 'linear')
-    xscale  = kwargs.get('xscale', 'linear')
+    plt.figure(figsize=figsize, dpi=dpi)
+    plt.xscale(kwargs.get('yscale', 'linear'))
+    plt.yscale(kwargs.get('xscale', 'linear'))
     
+    if kwargs.get('xsci', False):
+        plt.ticklabel_format(style='sci', axis='x', scilimits=(0,3))
     
-    ax.set_xscale(xscale)
-    ax.set_yscale(yscale)
+    if kwargs.get('ysci', False):
+        plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
     
     variables = {'xvar': xvar, 'yvar': yvar}
     
     for i in range(ds.size):
         xdata, ydata, _ = ds.getData(i, **variables)
         xunit, yunit, _ = ds.getUnit(i, **variables)
-        ax.plot(xdata, ydata)
+        plt.plot(xdata, ydata)
     
-    ax.set_xlabel(xvar.lower() + ' [' + xunit + ']')
-    ax.set_ylabel(yvar.lower() + ' [' + yunit + ']')
+    plt.xlabel(xvar.lower() + ' [' + xunit + ']')
+    plt.ylabel(yvar.lower() + ' [' + yunit + ']')
     
     return plt
 
@@ -63,25 +66,28 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
     if not ds.filetype == FileType.H5:
         raise RuntimeError('Not a H5 dataset.')
     
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+    figsize = kwargs.get('figsize', (7, 7))
+    dpi     = kwargs.get('dpi', 300)
     
-    yscale  = kwargs.get('yscale', 'linear')
-    xscale  = kwargs.get('xscale', 'linear')
+    plt.figure(figsize=figsize, dpi=dpi)
+    plt.xscale(kwargs.get('yscale', 'linear'))
+    plt.yscale(kwargs.get('xscale', 'linear'))
     
+    if kwargs.get('xsci', False):
+        plt.ticklabel_format(style='sci', axis='x', scilimits=(0,3))
     
-    ax.set_xscale(xscale)
-    ax.set_yscale(yscale)
+    if kwargs.get('ysci', False):
+        plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
     
     variables = {'xvar': xvar, 'yvar': yvar}
     
     for i in range(ds.size):
         xdata, ydata, _ = ds.getData(i, **variables)
         xunit, yunit, _ = ds.getUnit(i, **variables)
-        ax.plot(xdata, ydata, '.')
+        plt.plot(xdata, ydata, '.')
     
-    ax.set_xlabel(xvar.lower() + r' $ [' + xunit + ']$')
-    ax.set_ylabel(yvar.lower() + r' $ [' + yunit + ']$')
+    plt.xlabel(xvar.lower() + r' $ [' + xunit + ']$')
+    plt.ylabel(yvar.lower() + r' $ [' + yunit + ']$')
     
     plt.tight_layout()
     
