@@ -82,6 +82,7 @@ class Dataset:
     def __init__(self, directory, files):
         self.__directory = directory + '/'
         self.__files = files
+        self.__ftype = FileType.extensionToFileType(files[0])
         self.__parser = []
         
         print ( self.__str__() )
@@ -89,13 +90,13 @@ class Dataset:
         print ( 'Start loading files ...\n' )
         for f in files:
             print ( '    ' + f )
-            if FileType.extensionToFileType(f) == FileType.H5:
+            if self.__ftype == FileType.H5:
                 self.__parser.append(H5Parser())
                 self.__parser[-1].parse(self.__directory + f)
-            elif FileType.extensionToFileType(f) == FileType.STAT:
+            elif self.__ftype == FileType.STAT:
                 self.__parser.append(SDDSParser())
                 self.__parser[-1].parse(self.__directory + f)
-            elif FileType.extensionToFileType(f) == FileType.TIMING:
+            elif self.__ftype == FileType.TIMING:
                 self.__parser.append(Timing())
                 self.__parser[-1].read_ippl_timing(self.__directory + f)
         
@@ -108,3 +109,21 @@ class Dataset:
             if not f == '':
                 info += '    ' + f    + '\n'     
         return info
+    
+    
+    @property
+    def filetype(self):
+        return self.__ftype
+    
+    
+    def __getitem__(self, idx):
+        return self.__parser[idx]
+    
+    
+    def filename(self, idx):
+        return self.__directory + self.__files[idx]
+    
+    @property
+    def size(self):
+        return len(self.__files)
+

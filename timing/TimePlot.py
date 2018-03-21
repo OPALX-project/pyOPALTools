@@ -8,6 +8,23 @@ import timing.Timing as timing
 
 class TimePlot:
     
+    kinds = [
+        'line',
+        'summary',
+        'pie'
+    ]
+    
+    def automatic(self, kind, fname, **kwargs):
+        if kind == 'line':
+            return TimePlot.line_plot(self, fname, **kwargs)
+        elif kind == 'summary':
+            return TimePlot.summary_plot(self, fname, **kwargs)
+        elif kind == 'pie':
+            return TimePlot.pie_plot(self, fname, **kwargs)
+        else:
+            raise RuntimeError('TimePlot only supports ' + str(TimePlot.kinds))
+    
+    
     def line_plot(self, fnames, **kwargs):
         """
         Create a plot of several timings containing same timers.
@@ -251,11 +268,11 @@ class TimePlot:
         plt.tight_layout()
         if saveas:
             plt.savefig(saveas)
-        else:
-            plt.show()
+        
+        return plt
     
     
-    def pie_plot(self, fname, title, **kwargs):
+    def pie_plot(self, fname, **kwargs):
         """
         Create a pie plot of the first N most time consuming timings.
         
@@ -280,6 +297,7 @@ class TimePlot:
         dpi                         resolution
         ippl=True           (bool)  if ippl timing file or OPAL output
                                     file
+        title=None                  for plot
 
         Notes
         -----
@@ -304,6 +322,7 @@ class TimePlot:
         dpi       = kwargs.get('dpi', None)
         ippl      = kwargs.get('ippl', True)
         tag       = kwargs.get('tag', '')
+        title     = kwargs.get('title', None)
         
         time = timing()
         if ippl:
@@ -363,11 +382,14 @@ class TimePlot:
         
         ax.legend(patches, labels_sorted, loc='best', bbox_to_anchor=(0.95, 0.98), borderaxespad=0.1)
         plt.axis('equal')
-        plt.title(title)
+        
+        if title:
+            plt.title(title)
+        
         if saveas:
             plt.savefig(saveas)
-        else:
-            plt.show()
+        
+        return plt
             
     
     def __exclude(self, data, exclude):
