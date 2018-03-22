@@ -1,9 +1,28 @@
+# Author:   Matthias Frey
+# Date:     March 2018
+
 from utilities.H5Parser import H5Parser
 import numpy as np
 
 class H5Dataset:
     
     def __init__(self, directory, fname):
+        """
+        Constructor.
+        
+        Members
+        ----------
+        __directory         (str)           of file
+        __fname             (str)           name of file
+        __parser            (H5Parser)      actual data holder
+        __variable_mapper   (dict)          map user input variable
+                                            name to file variable name
+        __label_mapper      (dict)          map user input variable
+                                            name to plot label name
+        __direction         (dict)          used to find out the
+                                            direction in case of
+                                            vector type data
+        """
         self.__directory = directory
         self.__fname = fname
         
@@ -40,7 +59,16 @@ class H5Dataset:
     
     def getData(self, var, step):
         """
-        Automatic selection of data.
+        Obtain data of a variable
+        
+        Parameters
+        ----------
+        var     (str)   variable name
+        step    (int)   in case of step variables
+        
+        Returns
+        -------
+        a list of the data (n, dim)
         """
         
         h5var = var
@@ -69,13 +97,32 @@ class H5Dataset:
     
     
     def getLabel(self, var):
+        """
+        Obtain label for plotting.
+        
+        Parameters
+        ----------
+        var     (str)   variable name
+        
+        Returns
+        -------
+        appropriate name plotting ready
+        """
         if var in self.__label_mapper:
             var = self.__label_mapper[var]
         return var
     
     def getUnit(self, var):
         """
-        Automatic selection of unit of data.
+        Obtain unit for plotting.
+        
+        Parameters
+        ----------
+        var     (str)   variable name
+        
+        Returns
+        -------
+        appropriate unit in math mode for plotting 
         """
         if var in self.__variable_mapper:
             var = self.__variable_mapper[var]

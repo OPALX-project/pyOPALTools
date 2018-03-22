@@ -6,6 +6,19 @@ from utilities.SDDSParser import SDDSParser
 class StatDataset:
     
     def __init__(self, directory, fname):
+        """
+        Constructor.
+        
+        Members
+        ----------
+        __directory         (str)           of file
+        __fname             (str)           name of file
+        __parser            (SDDSParser)    actual data holder
+        __variable_mapper   (dict)          map user input variable
+                                            name to file variable name
+        __label_mapper      (dict)          map user input variable
+                                            name to plot label name
+        """
         self.__directory = directory
         self.__fname = fname
         
@@ -27,18 +40,52 @@ class StatDataset:
     
     
     def getData(self, var, step):
+        """
+        Obtain data of a variable
+        
+        Parameters
+        ----------
+        var     (str)   variable name
+        step    (int)   unused
+        
+        Returns
+        -------
+        a list of the data
+        """
         if var in self.__variable_mapper:
             var = self.__variable_mapper[var]
         return self.__parser.getDataOfVariable(var)
     
     
     def getLabel(self, var):
+        """
+        Obtain label for plotting.
+        
+        Parameters
+        ----------
+        var     (str)   variable name
+        
+        Returns
+        -------
+        appropriate name plotting ready
+        """
         if var in self.__label_mapper:
             var = self.__label_mapper[var]
         return var
     
     
     def getUnit(self, var):
+        """
+        Obtain unit for plotting.
+        
+        Parameters
+        ----------
+        var     (str)   variable name
+        
+        Returns
+        -------
+        appropriate unit in math mode for plotting 
+        """
         if var in self.__variable_mapper:
             var = self.__variable_mapper[var]
         unit = r'$' + self.__parser.getUnitOfVariable(var) + '$'
