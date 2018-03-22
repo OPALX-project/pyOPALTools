@@ -1,7 +1,7 @@
 import os
 from enum import IntEnum, unique
 from utilities.H5Dataset import H5Dataset
-from utilities.SDDSParser import SDDSParser
+from utilities.StatDataset import StatDataset
 from timing.Timing import Timing
 
 @unique
@@ -93,8 +93,7 @@ class Dataset:
             if self.__ftype == FileType.H5:
                 self.__dataset.append(H5Dataset(self.__directory, f))
             elif self.__ftype == FileType.STAT:
-                self.__dataset.append(SDDSParser())
-                self.__dataset[-1].parse(self.__directory + f)
+                self.__dataset.append(StatDataset(self.__directory, f))
             elif self.__ftype == FileType.TIMING:
                 self.__dataset.append(Timing())
                 self.__dataset[-1].read_ippl_timing(self.__directory + f)
@@ -140,7 +139,7 @@ class Dataset:
         
         if self.__ftype == FileType.TIMING:
             return self.__dataset[idx].getTiming()
-        elif self.__ftype == FileType.H5:
+        elif self.__ftype == FileType.H5 or self.__ftype == FileType.STAT:
             
             step = kwargs.get('step', 0)
             
@@ -157,22 +156,6 @@ class Dataset:
                 zdata = self.__dataset[idx].getData(zvar, step)
                 
             return xdata, ydata, zdata
-        
-        elif self.__ftype == FileType.STAT:
-            xdata = []
-            if xvar:
-                xdata = self.__dataset[idx].getDataOfVariable(xvar)
-            
-            ydata = []
-            if yvar:
-                ydata = self.__dataset[idx].getDataOfVariable(yvar)
-            
-            zdata = []
-            if zvar:
-                zdata = self.__dataset[idx].getDataOfVariable(zvar)
-            
-            
-            return xdata, ydata, zdata
     
     def getUnit(self, idx, **kwargs):
         xvar = kwargs.get('xvar', '')
@@ -181,9 +164,7 @@ class Dataset:
         
         if self.__ftype == FileType.TIMING:
             return None
-        elif self.__ftype == FileType.H5:
-            
-            step = kwargs.get('step', 0)
+        elif self.__ftype == FileType.H5 or self.__ftype == FileType.STAT:
             
             xunit = ''
             if xvar:
@@ -198,18 +179,26 @@ class Dataset:
                 zunit = self.__dataset[idx].getUnit(zvar)
             
             return xunit, yunit, zunit
+    
+    def getLabel(self, **kwargs):
+        xvar = kwargs.get('xvar', '')
+        yvar = kwargs.get('yvar', '')
+        zvar = kwargs.get('zvar', '')
+        
+        if self.__ftype == FileType.TIMING:
+            return None
+        elif self.__ftype == FileType.H5 or self.__ftype == FileType.STAT:
             
-        elif self.__ftype == FileType.STAT:
-            xunit = ''
+            xlabel = ''
             if xvar:
-                xunit = self.__dataset[idx].getUnitOfVariable(xvar)
+                xlabel = self.__dataset[0].getLabel(xvar)
             
-            yunit = ''
+            ylabel = ''
             if yvar:
-                yunit = self.__dataset[idx].getUnitOfVariable(yvar)
+                ylabel = self.__dataset[0].getLabel(yvar)
             
-            zunit = ''
+            zlabel = ''
             if zvar:
-                zunit = self.__dataset[idx].getDataOfVariable(zvar)
+                zlabel = self.__dataset[0].getLabel(zvar)
             
-            return xunit, yunit, zunit
+            return xlabel, ylabel, zlabel

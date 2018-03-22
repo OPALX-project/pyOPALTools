@@ -51,8 +51,10 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
         xunit, yunit, _ = ds.getUnit(i, **variables)
         plt.plot(xdata, ydata)
     
-    plt.xlabel(xvar.lower() + ' [' + xunit + ']')
-    plt.ylabel(yvar.lower() + ' [' + yunit + ']')
+    xlabel, ylabel, _ = ds.getLabel(xvar=xvar, yvar=yvar)
+    
+    plt.xlabel(xlabel + ' [' + xunit + ']')
+    plt.ylabel(ylabel + ' [' + yunit + ']')
     
     return plt
 
@@ -79,8 +81,10 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
         xunit, yunit, _ = ds.getUnit(i, **variables)
         plt.plot(xdata, ydata, '.')
     
-    plt.xlabel(xvar.lower() + r' $ [' + xunit + ']$')
-    plt.ylabel(yvar.lower() + r' $ [' + yunit + ']$')
+    xlabel, ylabel, _ = ds.getLabel(xvar=xvar, yvar=yvar)
+    
+    plt.xlabel(xlabel + ' [' + xunit + ']')
+    plt.ylabel(ylabel + ' [' + yunit + ']')
     
     plt.tight_layout()
     
