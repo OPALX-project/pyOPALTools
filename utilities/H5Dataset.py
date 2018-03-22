@@ -3,8 +3,9 @@
 
 from utilities.H5Parser import H5Parser
 import numpy as np
+from utilities.DatasetBase import *
 
-class H5Dataset:
+class H5Dataset(DatasetBase):
     
     def __init__(self, directory, fname):
         """
@@ -12,8 +13,6 @@ class H5Dataset:
         
         Members
         ----------
-        __directory         (str)           of file
-        __fname             (str)           name of file
         __parser            (H5Parser)      actual data holder
         __variable_mapper   (dict)          map user input variable
                                             name to file variable name
@@ -23,8 +22,6 @@ class H5Dataset:
                                             direction in case of
                                             vector type data
         """
-        self.__directory = directory
-        self.__fname = fname
         
         self.__parser = H5Parser()
         self.__parser.parse(directory + fname)
@@ -55,21 +52,24 @@ class H5Dataset:
             'y':    1,
             'z':    2
         }
+        
+        super(H5Dataset, self).__init__(directory, fname)
     
     
-    def getData(self, var, step):
+    def getData(self, var, **kwargs):
         """
         Obtain data of a variable
         
         Parameters
         ----------
         var     (str)   variable name
-        step    (int)   in case of step variables
         
         Returns
         -------
         a list of the data (n, dim)
         """
+        
+        step = kwargs.get('step', 0)
         
         h5var = var
         if var in self.__variable_mapper:

@@ -2,8 +2,9 @@
 # Date:     March 2018
 
 from utilities.SDDSParser import SDDSParser
+from utilities.DatasetBase import *
 
-class StatDataset:
+class StatDataset(DatasetBase):
     
     def __init__(self, directory, fname):
         """
@@ -11,17 +12,12 @@ class StatDataset:
         
         Members
         ----------
-        __directory         (str)           of file
-        __fname             (str)           name of file
         __parser            (SDDSParser)    actual data holder
         __variable_mapper   (dict)          map user input variable
                                             name to file variable name
         __label_mapper      (dict)          map user input variable
                                             name to plot label name
         """
-        self.__directory = directory
-        self.__fname = fname
-        
         self.__parser = SDDSParser()
         self.__parser.parse(directory + fname)
         
@@ -37,16 +33,16 @@ class StatDataset:
             'rms_py':   r'$\sigma_{py}$',
             'rms_pz':   r'$\sigma_{pz}$'
         }
+        
+        super(StatDataset, self).__init__(directory, fname)
     
-    
-    def getData(self, var, step):
+    def getData(self, var, **kwargs):
         """
         Obtain data of a variable
         
         Parameters
         ----------
         var     (str)   variable name
-        step    (int)   unused
         
         Returns
         -------

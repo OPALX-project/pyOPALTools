@@ -1,46 +1,8 @@
 import os
-from enum import IntEnum, unique
+from utilities.DatasetBase import *
 from utilities.H5Dataset import H5Dataset
 from utilities.StatDataset import StatDataset
 from timing.Timing import Timing
-
-@unique
-class FileType(IntEnum):
-    H5     = 0,
-    STAT   = 1,
-    MEM    = 2,
-    LBAL   = 3,
-    OUTPUT = 4,
-    TIMING = 5,
-    GRID   = 6,
-    SOLVER = 7,
-    NONE   = 8,
-    
-    @classmethod
-    def extensionToFileType(cls, fname):
-        extension = {
-            '.h5':      cls.H5,
-            '.stat':    cls.STAT,
-            '.mem':     cls.MEM,
-            '.lbal':    cls.LBAL,
-            '.out':     cls.OUTPUT,
-            '.output':  cls.OUTPUT,
-            '.grid':    cls.GRID,
-            '.solver':  cls.SOLVER
-        }
-        
-        file = {
-            'timing.dat': cls.TIMING
-        }
-        
-        _ , ext = os.path.splitext(fname)
-        
-        if ext in extension:
-            return extension[ext]
-        elif fname in file:
-            return file[fname]
-        else:
-            return cls.NONE
 
 
 def load_dataset(directory, **kwargs):
@@ -54,151 +16,34 @@ def load_dataset(directory, **kwargs):
     if not ftype == FileType.NONE and fname:
         raise RuntimeError('Specify either file type or file name but not both.')
     
+    fnames = []
+    
     if fname:
         if not os.path.exists(directory + '/' + fname):
-            raise RuntimeError("File '" + directory + "/" + fname + "' does not exist.")
-        return Dataset(directory, [fname])
+            raise RuntimeError("File '" + directory + "/" + fname + "' does not exist.")        
+        fnames.append(fname)
     elif not ftype == FileType.NONE:
-        
-        files = []
-        
         for fname in os.listdir(directory):
             if FileType.extensionToFileType(fname) == ftype:
-                files.append(fname)
+                fnames.append(fname)
         
-        if not files:
+        if not fnames:
             raise RuntimeError('Could not find any files of this type.')
-        
-        return Dataset(directory, files)
-        
     else:
         print ( "Neither file type 'ftype' nor file name 'fname' specified." )
         print ( 'Try loading stat file.' )
         load_dataset(directory, ftype=FileType.STAT)
-
-
-class Dataset:
-    
-    def __init__(self, directory, files):
-        self.__directory = directory + '/'
-        self.__files = files
-        self.__ftype = FileType.extensionToFileType(files[0])
-        self.__dataset = []
-        
-        print ( self.__str__() )
-        
-        print ( 'Start loading files ...\n' )
-        for f in files:
-            print ( '    ' + f )
-            if self.__ftype == FileType.H5:
-                self.__dataset.append(H5Dataset(self.__directory, f))
-            elif self.__ftype == FileType.STAT:
-                self.__dataset.append(StatDataset(self.__directory, f))
-            elif self.__ftype == FileType.TIMING:
-                self.__dataset.append(Timing())
-                self.__dataset[-1].read_ippl_timing(self.__directory + f)
-        
-        print ( '\nDone.\n' )
     
     
-    def __str__(self):
-        info = '\nAvailable files:\n'
-        for f in self.__files:
-            if not f == '':
-                info += '    ' + f    + '\n'     
-        return info
+    print ( 'Start loading files ...\n' )
+    datasets = []
+    for fname in fnames:
+        print ( '    ' + fname )
+        ftype = FileType.extensionToFileType(fname)
+        if  ftype == FileType.H5:
+            datasets.append(H5Dataset(directory, fname))
+        elif ftype == FileType.STAT:
+            datasets.append(StatDataset(directory, fname))
+    print ( '\nDone.\n' )
     
-    
-    @property
-    def filetype(self):
-        return self.__ftype
-    
-    
-    def __getitem__(self, idx):
-        return self.__dataset[idx]
-    
-    
-    def filename(self, idx):
-        return self.__directory + self.__files[idx]
-    
-    @property
-    def size(self):
-        return len(self.__files)
-    
-    
-    def getData(self, idx, **kwargs):
-        """
-        
-        Returns
-        -------
-        the data of a parsed file
-        """
-        xvar = kwargs.get('xvar', '')
-        yvar = kwargs.get('yvar', '')
-        zvar = kwargs.get('zvar', '')
-        
-        if self.__ftype == FileType.TIMING:
-            return self.__dataset[idx].getTiming()
-        elif self.__ftype == FileType.H5 or self.__ftype == FileType.STAT:
-            
-            step = kwargs.get('step', 0)
-            
-            xdata = []
-            if xvar:
-                xdata = self.__dataset[idx].getData(xvar, step)
-            
-            ydata = []
-            if yvar:
-                ydata = self.__dataset[idx].getData(yvar, step)
-            
-            zdata = []
-            if zvar:
-                zdata = self.__dataset[idx].getData(zvar, step)
-                
-            return xdata, ydata, zdata
-    
-    def getUnit(self, idx, **kwargs):
-        xvar = kwargs.get('xvar', '')
-        yvar = kwargs.get('yvar', '')
-        zvar = kwargs.get('zvar', '')
-        
-        if self.__ftype == FileType.TIMING:
-            return None
-        elif self.__ftype == FileType.H5 or self.__ftype == FileType.STAT:
-            
-            xunit = ''
-            if xvar:
-                xunit = self.__dataset[idx].getUnit(xvar)
-            
-            yunit = ''
-            if yvar:
-                yunit = self.__dataset[idx].getUnit(yvar)
-            
-            zunit = ''
-            if zvar:
-                zunit = self.__dataset[idx].getUnit(zvar)
-            
-            return xunit, yunit, zunit
-    
-    def getLabel(self, **kwargs):
-        xvar = kwargs.get('xvar', '')
-        yvar = kwargs.get('yvar', '')
-        zvar = kwargs.get('zvar', '')
-        
-        if self.__ftype == FileType.TIMING:
-            return None
-        elif self.__ftype == FileType.H5 or self.__ftype == FileType.STAT:
-            
-            xlabel = ''
-            if xvar:
-                xlabel = self.__dataset[0].getLabel(xvar)
-            
-            ylabel = ''
-            if yvar:
-                ylabel = self.__dataset[0].getLabel(yvar)
-            
-            zlabel = ''
-            if zvar:
-                zlabel = self.__dataset[0].getLabel(zvar)
-            
-            return xlabel, ylabel, zlabel
+    return datasets

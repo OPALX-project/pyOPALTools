@@ -2,13 +2,14 @@ from visualization.dataset import *
 import timing.TimePlot as TimePlot
 import matplotlib.pyplot as plt
 
-def plot_time(ds, kind='pie', **kwargs):
+def plot_time(dsets, kind='pie', **kwargs):
     """
+    Do timing plots.
     
     Parameters
     ----------
-    ds      dataset
-    kind    of plot
+    dsets   (list)  datasets
+    kind    (str)   of plot
     
     Returns
     -------
@@ -24,16 +25,29 @@ def plot_time(ds, kind='pie', **kwargs):
     # treat special case
     if kind == 'line':
         files = []
-        for i in range(ds.size):
-            files.append(ds.filename(i))
+        for ds in dsets:
+            files.append(ds.filename)
         return tp.automatic(kind, fname=files, **kwargs)
     else:
-        for i in range(ds.size):
+        for ds in dsets:
             return tp.automatic(kind=kind,
-                                fname=ds.filename(i), **kwargs)
+                                fname=ds.filename, **kwargs)
 
 
-def plot_profile1D(ds, xvar, yvar, **kwargs):
+def plot_profile1D(dsets, xvar, yvar, **kwargs):
+    """
+    Plot a 1D profile.
+    
+    Parameters
+    ----------
+    dsets   (list)  datasets
+    xvar    (str)   variable for x-axis
+    yvar    (str)   variable for y-axis
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
     plt.figure()
     plt.xscale(kwargs.get('yscale', 'linear'))
     plt.yscale(kwargs.get('xscale', 'linear'))
@@ -44,14 +58,15 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
     if kwargs.get('ysci', False):
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
     
-    variables = {'xvar': xvar, 'yvar': yvar}
-    
-    for i in range(ds.size):
-        xdata, ydata, _ = ds.getData(i, **variables)
-        xunit, yunit, _ = ds.getUnit(i, **variables)
+    for ds in dsets:
+        xdata = ds.getData(xvar)
+        ydata = ds.getData(yvar)
         plt.plot(xdata, ydata)
     
-    xlabel, ylabel, _ = ds.getLabel(xvar=xvar, yvar=yvar)
+    xunit  = dsets[0].getUnit(xvar)
+    yunit  = dsets[0].getUnit(yvar)
+    xlabel = dsets[0].getLabel(xvar)
+    ylabel = dsets[0].getLabel(yvar)
     
     plt.xlabel(xlabel + ' [' + xunit + ']')
     plt.ylabel(ylabel + ' [' + yunit + ']')
@@ -59,10 +74,24 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
     return plt
 
 
-def plot_phase_space(ds, xvar, yvar, **kwargs):
+def plot_phase_space(dsets, xvar, yvar, **kwargs):
+    """
+    Plot a 2D phase space plot.
     
-    if not ds.filetype == FileType.H5:
-        raise RuntimeError('Not a H5 dataset.')
+    Parameters
+    ----------
+    dsets   (list)  datasets
+    xvar    (str)   variable for x-axis
+    yvar    (str)   variable for y-axis
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    
+    for ds in dsets:
+        if not ds.filetype == FileType.H5:
+            raise RuntimeError("Dataset '" + ds.filename + "' is not a H5 file.")
     
     plt.figure()
     plt.xscale(kwargs.get('yscale', 'linear'))
@@ -74,14 +103,16 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
     if kwargs.get('ysci', False):
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
     
-    variables = {'xvar': xvar, 'yvar': yvar}
-    
-    for i in range(ds.size):
-        xdata, ydata, _ = ds.getData(i, **variables)
-        xunit, yunit, _ = ds.getUnit(i, **variables)
+    for ds in dsets:
+        xdata = ds.getData(xvar)
+        ydata = ds.getData(yvar)
         plt.plot(xdata, ydata, '.')
     
-    xlabel, ylabel, _ = ds.getLabel(xvar=xvar, yvar=yvar)
+    
+    xunit  = dsets[0].getUnit(xvar)
+    yunit  = dsets[0].getUnit(yvar)
+    xlabel = dsets[0].getLabel(xvar)
+    ylabel = dsets[0].getLabel(yvar)
     
     plt.xlabel(xlabel + ' [' + xunit + ']')
     plt.ylabel(ylabel + ' [' + yunit + ']')
