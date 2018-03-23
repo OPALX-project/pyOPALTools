@@ -76,7 +76,7 @@ class H5Dataset(DatasetBase):
             h5var = self.__variable_mapper[var]
         
         if h5var in self.__parser.getStepDatasets(step):
-            return self.__parser.getStepDataset(h5var, step)
+            return np.array(self.__parser.getStepDataset(h5var, step))
         elif h5var in self.__parser.getStepAttributes(step):
             data = []
             
@@ -91,7 +91,7 @@ class H5Dataset(DatasetBase):
             for i in range(self.__parser.getNSteps()):
                 data.append(self.__parser.getStepAttribute(h5var, i)[dim])
             
-            return data
+            return np.asarray(data)
         else:
             raise H5Error("'" + var + "' is not part of this step")
     

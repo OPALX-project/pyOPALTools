@@ -50,7 +50,7 @@ class StatDataset(DatasetBase):
         """
         if var in self.__variable_mapper:
             var = self.__variable_mapper[var]
-        return self.__parser.getDataOfVariable(var)
+        return np.asarray(self.__parser.getDataOfVariable(var))
     
     
     def getLabel(self, var):
