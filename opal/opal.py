@@ -2,7 +2,7 @@ import os
 from opal.datasets.DatasetBase import *
 from opal.datasets.H5Dataset import H5Dataset
 from opal.datasets.StatDataset import StatDataset
-#from timing.Timing import Timing
+from opal.datasets.TimeDataset import TimeDataset
 
 
 def load_dataset(directory, **kwargs):
@@ -39,12 +39,19 @@ def load_dataset(directory, **kwargs):
     print ( 'Start loading files ...\n' )
     datasets = []
     for fname in fnames:
-        print ( '    ' + fname )
+        print ( '    ' + fname + ' ... ', end='' )
         ftype = FileType.extensionToFileType(fname)
         if  ftype == FileType.H5:
             datasets.append(H5Dataset(directory, fname))
+            print ( 'matches H5 file type.' )
         elif ftype == FileType.STAT:
             datasets.append(StatDataset(directory, fname))
+            print ( 'matches stat file type.' )
+        elif ftype == FileType.TIMING:
+            datasets.append(TimeDataset(directory, fname))
+            print ( 'matches timing file type.' )
+        elif ftype == FileType.NONE:
+            print ( 'no appropriate file match.' )
     print ( '\nDone.\n' )
     
     return datasets

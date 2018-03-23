@@ -39,6 +39,9 @@ class FileType(IntEnum):
             return extension[ext]
         elif fname in file:
             return file[fname]
+        elif 'time' in fname.lower() or 'timing' in fname.lower():
+            # hopeful test for timing files
+            return cls.TIMING
         else:
             return cls.NONE
 

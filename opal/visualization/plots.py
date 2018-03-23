@@ -20,7 +20,7 @@ def plot_time(dsets, kind='pie', **kwargs):
     """
     
     
-    if not ds.filetype == FileType.TIMING:
+    if not dsets[0].filetype == FileType.TIMING:
         raise RuntimeError('Not a timing dataset.')
     
     tp = TimePlot()
