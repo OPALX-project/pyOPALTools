@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 import numpy as np
 from opal.datasets.DatasetBase import FileType
+from utilities.LatticeParser import LatticeParser
 
 def plot_time(dsets, kind='pie', **kwargs):
     """
@@ -147,5 +148,30 @@ def plot_density(dsets, xvar, yvar, **kwargs):
     
         plt.xlabel(xlabel + ' [' + xunit + ']')
         plt.ylabel(ylabel + ' [' + yunit + ']')
+    
+    return plt
+
+
+def plot_envelope(dsets, **kwargs):
+    """
+    Create an envelope plot.
+    
+    # TODO Philippe
+    
+    Parameters
+    ----------
+    dsets   (list)  datasets
+    lfile   (str)   lattice file (*.lattice) (optional)
+    """
+    
+    lfile = kwargs.get('lfile', '')
+    
+    if lfile:
+        # call lattice parser to get elements
+        pass
+    
+    plt.figure()
+    
+    
     
     return plt
