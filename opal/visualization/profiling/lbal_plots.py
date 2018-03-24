@@ -33,8 +33,8 @@ def plot_lbal_histogram(ds, **kwargs):
     nTotal = len(ds.getVariables())
     nCols = sum('processor' in var for var in ds.getVariables())
     
-    time_unit = ds.getUnit('t')
-    time = ds.getData('t')
+    time_unit = ds.getUnit('time')
+    time = ds.getData('time')
     
     nRows = len(time)
     
@@ -55,7 +55,7 @@ def plot_lbal_histogram(ds, **kwargs):
     # each row is a time stamp
     for r in range(0, nRows):
         stamp = np.empty([nCols,], dtype=float)
-        for c in range(colStart, colEnd+1):
+        for c in range(colStart, colEnd):
             cc = c - colStart
             stamp[cc] = float(ds.getData('processor-' + str(cc))[r])
         # total number of particles
@@ -81,8 +81,10 @@ def plot_lbal_histogram(ds, **kwargs):
             lab = '[' + common
             
         plt.plot(time, stamps[:, i], label=lab)
-        
-    plt.xlabel('t [' + time_unit + ']')
+    
+    
+    xlabel = ds.getLabel('time')
+    plt.xlabel(xlabel + ' [' + time_unit + ']')
     plt.xscale(xscale)
     
     plt.ylabel('#cores')
@@ -119,12 +121,12 @@ def plot_lbal_summary(ds, **kwargs):
     nCols = sum('processor' in var for var in ds.getVariables())
     
     
-    time_unit = ds.getUnit('t')
-    time = ds.getData('t')
+    time_unit = ds.getUnit('time')
+    time = ds.getData('time')
     
     nRows = len(time)
     
-    # iterate through all steps and do a boxplot
+    # iterate through all steps
     colStart = nTotal - nCols
     colEnd   = nCols + 1
     
@@ -137,9 +139,9 @@ def plot_lbal_summary(ds, **kwargs):
     mean    = []
     for r in range(0, nRows):
         stamp = np.empty([nCols,], dtype=float)
-        for c in range(colStart, colEnd+1):
+        for c in range(colStart, colEnd):
             cc = c - colStart
-            stamp[cc] = float(ds.getData('processor-' + str(cc))[r])
+            stamp[cc] = ds.getData('processor-' + str(cc))[r]
         minimum.append(min(stamp))
         mean.append(np.mean(stamp))
         maximum.append(max(stamp))
@@ -148,10 +150,11 @@ def plot_lbal_summary(ds, **kwargs):
     plt.plot(time, maximum, label='maximum')
     plt.plot(time, mean, label='mean')
     
-    plt.xlabel('time [' + time_unit + ']')
+    xlabel = ds.getLabel('time')
+    plt.xlabel(xlabel + ' [' + time_unit + ']')
     plt.xscale(xscale)
     
-    plt.ylabel('#particles [ ]')
+    plt.ylabel('#particles')
     plt.yscale(yscale)
     
     plt.legend()
@@ -184,8 +187,8 @@ def plot_lbal_boxplot(ds, **kwargs):
     nCols = sum('processor' in var for var in ds.getVariables())
     
     
-    time_unit = ds.getUnit('t')
-    time = ds.getData('t')
+    time_unit = ds.getUnit('time')
+    time = ds.getData('time')
     
     nRows = len(time)
     
@@ -200,7 +203,7 @@ def plot_lbal_boxplot(ds, **kwargs):
     stamps = []
     for r in range(0, nRows):
         stamp = np.empty([nCols,], dtype=float)
-        for c in range(colStart, colEnd+1):
+        for c in range(colStart, colEnd):
             cc = c - colStart
             stamp[cc] = float(ds.getData('processor-' + str(cc))[r])
         stamps.append(stamp)
@@ -216,10 +219,11 @@ def plot_lbal_boxplot(ds, **kwargs):
     
     plt.boxplot(stamps, 0, '', positions=time)
     
-    plt.xlabel('time [' + time_unit + ']')
+    xlabel = ds.getLabel('time')
+    plt.xlabel(xlabel + ' [' + time_unit + ']')
     plt.xscale(xscale)
     
-    plt.ylabel('#particles [ ]')
+    plt.ylabel('#particles')
     plt.yscale(yscale)
     
     plt.grid(grid, which='both')
