@@ -7,6 +7,7 @@ from utilities.LatticeParser import LatticeParser
 from opal.visualization.timing.plots import *
 from opal.visualization.profiling.memory_plots import *
 from opal.visualization.profiling.lbal_plots import *
+from opal.visualization.grids.plots import *
 
 
 def plot_orbits(dsets, **kwargs):

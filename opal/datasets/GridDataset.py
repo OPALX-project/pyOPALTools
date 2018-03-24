@@ -14,9 +14,21 @@ class GridDataset(DatasetBase):
         
         Members
         -------
-        __parser        (SDDSParser)     actual data holder
+        __parser            (SDDSParser)    actual data holder
+        __variable_mapper   (dict)          map user input variable
+                                            name to file variable name
+        __unit_label_mapper ([])            map units of variables
+                                            to plotting style
         """
         self.__parser = SDDSParser()
+        
+        self.__variable_mapper = {
+            'time':         't'
+        }
+        
+        self.__unit_label_mapper = [
+            'time'
+        ]
         
         full_path = os.path.join(directory, fname)
         if not os.path.exists(full_path):
@@ -39,7 +51,15 @@ class GridDataset(DatasetBase):
         -------
         an array of the data
         """
-        return np.asarray(self.__parser.getDataOfVariable(var))
+        gridvar = var
+        
+        if var in self.__variable_mapper:
+            gridvar = self.__variable_mapper[var]
+        
+        if not gridvar in self.__parser.getVariables():
+            raise RuntimeError("The variable '" + var + "' is not in dataset.")
+        return np.asarray(self.__parser.getDataOfVariable(gridvar))
+    
     
     def getLabel(self, var):
         """
@@ -53,6 +73,14 @@ class GridDataset(DatasetBase):
         -------
         appropriate name plotting ready
         """
+        gridvar = var
+        
+        if var in self.__variable_mapper:
+            gridvar = self.__variable_mapper[var]
+        
+        if not gridvar in self.__parser.getVariables():
+            raise RuntimeError("The variable '" + var + "' is not in dataset.")
+        
         return var
     
     
@@ -68,4 +96,49 @@ class GridDataset(DatasetBase):
         -------
         appropriate unit in math mode for plotting 
         """
-        return r'$' + self.__parser.getUnitOfVariable(var) + '$'
+        gridvar = var
+        
+        if var in self.__variable_mapper:
+            gridvar = self.__variable_mapper[var]
+        
+        if not gridvar in self.__parser.getVariables():
+            raise RuntimeError("The variable '" + var + "' is not in dataset.")
+        
+        unit = self.__parser.getUnitOfVariable(gridvar)
+        
+        if var in self.__unit_label_mapper:
+            unit = r'\mathrm{' + unit + '}'
+        
+        return r'$' + unit + '$'
+    
+    
+    def getNumLevels(self):
+        """
+        Obtain the number of levels.
+        
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        an integer
+        """
+        variables = self.__parser.getVariables()
+        return sum('level-' in var for var in variables)
+    
+    
+    def getNumCores(self):
+        """
+        Obtain the number of cores.
+        
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        an integer
+        """
+        variables = self.__parser.getVariables()
+        return sum('processor-' in var for var in variables)
