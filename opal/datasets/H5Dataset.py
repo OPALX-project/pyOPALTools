@@ -26,7 +26,7 @@ class H5Dataset(DatasetBase):
         
         self.__parser = H5Parser()
         
-        full_path = os.join.path(directory, fname)
+        full_path = os.path.join(directory, fname)
         if not os.path.exists(full_path):
             raise RuntimeError("File '" + full_path + "' does not exist.")
         

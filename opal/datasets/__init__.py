@@ -4,3 +4,5 @@ import opal.datasets.StatDataset
 import opal.datasets.TimeDataset
 import opal.datasets.LBalDataset
 import opal.datasets.MemoryDataset
+import opal.datasets.GridDataset
+import opal.datasets.SolverDataset

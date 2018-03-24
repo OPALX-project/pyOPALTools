@@ -2,11 +2,11 @@
 # Date:     March 2018
 
 import os
-from utilities.SDDSParser import SDDSParser
+from utilities.TrackOrbitParser import TrackOrbitParser
 from opal.datasets.DatasetBase import *
 import numpy as np
 
-class MemoryDataset(DatasetBase):
+class TrackOrbitDataset(DatasetBase):
     
     def __init__(self, directory, fname):
         """
@@ -14,9 +14,9 @@ class MemoryDataset(DatasetBase):
         
         Members
         -------
-        __parser        (SDDSParser)     actual data holder
+        __parser        (TrackOrbitParser)  actual data holder
         """
-        self.__parser = SDDSParser()
+        self.__parser = TrackOrbitParser()
         
         full_path = os.path.join(directory, fname)
         if not os.path.exists(full_path):
@@ -24,7 +24,7 @@ class MemoryDataset(DatasetBase):
         
         self.__parser.parse(full_path)
         
-        super(MemoryDataset, self).__init__(directory, fname)
+        super(TrackOrbitDataset, self).__init__(directory, fname)
     
     
     def getData(self, var, **kwargs):
@@ -37,7 +37,7 @@ class MemoryDataset(DatasetBase):
         
         Returns
         -------
-        an array of the data
+        an array of the dataself
         """
         return np.asarray(self.__parser.getDataOfVariable(var))
     

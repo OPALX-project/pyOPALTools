@@ -18,7 +18,7 @@ class LBalDataset(DatasetBase):
         """
         self.__parser = SDDSParser()
         
-        full_path = os.join.path(directory, fname)
+        full_path = os.path.join(directory, fname)
         if not os.path.exists(full_path):
             raise RuntimeError("File '" + full_path + "' does not exist.")
         

@@ -6,15 +6,16 @@ from enum import IntEnum, unique
 
 @unique
 class FileType(IntEnum):
-    H5     = 0,
-    STAT   = 1,
-    MEM    = 2,
-    LBAL   = 3,
-    OUTPUT = 4,
-    TIMING = 5,
-    GRID   = 6,
-    SOLVER = 7,
-    NONE   = 8,
+    H5          = 0,
+    STAT        = 1,
+    MEM         = 2,
+    LBAL        = 3,
+    OUTPUT      = 4,
+    TIMING      = 5,
+    GRID        = 6,
+    SOLVER      = 7,
+    TRACK_ORBIT = 8,
+    NONE        = 9
     
     @classmethod
     def extensionToFileType(cls, fname):
@@ -30,7 +31,8 @@ class FileType(IntEnum):
         }
         
         file = {
-            'timing.dat': cls.TIMING
+            'timing.dat':       cls.TIMING,
+            '-trackOrbit.dat':  cls.TRACK_ORBIT
         }
         
         _ , ext = os.path.splitext(fname)
@@ -42,6 +44,8 @@ class FileType(IntEnum):
         elif 'time' in fname.lower() or 'timing' in fname.lower():
             # hopeful test for timing files
             return cls.TIMING
+        elif '-trackOrbit.dat' in fname:
+            return cls.TRACK_ORBIT
         else:
             return cls.NONE
 

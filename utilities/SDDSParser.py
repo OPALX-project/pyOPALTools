@@ -1,3 +1,6 @@
+# Author:   Matthias Frey
+# Date:     March 2018
+
 import numpy as np
 import re,os,sys
 

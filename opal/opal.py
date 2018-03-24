@@ -5,6 +5,9 @@ from opal.datasets.StatDataset import StatDataset
 from opal.datasets.TimeDataset import TimeDataset
 from opal.datasets.MemoryDataset import MemoryDataset
 from opal.datasets.LBalDataset import LBalDataset
+from opal.datasets.GridDataset import GridDataset
+from opal.datasets.SolverDataset import SolverDataset
+from opal.datasets.TrackOrbitDataset import TrackOrbitDataset
 
 
 def load_dataset(directory, **kwargs):
@@ -69,6 +72,15 @@ def load_dataset(directory, **kwargs):
         elif ftype == FileType.LBAL:
             datasets.append(LBalDataset(directory, fname))
             print ( 'matches load balancing file type.' )
+        elif ftype == FileType.GRID:
+            datasets.append(GridDataset(directory, fname))
+            print ( 'matches grid file type.' )
+        elif ftype == FileType.SOLVER:
+            datasets.append(SolverDataset(directory, fname))
+            print ( 'matches solver file type.' )
+        elif ftype == FileType.TRACK_ORBIT:
+            datasets.append(TrackOrbitDataset(directory, fname))
+            print ( 'matches track orbit file type.' )
         elif ftype == FileType.NONE:
             print ( 'no appropriate file match.' )
     print ( '\nDone.\n' )
