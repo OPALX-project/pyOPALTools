@@ -3,9 +3,22 @@ from opal.datasets.DatasetBase import *
 from opal.datasets.H5Dataset import H5Dataset
 from opal.datasets.StatDataset import StatDataset
 from opal.datasets.TimeDataset import TimeDataset
+from opal.datasets.MemoryDataset import MemoryDataset
+from opal.datasets.LBalDataset import LBalDataset
 
 
 def load_dataset(directory, **kwargs):
+    """
+    Load any file(s) produced by an OPAL simulation.
+    If neither ftype nor fname is specified it tries to
+    read in a *.stat file.
+    
+    Parameters
+    ----------
+    directory       (str)       root directory of the OPAL simulation
+    ftype           (FileType)  type of file to read in (optional)
+    fname           (str)       file to read in (optional)
+    """
     
     if not os.path.exists(directory):
         raise RuntimeError("No such directory: '" + directory + "'.")
@@ -50,6 +63,12 @@ def load_dataset(directory, **kwargs):
         elif ftype == FileType.TIMING:
             datasets.append(TimeDataset(directory, fname))
             print ( 'matches timing file type.' )
+        elif ftype == FileType.MEM:
+            datasets.append(MemoryDataset(directory, fname))
+            print ( 'matches memory file type.' )
+        elif ftype == FileType.LBAL:
+            datasets.append(LBalDataset(directory, fname))
+            print ( 'matches load balancing file type.' )
         elif ftype == FileType.NONE:
             print ( 'no appropriate file match.' )
     print ( '\nDone.\n' )
