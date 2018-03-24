@@ -18,6 +18,8 @@ class H5Dataset(DatasetBase):
         __variable_mapper   (dict)          map user input variable
                                             name to file variable name
         __label_mapper      (dict)          map user input variable
+        __unit_label_mapper ([])            map units of variables
+                                            to plotting style
                                             name to plot label name
         __direction         (dict)          used to find out the
                                             direction in case of
@@ -52,6 +54,16 @@ class H5Dataset(DatasetBase):
             'rms_py':   r'$\sigma_{py}$',
             'rms_pz':   r'$\sigma_{pz}$'
         }
+        
+        self.__unit_label_mapper = [
+            'rms_x',
+            'rms_y',
+            'rms_z',
+            'x',
+            'y',
+            'z',
+            'time'
+        ]
         
         self.__direction = {
             'x':    0,
@@ -130,10 +142,16 @@ class H5Dataset(DatasetBase):
         -------
         appropriate unit in math mode for plotting 
         """
-        if var in self.__variable_mapper:
-            var = self.__variable_mapper[var]
+        h5var = var
         
-        unit = self.__parser.getGlobalAttribute(var + 'Unit')
+        if var in self.__variable_mapper:
+            h5var = self.__variable_mapper[var]
+        
+        unit = self.__parser.getGlobalAttribute(h5var + 'Unit')
         unit = unit.replace('#', '\\')
+        
+        if var in self.__unit_label_mapper:
+            unit = r'\mathrm{' + unit + '}'
+        
         unit = r'$' + unit + '$'
         return unit

@@ -17,6 +17,8 @@ class StatDataset(DatasetBase):
                                             name to file variable name
         __label_mapper      (dict)          map user input variable
                                             name to plot label name
+        __unit_label_mapper ([])            map units of variables
+                                            to plotting style
         """
         self.__parser = SDDSParser()
         
@@ -38,6 +40,13 @@ class StatDataset(DatasetBase):
             'rms_py':   r'$\sigma_{py}$',
             'rms_pz':   r'$\sigma_{pz}$'
         }
+        
+        self.__unit_label_mapper = [
+            'rms_x',
+            'rms_y',
+            'rms_z',
+            'time'
+        ]
         
         super(StatDataset, self).__init__(directory, fname)
     
@@ -87,7 +96,13 @@ class StatDataset(DatasetBase):
         -------
         appropriate unit in math mode for plotting 
         """
+        statvar = var
+        
         if var in self.__variable_mapper:
-            var = self.__variable_mapper[var]
-        unit = r'$' + self.__parser.getUnitOfVariable(var) + '$'
-        return unit
+            statvar = self.__variable_mapper[var]
+        unit = self.__parser.getUnitOfVariable(statvar)
+        
+        if var in self.__unit_label_mapper:
+            unit = r'\mathrm{' + unit + '}'
+        
+        return r'$' + unit + '$'

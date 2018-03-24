@@ -14,9 +14,18 @@ class TrackOrbitDataset(DatasetBase):
         
         Members
         -------
-        __parser        (TrackOrbitParser)  actual data holder
+        __parser            (TrackOrbitParser)  actual data holder
+        __unit_label_mapper ([])                map units of variables
+                                                to plotting style
         """
         self.__parser = TrackOrbitParser()
+        
+        self.__unit_label_mapper = [
+            'x',
+            'y',
+            'z'
+        ]
+        
         
         full_path = os.path.join(directory, fname)
         if not os.path.exists(full_path):
@@ -71,4 +80,12 @@ class TrackOrbitDataset(DatasetBase):
         -------
         appropriate unit in math mode for plotting 
         """
-        return r'$' + self.__parser.getUnitOfVariable(var) + '$'
+        
+        if not self.__parser.isVariable(var):
+            raise RuntimeError("No variable '" + var + "' in dataset.")
+        
+        unit = self.__parser.getUnitOfVariable(var)
+        if var in self.__unit_label_mapper:
+            unit = r'\mathrm{' + unit + '}'
+        
+        return r'$' + unit + '$'

@@ -69,3 +69,18 @@ class LBalDataset(DatasetBase):
         appropriate unit in math mode for plotting 
         """
         return r'$' + self.__parser.getUnitOfVariable(var) + '$'
+    
+    
+    def getVariables(self):
+        """
+        Obtain all variables within file.
+        
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        list of strings
+        """
+        return self.__parser.getVariables()
