@@ -5,6 +5,36 @@ import numpy as np
 from opal.datasets.DatasetBase import FileType
 from utilities.LatticeParser import LatticeParser
 
+
+def plot_orbits(dsets, **kwargs):
+    
+    for ds in dsets:
+        if not ds.filetype == FileType.TRACK_ORBIT:
+            raise RuntimeError(ds.filename + ' is not a track orbit dataset.')
+    
+    for ds in dsets:
+        
+        xdata = ds.getData('x')
+        ydata = ds.getData('y')
+        ids   = ds.getData('ID')
+        
+        xdata = xdata[np.where(ids == 0)]
+        ydata = ydata[np.where(ids == 1)]
+        
+        plt.plot(xdata, ydata)
+        
+    xlabel = ds.getLabel('x')
+    xunit  = ds.getUnit('x')
+    
+    ylabel = ds.getLabel('y')
+    yunit  = ds.getUnit('y')
+    
+    plt.xlabel(xlabel + ' [' + xunit + ']')
+    plt.ylabel(ylabel + ' [' + yunit + ']')
+    
+    return plt
+
+
 def plot_time(dsets, kind='pie', **kwargs):
     """
     Do timing plots.
