@@ -53,7 +53,10 @@ class TrackOrbitDataset(DatasetBase):
         -------
         appropriate name plotting ready
         """
-        return var
+        if self.__parser.isVariable(var):
+            return var
+        else:
+            raise RuntimeError("No variable '" + var + "' in dataset.")
     
     
     def getUnit(self, var):
