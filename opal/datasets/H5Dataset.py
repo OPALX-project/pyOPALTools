@@ -1,6 +1,7 @@
 # Author:   Matthias Frey
 # Date:     March 2018
 
+import os
 from utilities.H5Parser import H5Parser
 import numpy as np
 from opal.datasets.DatasetBase import *
@@ -12,7 +13,7 @@ class H5Dataset(DatasetBase):
         Constructor.
         
         Members
-        ----------
+        -------
         __parser            (H5Parser)      actual data holder
         __variable_mapper   (dict)          map user input variable
                                             name to file variable name
@@ -24,7 +25,12 @@ class H5Dataset(DatasetBase):
         """
         
         self.__parser = H5Parser()
-        self.__parser.parse(directory + fname)
+        
+        full_path = os.join.path(directory, fname)
+        if not os.path.exists(full_path):
+            raise RuntimeError("File '" + full_path + "' does not exist.")
+        
+        self.__parser.parse(full_path)
         
         self.__variable_mapper = {
             'rms_x':    'RMSX',
@@ -66,7 +72,7 @@ class H5Dataset(DatasetBase):
         
         Returns
         -------
-        a list of the data (n, dim)
+        an array of the data (n, dim)
         """
         
         step = kwargs.get('step', 0)
