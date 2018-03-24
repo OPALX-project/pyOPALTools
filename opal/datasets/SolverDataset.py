@@ -14,9 +14,36 @@ class SolverDataset(DatasetBase):
         
         Members
         -------
-        __parser        (SDDSParser)     actual data holder
+        __parser            (SDDSParser)    actual data holder
+        __variable_mapper   (dict)          map user input variable
+                                            name to file variable name
+        __label_mapper      (dict)          map user input variable
+                                            name to plot label name
+        __unit_label_mapper ([])            map units of variables
+                                            to plotting style
         """
         self.__parser = SDDSParser()
+        
+        self.__variable_mapper = {
+            'time':         't',
+            'bottom':       'bottom_iter',
+            'mg':           'mg_iter',
+            'linf':         'LINF',
+            'l1':           'L1',
+            'l2':           'L2'
+        }
+        
+        self.__label_mapper  = {
+            'linf':     r'max. $l_\infty$ residual error',
+            'l1':       r'max. $l_1$ residual error',
+            'l2':       r'max. $l_2$ residual error',
+            'bottom':   r'#iterations of bottom solver',
+            'mg':       r'#iterations of MG'
+        }
+        
+        self.__unit_label_mapper = [
+            'time'
+        ]
         
         full_path = os.path.join(directory, fname)
         if not os.path.exists(full_path):
@@ -39,7 +66,14 @@ class SolverDataset(DatasetBase):
         -------
         an array of the data
         """
-        return np.asarray(self.__parser.getDataOfVariable(var))
+        solvervar = var
+        
+        if var in self.__variable_mapper:
+            solvervar = self.__variable_mapper[var]
+        
+        if not solvervar in self.__parser.getVariables():
+            raise RuntimeError("The variable '" + var + "' is not in dataset.")
+        return np.asarray(self.__parser.getDataOfVariable(solvervar))
     
     def getLabel(self, var):
         """
@@ -53,6 +87,17 @@ class SolverDataset(DatasetBase):
         -------
         appropriate name plotting ready
         """
+        solvervar = var
+        
+        if var in self.__variable_mapper:
+            solvervar = self.__variable_mapper[var]
+        
+        if not solvervar in self.__parser.getVariables():
+            raise RuntimeError("The variable '" + var + "' is not in dataset.")
+        
+        if var in self.__label_mapper:
+            var = self.__label_mapper[var]
+        
         return var
     
     
@@ -68,4 +113,17 @@ class SolverDataset(DatasetBase):
         -------
         appropriate unit in math mode for plotting 
         """
-        return r'$' + self.__parser.getUnitOfVariable(var) + '$'
+        solvervar = var
+        
+        if var in self.__variable_mapper:
+            solvervar = self.__variable_mapper[var]
+        
+        if not solvervar in self.__parser.getVariables():
+            raise RuntimeError("The variable '" + var + "' is not in dataset.")
+        
+        unit = self.__parser.getUnitOfVariable(solvervar)
+        
+        if var in self.__unit_label_mapper:
+            unit = r'\mathrm{' + unit + '}'
+        
+        return r'$' + unit + '$'
