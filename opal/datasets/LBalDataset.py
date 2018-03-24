@@ -15,8 +15,22 @@ class LBalDataset(DatasetBase):
         Members
         -------
         __parser        (SDDSParser)     actual data holder
+        __variable_mapper   (dict)          map user input variable
+                                            name to file variable name
+        __unit_label_mapper ([])            map units of variables
+                                            to plotting style
         """
         self.__parser = SDDSParser()
+        
+        
+        self.__variable_mapper = {
+            'time':         't'
+        }
+        
+        self.__unit_label_mapper = [
+            'time'
+        ]
+        
         
         full_path = os.path.join(directory, fname)
         if not os.path.exists(full_path):
@@ -39,7 +53,15 @@ class LBalDataset(DatasetBase):
         -------
         an array of the data
         """
-        return np.asarray(self.__parser.getDataOfVariable(var))
+        lbalvar = var
+        
+        if var in self.__variable_mapper:
+            lbalvar = self.__variable_mapper[var]
+        
+        if not lbalvar in self.__parser.getVariables():
+            raise RuntimeError("The variable '" + var + "' is not in dataset.")
+        return np.asarray(self.__parser.getDataOfVariable(lbalvar))
+    
     
     def getLabel(self, var):
         """
@@ -53,6 +75,14 @@ class LBalDataset(DatasetBase):
         -------
         appropriate name plotting ready
         """
+        lbalvar = var
+        
+        if var in self.__variable_mapper:
+            lbalvar = self.__variable_mapper[var]
+        
+        if not lbalvar in self.__parser.getVariables():
+            raise RuntimeError("The variable '" + var + "' is not in dataset.")
+        
         return var
     
     
@@ -68,7 +98,20 @@ class LBalDataset(DatasetBase):
         -------
         appropriate unit in math mode for plotting 
         """
-        return r'$' + self.__parser.getUnitOfVariable(var) + '$'
+        lbalvar = var
+        
+        if var in self.__variable_mapper:
+            lbalvar = self.__variable_mapper[var]
+        
+        if not lbalvar in self.__parser.getVariables():
+            raise RuntimeError("The variable '" + var + "' is not in dataset.")
+        
+        unit = self.__parser.getUnitOfVariable(lbalvar)
+        
+        if var in self.__unit_label_mapper:
+            unit = r'\mathrm{' + unit + '}'
+        
+        return r'$' + unit + '$'
     
     
     def getVariables(self):
