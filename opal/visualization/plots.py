@@ -158,59 +158,55 @@ def plot_density(ds, xvar, yvar, **kwargs):
     return plt
 
 
-def plot_envelope(ds, yvar='rms', xvar='s', **kwargs):
+def plot_envelope(ds, xvar='s', **kwargs):
     """
     Create an envelope plot.
-    
-    # TODO Philippe
     
     Parameters
     ----------
     ds      (DatasetBase)   datasets
     lfile   (str)           lattice file (*.lattice) (optional)
+    xvar    (str)           x-axis variable
+    yvars   ([])            list of variables for y-axis
+                            (2 entries expected)
     """
+    ymax = kwargs.get('ymax', 0.03)
     
     lfile = kwargs.get('lfile', '')
     
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, dpi=150)
     fig.set_size_inches(9,4)
-     
+    
     if lfile:
-        Lattice=LatticeParser()
-        Lattice.plotLattice(lfile, fig, ax1, ax2)
+        lattice = LatticeParser()
+        lattice.plot(lfile, fig, ax1, ax2)
     
-    yvarvec=[yvar+"_x", yvar+"_y"]
-    
-
     xdata =  ds.getData(xvar)
-    y1data = ds.getData(yvarvec[1])
-    y2data = ds.getData(yvarvec[0])
-            
+    y1data = ds.getData('rms_x')
+    y2data = ds.getData('rms_y')
+    
     xunit = ds.getUnit(xvar)
-    yunit = ds.getUnit(yvarvec[0])
-            
-    ax1.plot(xdata, y1data,label=' [' + yunit + ']')
+    yunit = ds.getUnit('rms_x')
+    
+    ax1.plot(xdata, y1data, label=' [' + yunit + ']')
     ax2.plot(xdata, y2data)
     
     for ax in [ax1,ax2]:
         ax.set_xlabel(xvar + ' [' + xunit + ']')
-        
+    
     ax1.set_ylabel(yvar+"_x" + ' [' + yunit + ']')
     ax2.set_ylabel(yvar+"_y" + ' [' + yunit + ']')
    
     ax2 = plt.gca()
     plt.gca().invert_yaxis()
-           
-        
-    ax1.set_ylim(ymin=0,ymax=0.03)
-    ax2.set_ylim(ymax=0,ymin=0.03)
+    
+    ax1.set_ylim(ymin=0, ymax=ymax)
+    ax2.set_ylim(ymax=0, ymin=ymax)
     
     ax2.xaxis.set_label_position('top') 
     ax2.xaxis.set_ticks_position('top')
     
     fig.subplots_adjust(hspace = .001)
     fig.legend(loc=4)
-    
-    plt.figure()
     
     return plt
