@@ -97,6 +97,9 @@ def plot_phase_space(dsets, xvar, yvar, **kwargs):
     a matplotlib.pyplot handle
     """
     
+    step        = kwargs.get('step', 0)
+    energy_bin  = kwargs.get('bin', -1)
+    
     for ds in dsets:
         if not ds.filetype == FileType.H5:
             raise RuntimeError("Dataset '" + ds.filename + "' is not a H5 file.")
@@ -112,10 +115,16 @@ def plot_phase_space(dsets, xvar, yvar, **kwargs):
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
     
     for ds in dsets:
-        xdata = ds.getData(xvar)
-        ydata = ds.getData(yvar)
+        xdata = ds.getData(xvar, step=step)
+        ydata = ds.getData(yvar, step=step)
+        
         plt.scatter(xdata, ydata, marker='.', s=1)
-    
+        
+        if energy_bin > 0 and ds.filetype == FileType.H5:
+            bins = ds.getData('bin', step=step)        
+            xdata = xdata[np.where(bins == energy_bin)]
+            ydata = ydata[np.where(bins == energy_bin)]
+            plt.scatter(xdata, ydata, marker='.', s=1, c='r')
     
     xunit  = dsets[0].getUnit(xvar)
     yunit  = dsets[0].getUnit(yvar)
