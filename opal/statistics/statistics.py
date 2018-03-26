@@ -18,13 +18,14 @@ def moment(ds, var, k, **kwargs):
     -----
     https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html#scipy.stats.moment
     """
+    step = kwargs.get('step', 0)
     
-    data = ds.getData(var)
+    data = ds.getData(var, step=step)
     
     energy_bin = kwargs.get('bin', -1)
     if energy_bin > 0 and ds.filetype == FileType.H5:
-        bins = ds.getData('bin')
-        data = data[np.where(bins > energy_bin)]
+        bins = ds.getData('bin', step=step)
+        data = data[np.where(bins == energy_bin)]
     
     if data.size < 1:
         raise RuntimeError('Empty dataset.')
@@ -42,13 +43,14 @@ def mean(ds, var, **kwargs):
     var     (str)           the variable to compute mean
     bin     (int)           energy bin for which to compute (optional)
     """
+    step = kwargs.get('step', 0)
     
-    data = ds.getData(var)
+    data = ds.getData(var, step=step)
     
     energy_bin = kwargs.get('bin', -1)
     if energy_bin > 0 and ds.filetype == FileType.H5:
-        bins = ds.getData('bin')
-        data = data[np.where(bins > energy_bin)]
+        bins = ds.getData('bin', step=step)
+        data = data[np.where(bins == energy_bin)]
     
     if data.size < 1:
         raise RuntimeError('Empty dataset.')
@@ -69,12 +71,14 @@ def skew(ds, var, **kwargs):
     var     (str)           the variable
     bin     (int)           energy bin for which to compute (optional)
     """
-    data = ds.getData(var)
+    step = kwargs.get('step', 0)
+    
+    data = ds.getData(var, step=step)
     
     energy_bin = kwargs.get('bin', -1)
     if energy_bin > 0 and ds.filetype == FileType.H5:
-        bins = ds.getData('bin')
-        data = data[np.where(bins > energy_bin)]
+        bins = ds.getData('bin', step=step)
+        data = data[np.where(bins == energy_bin)]
     
     if data.size < 1:
         raise RuntimeError('Empty dataset.')
@@ -99,12 +103,14 @@ def kurtosis(ds, var, **kwargs):
     var     (str)           the variable
     bin     (int)           energy bin for which to compute (optional)
     """
-    data = ds.getData(var)
+    step = kwargs.get('step', 0)
+    
+    data = ds.getData(var, step=step)
     
     energy_bin = kwargs.get('bin', -1)
-    if energy_bin > 0 and ds.ftype == FileType.H5:
-        bins = ds.getData('bin')
-        data = data[np.where(bins > energy_bin)]
+    if energy_bin > 0 and ds.filetype == FileType.H5:
+        bins = ds.getData('bin', step=step)
+        data = data[np.where(bins == energy_bin)]
     
     if data.size < 1:
         raise RuntimeError('Empty dataset.')

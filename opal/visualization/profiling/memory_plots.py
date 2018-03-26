@@ -6,14 +6,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import warnings
 
-def plot_total_memory(dsets, **kwargs):
+def plot_total_memory(ds, **kwargs):
     """
     Plot the total memory consumption vs. simulation time.
     
     """
-    for ds in dsets:
-        if not ds.filetype == FileType.MEM:
-            raise RuntimeError(ds.filename + ' is not a memory dataset.')
+    if not ds.filetype == FileType.MEM:
+        raise RuntimeError(ds.filename + ' is not a memory dataset.')
     
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
@@ -23,10 +22,9 @@ def plot_total_memory(dsets, **kwargs):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     
-    for ds in dsets:
-        memory_usage = ds.getData('memory')
-        time = ds.getData('t')
-        plt.plot(time, memory_usage)
+    memory_usage = ds.getData('memory')
+    time = ds.getData('t')
+    plt.plot(time, memory_usage)
     
     ax.grid(grid, which='both')
     
