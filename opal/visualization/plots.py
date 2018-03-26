@@ -157,7 +157,7 @@ def plot_density(dsets, xvar, yvar, **kwargs):
     return plt
 
 
-def plot_envelope(dsets, **kwargs):
+def plot_envelope(dsets, yvar='rms', xvar='s' **kwargs):
     """
     Create an envelope plot.
     
@@ -171,9 +171,54 @@ def plot_envelope(dsets, **kwargs):
     
     lfile = kwargs.get('lfile', '')
     
+    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, dpi=150)
+    fig.set_size_inches(9,4)
+    
+    
+    
     if lfile:
-        # call lattice parser to get elements
-        pass
+        Lattice=LatticeParaser()
+        Lattice.plotLattice(lfile, fig, ax1, ax2)
+    
+    yvarvec=[yvar+"_x", yvar+"_y"]
+    
+    x=[]
+    y1=[]
+    y2=[]
+    xunit=[]
+    yunit=[]
+    
+    for track in fns:
+        x.append(fns[track].getDataOfVariable(xvar))
+        y1.append(fns[track].getDataOfVariable(yvarvec[1]))
+        y2.append(fns[track].getDataOfVariable(yvarvec[0]))
+        
+        xunit.append(fns[track].getUnitOfVariable(xvar))
+        yunit.append(fns[track].getUnitOfVariable(yvar+"_x"))   
+    
+    for ax in [ax1,ax2]:
+        ax.set_xlabel(xvar + ' [' + xunit[0] + ']')
+        
+    ax1.set_ylabel(yvar+"_x" + ' [' + yunit[0] + ']')
+    ax2.set_ylabel(yvar+"_y" + ' [' + yunit[0] + ']')
+   
+    ax2 = plt.gca()
+    plt.gca().invert_yaxis()
+    
+    
+    for i, track in enumerate(fns):
+        ax1.plot(x[i], y1[i],label=track+ ' [' + yunit[0] + ']')
+        ax2.plot(x[i], y2[i])   
+        
+    ax1.set_ylim(ymin=0,ymax=0.03)
+    ax2.set_ylim(ymax=0,ymin=0.03)
+    
+    ax2.xaxis.set_label_position('top') 
+    ax2.xaxis.set_ticks_position('top')
+    
+    fig.subplots_adjust(hspace = .001)
+    fig.suptitle('Comparison OPAL Algorithms')
+    fig.legend(loc=4)
     
     plt.figure()
     
