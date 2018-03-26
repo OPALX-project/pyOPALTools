@@ -11,24 +11,21 @@ from opal.visualization.grids.plots import *
 from opal.visualization.solver.plots import *
 
 
-def plot_orbits(dsets, **kwargs):
+def plot_orbits(ds, **kwargs):
     
-    for ds in dsets:
-        if not ds.filetype == FileType.TRACK_ORBIT:
-            raise RuntimeError(ds.filename + ' is not a track orbit dataset.')
+    if not ds.filetype == FileType.TRACK_ORBIT:
+        raise RuntimeError(ds.filename + ' is not a track orbit dataset.')
     
     pid = kwargs.get('id', 0)
     
-    for ds in dsets:
+    xdata = ds.getData('x')
+    ydata = ds.getData('y')
+    ids   = ds.getData('ID')
         
-        xdata = ds.getData('x')
-        ydata = ds.getData('y')
-        ids   = ds.getData('ID')
+    xdata = xdata[np.where(ids == pid)]
+    ydata = ydata[np.where(ids == pid)]
         
-        xdata = xdata[np.where(ids == pid)]
-        ydata = ydata[np.where(ids == pid)]
-        
-        plt.plot(xdata, ydata)
+    plt.plot(xdata, ydata)
         
     xlabel = ds.getLabel('x')
     xunit  = ds.getUnit('x')
@@ -42,15 +39,15 @@ def plot_orbits(dsets, **kwargs):
     return plt
 
 
-def plot_profile1D(dsets, xvar, yvar, **kwargs):
+def plot_profile1D(ds, xvar, yvar, **kwargs):
     """
     Plot a 1D profile.
     
     Parameters
     ----------
-    dsets   (list)  datasets
-    xvar    (str)   variable for x-axis
-    yvar    (str)   variable for y-axis
+    ds      (DatasetBase)   datasets
+    xvar    (str)           variable for x-axis
+    yvar    (str)           variable for y-axis
     
     Returns
     -------
@@ -66,15 +63,14 @@ def plot_profile1D(dsets, xvar, yvar, **kwargs):
     if kwargs.get('ysci', False):
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
     
-    for ds in dsets:
-        xdata = ds.getData(xvar)
-        ydata = ds.getData(yvar)
-        plt.plot(xdata, ydata)
+    xdata = ds.getData(xvar)
+    ydata = ds.getData(yvar)
+    plt.plot(xdata, ydata)
     
-    xunit  = dsets[0].getUnit(xvar)
-    yunit  = dsets[0].getUnit(yvar)
-    xlabel = dsets[0].getLabel(xvar)
-    ylabel = dsets[0].getLabel(yvar)
+    xunit  = ds.getUnit(xvar)
+    yunit  = ds.getUnit(yvar)
+    xlabel = ds.getLabel(xvar)
+    ylabel = ds.getLabel(yvar)
     
     plt.xlabel(xlabel + ' [' + xunit + ']')
     plt.ylabel(ylabel + ' [' + yunit + ']')
@@ -82,15 +78,15 @@ def plot_profile1D(dsets, xvar, yvar, **kwargs):
     return plt
 
 
-def plot_phase_space(dsets, xvar, yvar, **kwargs):
+def plot_phase_space(ds, xvar, yvar, **kwargs):
     """
     Plot a 2D phase space plot.
     
     Parameters
     ----------
-    dsets   (list)  datasets
-    xvar    (str)   variable for x-axis
-    yvar    (str)   variable for y-axis
+    ds      (DatasetBase)   datasets
+    xvar    (str)           variable for x-axis
+    yvar    (str)           variable for y-axis
     
     Returns
     -------
@@ -100,9 +96,8 @@ def plot_phase_space(dsets, xvar, yvar, **kwargs):
     step        = kwargs.get('step', 0)
     energy_bin  = kwargs.get('bin', -1)
     
-    for ds in dsets:
-        if not ds.filetype == FileType.H5:
-            raise RuntimeError("Dataset '" + ds.filename + "' is not a H5 file.")
+    if not ds.filetype == FileType.H5:
+        raise RuntimeError("Dataset '" + ds.filename + "' is not a H5 file.")
     
     plt.figure()
     plt.xscale(kwargs.get('yscale', 'linear'))
@@ -114,22 +109,21 @@ def plot_phase_space(dsets, xvar, yvar, **kwargs):
     if kwargs.get('ysci', False):
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
     
-    for ds in dsets:
-        xdata = ds.getData(xvar, step=step)
-        ydata = ds.getData(yvar, step=step)
+    xdata = ds.getData(xvar, step=step)
+    ydata = ds.getData(yvar, step=step)
         
-        plt.scatter(xdata, ydata, marker='.', s=1)
+    plt.scatter(xdata, ydata, marker='.', s=1)
         
-        if energy_bin > 0 and ds.filetype == FileType.H5:
-            bins = ds.getData('bin', step=step)        
-            xdata = xdata[np.where(bins == energy_bin)]
-            ydata = ydata[np.where(bins == energy_bin)]
-            plt.scatter(xdata, ydata, marker='.', s=1, c='r')
+    if energy_bin > 0 and ds.filetype == FileType.H5:
+        bins = ds.getData('bin', step=step)        
+        xdata = xdata[np.where(bins == energy_bin)]
+        ydata = ydata[np.where(bins == energy_bin)]
+        plt.scatter(xdata, ydata, marker='.', s=1, c='r')
     
-    xunit  = dsets[0].getUnit(xvar)
-    yunit  = dsets[0].getUnit(yvar)
-    xlabel = dsets[0].getLabel(xvar)
-    ylabel = dsets[0].getLabel(yvar)
+    xunit  = ds.getUnit(xvar)
+    yunit  = ds.getUnit(yvar)
+    xlabel = ds.getLabel(xvar)
+    ylabel = ds.getLabel(yvar)
     
     plt.xlabel(xlabel + ' [' + xunit + ']')
     plt.ylabel(ylabel + ' [' + yunit + ']')
@@ -139,34 +133,32 @@ def plot_phase_space(dsets, xvar, yvar, **kwargs):
     return plt
 
 
-def plot_density(dsets, xvar, yvar, **kwargs):
+def plot_density(ds, xvar, yvar, **kwargs):
     """
     
     22. March 2018
     https://stackoverflow.com/questions/20105364/how-can-i-make-a-scatter-plot-colored-by-density-in-matplotlib
     """
     
-    for ds in dsets:
+    xdata = ds.getData(xvar)
+    ydata = ds.getData(yvar)
         
-        xdata = ds.getData(xvar)
-        ydata = ds.getData(yvar)
-        
-        xy = np.vstack([xdata, ydata])
-        z = gaussian_kde(xy)(xy)
-        plt.scatter(xdata, ydata, c=z, marker='.', s=1)
-        
-        xunit  = ds.getUnit(xvar)
-        yunit  = ds.getUnit(yvar)
-        xlabel = ds.getLabel(xvar)
-        ylabel = ds.getLabel(yvar)
+    xy = np.vstack([xdata, ydata])
+    z = gaussian_kde(xy)(xy)
+    plt.scatter(xdata, ydata, c=z, marker='.', s=1)
     
-        plt.xlabel(xlabel + ' [' + xunit + ']')
-        plt.ylabel(ylabel + ' [' + yunit + ']')
+    xunit  = ds.getUnit(xvar)
+    yunit  = ds.getUnit(yvar)
+    xlabel = ds.getLabel(xvar)
+    ylabel = ds.getLabel(yvar)
+    
+    plt.xlabel(xlabel + ' [' + xunit + ']')
+    plt.ylabel(ylabel + ' [' + yunit + ']')
     
     return plt
 
 
-def plot_envelope(dslist, yvar='rms', xvar='s', **kwargs):
+def plot_envelope(ds, yvar='rms', xvar='s', **kwargs):
     """
     Create an envelope plot.
     
@@ -174,8 +166,8 @@ def plot_envelope(dslist, yvar='rms', xvar='s', **kwargs):
     
     Parameters
     ----------
-    dsets   (list)  datasets
-    lfile   (str)   lattice file (*.lattice) (optional)
+    ds      (DatasetBase)   datasets
+    lfile   (str)           lattice file (*.lattice) (optional)
     """
     
     lfile = kwargs.get('lfile', '')
@@ -190,18 +182,15 @@ def plot_envelope(dslist, yvar='rms', xvar='s', **kwargs):
     yvarvec=[yvar+"_x", yvar+"_y"]
     
 
-    for dsets in dslist:
-        for ds in dsets:
-            print(ds)
-            xdata =  ds.getData(xvar)
-            y1data = ds.getData(yvarvec[1])
-            y2data = ds.getData(yvarvec[0])
+    xdata =  ds.getData(xvar)
+    y1data = ds.getData(yvarvec[1])
+    y2data = ds.getData(yvarvec[0])
             
-            xunit=ds.getUnit(xvar)
-            yunit=ds.getUnit(yvarvec[0])
+    xunit = ds.getUnit(xvar)
+    yunit = ds.getUnit(yvarvec[0])
             
-            ax1.plot(xdata, y1data,label=' [' + yunit + ']')
-            ax2.plot(xdata, y2data)
+    ax1.plot(xdata, y1data,label=' [' + yunit + ']')
+    ax2.plot(xdata, y2data)
     
     for ax in [ax1,ax2]:
         ax.set_xlabel(xvar + ' [' + xunit + ']')
@@ -220,7 +209,6 @@ def plot_envelope(dslist, yvar='rms', xvar='s', **kwargs):
     ax2.xaxis.set_ticks_position('top')
     
     fig.subplots_adjust(hspace = .001)
-    fig.suptitle('Comparison OPAL Algorithms')
     fig.legend(loc=4)
     
     plt.figure()
