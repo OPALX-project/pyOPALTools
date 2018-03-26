@@ -20,18 +20,18 @@ class LatticeParser:
 	
 
       
-	    self.pattern_corner=re.compile(r'''(?P<name>[A-Z,0-9]*) [\s]+            
+        self.pattern_corner=re.compile(r'''(?P<name>[A-Z,0-9]*) [\s]+            
 	            (?P<one>[0-9]+ [.]? [0-9]*) [\s]*
 	            ((?P<two>[0-9]+ [.]? [0-9]*) [\s]*)?
 	            ((?P<three>[0-9]+ [.]? [0-9]*) [\s]*)?
 	            (?P<four>[0-9]+ [.]? [0-9]*)? \s* \n
 	                            ''',re.VERBOSE|re.UNICODE)
-	    self.dictTypes={
-	        "monitor": [pattern_monitor, 2,'k-'], 
-	        "collimator":[pattern_collimator,4,'k-'],
-	        "dipole": [pattern_dipole,5,'b-'],
-	        "quadrupole":[pattern_quadrupole,5,'r-'],
-	    }
+        self.dictTypes={
+	        "monitor": [self.pattern_monitor, 2,'k-'], 
+	        "collimator":[self.pattern_collimator,4,'k-'],
+	        "dipole": [self.pattern_dipole,5,'b-'],
+	        "quadrupole":[self.pattern_quadrupole,5,'r-'],
+	   }
 
     def plotLattice(self, pathLattice, fig, ax1, ax2):
     
@@ -71,29 +71,30 @@ class LatticeParser:
                 self.ax2.plot(x,y,'k-')
                 
             elif self.dictPlot[element][0]=="dipole":            
+                 x=([float(self.dictPlot[element][2]),float(self.dictPlot[element][2]),
+	               float(self.dictPlot[element][2])+float(self.dictPlot[element][3]),
+	               float(self.dictPlot[element][2])+float(self.dictPlot[element][3])])
+	            
+                 y=[float(self.dictPlot[element][5])/2000+.003,float(self.dictPlot[element][5])/2000,
+	               float(self.dictPlot[element][5])/2000,float(self.dictPlot[element][5])/2000+.003]
+	            
+                 self.ax1.plot(x,y,'r-')
+                 self.ax2.plot(x,y,'r-')     
+	            
+            elif self.dictPlot[element][0]=="quadrupole":
+                
                 x=([float(self.dictPlot[element][2]),float(self.dictPlot[element][2]),
 	               float(self.dictPlot[element][2])+float(self.dictPlot[element][3]),
 	               float(self.dictPlot[element][2])+float(self.dictPlot[element][3])])
 	            
-	            y=[float(dictPlot[element][5])/2000+.003,float(self.dictPlot[element][5])/2000,
-	               float(dictPlot[element][5])/2000,float(self.dictPlot[element][5])/2000+.003]
-	            
-	            self.ax1.plot(x,y,'r-')
-	            self.ax2.plot(x,y,'r-')     
-	            
-	        elif self.dictPlot[element][0]=="quadrupole":
-	            x=([float(self.dictPlot[element][2]),float(self.dictPlot[element][2]),
-	               float(self.dictPlot[element][2])+float(self.dictPlot[element][3]),
-	               float(self.dictPlot[element][2])+float(self.dictPlot[element][3])])
-	            
-	            y=[float(self.dictPlot[element][5])/2000+.003,float(self.dictPlot[element][5])/2000,
+                y=[float(self.dictPlot[element][5])/2000+.003,float(self.dictPlot[element][5])/2000,
 	               float(self.dictPlot[element][5])/2000,float(self.dictPlot[element][5])/2000+.003]
 	            
-	            self.ax1.plot(x,y,'g-')
-	            self.ax2.plot(x,y,'g-')   
+                self.ax1.plot(x,y,'g-')
+                self.ax2.plot(x,y,'g-')   
 	            
 	        
-	        elif self.dictPlot[element][0]=="collimator":
+            elif self.dictPlot[element][0]=="collimator":
 	            x=[float(self.dictPlot[element][2]),float(self.dictPlot[element][2])]
 	            y=[float(self.dictPlot[element][3])/2000,float(self.dictPlot[element][3])/2000+.003]
 	            y2=[float(self.dictPlot[element][4])/2000,float(self.dictPlot[element][4])/2000+.003]
