@@ -14,10 +14,10 @@ def default_style():
 
 
 def jupyter_style():
-    mpl.rcParams['figure.figsize'] = [7.0, 6.0]
+    mpl.rcParams['figure.figsize'] = [7.0, 5.0]
     mpl.rcParams['figure.dpi'] = 300
     mpl.rcParams['savefig.dpi'] = 300
     
-    mpl.rcParams['font.size'] = 12
-    mpl.rcParams['legend.fontsize'] = 'large'
+    mpl.rcParams['font.size'] = 10
+    mpl.rcParams['legend.fontsize'] = 'medium'
     mpl.rcParams['figure.titlesize'] = 'medium'

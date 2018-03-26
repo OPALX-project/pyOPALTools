@@ -265,9 +265,9 @@ class Timing:
         
         main_dict, special_dict = self._init_data_structure()
         
-        problem_pattern = '(.*): (.*)'
-        main_pattern = '(.*) (.*) (.*) (.*)'
-        special_pattern = '(.*) (.*) (.*) (.*) (.*) (.*) (.*) (.*)'
+        problem_pattern = '(.*): (\d+)'
+        main_pattern = '(.*) (\d+) (.*) (.*)'
+        special_pattern = '(.*) (\d+) (.*) (.*) (.*) (.*) (.*) (.*)'
         
         with open(f, 'r') as ff:
             

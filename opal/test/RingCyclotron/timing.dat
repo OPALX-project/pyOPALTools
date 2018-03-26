@@ -1,0 +1,35 @@
+Problem size:
+            MT: 32
+            MX: 32
+            MY: 32
+            NP: 100000
+
+                  num Nodes   CPU tot  Wall tot
+===============================================
+mainTimer...........      4     90.15     90.23
+
+                  num Nodes   CPU max  Wall max   CPU min  Wall min   CPU avg  Wall avg
+=======================================================================================
+mainTimer...........      4     90.15     90.23     90.13     90.23     90.14     90.23
+Binaryrepart........      4      0.63    0.5519      0.54    0.5505      0.57    0.5515
+Boundingbox.........      4      3.79      3.67      3.72     3.665     3.767     3.667
+Boundingbox-bounds..      4      0.18    0.1186      0.09    0.1177    0.1275     0.118
+Boundingbox-update..      4       3.5     3.384      3.41     3.382     3.472     3.384
+Compute Statistics..      4      2.18     2.234      1.91     2.227     2.038     2.231
+ComputePotential....      4     26.48      26.3     26.01      26.3     26.23      26.3
+Create Distr........      4         0         0         0         0         0         0
+Dump................      4      2.56     2.829      2.07     2.554     2.355     2.623
+Fast inside test....      4         0         0         0         0         0         0
+Frametransform......      4      6.26     6.044      5.88     5.816      6.04     5.981
+Histogram...........      4         0         0         0         0         0         0
+Initialize geometry.      4         0         0         0         0         0         0
+Inside test.........      4         0         0         0         0         0         0
+Integration.........      4     42.09     42.55     40.29      40.2     40.83     40.85
+Load Distr..........      4         0         0         0         0         0         0
+Particle Inside.....      4         0         0         0         0         0         0
+Ray tracing.........      4         0         0         0         0         0         0
+Secondary emission..      4         0         0         0         0         0         0
+SelfField total.....      4     36.17      35.6     35.14      35.3     35.57     35.38
+SF: GreensFTotal....      4     16.44     16.54     16.18     16.23     16.31     16.39
+Write H5-File.......      4      0.02   0.07754      0.01   0.07715    0.0125   0.07735
+Write Stat..........      4      1.32     1.435      0.94     1.144     1.075     1.218

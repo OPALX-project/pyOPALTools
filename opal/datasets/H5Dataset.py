@@ -1,6 +1,7 @@
 # Author:   Matthias Frey
 # Date:     March 2018
 
+import os
 from utilities.H5Parser import H5Parser
 import numpy as np
 from opal.datasets.DatasetBase import *
@@ -12,11 +13,13 @@ class H5Dataset(DatasetBase):
         Constructor.
         
         Members
-        ----------
+        -------
         __parser            (H5Parser)      actual data holder
         __variable_mapper   (dict)          map user input variable
                                             name to file variable name
         __label_mapper      (dict)          map user input variable
+        __unit_label_mapper ([])            map units of variables
+                                            to plotting style
                                             name to plot label name
         __direction         (dict)          used to find out the
                                             direction in case of
@@ -24,7 +27,12 @@ class H5Dataset(DatasetBase):
         """
         
         self.__parser = H5Parser()
-        self.__parser.parse(directory + fname)
+        
+        full_path = os.path.join(directory, fname)
+        if not os.path.exists(full_path):
+            raise RuntimeError("File '" + full_path + "' does not exist.")
+        
+        self.__parser.parse(full_path)
         
         self.__variable_mapper = {
             'rms_x':    'RMSX',
@@ -47,6 +55,16 @@ class H5Dataset(DatasetBase):
             'rms_pz':   r'$\sigma_{pz}$'
         }
         
+        self.__unit_label_mapper = [
+            'rms_x',
+            'rms_y',
+            'rms_z',
+            'x',
+            'y',
+            'z',
+            'time'
+        ]
+        
         self.__direction = {
             'x':    0,
             'y':    1,
@@ -66,7 +84,7 @@ class H5Dataset(DatasetBase):
         
         Returns
         -------
-        a list of the data (n, dim)
+        an array of the data (n, dim)
         """
         
         step = kwargs.get('step', 0)
@@ -124,10 +142,16 @@ class H5Dataset(DatasetBase):
         -------
         appropriate unit in math mode for plotting 
         """
-        if var in self.__variable_mapper:
-            var = self.__variable_mapper[var]
+        h5var = var
         
-        unit = self.__parser.getGlobalAttribute(var + 'Unit')
+        if var in self.__variable_mapper:
+            h5var = self.__variable_mapper[var]
+        
+        unit = self.__parser.getGlobalAttribute(h5var + 'Unit')
         unit = unit.replace('#', '\\')
+        
+        if var in self.__unit_label_mapper:
+            unit = r'\mathrm{' + unit + '}'
+        
         unit = r'$' + unit + '$'
         return unit

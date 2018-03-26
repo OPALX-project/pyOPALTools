@@ -1,40 +1,45 @@
-import timing.TimePlot as TimePlot
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
 import numpy as np
 from opal.datasets.DatasetBase import FileType
 from utilities.LatticeParser import LatticeParser
 
-def plot_time(dsets, kind='pie', **kwargs):
-    """
-    Do timing plots.
+from opal.visualization.timing.plots import *
+from opal.visualization.profiling.memory_plots import *
+from opal.visualization.profiling.lbal_plots import *
+from opal.visualization.grids.plots import *
+from opal.visualization.solver.plots import *
+
+
+def plot_orbits(dsets, **kwargs):
     
-    Parameters
-    ----------
-    dsets   (list)  datasets
-    kind    (str)   of plot
+    for ds in dsets:
+        if not ds.filetype == FileType.TRACK_ORBIT:
+            raise RuntimeError(ds.filename + ' is not a track orbit dataset.')
     
-    Returns
-    -------
-    a matplotlib.pyplot handle
-    """
+    pid = kwargs.get('id', 0)
     
+    for ds in dsets:
+        
+        xdata = ds.getData('x')
+        ydata = ds.getData('y')
+        ids   = ds.getData('ID')
+        
+        xdata = xdata[np.where(ids == pid)]
+        ydata = ydata[np.where(ids == pid)]
+        
+        plt.plot(xdata, ydata)
+        
+    xlabel = ds.getLabel('x')
+    xunit  = ds.getUnit('x')
     
-    if not ds.filetype == FileType.TIMING:
-        raise RuntimeError('Not a timing dataset.')
+    ylabel = ds.getLabel('y')
+    yunit  = ds.getUnit('y')
     
-    tp = TimePlot()
+    plt.xlabel(xlabel + ' [' + xunit + ']')
+    plt.ylabel(ylabel + ' [' + yunit + ']')
     
-    # treat special case
-    if kind == 'line':
-        files = []
-        for ds in dsets:
-            files.append(ds.filename)
-        return tp.automatic(kind, fname=files, **kwargs)
-    else:
-        for ds in dsets:
-            return tp.automatic(kind=kind,
-                                fname=ds.filename, **kwargs)
+    return plt
 
 
 def plot_profile1D(dsets, xvar, yvar, **kwargs):
