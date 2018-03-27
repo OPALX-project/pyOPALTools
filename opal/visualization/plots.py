@@ -207,26 +207,39 @@ def plot_envelope(ds, xvar='s', **kwargs):
     y1data = ds.getData('rms_x')
     y2data = ds.getData('rms_y')
     
+    y1label = ds.getLabel('rms_x')
+    y2label = ds.getLabel('rms_y')
+    
     xunit = ds.getUnit(xvar)
     yunit = ds.getUnit('rms_x')
     
     ax1.plot(xdata, y1data, label=' [' + yunit + ']')
-    ax2.plot(xdata, y2data)
     
-    for ax in [ax1,ax2]:
-        ax.set_xlabel(xvar + ' [' + xunit + ']')
+    # 27. March 2018
+    # https://stackoverflow.com/questions/20350503/remove-first-and-last-ticks-label-of-each-y-axis-subplot
+    plt.setp(ax1.get_yticklabels()[0], visible=False)
     
-    ax1.set_ylabel(yvar+"_x" + ' [' + yunit + ']')
-    ax2.set_ylabel(yvar+"_y" + ' [' + yunit + ']')
-   
     ax2 = plt.gca()
     plt.gca().invert_yaxis()
+    ax2.plot(xdata, y2data)
+    
+    # 27. March 2018
+    # https://stackoverflow.com/questions/925024/how-can-i-remove-the-top-and-right-axis-in-matplotlib
+    ax1.spines['bottom'].set_visible(False)
+    ax1.get_xaxis().set_visible(False)
+    
+    #for ax in [ax1,ax2]:
+    ax2.set_xlabel(xvar + ' [' + xunit + ']')
+    
+    ax1.set_ylabel(y1label + ' [' + yunit + ']')
+    ax2.set_ylabel(y2label + ' [' + yunit + ']')
+   
     
     ax1.set_ylim(ymin=0, ymax=ymax)
     ax2.set_ylim(ymax=0, ymin=ymax)
     
-    ax2.xaxis.set_label_position('top') 
-    ax2.xaxis.set_ticks_position('top')
+    ax2.xaxis.set_label_position('bottom') 
+    ax2.xaxis.set_ticks_position('bottom')
     
     fig.subplots_adjust(hspace = .001)
     fig.legend(loc=4)
