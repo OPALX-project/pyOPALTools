@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from scipy.stats import gaussian_kde
 import numpy as np
 from opal.datasets.DatasetBase import FileType
@@ -84,17 +85,21 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
     
     Parameters
     ----------
-    ds      (DatasetBase)   datasets
-    xvar    (str)           variable for x-axis
-    yvar    (str)           variable for y-axis
+    ds      (DatasetBase)       datasets
+    xvar    (str)               variable for x-axis
+    yvar    (str)               variable for y-axis
+    
+    Optional parameters
+    -------------------
+    bins    (list or integer)   color energy bins
     
     Returns
     -------
     a matplotlib.pyplot handle
     """
     
-    step        = kwargs.get('step', 0)
-    energy_bin  = kwargs.get('bin', -1)
+    step = kwargs.get('step', 0)
+    bins = kwargs.get('bins', [])
     
     if not ds.filetype == FileType.H5:
         raise RuntimeError("Dataset '" + ds.filename + "' is not a H5 file.")
@@ -111,14 +116,31 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
     
     xdata = ds.getData(xvar, step=step)
     ydata = ds.getData(yvar, step=step)
+    
+    if bins and ds.filetype == FileType.H5:
+        bdata = ds.getData('bin', step=step)
         
-    plt.scatter(xdata, ydata, marker='.', s=1)
+        # get all bins not in plotted
+        bmin = min(bdata)
+        bmax = max(bdata)
+        # 27. March 2018
+        # https://stackoverflow.com/questions/6486450/python-compute-list-difference
+        skipped = set(range(bmin, bmax+1)) - set(bins)
         
-    if energy_bin > 0 and ds.filetype == FileType.H5:
-        bins = ds.getData('bin', step=step)        
-        xdata = xdata[np.where(bins == energy_bin)]
-        ydata = ydata[np.where(bins == energy_bin)]
-        plt.scatter(xdata, ydata, marker='.', s=1, c='r')
+        nBins = len(bins) + 1
+        colors = np.linspace(0, 1, nBins)
+        
+        for i, b in enumerate(bins):
+            xbin = xdata[np.where(bdata == b)]
+            ybin = ydata[np.where(bdata == b)]
+            plt.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[i]))
+        # plot all skipped bins with same color
+        for s in skipped:
+            xbin = xdata[np.where(bdata == s)]
+            ybin = ydata[np.where(bdata == s)]
+            plt.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[nBins]))
+    else:
+        plt.scatter(xdata, ydata, marker='.', s=1)
     
     xunit  = ds.getUnit(xvar)
     yunit  = ds.getUnit(yvar)
