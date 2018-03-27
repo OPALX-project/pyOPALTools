@@ -32,10 +32,10 @@ class LatticeParser:
                                         (?P<four>[0-9]+ [.]? [0-9]*)? \s* \n
                                         ''',re.VERBOSE|re.UNICODE)
         self._dictTypes= {
-            "monitor": [self.pattern_monitor, 2, 'k-'], 
-            "collimator":[self.pattern_collimator, 4, 'k-'],
-            "dipole": [self.pattern_dipole, 5, 'b-'],
-            "quadrupole":[self.pattern_quadrupole, 5, 'r-'],
+            "monitor": [self._pattern_monitor, 2, 'k-'], 
+            "collimator":[self._pattern_collimator, 4, 'k-'],
+            "dipole": [self._pattern_dipole, 5, 'b-'],
+            "quadrupole":[self._pattern_quadrupole, 5, 'r-'],
         }
     
     
@@ -46,19 +46,19 @@ class LatticeParser:
         with open(lfile, 'r') as lattice:
             for p, line in enumerate(lattice):
                 if p%2==0:
-                    for eltype in self.dictTypes:
-                        typematch=self.dictTypes[eltype][0].match(line)
+                    for eltype in self._dictTypes:
+                        typematch=self._dictTypes[eltype][0].match(line)
                         if typematch:
                             element=eltype
                             break                    
                    
                 if p%2==1 and typematch:
-                    cornermatch= self.pattern_corner.match(line)
+                    cornermatch= self._pattern_corner.match(line)
                 
                     if cornermatch:
                         elem=[]
                         elem.append(element)
-                        for i in range(self.dictTypes[element][1]):
+                        for i in range(self._dictTypes[element][1]):
                             elem.append(cornermatch.group(i+1))
                         dictPlot[elem[1]]=elem
                          
