@@ -43,6 +43,13 @@ class LatticeParser:
         
         dictPlot={}
         
+        m2mm = 1000.0
+        diameter2radius = 2.0
+        
+        rectangle_edge = 0.003
+        
+        scale = m2mm * diameter2radius
+        
         with open(lfile, 'r') as lattice:
             for p, line in enumerate(lattice):
                 if p%2==0:
@@ -78,8 +85,8 @@ class LatticeParser:
 	               float(dictPlot[element][2])+float(dictPlot[element][3]),
 	               float(dictPlot[element][2])+float(dictPlot[element][3])])
 	            
-                 y=[float(dictPlot[element][5])/2000+.003,float(dictPlot[element][5])/2000,
-	               float(dictPlot[element][5])/2000,float(dictPlot[element][5])/2000+.003]
+                 y=[float(dictPlot[element][5])/scale+rectangle_edge,float(dictPlot[element][5])/scale,
+	               float(dictPlot[element][5])/scale,float(dictPlot[element][5])/scale+rectangle_edge]
 	            
                  ax1.plot(x,y,'r-')
                  ax2.plot(x,y,'r-')     
@@ -90,8 +97,8 @@ class LatticeParser:
 	               float(dictPlot[element][2])+float(dictPlot[element][3]),
 	               float(dictPlot[element][2])+float(dictPlot[element][3])])
 	            
-                y=[float(dictPlot[element][5])/2000+.003,float(dictPlot[element][5])/2000,
-	               float(dictPlot[element][5])/2000,float(dictPlot[element][5])/2000+.003]
+                y=[float(dictPlot[element][5])/scale+rectangle_edge,float(dictPlot[element][5])/scale,
+	               float(dictPlot[element][5])/scale,float(dictPlot[element][5])/scale+rectangle_edge]
 	            
                 ax1.plot(x,y,'g-')
                 ax2.plot(x,y,'g-')   
@@ -99,8 +106,8 @@ class LatticeParser:
 	        
             elif dictPlot[element][0]=="collimator":
 	            x=[float(dictPlot[element][2]),float(dictPlot[element][2])]
-	            y=[float(dictPlot[element][3])/2000,float(dictPlot[element][3])/2000+.003]
-	            y2=[float(dictPlot[element][4])/2000,float(dictPlot[element][4])/2000+.003]
+	            y=[float(dictPlot[element][3])/scale,float(dictPlot[element][3])/scale+rectangle_edge]
+	            y2=[float(dictPlot[element][4])/scale,float(dictPlot[element][4])/scale+rectangle_edge]
 	            
 	            ax1.plot(x,y,'b-')
 	            ax2.plot(x,y2,'b-')

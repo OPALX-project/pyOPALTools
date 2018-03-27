@@ -4,6 +4,7 @@ from scipy.stats import gaussian_kde
 import numpy as np
 from opal.datasets.DatasetBase import FileType
 from utilities.LatticeParser import LatticeParser
+import os
 
 from opal.visualization.timing.plots import *
 from opal.visualization.profiling.memory_plots import *
@@ -194,6 +195,10 @@ def plot_envelope(ds, xvar='position', **kwargs):
     """
     ymax = kwargs.get('ymax', 0.03)
     
+    dsets = kwargs.get('dsets', [])
+    
+    dsets.append(ds)
+    
     lfile = kwargs.get('lfile', '')
     
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, dpi=150)
@@ -203,17 +208,16 @@ def plot_envelope(ds, xvar='position', **kwargs):
         lattice = LatticeParser()
         lattice.plot(lfile, fig, ax1, ax2)
     
-    xdata =  ds.getData(xvar)
-    y1data = ds.getData('rms_x')
-    y2data = ds.getData('rms_y')
-    
     y1label = ds.getLabel('rms_x')
     y2label = ds.getLabel('rms_y')
     
     xunit = ds.getUnit(xvar)
     yunit = ds.getUnit('rms_x')
     
-    ax1.plot(xdata, y1data, label=' [' + yunit + ']')
+    for ds in dsets:
+        xdata =  ds.getData(xvar)
+        y1data = ds.getData('rms_x')
+        ax1.plot(xdata, y1data, label=os.path.basename(ds.filename))
     
     # 27. March 2018
     # https://stackoverflow.com/questions/20350503/remove-first-and-last-ticks-label-of-each-y-axis-subplot
@@ -221,7 +225,11 @@ def plot_envelope(ds, xvar='position', **kwargs):
     
     ax2 = plt.gca()
     plt.gca().invert_yaxis()
-    ax2.plot(xdata, y2data)
+    
+    for ds in dsets:
+        xdata =  ds.getData(xvar)
+        y2data = ds.getData('rms_y')
+        ax2.plot(xdata, y2data)
     
     # 27. March 2018
     # https://stackoverflow.com/questions/925024/how-can-i-remove-the-top-and-right-axis-in-matplotlib
@@ -242,5 +250,7 @@ def plot_envelope(ds, xvar='position', **kwargs):
     ax2.xaxis.set_ticks_position('bottom')
     
     fig.subplots_adjust(hspace = 0.0)
+    
+    fig.legend(loc=4)
     
     return plt
