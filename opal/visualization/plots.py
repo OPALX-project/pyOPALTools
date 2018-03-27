@@ -180,7 +180,7 @@ def plot_density(ds, xvar, yvar, **kwargs):
     return plt
 
 
-def plot_envelope(ds, xvar='s', **kwargs):
+def plot_envelope(ds, xvar='position', **kwargs):
     """
     Create an envelope plot.
     

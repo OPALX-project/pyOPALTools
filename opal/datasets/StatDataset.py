@@ -85,6 +85,7 @@ class StatDataset(DatasetBase):
             'rms_z',
             'time',
             'position',
+            's',
             'energy',
             'emit_x',
             'emit_y',
