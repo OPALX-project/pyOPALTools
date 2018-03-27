@@ -241,7 +241,6 @@ def plot_envelope(ds, xvar='s', **kwargs):
     ax2.xaxis.set_label_position('bottom') 
     ax2.xaxis.set_ticks_position('bottom')
     
-    fig.subplots_adjust(hspace = .001)
-    fig.legend(loc=4)
+    fig.subplots_adjust(hspace = 0.0)
     
     return plt
