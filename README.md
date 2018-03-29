@@ -64,10 +64,11 @@ pip install pyQt5
 
 #### Installation using conda
 ```bash
-conda create -p $TARGET/pyOPALTools.venv
+conda create -p $TARGET/pyOPALTools.venv python=x.x.x
 source activate $TARGET/pyOPALTools.venv
 ```
-where ```$TARGET``` is some specified directory.
+where ```$TARGET``` is some specified directory anx ```x.x.x```
+is some python version.
 The virtual environment can be deactivated with 
 
 ```bash
