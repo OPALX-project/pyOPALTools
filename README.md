@@ -79,19 +79,45 @@ The packages can be installed with
 ```bash
 conda install -n pyOPALTools.venv numpy
 conda install -n pyOPALTools.venv scipy
-conda install -n pyOPALTools.venv jupyter\[notebook\]
+conda install -n pyOPALTools.venv jupyter
 conda install -n pyOPALTools.venv matplotlib
 conda install -n pyOPALTools.venv h5py
-conda install -n pyOPALTools.venv pyQt5
 ```
 
 ### Run Jupyter
+#### Locally
 A Jupyter notebook is started by executing
 
 ```bash
 jupyter notebook
 ```
+#### Remotely
+In order to run Jupyter on a remote server but
+having the web browser open on the local computer
+do the following steps:
+* Create an SSH tunnel:
+ 
+```bash
+$ ssh -L ssh -L hport:localhost:rport username@remote
+```
+ where ```hport``` is the host port, e.g. 8000 and
+ ```rport``` the remote port, e.g. 8888. You have to
+ replace *username* and *remote* properly.
+* Start jupyter on the server (same terminal as before):
 
+```bash
+$ jupyter notebook --no-browser
+```
+It will write an URL to the screen that you need to
+copy and paste to a browser
+```bash
+Copy/paste this URL into your browser when you connect for the first time,
+    to login with a token:
+        http://localhost:rport/?token=...
+```
+The ```rport``` will be the number you specified in th SSH tunnel.
+In order to run the browser on the local host you need to replace ```rport```
+with the ```hport``` number.
 
 
 Installation of yt
