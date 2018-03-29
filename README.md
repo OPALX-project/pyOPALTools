@@ -82,7 +82,8 @@ conda install -n pyOPALTools.venv scipy
 conda install -n pyOPALTools.venv jupyter
 conda install -n pyOPALTools.venv matplotlib
 conda install -n pyOPALTools.venv h5py
-#conda install -c inria-pro-sed h5py-parallel
+#conda install -n pyOPALTools.venv -c spectraldns h5py-parallel
+#conda install  -n pyOPALTools.venv -c inria-pro-sed h5py-parallel
 #conda install -n pyOPALTools.venv -c mpi4py openmpi
 ```
 
