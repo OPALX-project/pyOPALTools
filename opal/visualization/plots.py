@@ -246,11 +246,10 @@ def plot_envelope(ds, xvar='position', **kwargs):
     ax1.set_ylim(ymin=0, ymax=ymax)
     ax2.set_ylim(ymax=0, ymin=ymax)
     
+    ax1.legend(bbox_to_anchor=(0.6, 1.08))
+    
     ax2.xaxis.set_label_position('bottom') 
     ax2.xaxis.set_ticks_position('bottom')
     
     fig.subplots_adjust(hspace = 0.0)
-    
-    fig.legend(loc=4)
-    
     return plt
