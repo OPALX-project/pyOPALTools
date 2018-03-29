@@ -49,6 +49,19 @@ The virtual environment can be deactivated with
 ```bash
 deactivate
 ```
+
+#### Installation using conda
+```bash
+conda create -p $TARGET/pyOPALTools.venv
+source activate $TARGET/pyOPALTools.venv
+```
+where ```$TARGET``` is some specified directory.
+The virtual environment can be deactivated with 
+
+```bash
+source deactivate $TARGET/pyOPALTools.venv
+```
+
 ### Installation of dependent packages
 
 Install Jupyter and additional software in the *activated* environment
