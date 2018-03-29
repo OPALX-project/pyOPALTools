@@ -50,6 +50,18 @@ The virtual environment can be deactivated with
 deactivate
 ```
 
+### Installation of dependent packages
+
+Install Jupyter and additional software in the *activated* environment
+
+```bash
+pip install numpy
+pip install scipy
+pip install jupyter\[notebook\] matplotlib
+pip install h5py
+pip install pyQt5
+```
+
 #### Installation using conda
 ```bash
 conda create -p $TARGET/pyOPALTools.venv
@@ -62,16 +74,14 @@ The virtual environment can be deactivated with
 source deactivate $TARGET/pyOPALTools.venv
 ```
 
-### Installation of dependent packages
-
-Install Jupyter and additional software in the *activated* environment
-
+The packages can be installed with
 ```bash
-pip install numpy
-pip install scipy
-pip install jupyter\[notebook\] matplotlib
-pip install h5py
-pip install pyQt5
+conda install -n pyOPALTools.venv numpy
+conda install -n pyOPALTools.venv scipy
+conda install -n pyOPALTools.venv jupyter\[notebook\]
+conda install -n pyOPALTools.venv matplotlib
+conda install -n pyOPALTools.venv h5py
+conda install -n pyOPALTools.venv pyQt5
 ```
 
 ### Run Jupyter
