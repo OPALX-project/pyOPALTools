@@ -1,3 +1,6 @@
+# Author:   Matthias Frey
+# Date:     March 2018
+
 from opal.datasets.DatasetBase import FileType, DatasetBase
 import timing.TimePlot as TimePlot
 import matplotlib.pyplot as plt
