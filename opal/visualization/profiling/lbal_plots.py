@@ -17,11 +17,11 @@ def plot_lbal_histogram(ds, **kwargs):
     boundaries are given in percent.
     """
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.LBAL:
-        raise RuntimeError(ds.filename + ' is not a load balancing dataset.')
+        raise TypeError(ds.filename + ' is not a load balancing dataset.')
     
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
@@ -31,7 +31,7 @@ def plot_lbal_histogram(ds, **kwargs):
     bupper   = kwargs.get('bupper', [0.0, 25.0, 50.0, 75.0, 100.0])
     
     if not len(blower) == len(bupper):
-        raise RuntimeError('len(blower) != len(bupper)')
+        raise ValueError('len(blower) != len(bupper)')
         
     nTotal = len(ds.getVariables())
     nCols = sum('processor' in var for var in ds.getVariables())
@@ -113,11 +113,11 @@ def plot_lbal_summary(ds, **kwargs):
     particles per core vs. the simulation time.
     """
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.LBAL:
-        raise RuntimeError(ds.filename + ' is not a load balancing dataset.')
+        raise TypeError(ds.filename + ' is not a load balancing dataset.')
     
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
@@ -183,11 +183,11 @@ def plot_lbal_boxplot(ds, **kwargs):
     particle load balancing.
     """
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.LBAL:
-        raise RuntimeError(ds.filename + ' is not a load balancing dataset.')
+        raise TypeError(ds.filename + ' is not a load balancing dataset.')
     
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)

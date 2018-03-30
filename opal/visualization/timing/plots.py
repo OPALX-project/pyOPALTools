@@ -18,19 +18,26 @@ def plot_time(ds, kind='pie', **kwargs):
     -------
     a matplotlib.pyplot handle
     """
-    if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
-    
-    if not ds.filetype == FileType.TIMING:
-        raise RuntimeError('Not a timing dataset.')
+    if kind == 'line':
+        if not isinstance(ds, list):
+            raise TypeError("Input 'ds' has to be a list for 'line' plot type.")
+        if len(ds) < 2:
+            raise ValueError("More than one dataset required for 'line' plot.")
+        for d in ds:
+            if not d.filetype == FileType.TIMING:
+                raise TypeError("Dataset '" + d.filename +
+                                "' is not a timing dataset.")
+    else:
+        if not isinstance(ds, DatasetBase):
+            raise TypeError("Dataset '" + ds.filename +
+                            "' not derived from 'DatasetBase'.")
+        if not ds.filetype == FileType.TIMING:
+            raise TypeError('Not a timing dataset.')
     
     tp = TimePlot()
     
     # treat special case
     if kind == 'line':
-        if len(ds) < 2:
-            raise RuntimeError('More than one dataset required for this plot.')
         files = []
         for d in ds:
             files.append(d.filename)

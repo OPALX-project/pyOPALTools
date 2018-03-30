@@ -11,11 +11,11 @@ def plot_grids_per_level(ds, **kwargs):
     and the total number of grids.
     """
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.GRID:
-        raise RuntimeError(ds.filename + ' is not a grid dataset.')
+        raise TypeError(ds.filename + ' is not a grid dataset.')
     
     hspan  = kwargs.get('hspan', [None, None])
     grid   = kwargs.get('grid', False)
@@ -58,11 +58,11 @@ def plot_grid_histogram(ds, **kwargs):
     average number of grids per core.
     """
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.GRID:
-        raise RuntimeError(ds.filename + ' is not a grid dataset.')
+        raise TypeError(ds.filename + ' is not a grid dataset.')
     
     hspan  = kwargs.get('hspan', [None, None])
     grid   = kwargs.get('grid', False)

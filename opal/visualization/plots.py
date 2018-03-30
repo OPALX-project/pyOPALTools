@@ -1,3 +1,7 @@
+# Author:   Matthias Frey,
+#           Philippe Ganz
+# Date:     March 2018
+
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from scipy.stats import gaussian_kde
@@ -16,11 +20,11 @@ from opal.visualization.solver.plots import *
 def plot_orbits(ds, **kwargs):
     
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.TRACK_ORBIT:
-        raise RuntimeError(ds.filename + ' is not a track orbit dataset.')
+        raise TypeError(ds.filename + ' is not a track orbit dataset.')
     
     pid = kwargs.get('id', 0)
     
@@ -60,8 +64,8 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
     a matplotlib.pyplot handle
     """
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     plt.figure()
     plt.xscale(kwargs.get('yscale', 'linear'))
@@ -107,14 +111,14 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
     a matplotlib.pyplot handle
     """
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     step = kwargs.get('step', 0)
     bins = kwargs.get('bins', [])
     
     if not ds.filetype == FileType.H5:
-        raise RuntimeError("Dataset '" + ds.filename + "' is not a H5 file.")
+        raise TypeError("Dataset '" + ds.filename + "' is not a H5 file.")
     
     plt.figure()
     plt.xscale(kwargs.get('yscale', 'linear'))
@@ -174,8 +178,8 @@ def plot_density(ds, xvar, yvar, **kwargs):
     https://stackoverflow.com/questions/20105364/how-can-i-make-a-scatter-plot-colored-by-density-in-matplotlib
     """
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     xdata = ds.getData(xvar)
     ydata = ds.getData(yvar)
@@ -211,12 +215,12 @@ def plot_envelope(dsets, xvar='position', **kwargs):
         raise TypeError("Input 'dsets' has to be a list")
     
     if not dsets:
-        raise RuntimeError('Dataset list is empty.')
+        raise IndexError('Dataset list is empty.')
     
     for ds in dsets:
         if not isinstance(ds, DatasetBase):
-            raise RuntimeError("Dataset '" + ds.filename +
-                               "' not derived from 'DatasetBase'.")
+            raise TypeError("Dataset '" + ds.filename +
+                            "' not derived from 'DatasetBase'.")
     
     ymax = kwargs.get('ymax', 0.03)
     

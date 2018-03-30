@@ -12,11 +12,11 @@ def plot_total_memory(ds, **kwargs):
     
     """
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.MEM:
-        raise RuntimeError(ds.filename + ' is not a memory dataset.')
+        raise TypeError(ds.filename + ' is not a memory dataset.')
     
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
@@ -55,11 +55,11 @@ def plot_memory_summary(ds, **kwargs):
     vs. simulation time.
     """
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.MEM:
-        raise RuntimeError(ds.filename + ' is not a memory dataset.')
+        raise TypeError(ds.filename + ' is not a memory dataset.')
     
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
@@ -122,11 +122,11 @@ def plot_memory_summary(ds, **kwargs):
 def plot_memory_boxplot(ds, **kwargs):
     
     if not isinstance(ds, DatasetBase):
-        raise RuntimeError("Dataset '" + ds.filename +
-                           "' not derived from 'DatasetBase'.")
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.MEM:
-        raise RuntimeError(ds.filename + ' is not a memory dataset.')
+        raise TypeError(ds.filename + ' is not a memory dataset.')
     
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
