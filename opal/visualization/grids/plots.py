@@ -10,6 +10,9 @@ def plot_grids_per_level(ds, **kwargs):
     Plot a time series of the number of grids per level
     and the total number of grids.
     """
+    if not isinstance(ds, DatasetBase):
+        raise RuntimeError("Dataset '" + ds.filename +
+                           "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.GRID:
         raise RuntimeError(ds.filename + ' is not a grid dataset.')
@@ -54,6 +57,10 @@ def plot_grid_histogram(ds, **kwargs):
     Plot a time series of the minimum, maximum and
     average number of grids per core.
     """
+    if not isinstance(ds, DatasetBase):
+        raise RuntimeError("Dataset '" + ds.filename +
+                           "' not derived from 'DatasetBase'.")
+    
     if not ds.filetype == FileType.GRID:
         raise RuntimeError(ds.filename + ' is not a grid dataset.')
     

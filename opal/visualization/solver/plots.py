@@ -10,6 +10,9 @@ def plot_solver_histogram(ds, var, **kwargs):
     Plot a time series of solver output, e.g. error,
     number of iterations, etc.
     """
+    if not isinstance(ds, DatasetBase):
+        raise RuntimeError("Dataset '" + ds.filename +
+                           "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.SOLVER:
         raise RuntimeError(ds.filename + ' is not a solver dataset.')

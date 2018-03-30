@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from scipy.stats import gaussian_kde
 import numpy as np
-from opal.datasets.DatasetBase import FileType
+from opal.datasets.DatasetBase import FileType, DatasetBase
 from utilities.LatticeParser import LatticeParser
 import os
 
@@ -14,6 +14,10 @@ from opal.visualization.solver.plots import *
 
 
 def plot_orbits(ds, **kwargs):
+    
+    if not isinstance(ds, DatasetBase):
+        raise RuntimeError("Dataset '" + ds.filename +
+                           "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.TRACK_ORBIT:
         raise RuntimeError(ds.filename + ' is not a track orbit dataset.')
@@ -55,6 +59,10 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
     -------
     a matplotlib.pyplot handle
     """
+    if not isinstance(ds, DatasetBase):
+        raise RuntimeError("Dataset '" + ds.filename +
+                           "' not derived from 'DatasetBase'.")
+    
     plt.figure()
     plt.xscale(kwargs.get('yscale', 'linear'))
     plt.yscale(kwargs.get('xscale', 'linear'))
@@ -98,6 +106,9 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
     -------
     a matplotlib.pyplot handle
     """
+    if not isinstance(ds, DatasetBase):
+        raise RuntimeError("Dataset '" + ds.filename +
+                           "' not derived from 'DatasetBase'.")
     
     step = kwargs.get('step', 0)
     bins = kwargs.get('bins', [])
@@ -162,6 +173,9 @@ def plot_density(ds, xvar, yvar, **kwargs):
     22. March 2018
     https://stackoverflow.com/questions/20105364/how-can-i-make-a-scatter-plot-colored-by-density-in-matplotlib
     """
+    if not isinstance(ds, DatasetBase):
+        raise RuntimeError("Dataset '" + ds.filename +
+                           "' not derived from 'DatasetBase'.")
     
     xdata = ds.getData(xvar)
     ydata = ds.getData(yvar)
@@ -181,23 +195,30 @@ def plot_density(ds, xvar, yvar, **kwargs):
     return plt
 
 
-def plot_envelope(ds, xvar='position', **kwargs):
+def plot_envelope(dsets, xvar='position', **kwargs):
     """
     Create an envelope plot.
     
     Parameters
     ----------
-    ds      (DatasetBase)   datasets
+    dsets   (DatasetBase)   datasets
     lfile   (str)           lattice file (*.lattice) (optional)
     xvar    (str)           x-axis variable
     yvars   ([])            list of variables for y-axis
                             (2 entries expected)
     """
+    if not isinstance(dsets, list):
+        raise TypeError("Input 'dsets' has to be a list")
+    
+    if not dsets:
+        raise RuntimeError('Dataset list is empty.')
+    
+    for ds in dsets:
+        if not isinstance(ds, DatasetBase):
+            raise RuntimeError("Dataset '" + ds.filename +
+                               "' not derived from 'DatasetBase'.")
+    
     ymax = kwargs.get('ymax', 0.03)
-    
-    dsets = kwargs.get('dsets', [])
-    
-    dsets.append(ds)
     
     lfile = kwargs.get('lfile', '')
     
@@ -208,11 +229,11 @@ def plot_envelope(ds, xvar='position', **kwargs):
         lattice = LatticeParser()
         lattice.plot(lfile, fig, ax1, ax2)
     
-    y1label = ds.getLabel('rms_x')
-    y2label = ds.getLabel('rms_y')
+    y1label = dsets[0].getLabel('rms_x')
+    y2label = dsets[0].getLabel('rms_y')
     
-    xunit = ds.getUnit(xvar)
-    yunit = ds.getUnit('rms_x')
+    xunit = dsets[0].getUnit(xvar)
+    yunit = dsets[0].getUnit('rms_x')
     
     for ds in dsets:
         xdata =  ds.getData(xvar)

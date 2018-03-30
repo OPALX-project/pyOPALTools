@@ -1,4 +1,4 @@
-from opal.datasets.DatasetBase import FileType
+from opal.datasets.DatasetBase import FileType, DatasetBase
 import timing.TimePlot as TimePlot
 import matplotlib.pyplot as plt
 
@@ -15,7 +15,9 @@ def plot_time(ds, kind='pie', **kwargs):
     -------
     a matplotlib.pyplot handle
     """
-    
+    if not isinstance(ds, DatasetBase):
+        raise RuntimeError("Dataset '" + ds.filename +
+                           "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.TIMING:
         raise RuntimeError('Not a timing dataset.')

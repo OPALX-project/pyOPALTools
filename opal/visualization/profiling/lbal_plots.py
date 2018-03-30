@@ -16,6 +16,9 @@ def plot_lbal_histogram(ds, **kwargs):
     boundary, i.e. 'bupper' and, respectively, 'blower'. Those
     boundaries are given in percent.
     """
+    if not isinstance(ds, DatasetBase):
+        raise RuntimeError("Dataset '" + ds.filename +
+                           "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.LBAL:
         raise RuntimeError(ds.filename + ' is not a load balancing dataset.')
@@ -109,6 +112,10 @@ def plot_lbal_summary(ds, **kwargs):
     Plot the minimum, maximum and average number of
     particles per core vs. the simulation time.
     """
+    if not isinstance(ds, DatasetBase):
+        raise RuntimeError("Dataset '" + ds.filename +
+                           "' not derived from 'DatasetBase'.")
+    
     if not ds.filetype == FileType.LBAL:
         raise RuntimeError(ds.filename + ' is not a load balancing dataset.')
     
@@ -175,6 +182,10 @@ def plot_lbal_boxplot(ds, **kwargs):
     Does a (simulation) time series boxplot of the
     particle load balancing.
     """
+    if not isinstance(ds, DatasetBase):
+        raise RuntimeError("Dataset '" + ds.filename +
+                           "' not derived from 'DatasetBase'.")
+    
     if not ds.filetype == FileType.LBAL:
         raise RuntimeError(ds.filename + ' is not a load balancing dataset.')
     
