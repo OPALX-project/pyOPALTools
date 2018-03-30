@@ -3,7 +3,7 @@
 
 from opal.statistics import statistics as stat
 
-def halo_continuous_beam(ds, var, , **kwargs):
+def halo_continuous_beam(ds, var, **kwargs):
     """
     Compute the halo in horizontal or
     vertical direction according to
@@ -23,7 +23,7 @@ def halo_continuous_beam(ds, var, , **kwargs):
     return m4 / m2 ** 2 - 2.0
 
 
-def halo_ellipsoidal_beam(ds, var):
+def halo_ellipsoidal_beam(ds, var, **kwargs):
     """
     Compute the halo in horizontal, vertical
     or longitudinal direction according to
@@ -40,4 +40,4 @@ def halo_ellipsoidal_beam(ds, var):
     m4 = stat.moment(ds, var, k=4, **kwargs)
     m2 = stat.moment(ds, var, k=2, **kwargs)
     
-    return m4 / m2 ** 2 - 15.0 / 17.0
+    return m4 / m2 ** 2 - 15.0 / 7.0
