@@ -17,8 +17,8 @@ def halo_continuous_beam(ds, var, , **kwargs):
     BEAM HALO IN PROTON LINAC BEAMS,
     XX International Linac Conference, Monterey, California
     """
-    m4 = stat.moment(ds, var, **kwargs)
-    m2 = stat.moment(ds, var, **kwargs)
+    m4 = stat.moment(ds, var, k=4, **kwargs)
+    m2 = stat.moment(ds, var, k=2, **kwargs)
     
     return m4 / m2 ** 2 - 2.0
 
@@ -37,7 +37,7 @@ def halo_ellipsoidal_beam(ds, var):
     BEAM HALO IN PROTON LINAC BEAMS,
     XX International Linac Conference, Monterey, California
     """
-    m4 = stat.moment(ds, var, **kwargs)
-    m2 = stat.moment(ds, var, **kwargs)
+    m4 = stat.moment(ds, var, k=4, **kwargs)
+    m2 = stat.moment(ds, var, k=2, **kwargs)
     
     return m4 / m2 ** 2 - 15.0 / 17.0
