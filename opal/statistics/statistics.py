@@ -12,12 +12,20 @@ def moment(ds, var, k, **kwargs):
     ds      (DatasetBase)   where the data is taken from
     var     (str)           the variable to compute k-th central moment
     k       (int)           the moment, k = 1 is central mean
-    bin     (int)           energy bin for which to compute (optional)
+    
+    Optionals
+    ---------
+    step    (int)           of dataset
+    bin     (int)           energy bin for which to compute
     
     Notes
     -----
     https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html#scipy.stats.moment
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
     step = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)
@@ -41,8 +49,16 @@ def mean(ds, var, **kwargs):
     ----------
     ds      (DatasetBase)   where the data is taken from
     var     (str)           the variable to compute mean
-    bin     (int)           energy bin for which to compute (optional)
+    
+    Optionals
+    ---------
+    step    (int)           of dataset
+    bin     (int)           energy bin for which to compute
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
     step = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)
@@ -69,8 +85,16 @@ def skew(ds, var, **kwargs):
     ----------
     ds      (DatasetBase)   where the data is taken from
     var     (str)           the variable
-    bin     (int)           energy bin for which to compute (optional)
+    
+    Optionals
+    ---------
+    step    (int)           of dataset
+    bin     (int)           energy bin for which to compute
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
     step = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)
@@ -101,8 +125,16 @@ def kurtosis(ds, var, **kwargs):
     ----------
     ds      (DatasetBase)   where the data is taken from
     var     (str)           the variable
-    bin     (int)           energy bin for which to compute (optional)
+    
+    Optionals
+    ---------
+    step    (int)           of dataset
+    bin     (int)           energy bin for which to compute
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
     step = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)
@@ -113,7 +145,7 @@ def kurtosis(ds, var, **kwargs):
         data = data[np.where(bins == energy_bin)]
     
     if data.size < 1:
-        raise RuntimeError('Empty dataset.')
+        raise ValueError('Empty dataset.')
     
     return sc.stats.kurtosis(data, axis=0, fisher=True)
 
@@ -129,8 +161,22 @@ def gaussian_kde(ds, var, **kwargs):
     ----------
     ds      (DatasetBase)   where the data is taken from
     var     (str)           the variable
-    bin     (int)           energy bin for which to compute (optional)
+    
+    Optionals
+    ---------
+    step    (int)           of dataset
+    bins    (int /str)      binning type or #bins
+                            (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
+    density (bool)          normalize such that integral over
+                            range is 1.
+    
+    Returns
+    -------
+    kernel density estimator of scipy.
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     step    = kwargs.get('step', 0)
     bins    = kwargs.get('bins', 'sturges')
@@ -142,6 +188,30 @@ def gaussian_kde(ds, var, **kwargs):
 
 
 def histogram(ds, var, **kwargs):
+    """
+    Compute a histogram of a dataset
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)   where the data is taken from
+    var     (str)           the variable
+    
+    Optionals
+    ---------
+    step    (int)           of dataset
+    bins    (int /str)      binning type or #bins
+                            (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
+    density (bool)          normalize such that integral over
+                            range is 1.
+                            
+    Returns
+    -------
+    a numpy.histogram with bin edges
+    (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     step    = kwargs.get('step', 0)
     bins    = kwargs.get('bins', 'sturges')
