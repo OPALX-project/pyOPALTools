@@ -3,9 +3,7 @@
 
 from opal.statistics import statistics as stat
 from opal.datasets.DatasetBase import DatasetBase
-import numpy as np
-import scipy as sc
-from scipy.signal import argrelmin
+from opal.analysis import impl_beam
 
 def halo_continuous_beam(ds, var, **kwargs):
     """
@@ -84,11 +82,6 @@ def find_beams(ds, var, **kwargs):
     npoints (int)           number of points to evaluate
                             kernel density estimator
     
-    References (31. March 2018)
-    ---------------------------
-    https://docs.scipy.org/doc/scipy-0.19.0/reference/generated/scipy.stats.gaussian_kde.html
-    https://docs.scipy.org/doc/scipy-0.16.1/reference/generated/scipy.signal.argrelmin.html
-    
     Returns
     -------
     a list of minima locations
@@ -98,23 +91,7 @@ def find_beams(ds, var, **kwargs):
                         "' not derived from 'DatasetBase'.")
     
     step    = kwargs.get('step', 0)
-    npoints = kwargs.get('npoints', 500)
     
     data = ds.getData(var, step=step)
     
-    kde = sc.stats.gaussian_kde(data)
-    
-    xmin = min(data)
-    xmax = max(data)
-    points = np.linspace(xmin, xmax, npoints)
-    
-    pdf = kde.pdf(points)
-    
-    extrema = argrelmin(pdf)
-    
-    bc = [xmin]
-    for idx in extrema[0]:
-        bc.append(points[idx])
-    bc.append(xmax)
-    
-    return bc
+    return impl_beam.find_beams(data, **kwargs)
