@@ -131,4 +131,22 @@ def gaussian_kde(ds, var, **kwargs):
     var     (str)           the variable
     bin     (int)           energy bin for which to compute (optional)
     """
-    pass
+    
+    step    = kwargs.get('step', 0)
+    bins    = kwargs.get('bins', 'sturges')
+    density = kwargs.get('density', True)
+    
+    data = ds.getData(var, step=step)
+    
+    return sc.stats.gaussian_kde(data)
+
+
+def histogram(ds, var, **kwargs):
+    
+    step    = kwargs.get('step', 0)
+    bins    = kwargs.get('bins', 'sturges')
+    density = kwargs.get('density', True)
+    
+    data = ds.getData(var, step=step)
+    
+    return np.histogram(data, density=density, bins=bins)
