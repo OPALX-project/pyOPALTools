@@ -92,6 +92,9 @@ def find_beams(ds, var, **kwargs):
     -------
     a list of minima locations
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     step    = kwargs.get('step', 0)
     npoints = kwargs.get('npoints', 500)
