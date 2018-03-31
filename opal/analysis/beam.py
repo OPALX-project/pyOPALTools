@@ -2,6 +2,7 @@
 # Date:     March 2018
 
 from opal.statistics import statistics as stat
+from opal.datasets.DatasetBase import DatasetBase
 import numpy as np
 import scipy as sc
 from scipy.signal import argrelmin

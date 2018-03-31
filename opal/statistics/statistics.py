@@ -1,11 +1,10 @@
 import numpy as np
-import scipy as sc
-from opal.datasets.DatasetBase import FileType
+from opal.datasets.DatasetBase import FileType, DatasetBase
+from opal.statistics import impl_statistics
 
 def moment(ds, var, k, **kwargs):
     """
     Calculate the k-th central moment.
-    
     
     Parameters
     ----------
@@ -35,10 +34,7 @@ def moment(ds, var, k, **kwargs):
         bins = ds.getData('bin', step=step)
         data = data[np.where(bins == energy_bin)]
     
-    if data.size < 1:
-        raise RuntimeError('Empty dataset.')
-    
-    return sc.stats.moment(data, axis=0, moment=k)
+    return impl_statistics.moment(data, k)
 
 
 def mean(ds, var, **kwargs):
@@ -67,11 +63,8 @@ def mean(ds, var, **kwargs):
     if energy_bin > 0 and ds.filetype == FileType.H5:
         bins = ds.getData('bin', step=step)
         data = data[np.where(bins == energy_bin)]
-    
-    if data.size < 1:
-        raise RuntimeError('Empty dataset.')
-    
-    return np.mean(data, axis=0)
+        
+    return impl_statistics.mean(data)
 
 
 def skew(ds, var, **kwargs):
@@ -104,10 +97,7 @@ def skew(ds, var, **kwargs):
         bins = ds.getData('bin', step=step)
         data = data[np.where(bins == energy_bin)]
     
-    if data.size < 1:
-        raise RuntimeError('Empty dataset.')
-    
-    return sc.stats.skew(data, axis=0)
+    return impl_statistics.skew(data)
 
 
 def kurtosis(ds, var, **kwargs):
@@ -144,10 +134,7 @@ def kurtosis(ds, var, **kwargs):
         bins = ds.getData('bin', step=step)
         data = data[np.where(bins == energy_bin)]
     
-    if data.size < 1:
-        raise ValueError('Empty dataset.')
-    
-    return sc.stats.kurtosis(data, axis=0, fisher=True)
+    return impl_statistics.skew(data)
 
 
 def gaussian_kde(ds, var, **kwargs):
@@ -184,7 +171,7 @@ def gaussian_kde(ds, var, **kwargs):
     
     data = ds.getData(var, step=step)
     
-    return sc.stats.gaussian_kde(data)
+    return impl_statistics.gaussian_kde(data)
 
 
 def histogram(ds, var, **kwargs):
@@ -214,9 +201,7 @@ def histogram(ds, var, **kwargs):
                         "' not derived from 'DatasetBase'.")
     
     step    = kwargs.get('step', 0)
-    bins    = kwargs.get('bins', 'sturges')
-    density = kwargs.get('density', True)
     
     data = ds.getData(var, step=step)
     
-    return np.histogram(data, density=density, bins=bins)
+    return impl_statistics.histogram(data, **kwargs)
