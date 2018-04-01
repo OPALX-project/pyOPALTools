@@ -100,6 +100,7 @@ def plot_classification(ds, xvar, yvar, value, **kwargs):
 
 def plot_joint(ds, xvar, yvar, join, **kwargs):
     """
+    Do a joint plot (marginals + contour / scatter)
     
     Parameters
     ----------
@@ -135,5 +136,47 @@ def plot_joint(ds, xvar, yvar, join, **kwargs):
     plt = impl_plots.plot_joint(xdata, xlabel + ' [' + xunit + ']',
                                 ydata, ylabel + ' [' + yunit + ']',
                                 join, **kwargs)
+    
+    return plt
+
+
+def plot_density(ds, xvar, yvar, **kwargs):
+    """
+    Do a density plot
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)       dataset
+    xvar    (str)               x-axis variable to consider
+    yvar    (str)               y-axis variable to consider
+    
+    Optional parameters
+    -------------------
+    step        (int)           of dataset
+    see also                    help(impl_plots.plot_density)
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    step    = kwargs.get('step', 0)
+    
+    xdata = ds.getData(xvar, step=step)
+    ydata = ds.getData(yvar, step=step)
+    
+    xunit  = ds.getUnit(xvar)
+    xlabel = ds.getLabel(xvar)
+    
+    yunit  = ds.getUnit(yvar)
+    ylabel = ds.getLabel(yvar)
+    clab   = ''
+    
+    plt = impl_plots.plot_density(xdata, xlabel + ' [' + xunit + ']',
+                                  ydata, ylabel + ' [' + yunit + ']',
+                                  clab, **kwargs)
     
     return plt
