@@ -136,4 +136,12 @@ def get_beam(ds, var, k, **kwargs):
     
     # 1. April 2018
     # https://stackoverflow.com/questions/16343752/numpy-where-function-multiple-conditions
-    return data[(data >= minima[k]) & (data < minima[k+1])]
+    bunch = None
+    if k == len(minima):
+        # last bunch includes particles from upper part [k, k+1]
+        bunch data[(data >= minima[k]) & (data <= minima[k+1])
+    else:
+        # do not include upper part [k, k+1[
+        bunch data[(data >= minima[k]) & (data < minima[k+1])
+    
+    return bunch
