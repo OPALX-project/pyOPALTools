@@ -19,7 +19,8 @@ def halo_continuous_beam(ds, var, **kwargs):
     
     Optionals
     ---------
-    see opal.statistics.moment
+    step    (int)           of dataset
+    bin     (int)           energy bin for which to compute
     
     Reference
     ---------
@@ -28,10 +29,20 @@ def halo_continuous_beam(ds, var, **kwargs):
     BEAM HALO IN PROTON LINAC BEAMS,
     XX International Linac Conference, Monterey, California
     """
-    m4 = stat.moment(ds, var, k=4, **kwargs)
-    m2 = stat.moment(ds, var, k=2, **kwargs)
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
-    return m4 / m2 ** 2 - 2.0
+    step = kwargs.get('step', 0)
+    
+    data = ds.getData(var, step=step)
+    
+    energy_bin = kwargs.get('bin', -1)
+    if energy_bin > 0 and ds.filetype == FileType.H5:
+        bins = ds.getData('bin', step=step)
+        data = data[np.where(bins == energy_bin)]
+    
+    return impl_beam.halo_continuous_beam(data)
 
 
 def halo_ellipsoidal_beam(ds, var, **kwargs):
@@ -48,7 +59,8 @@ def halo_ellipsoidal_beam(ds, var, **kwargs):
     
     Optionals
     ---------
-    see opal.statistics.moment
+    step    (int)           of dataset
+    bin     (int)           energy bin for which to compute
     
     Reference
     ---------
@@ -57,10 +69,20 @@ def halo_ellipsoidal_beam(ds, var, **kwargs):
     BEAM HALO IN PROTON LINAC BEAMS,
     XX International Linac Conference, Monterey, California
     """
-    m4 = stat.moment(ds, var, k=4, **kwargs)
-    m2 = stat.moment(ds, var, k=2, **kwargs)
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
-    return m4 / m2 ** 2 - 15.0 / 7.0
+    step = kwargs.get('step', 0)
+    
+    data = ds.getData(var, step=step)
+    
+    energy_bin = kwargs.get('bin', -1)
+    if energy_bin > 0 and ds.filetype == FileType.H5:
+        bins = ds.getData('bin', step=step)
+        data = data[np.where(bins == energy_bin)]
+    
+    return impl_beam.halo_ellipsoidal_beam(data)
 
 
 def find_beams(ds, var, **kwargs):
