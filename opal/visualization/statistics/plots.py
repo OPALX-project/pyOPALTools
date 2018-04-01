@@ -3,6 +3,7 @@
 
 import matplotlib.pyplot as plt
 from opal.datasets.DatasetBase import FileType, DatasetBase
+from opal.visualization.statistics import impl_plots
 
 def plot_histogram(ds, var, **kwargs):
     """
@@ -51,7 +52,7 @@ def plot_histogram(ds, var, **kwargs):
     return plt
 
 
-def plot_classification(ds, xvar, yvar, prob, **kwargs):
+def plot_classification(ds, xvar, yvar, value, **kwargs):
     """
     Scatter plot where the points are colored according
     the value of the probability density function
@@ -62,8 +63,7 @@ def plot_classification(ds, xvar, yvar, prob, **kwargs):
     ds      (DatasetBase)       dataset
     xvar    (str)               x-axis variable to consider
     yvar    (str)               y-axis variable to consider
-    prob    (float)             probability [0, 1] to
-                                classify
+    value   (float)             boundary value of classification
     
     Optional parameters
     -------------------
@@ -77,6 +77,8 @@ def plot_classification(ds, xvar, yvar, prob, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
+    step    = kwargs.get('step', 0)
+    
     xdata = ds.getData(xvar, step=step)
     ydata = ds.getData(yvar, step=step)
     
@@ -88,7 +90,7 @@ def plot_classification(ds, xvar, yvar, prob, **kwargs):
     
     plt = impl_plots.plot_classification(xdata, xlabel,
                                          ydata, ylabel,
-                                         prob)
+                                         value)
     
     plt.xlabel(xlabel + ' [' + xunit + ']')
     plt.ylabel(ylabel + ' [' + yunit + ']')
