@@ -19,6 +19,23 @@ from opal.visualization.statistics.plots import *
 
 
 def plot_orbits(ds, **kwargs):
+    """
+    Do an orbit plot. Only with datasets of
+    type FileType.TRACK_ORBIT.
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)   datasets
+    
+    Optional parameters
+    -------------------
+    id      (int)           which particle id
+                            (default: 0)
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
     
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
@@ -28,6 +45,9 @@ def plot_orbits(ds, **kwargs):
         raise TypeError(ds.filename + ' is not a track orbit dataset.')
     
     pid = kwargs.get('id', 0)
+    
+    if not pid:
+        raise ValueError("No data for particle id '" + str(pid) + "'.")
     
     xdata = ds.getData('x')
     ydata = ds.getData('y')
@@ -59,6 +79,15 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
     ds      (DatasetBase)   datasets
     xvar    (str)           variable for x-axis
     yvar    (str)           variable for y-axis
+    
+    Optional parameters
+    -------------------
+    step    (int)               of dataset
+    bins    (list or integer)   color energy bins
+    xscale  (str)               'linear', 'log'
+    yscale  (str)               'linear', 'log'
+    xsci    (bool)              x-ticks in scientific notation
+    ysci    (bool)              y-ticks in scientific notation
     
     Returns
     -------
@@ -105,7 +134,12 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
     
     Optional parameters
     -------------------
+    step    (int)               of dataset
     bins    (list or integer)   color energy bins
+    xscale  (str)               'linear', 'log'
+    yscale  (str)               'linear', 'log'
+    xsci    (bool)              x-ticks in scientific notation
+    ysci    (bool)              y-ticks in scientific notation
     
     Returns
     -------
@@ -174,16 +208,34 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
 
 def plot_density(ds, xvar, yvar, **kwargs):
     """
+    Do a density plot.
     
-    22. March 2018
+    Parameters
+    ----------
+    ds      (DatasetBase)       dataset
+    xvar    (str)               x-axis variable to consider
+    yvar    (str)               y-axis variable to consider
+    
+    Optional parameters
+    -------------------
+    step    (int)           of dataset
+    
+    Reference (22. March 2018)
+    ---------
     https://stackoverflow.com/questions/20105364/how-can-i-make-a-scatter-plot-colored-by-density-in-matplotlib
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
     """
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    xdata = ds.getData(xvar)
-    ydata = ds.getData(yvar)
+    step = kwargs.get('step', 0)
+    
+    xdata = ds.getData(xvar, step=step)
+    ydata = ds.getData(yvar, step=step)
         
     xy = np.vstack([xdata, ydata])
     z = gaussian_kde(xy)(xy)
@@ -209,8 +261,10 @@ def plot_envelope(dsets, xvar='position', **kwargs):
     dsets   (DatasetBase)   datasets
     lfile   (str)           lattice file (*.lattice) (optional)
     xvar    (str)           x-axis variable
-    yvars   ([])            list of variables for y-axis
-                            (2 entries expected)
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
     """
     if not isinstance(dsets, list):
         raise TypeError("Input 'dsets' has to be a list")
