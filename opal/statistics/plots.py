@@ -55,55 +55,6 @@ def simple_kde_plot(xdata, ydata, **kwargs):
     
     return plt
 
-# https://seaborn.pydata.org/generated/seaborn.JointGrid.html
-def joint_plot(xdata, ydata, join, **kwargs):
-    xlab         = kwargs.get('xlab', 'x')
-    ylab         = kwargs.get('ylab', 'y')
-    marginals    = kwargs.get('marginals', 'hist')
-    size         = kwargs.get('size', 8)
-    cmap         = kwargs.get('cmap', 'Blues_d')
-    
-    g = sns.JointGrid(x=xdata, y=ydata, size=size)
-    
-    hasJoin = False
-    
-    doAll = 'all' in join
-    
-    if 'scatter' in join or doAll:
-        g = g.plot_joint(plt.scatter, marker='.', s=10, cmap=cmap)
-        hasJoin = True
-    
-    if 'contour' in join or doAll:
-        g = g.plot_joint(sns.kdeplot, shade=False, cmap=cmap)
-        hasJoin = True
-    
-    g.set_axis_labels(r'$' + xlab + '$', r'$' + ylab + '$')
-    
-    if not hasJoin and not join == '':
-        raise RuntimeError("Fill list either with 'scatter', " +
-                           "'contour', 'all'.")
-    
-    hist = 'hist' in marginals
-    kde  = 'kde' in marginals
-    rug  = 'rug' in marginals
-    
-    if hist:
-        g = g.plot_marginals(sns.distplot, kde=kde, rug=rug)
-    elif kde:
-        g = g.plot_marginals(sns.kdeplot, shade=True)
-    
-    if rug and not hist:
-        g = g.plot_marginals(sns.rugplot)
-    
-    hasMarginals = hist + kde + rug
-    if not hasMarginals and not marginals == '':
-        raise RuntimeError("Use either 'kde', 'hist', 'rug', " +
-                           "or combination with '+', e.g. hist+rug.")
-    
-    plt.tight_layout()
-    
-    return plt
-
 
 def density_plot(xdata, ydata, **kwargs):
     """
