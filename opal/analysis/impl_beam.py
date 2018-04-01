@@ -1,3 +1,4 @@
+from opal.statistics import impl_statistics as stat
 import scipy as sc
 from scipy import signal
 import numpy as np
@@ -46,3 +47,57 @@ def find_beams(data, **kwargs):
     bc.append(xmax)
     
     return bc
+
+
+def halo_continuous_beam(data):
+    """
+    Compute the halo in horizontal or
+    vertical direction according to
+    
+    h_x = <x^4> / <x^2>^2 - 2
+    
+    Parameters
+    ----------
+    data    (list, array)   is plain data
+    
+    Reference
+    ---------
+    T. P. Wangler, Los Alamos National Laboratory, Los Alamos, NM 87545,
+    K. R. Crandall, TechSource, Santa Fe, NM 87594-1057,
+    BEAM HALO IN PROTON LINAC BEAMS,
+    XX International Linac Conference, Monterey, California
+    """
+    if data.size < 1:
+        raise ValueError('Empty data container.')
+    
+    m4 = stat.moment(data, k=4)
+    m2 = stat.moment(data, k=2)
+    
+    return m4 / m2 ** 2 - 2.0
+
+
+def halo_ellipsoidal_beam(data):
+    """
+    Compute the halo in horizontal, vertical
+    or longitudinal direction according to
+    
+    h_x = <x^4> / <x^2>^2 - 15 / 17
+    
+    Parameters
+    ----------
+    data    (list, array)   is plain data
+    
+    Reference
+    ---------
+    T. P. Wangler, Los Alamos National Laboratory, Los Alamos, NM 87545,
+    K. R. Crandall, TechSource, Santa Fe, NM 87594-1057,
+    BEAM HALO IN PROTON LINAC BEAMS,
+    XX International Linac Conference, Monterey, California
+    """
+    if data.size < 1:
+        raise ValueError('Empty data container.')
+    
+    m4 = stat.moment(data, k=4)
+    m2 = stat.moment(data, k=2)
+    
+    return m4 / m2 ** 2 - 15.0 / 7.0
