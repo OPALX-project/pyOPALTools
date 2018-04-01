@@ -49,3 +49,48 @@ def plot_histogram(ds, var, **kwargs):
     plt.ylabel(ylabel)
     
     return plt
+
+
+def plot_classification(ds, xvar, yvar, prob, **kwargs):
+    """
+    Scatter plot where the points are colored according
+    the value of the probability density function
+    pdf(x, y) computed through kernel density estimation.
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)       dataset
+    xvar    (str)               x-axis variable to consider
+    yvar    (str)               y-axis variable to consider
+    prob    (float)             probability [0, 1] to
+                                classify
+    
+    Optional parameters
+    -------------------
+    step    (int)           of dataset
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    xdata = ds.getData(xvar, step=step)
+    ydata = ds.getData(yvar, step=step)
+    
+    xunit  = ds.getUnit(xvar)
+    xlabel = ds.getLabel(xvar)
+    
+    yunit  = ds.getUnit(yvar)
+    ylabel = ds.getLabel(yvar)
+    
+    plt = impl_plots.plot_classification(xdata, xlabel,
+                                         ydata, ylabel,
+                                         prob)
+    
+    plt.xlabel(xlabel + ' [' + xunit + ']')
+    plt.ylabel(ylabel + ' [' + yunit + ']')
+    
+    return plt
