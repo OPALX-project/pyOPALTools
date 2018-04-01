@@ -184,15 +184,3 @@ def density_plot(xdata, ydata, **kwargs):
     cb.set_label(r'$' + clab + '$')
     
     return plt
-
-
-def plot_histogram(ds, var, **kwargs):
-    
-    step    = kwargs.get('step', 0)
-    bins    = kwargs.get('bins', 'sturges')
-    density = kwargs.get('density', True)
-    
-    data = ds.getData(var, step=step)
-    
-    plt.hist(data, bins=bins, density=density)
-    return plt

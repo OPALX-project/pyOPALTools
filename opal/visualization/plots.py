@@ -15,6 +15,7 @@ from opal.visualization.profiling.memory_plots import *
 from opal.visualization.profiling.lbal_plots import *
 from opal.visualization.grids.plots import *
 from opal.visualization.solver.plots import *
+from opal.visualization.statistics.plots import *
 
 
 def plot_orbits(ds, **kwargs):

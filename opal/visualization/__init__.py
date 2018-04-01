@@ -5,3 +5,4 @@ from opal.visualization.profiling.lbal_plots import *
 from opal.visualization.timing.plots import *
 from opal.visualization.grids.plots import *
 from opal.visualization.solver.plots import *
+from opal.visualization.statistics.plots import *
