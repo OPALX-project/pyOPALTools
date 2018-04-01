@@ -134,4 +134,6 @@ def get_beam(ds, var, k, **kwargs):
     if k > len(minima) - 1:
         raise ValueError("Bunch number has to be 'k < " + str(len(minima)) + "'.")
     
+    # 1. April 2018
+    # https://stackoverflow.com/questions/16343752/numpy-where-function-multiple-conditions
     return data[(data >= minima[k]) & (data < minima[k+1])]
