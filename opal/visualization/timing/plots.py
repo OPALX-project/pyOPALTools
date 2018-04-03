@@ -51,6 +51,11 @@ def plot_efficiency(dsets, what, prop, **kwargs):
     """
     Efficiency plot of a timing benchmark study
     
+    E_p = S_p / p
+    
+    where E_p is the efficiency and S_p the
+    speed-up with p cores / nodes.
+    
     Parameters
     ----------
     dsets   ([DatasetBase]) all timing datasets
@@ -64,6 +69,7 @@ def plot_efficiency(dsets, what, prop, **kwargs):
     xscale  (str)           x-axis scale, 'linear' or 'log'
     yscale  (str)           y-axis scale, 'linear' or 'log'
     grid    (bool)          if true, plot grid
+    percent (bool)          efficiency in percentage
     
     Returns
     -------
@@ -130,8 +136,15 @@ def plot_efficiency(dsets, what, prop, **kwargs):
     
     # obtain efficiency
     efficiency = []
+    
+    percent = 1.0
+    ylabel  = 'efficiency'
+    if kwargs.get('percent', True):
+        percent = 100.0
+        ylabel += ' [%]'
+    
     for i, s in enumerate(speedup):
-        efficiency.append( s / incr[i] )
+        efficiency.append( s / incr[i] * percent ) # in percent
     
     xscale = kwargs.get('xscale', 'linear')
     yscale = kwargs.get('yscale', 'linear')
@@ -139,7 +152,7 @@ def plot_efficiency(dsets, what, prop, **kwargs):
     
     plt.plot(cores, efficiency)
     plt.xlabel('#cores')
-    plt.ylabel('efficiency')
+    plt.ylabel(ylabel)
     plt.xscale(xscale)
     plt.yscale(yscale)
     plt.grid(grid, which='both')
