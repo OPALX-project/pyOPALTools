@@ -64,7 +64,10 @@ def load_dataset(directory, **kwargs):
             datasets.append(StatDataset(directory, fname))
             print ( 'matches stat file type.' )
         elif ftype == FileType.TIMING:
-            datasets.append(TimeDataset(directory, fname))
+            datasets.append(TimeDataset(directory, fname, 'ippl'))
+            print ( 'matches timing file type.' )
+        elif ftype == FileType.OUTPUT:
+            datasets.append(TimeDataset(directory, fname, 'output'))
             print ( 'matches timing file type.' )
         elif ftype == FileType.MEM:
             datasets.append(MemoryDataset(directory, fname))
