@@ -66,11 +66,13 @@ def plot_efficiency(dsets, what, prop, **kwargs):
     
     Optionals
     ---------
-    xscale  (str)           x-axis scale, 'linear' or 'log'
-    yscale  (str)           y-axis scale, 'linear' or 'log'
-    grid    (bool)          if true, plot grid
-    percent (bool)          efficiency in percentage
-    xlabel  (str)           label for x-axis. Default '#cores'
+    xscale      (str)           x-axis scale, 'linear' or 'log'
+    yscale      (str)           y-axis scale, 'linear' or 'log'
+    grid        (bool)          if true, plot grid
+    percent     (bool)          efficiency in percentage
+    xlabel      (str)           label for x-axis. Default '#cores'
+    core2node   (int)           scale #cores == 1 node
+                                (useful with xlabel='#nodes')
     
     Returns
     -------
@@ -101,6 +103,15 @@ def plot_efficiency(dsets, what, prop, **kwargs):
     
     # sort
     cores, time = zip(*sorted(zip(cores, time)))
+    
+    # tuple --> list
+    cores = list(cores)
+    
+    # transform cores --> nodes
+    core2node = kwargs.get('core2node', 1)
+    
+    for i, c in enumerate(cores):
+        cores[i] /= core2node
     
     
     # obtain speed-up
@@ -166,6 +177,8 @@ def plot_speedup(dsets, what, prop, **kwargs):
     grid        (bool)          if true, plot grid
     efficiency  (bool)          add efficiency to plot
     xlabel      (str)           label for x-axis. Default '#cores'
+    core2node   (int)           scale #cores == 1 node
+                                (useful with xlabel='#nodes')
     reference   (bool)          add speed-up reference line
     
     Returns
@@ -198,6 +211,14 @@ def plot_speedup(dsets, what, prop, **kwargs):
     # sort
     cores, time = zip(*sorted(zip(cores, time)))
     
+    # tuple --> list
+    cores = list(cores)
+    
+    # transform cores --> nodes
+    core2node = kwargs.get('core2node', 1)
+    
+    for i, c in enumerate(cores):
+        cores[i] /= core2node
     
     # obtain speed-up
     speedup = []
