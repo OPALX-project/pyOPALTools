@@ -252,21 +252,7 @@ def plot_speedup(dsets, what, prop, **kwargs):
     yscale = kwargs.get('yscale', 'linear')
     grid   = kwargs.get('grid', False)
     
-    plt.plot(cores, speedup)
-    plt.xlabel(kwargs.get('xlabel', '#cores'))
-    plt.ylabel('speed-up')
-    plt.xscale(xscale)
-    plt.yscale(yscale)
-    plt.grid(grid, which='both')
-    plt.tight_layout()
-    
-    if kwargs.get('reference', False):
-        ref = []
-        for c in cores:
-            ref.append( c / cores[0] )
-        plt.plot(cores, ref, 'k--', label='reference')
-        plt.legend()
-    
+    ax1 = plt.gca()
     
     if kwargs.get('efficiency', False):
         # obtain core increase
@@ -277,13 +263,31 @@ def plot_speedup(dsets, what, prop, **kwargs):
         # obtain efficiency
         efficiency = []
         
-        ax2 = plt.twinx()
+        ax2 = ax1.twinx()
         ax2.set_ylabel('efficiency', color='r')
         ax2.set_yscale(yscale)
+        ax2.tick_params('y', colors='r')
+        ax2.grid(grid, which='both', color='r', linestyle='dashed', alpha=0.4)
         
         for i, s in enumerate(speedup):
             efficiency.append( s / incr[i] )
         
         ax2.plot(cores, efficiency, 'r--')
+    
+    ax1.plot(cores, speedup)
+    ax1.set_xlabel(kwargs.get('xlabel', '#cores'))
+    ax1.set_ylabel('speed-up')
+    ax1.set_xscale(xscale)
+    ax1.set_yscale(yscale)
+    ax1.grid(grid, which='both')
+    
+    if kwargs.get('reference', False):
+        ref = []
+        for c in cores:
+            ref.append( c / cores[0] )
+        ax1.plot(cores, ref, 'k--', label='reference')
+        ax1.legend()
+    
+    plt.tight_layout()
         
     return plt
