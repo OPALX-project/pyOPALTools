@@ -91,35 +91,13 @@ def plot_efficiency(dsets, what, prop, **kwargs):
                             "' is not a timing dataset.")
     
     cores = []
-
-    # find timing dictionary of corresponding property 'prop'
-    # 'idx' will be set accordingly
-    idx = 0
-    match = False
-    available = []
-    for timing in dsets[0].getData(''):
-        if timing['what'] == what:
-            match = True
-        else:
-            available.append( timing['what'] )
-            idx += 1
-    
-    if not match:
-        raise ValueError("No timing called '" + what + "'. Possible entries:"
-                         + str(available))
-    
-    # clear again
-    available = []
-    
     time = []
     
     for ds in dsets:
-        data = ds.getData('')
-        
         #access main timing
-        cores.append( int(data[0]['cores']) )
+        cores.append( int(ds.getData(0, prop='cores')) )
         
-        time.append( data[idx][prop] )
+        time.append( ds.getData(var=what, prop=prop) )
     
     # sort
     cores, time = zip(*sorted(zip(cores, time)))
@@ -209,35 +187,13 @@ def plot_speedup(dsets, what, prop, **kwargs):
                             "' is not a timing dataset.")
     
     cores = []
-
-    # find timing dictionary of corresponding property 'prop'
-    # 'idx' will be set accordingly
-    idx = 0
-    match = False
-    available = []
-    for timing in dsets[0].getData(''):
-        if timing['what'] == what:
-            match = True
-        else:
-            available.append( timing['what'] )
-            idx += 1
-    
-    if not match:
-        raise ValueError("No timing called '" + what + "'. Possible entries:"
-                         + str(available))
-    
-    # clear again
-    available = []
-    
     time = []
     
     for ds in dsets:
-        data = ds.getData('')
-        
         #access main timing
-        cores.append( int(data[0]['cores']) )
+        cores.append( int(ds.getData(0, prop='cores')) )
         
-        time.append( data[idx][prop] )
+        time.append( ds.getData(var=what, prop=prop) )
     
     # sort
     cores, time = zip(*sorted(zip(cores, time)))
