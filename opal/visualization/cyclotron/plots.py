@@ -1,4 +1,7 @@
-from opal.visualization.cyclotron import calcTurnSeparation, calcCenteringExtraction
+from opal.datasets.DatasetBase import DatasetBase, FileType
+from opal.analysis.cyclotron import *
+import numpy as np
+import matplotlib.pyplot as plt
 
 def plot_orbits(ds, **kwargs):
     """
@@ -104,4 +107,76 @@ def plot_centering(ds, **kwargs):
     ax.xaxis.set_label_coords(0.9, -0.025)
     ax.yaxis.set_label_coords(-0.025,0.9)
 
+    return plt
+
+
+def plot_turn_separation(ds, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
+    """
+    Only with datasets of
+    type FileType.TRACK_ORBIT.
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)   datasets
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.TRACK_ORBIT:
+        raise TypeError(ds.filename + ' is not a track orbit dataset.')
+    
+    ts, energy, _, radius = calcTurnSeparation(ds)
+    
+    if asFunctionOfTurnNumber:
+        x = np.arange(2, len(ts)+2) # From second turn
+        plt.xlabel('Turn Number')
+    elif asFunctionOfEnergy:
+        x = energy[1:] # From second turn
+        plt.xlabel('Energy [MeV]')
+    else:
+        x = radius[1:] / 1000. # From second turn, in meters
+        plt.xlabel('Radius [m]')
+
+    plt.plot(x, ts, 'o-', linewidth=2, **kwargs)
+    plt.ylabel('Turn Separation [mm]')
+    
+    return plt
+
+
+def plot_RF_phases(ds, RFcavity, **kwargs):
+    """
+    Only with datasets of
+    type FileType.OUTPUT.
+    
+    Parameters
+    ----------
+    ds          (DatasetBase)   datasets
+    RFcavity    ([str])         name of the RFcavity as specifed in the input file
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.OUTPUT:
+        raise TypeError(ds.filename + ' is not an OPAL standard output file.')
+    
+    data = calcRFphases(ds, RFcavity)
+    
+    for i, cname in enumerate(RFcavity):
+        turns  = data[i][0]
+        phases = data[i][1]
+        plt.plot(turns, phases, linewidth=3, label=cname, **kwargs)
+    plt.xlabel("Turn number")
+    plt.ylabel("RF phase [deg]")
+    plt.legend(loc=0)
+    
     return plt

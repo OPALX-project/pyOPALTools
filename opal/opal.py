@@ -8,6 +8,7 @@ from opal.datasets.LBalDataset import LBalDataset
 from opal.datasets.GridDataset import GridDataset
 from opal.datasets.SolverDataset import SolverDataset
 from opal.datasets.TrackOrbitDataset import TrackOrbitDataset
+from opal.datasets.OutputDataset import OutputDataset
 
 
 def load_dataset(directory, **kwargs):
@@ -19,15 +20,22 @@ def load_dataset(directory, **kwargs):
     Parameters
     ----------
     directory       (str)       root directory of the OPAL simulation
+    
+    Optionals
+    ---------
     ftype           (FileType)  type of file to read in (optional)
     fname           (str)       file to read in (optional)
+    astype          (FileType)  read a file according some dataset type
+                                E.g. OPAL standard output contains timings
+                                as well.
     """
     
     if not os.path.exists(directory):
         raise RuntimeError("No such directory: '" + directory + "'.")
     
-    ftype = kwargs.get('ftype', FileType.NONE)
-    fname = kwargs.get('fname', '')
+    ftype  = kwargs.get('ftype', FileType.NONE)
+    fname  = kwargs.get('fname', '')
+    astype = kwargs.get('astpye', FileType.NONE)
     
     if not ftype == FileType.NONE and fname:
         raise RuntimeError('Specify either file type or file name but not both.')
@@ -67,8 +75,12 @@ def load_dataset(directory, **kwargs):
             datasets.append(TimeDataset(directory, fname, 'ippl'))
             print ( 'matches timing file type.' )
         elif ftype == FileType.OUTPUT:
-            datasets.append(TimeDataset(directory, fname, 'output'))
-            print ( 'matches timing file type.' )
+            if astype == FileType.TIMING:
+                datasets.append(TimeDataset(directory, fname, 'output'))
+                print ( 'matches timing file type.' )
+            else:
+                datasets.append(OutputDataset(directory, fname))
+                print ( 'matches OPAL standard output file type.' )
         elif ftype == FileType.MEM:
             datasets.append(MemoryDataset(directory, fname))
             print ( 'matches memory file type.' )

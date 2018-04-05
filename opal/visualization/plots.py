@@ -16,6 +16,7 @@ from opal.visualization.profiling.lbal_plots import *
 from opal.visualization.grids.plots import *
 from opal.visualization.solver.plots import *
 from opal.visualization.statistics.plots import *
+from opal.visualization.cyclotron.plots import *
 
 
 def plot_profile1D(ds, xvar, yvar, **kwargs):
