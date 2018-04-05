@@ -81,7 +81,7 @@ def halo_ellipsoidal_beam(data):
     Compute the halo in horizontal, vertical
     or longitudinal direction according to
     
-    h_x = <x^4> / <x^2>^2 - 15 / 17
+    h_x = <x^4> / <x^2>^2 - 15 / 7
     
     Parameters
     ----------
@@ -101,3 +101,24 @@ def halo_ellipsoidal_beam(data):
     m2 = stat.moment(data, k=2)
     
     return m4 / m2 ** 2 - 15.0 / 7.0
+
+
+def projected_emittance(coords, momenta):
+    """
+    Compute the projected emittance. It shifts the
+    coordinates by their mean value such that the bunch
+    is centered around zero.
+    
+    \varepsilon = \sqrt{ <coords^2><momenta^2> - <coords*momenta>^2 }
+    """
+    c2 = stat.moment(coords, k=2)
+    m2 = stat.moment(momenta, k=2)
+    
+    # we need to shift coords to center the beam
+    mean = stat.mean(coords)
+    
+    coords -= mean
+    
+    cm = np.mean(np.asarray(coords) * np.asarray(momenta))
+    
+    return np.sqrt( m2 * c2 - cm ** 2 )
