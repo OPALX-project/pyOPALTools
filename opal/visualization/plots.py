@@ -18,58 +18,6 @@ from opal.visualization.solver.plots import *
 from opal.visualization.statistics.plots import *
 
 
-def plot_orbits(ds, **kwargs):
-    """
-    Do an orbit plot. Only with datasets of
-    type FileType.TRACK_ORBIT.
-    
-    Parameters
-    ----------
-    ds      (DatasetBase)   datasets
-    
-    Optional parameters
-    -------------------
-    id      (int)           which particle id
-                            (default: 0)
-    
-    Returns
-    -------
-    a matplotlib.pyplot handle
-    """
-    
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
-    if not ds.filetype == FileType.TRACK_ORBIT:
-        raise TypeError(ds.filename + ' is not a track orbit dataset.')
-    
-    pid = kwargs.get('id', 0)
-    
-    if not pid:
-        raise ValueError("No data for particle id '" + str(pid) + "'.")
-    
-    xdata = ds.getData('x')
-    ydata = ds.getData('y')
-    ids   = ds.getData('ID')
-        
-    xdata = xdata[np.where(ids == pid)]
-    ydata = ydata[np.where(ids == pid)]
-        
-    plt.plot(xdata, ydata)
-        
-    xlabel = ds.getLabel('x')
-    xunit  = ds.getUnit('x')
-    
-    ylabel = ds.getLabel('y')
-    yunit  = ds.getUnit('y')
-    
-    plt.xlabel(xlabel + ' [' + xunit + ']')
-    plt.ylabel(ylabel + ' [' + yunit + ']')
-    
-    return plt
-
-
 def plot_profile1D(ds, xvar, yvar, **kwargs):
     """
     Plot a 1D profile.
