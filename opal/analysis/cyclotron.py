@@ -98,7 +98,7 @@ def calcCenteringExtraction(radius, turnCorrection=1.35,phaseCorrection=0.0,ampl
     
     Examples
     --------
-    TODO
+    Check Cyclotron.ipynb in the opal/test directory
     
     Returns
     -----
@@ -320,7 +320,7 @@ def calcRFphases(ds, RFcavity):
 
     Examples
     --------
-    None
+    Check Cyclotron.ipynb in the opal/test directory
     """
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
