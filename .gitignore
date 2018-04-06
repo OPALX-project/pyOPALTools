@@ -1,3 +1,7 @@
+## Editor files
 *~
+
+## Python files
 *.pyc
 __pycache__
+.ipynb_checkpoints

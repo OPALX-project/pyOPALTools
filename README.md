@@ -60,6 +60,7 @@ pip install scipy
 pip install jupyter\[notebook\] matplotlib
 pip install h5py
 pip install pyQt5
+pip install seaborn
 ```
 
 #### Installation using conda
@@ -82,6 +83,7 @@ conda install -n pyOPALTools.venv scipy
 conda install -n pyOPALTools.venv jupyter
 conda install -n pyOPALTools.venv matplotlib
 conda install -n pyOPALTools.venv h5py
+conda install -n pyOPALTools.venv seaborn
 #conda install -n pyOPALTools.venv -c spectraldns h5py-parallel
 #conda install  -n pyOPALTools.venv -c inria-pro-sed h5py-parallel
 #conda install -n pyOPALTools.venv -c mpi4py openmpi
