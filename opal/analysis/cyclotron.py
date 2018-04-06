@@ -50,7 +50,7 @@ def calcTurnSeparation(ds):
     # Particle energy
     p_mass = 938.28 # proton mass in MeV / c^2
     # Beta*gamma
-    beta_gamma = np.sqrt(px * py + py * py + pz * pz)
+    beta_gamma = np.sqrt(px * px + py * py + pz * pz)
     # Gamma
     gamma = np.sqrt(1+beta_gamma*beta_gamma)
     # Energy
