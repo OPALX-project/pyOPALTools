@@ -1,5 +1,6 @@
 from opal.datasets.DatasetBase import DatasetBase, FileType
 import numpy as np
+import scipy as sp
 import re
 
 def calcTurnSeparation(ds, nsteps=-1):
