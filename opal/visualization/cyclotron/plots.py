@@ -110,7 +110,7 @@ def plot_centering(ds, **kwargs):
     return plt
 
 
-def plot_turn_separation(ds, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
+def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
     """
     Only with datasets of
     type FileType.TRACK_ORBIT.
@@ -130,7 +130,7 @@ def plot_turn_separation(ds, asFunctionOfTurnNumber=True, asFunctionOfEnergy=Fal
     if not ds.filetype == FileType.TRACK_ORBIT:
         raise TypeError(ds.filename + ' is not a track orbit dataset.')
     
-    ts, energy, _, radius = calcTurnSeparation(ds)
+    ts, energy, _, radius = calcTurnSeparation(ds, nsteps)
     
     if asFunctionOfTurnNumber:
         x = np.arange(2, len(ts)+2) # From second turn
