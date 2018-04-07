@@ -203,6 +203,7 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
     if show_single:
         fig.canvas.mpl_connect('pick_event', onpick)
         pl.show()
+        pl.savefig(prefix + '/pf.png')
     else:
         pl.savefig(prefix + '/' + num.zfill(4) + '.png')
         pl.close(fig)
@@ -316,16 +317,17 @@ def main(argv):
             raise SyntaxError('No path for input data specified')
     
         if len(selected_ids) != 3:
-            raise SyntaxError('Please select 3 things to visualize')
+            raise SyntaxError('Please select exactly 3 things to visualize')
             return
         
         if generation != -1:
             print("Show generation " + generation)
     
+        if not os.path.isdir(outpath):
+            os.mkdir(outpath)
+
         data = {}
         if generation == -1:
-            if not os.path.isdir(outpath):
-                os.mkdir(outpath)
             for infile in glob.glob(os.path.join(path + '/',
                                     '*_' + filename_postfix)):
                 print("Reading data file " + infile)

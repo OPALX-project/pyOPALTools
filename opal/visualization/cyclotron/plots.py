@@ -110,7 +110,7 @@ def plot_centering(ds, **kwargs):
     return plt
 
 
-def plot_turn_separation(ds, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
+def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
     """
     Only with datasets of
     type FileType.TRACK_ORBIT.
@@ -130,7 +130,7 @@ def plot_turn_separation(ds, asFunctionOfTurnNumber=True, asFunctionOfEnergy=Fal
     if not ds.filetype == FileType.TRACK_ORBIT:
         raise TypeError(ds.filename + ' is not a track orbit dataset.')
     
-    ts, energy, _, radius = calcTurnSeparation(ds)
+    ts, energy, _, radius = calcTurnSeparation(ds, nsteps)
     
     if asFunctionOfTurnNumber:
         x = np.arange(2, len(ts)+2) # From second turn
@@ -147,6 +147,35 @@ def plot_turn_separation(ds, asFunctionOfTurnNumber=True, asFunctionOfEnergy=Fal
     
     return plt
 
+
+def plot_beta_beat(ds, **kwargs):
+    """
+    Only with datasets of
+    type FileType.TRACK_ORBIT.
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)   datasets
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.TRACK_ORBIT:
+        raise TypeError(ds.filename + ' is not a track orbit dataset.')
+    
+    _, _, phi, radius = calcTurnSeparation(ds)
+
+    plt.plot(radius / 1000, phi, 'o-', linewidth=2, **kwargs)
+    plt.xlabel('Radius [m]')
+    plt.ylabel('Radial Direction [rad]')
+    
+    return plt
+    
 
 def plot_RF_phases(ds, RFcavity, **kwargs):
     """

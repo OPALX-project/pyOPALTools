@@ -1,15 +1,17 @@
 from opal.datasets.DatasetBase import DatasetBase, FileType
 import numpy as np
+import scipy as sp
 import re
 
-def calcTurnSeparation(ds):
+def calcTurnSeparation(ds, nsteps=-1):
     """ 
     Calculate turn separation from OPAL xxx--trackOrbit.dat file
 
     Parameters
     ----------
     ds      (DatasetBase)   datasets of type FileType.TRACK_ORBIT
-    
+    nsteps                  number of steps per turn
+
     Returns
     -------
     none
@@ -20,7 +22,7 @@ def calcTurnSeparation(ds):
 
     Examples
     --------
-    Check testCycl-1.py in the test directory
+    Check Cyclotron.ipynb in the opal/test directory
     
     Returns
     -------
@@ -34,14 +36,25 @@ def calcTurnSeparation(ds):
     if not ds.filetype == FileType.TRACK_ORBIT:
         raise TypeError(ds.filename + ' is not a track orbit dataset.')
     
-    x = ds.getData('x')
-    y = ds.getData('y')
-    px = ds.getData('px')
-    py = ds.getData('py')
-    pz = ds.getData('pz')
+    # first particles only
+    id0s = [index for index,ID in enumerate(ds.getData('ID')) if ID==0]
+
+    x  = ds.getData('x') [id0s]
+    y  = ds.getData('y') [id0s]
+    px = ds.getData('px')[id0s]
+    py = ds.getData('py')[id0s]
+    pz = ds.getData('pz')[id0s]
     
     # Get x-axis crossings
     pksx = detect_peaks(x, mph=0.04, mpd=100)
+    # Correct as peaks might not correspond to each other
+    # Use number of steps per turn
+    if not nsteps==-1:
+        for pknr in range(1,len(pksx)):
+            pksx[pknr] = pksx[pknr-1] + nsteps
+            if pksx[pknr] + nsteps >= len(x):
+                break
+
     mx = x[pksx]
 
     # Turn separation is the difference between crossings
@@ -50,7 +63,7 @@ def calcTurnSeparation(ds):
     # Particle energy
     p_mass = 938.28 # proton mass in MeV / c^2
     # Beta*gamma
-    beta_gamma = np.sqrt(px * py + py * py + pz * pz)
+    beta_gamma = np.sqrt(px * px + py * py + pz * pz)
     # Gamma
     gamma = np.sqrt(1+beta_gamma*beta_gamma)
     # Energy
@@ -85,7 +98,7 @@ def calcCenteringExtraction(radius, turnCorrection=1.35,phaseCorrection=0.0,ampl
     
     Examples
     --------
-    TODO
+    Check Cyclotron.ipynb in the opal/test directory
     
     Returns
     -----
@@ -307,7 +320,7 @@ def calcRFphases(ds, RFcavity):
 
     Examples
     --------
-    None
+    Check Cyclotron.ipynb in the opal/test directory
     """
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
