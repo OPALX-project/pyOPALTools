@@ -254,7 +254,7 @@ def plot_speedup(dsets, what, prop, **kwargs):
         for i, s in enumerate(speedup):
             efficiency.append( s / incr[i] )
         
-        ax2.plot(cores, efficiency, 'r--')
+        ax2.plot(cores, efficiency, 'r')
     
     ax1.plot(cores, speedup)
     ax1.set_xlabel(kwargs.get('xlabel', '#cores'))
