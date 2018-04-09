@@ -40,9 +40,53 @@ def substring_after(s, delim):
 def substring_before(s, delim):
     return s.partition(delim)[0]
 
+def buildBounded(pickle):
+    #Build a data base using simulations within bounds given
+    dbr = mldb()
+    dbr.load(pickle)
+    ulb = dbr.getBounds()
+    
+    keys = dbr.getXNames()   
+    n    = len(keys) 
+    lb   = np.zeros((n))
+    ub   = np.zeros((n))
+    #Make array with upper bounds (ub) 
+    #and lower bounds (lb)    
+    for i, key in enumerate(keys):
+        lb[i] = ulb[key][0]         
+        ub[i] = ulb[key][1]
+    
+    goodpts   = 0 
+    badpts    = 0
+    totalgen  = dbr.getNumberOfSamples()  
+    bounded   = []
+    unbounded = [] 
+    #Loop through each generation
+    for gen in range(0, totalgen):
+        nsims = dbr.getSampleSize(i=gen)
+        #Loop through each simulation in gen 
+        for x in range(0,nsims):
+            xvals  = dbr.getDVarVec(gen,x) 
+            ovars  = dbr.getObjVec(gen,x)
+            #Check if xvals <= lb
+            testlb = np.less_equal(xvals, lb)
+            #Check if xvlas >= ub
+            testub = np.greater_equal(xvals, ub)
 
-
-
+            if (any(testlb) == True) or (any(testub) == True):  
+                badpts  = badpts +1
+                unbounded.append({'dvarValues':xvals,'objValues' :ovars})
+            elif (all(testlb) == False) and (all(testub) == False):
+                goodpts = goodpts +1
+                bounded.append({'dvarValues':xvals,'objValues' :ovars})
+            else:
+                print('Mistake, xvals not in boundaries expected.')
+ 
+    print('# bad pts:', badpts, '# good pts:', goodpts)
+    #print(np.shape(unbounded[0]))
+    #print('bad bounds:', max(unbounded[0]['dvarValues']))
+    #print('Write ML-Database ' + filename_postfix+'.pk')
+    #pick.dump(self.trainingSet,open(filename_postfix+'.pk','wb'),-1)
 class mldb:
  
     def __init__(self):
@@ -59,9 +103,11 @@ class mldb:
             if (i == 0):
                 dvarsNames = optjson.getDesignVariables()
                 objsNames  = optjson.getObjectives()
+                bounds     = optjson.getBounds()
                 self.trainingSet.append({'sampleSize':numGenerations, 
                                          'dvarNames' :dvarsNames, 
-                                         'objNames'  :objsNames})
+                                         'objNames'  :objsNames,
+                                         'bounds'    :bounds})
             dvars      = optjson.getAllInput()
             ovars      = optjson.getAllOutput()
 
@@ -314,6 +360,7 @@ class mldb:
 
     def getXDim(self):
         return len(self.trainingSet[0]['dvarNames'])
+
     def getXNames(self):
         return self.trainingSet[0]['dvarNames']
 
@@ -330,6 +377,9 @@ class mldb:
 
     def getTimes(self,gen,indiv):
         return self.trainingSet[gen+1]['times'][indiv]
+    
+    def getBounds(self):
+        return self.trainingSet[0]['bounds']
 
     def printOverview(self):
         if (self.trainingSet):
@@ -356,6 +406,7 @@ class mldb:
         else:
             print('Load data first')
             sys.exit()
+
 
 #def main(argv):
 #    readAscii           = False # read ASCII or JSON
