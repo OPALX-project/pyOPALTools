@@ -110,7 +110,7 @@ def buildBounded(pickle, baseFN):
 
     filename = baseFN+'-bounded.pk'
     print('Write ML-Database ' + filename)
-    #pick.dump(bounded,open(filename,'wb'),-1)
+    pick.dump(bounded,open(filename,'wb'),-1)
 
 class mldb:
  
