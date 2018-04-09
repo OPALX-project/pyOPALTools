@@ -65,9 +65,8 @@ def buildBounded(pickle, baseFN):
     for i, key in enumerate(keys):
         lb[0, i] = ulb[key][0]         
         ub[0, i] = ulb[key][1]
-    
-    goodpts   = 0 
-    badpts    = 0
+    print(lb)
+    print(ub) 
     totalgen  = dbr.getNumberOfSamples()  
     bounded   = []
     unbounded = [] 
@@ -91,19 +90,20 @@ def buildBounded(pickle, baseFN):
                 'bounds'    :ulb})
 
         #Loop through each simulation in gen 
-        for x in range(0,nsims):
+        for x in range(0, nsims):
             xvals  = (dbr.getDVarVec(gen,x)).reshape((1,n))
             ovals  = (dbr.getObjVec(gen,x)).reshape((1,nobjs))
             testlb = np.less_equal(xvals, lb)
             testub = np.greater_equal(xvals, ub)
             #Check if xvals <= lb or xvlas >= ub
-            if (testlb.any() == True) or (testlb.any() == True):  
-                badpts  = badpts +1
+            if (any(testlb[0]) == True) or (any(testub[0]) == True):  
                 bxvec = np.append(bxvec, xvals, axis=0)
                 byvec = np.append(byvec, ovals, axis=0)
             #Check if xvlas within all bounds
-            elif (testlb.all() == False) and (testub.all() == False):
-                goodpts = goodpts +1
+            elif (all(testlb[0]) == False) and (all(testub[0]) == False):
+                #print(testlb[0])
+                #print(testub[0])
+                #print(xvals)
                 xvec = np.append(xvec, xvals, axis=0)
                 yvec = np.append(yvec, ovals, axis=0)
                 gxvec = np.append(gxvec, xvals, axis=0)
@@ -130,7 +130,7 @@ def buildBounded(pickle, baseFN):
     #Saving all bad points, looses generation info
     unbounded.append({'dvarValues':bxvec, 'objValues' :byvec})
 
-    print('# bad pts:', badpts, '# good pts:', goodpts)
+    print('# bad pts:', str(np.size(bxvec[:,0])), '# good pts:', str(np.size(xvec[:,0])))
     badbounds = checkBounds(unbounded, keys)
 
     filename = baseFN+'-bounded.pk'
