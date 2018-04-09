@@ -40,7 +40,13 @@ def substring_after(s, delim):
 def substring_before(s, delim):
     return s.partition(delim)[0]
 
-def buildBounded(pickle):
+def checkBounds(data):
+    n = len(data)
+    print(n)
+    print(max(data[1]['dvarValues']))
+    
+
+def buildBounded(pickle, baseFN):
     #Build a data base using simulations within bounds given
     dbr = mldb()
     dbr.load(pickle)
@@ -66,6 +72,14 @@ def buildBounded(pickle):
         nsims = dbr.getSampleSize(i=gen)
         #Loop through each simulation in gen 
         for x in range(0,nsims):
+            #Save extra info            
+            if (x == 0):
+                objsNames  = dbr.getYNames()
+                bounded.append({'sampleSize':totalgen,
+                                'dvarNames' :keys,
+                                'objNames'  :objsNames,
+                                'bounds'    :ulb})
+
             xvals  = dbr.getDVarVec(gen,x) 
             ovars  = dbr.getObjVec(gen,x)
             #Check if xvals <= lb
@@ -83,10 +97,12 @@ def buildBounded(pickle):
                 print('Mistake, xvals not in boundaries expected.')
  
     print('# bad pts:', badpts, '# good pts:', goodpts)
-    #print(np.shape(unbounded[0]))
-    #print('bad bounds:', max(unbounded[0]['dvarValues']))
-    #print('Write ML-Database ' + filename_postfix+'.pk')
-    #pick.dump(self.trainingSet,open(filename_postfix+'.pk','wb'),-1)
+    badbounds = checkBounds(unbounded)
+
+    filename = baseFN+'-bounded.pk'
+    print('Write ML-Database ' + filename)
+    pick.dump(bounded,open(filename,'wb'),-1)
+
 class mldb:
  
     def __init__(self):
