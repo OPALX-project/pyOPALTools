@@ -230,8 +230,11 @@ def plot_speedup(dsets, what, prop, **kwargs):
     grid   = kwargs.get('grid', False)
     
     ax1 = plt.gca()
+    loc = 'best'
     
     if kwargs.get('efficiency', False):
+        loc = 'lower center'
+        
         # obtain core increase
         incr = []
         for c in cores:
@@ -243,13 +246,15 @@ def plot_speedup(dsets, what, prop, **kwargs):
         ax2 = ax1.twinx()
         ax2.set_ylabel('efficiency', color='r')
         ax2.set_yscale(yscale)
-        ax2.tick_params('y', colors='r')
+        # 8. April 2018
+        # https://stackoverflow.com/questions/15256660/set-the-colour-of-matplotlib-ticks-on-a-log-scaled-axes
+        ax2.tick_params('y', colors='r', which='both')
         ax2.grid(grid, which='both', color='r', linestyle='dashed', alpha=0.4)
         
         for i, s in enumerate(speedup):
             efficiency.append( s / incr[i] )
         
-        ax2.plot(cores, efficiency, 'r--')
+        ax2.plot(cores, efficiency, 'r')
     
     ax1.plot(cores, speedup)
     ax1.set_xlabel(kwargs.get('xlabel', '#cores'))
@@ -263,7 +268,7 @@ def plot_speedup(dsets, what, prop, **kwargs):
         for c in cores:
             ref.append( c / cores[0] )
         ax1.plot(cores, ref, 'k--', label='reference')
-        ax1.legend()
+        ax1.legend(frameon=True, loc=loc)
     
     plt.tight_layout()
         

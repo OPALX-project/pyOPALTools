@@ -35,7 +35,7 @@ def load_dataset(directory, **kwargs):
     
     ftype  = kwargs.get('ftype', FileType.NONE)
     fname  = kwargs.get('fname', '')
-    astype = kwargs.get('astpye', FileType.NONE)
+    astype = kwargs.get('astype', FileType.NONE)
     
     if not ftype == FileType.NONE and fname:
         raise RuntimeError('Specify either file type or file name but not both.')
