@@ -40,11 +40,20 @@ def substring_after(s, delim):
 def substring_before(s, delim):
     return s.partition(delim)[0]
 
-def checkBounds(data):
-    n = len(data)
-    print(n)
-    print(max(data[1]['dvarValues']))
-    
+def checkBounds(data, keys):
+    #nxs = number of x variables
+    nxs  = len(keys)
+    npts = len(data)
+    hold = np.zeros((npts,nxs)) 
+    for i in range(0, npts):
+        for x in range(0,nxs):
+            hold[i,x] = data[i]['dvarValues'][x]
+
+    #Print bounds 
+    for j in range(0, nxs):
+        print("max of "+ keys[j] + '= '+ str(max(hold[:,j])))
+        print("min of "+ keys[j] + '= '+ str(min(hold[:,j])))
+        print('\n')
 
 def buildBounded(pickle, baseFN):
     #Build a data base using simulations within bounds given
@@ -97,11 +106,11 @@ def buildBounded(pickle, baseFN):
                 print('Mistake, xvals not in boundaries expected.')
  
     print('# bad pts:', badpts, '# good pts:', goodpts)
-    badbounds = checkBounds(unbounded)
+    badbounds = checkBounds(unbounded, keys)
 
     filename = baseFN+'-bounded.pk'
     print('Write ML-Database ' + filename)
-    pick.dump(bounded,open(filename,'wb'),-1)
+    #pick.dump(bounded,open(filename,'wb'),-1)
 
 class mldb:
  
