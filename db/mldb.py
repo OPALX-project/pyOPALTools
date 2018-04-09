@@ -79,18 +79,22 @@ def buildBounded(pickle, baseFN):
     #Loop through each generation
     for gen in range(0, totalgen):
         nsims = dbr.getSampleSize(i=gen)
+                #Save extra info            
+        if (gen == 0):
+            objsNames  = dbr.getYNames()
+            bounded.append({'sampleSize':totalgen,
+                            'dvarNames' :keys,
+                            'objNames'  :objsNames,
+                            'bounds'    :ulb})
+
+        xvec  = np.zeros((nsims, n))
+        bxvec = np.zeros((nsims, n))
+        yvec  = np.zeros((nsims, len(objsNames)))
+        byvec = np.zeros((nsims, len(objsNames)))
         #Loop through each simulation in gen 
         for x in range(0,nsims):
-            #Save extra info            
-            if (x == 0):
-                objsNames  = dbr.getYNames()
-                bounded.append({'sampleSize':totalgen,
-                                'dvarNames' :keys,
-                                'objNames'  :objsNames,
-                                'bounds'    :ulb})
-
             xvals  = dbr.getDVarVec(gen,x) 
-            ovars  = dbr.getObjVec(gen,x)
+            ovals  = dbr.getObjVec(gen,x)
             #Check if xvals <= lb
             testlb = np.less_equal(xvals, lb)
             #Check if xvlas >= ub
@@ -98,15 +102,20 @@ def buildBounded(pickle, baseFN):
 
             if (any(testlb) == True) or (any(testub) == True):  
                 badpts  = badpts +1
-                unbounded.append({'dvarValues':xvals,'objValues' :ovars})
+                bxvec[x,:] = xvals
+                byvec[x,:] = ovals
             elif (all(testlb) == False) and (all(testub) == False):
                 goodpts = goodpts +1
-                bounded.append({'dvarValues':xvals,'objValues' :ovars})
+                xvec[x,:] = xvals
+                yvec[x,:] = ovals
             else:
                 print('Mistake, xvals not in boundaries expected.')
+
+        bounded.append({'dvarValues':xvec,'objValues' :yvec})
+        unbounded.append({'dvarValues':bxvec, 'objValues' :byvec})
  
     print('# bad pts:', badpts, '# good pts:', goodpts)
-    badbounds = checkBounds(unbounded, keys)
+    #badbounds = checkBounds(unbounded, keys)
 
     filename = baseFN+'-bounded.pk'
     print('Write ML-Database ' + filename)
