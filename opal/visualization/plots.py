@@ -182,12 +182,14 @@ def plot_density(ds, xvar, yvar, **kwargs):
                         "' not derived from 'DatasetBase'.")
     
     step = kwargs.get('step', 0)
-    
+    bins = kwargs.get('bins', (50,50))
+    cmap = kwargs.get('cmap', plt.cm.jet)
+
     xdata = ds.getData(xvar, step=step)
     ydata = ds.getData(yvar, step=step)
         
     xy = np.vstack([xdata, ydata])
-    plt.hist2d(xdata, ydata, (50, 50), cmap=plt.cm.jet)
+    plt.hist2d(xdata, ydata, bins = bins, cmap=cmap)
 
     xunit  = ds.getUnit(xvar)
     yunit  = ds.getUnit(yvar)
