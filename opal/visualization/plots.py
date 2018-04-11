@@ -187,9 +187,8 @@ def plot_density(ds, xvar, yvar, **kwargs):
     ydata = ds.getData(yvar, step=step)
         
     xy = np.vstack([xdata, ydata])
-    z = gaussian_kde(xy)(xy)
-    plt.scatter(xdata, ydata, c=z, marker='.', s=1)
-    
+    plt.hist2d(xdata, ydata, (50, 50), cmap=plt.cm.jet)
+
     xunit  = ds.getUnit(xvar)
     yunit  = ds.getUnit(yvar)
     xlabel = ds.getLabel(xvar)
