@@ -3,7 +3,7 @@ from opal.analysis.cyclotron import *
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_orbits(ds, **kwargs):
+def plot_orbits(ds, pid=0, **kwargs):
     """
     Do an orbit plot. Only with datasets of
     type FileType.TRACK_ORBIT.
@@ -14,7 +14,7 @@ def plot_orbits(ds, **kwargs):
     
     Optional parameters
     -------------------
-    id      (int)           which particle id
+    pid     (int)           which particle id
                             (default: 0)
     
     Returns
@@ -28,20 +28,15 @@ def plot_orbits(ds, **kwargs):
     if not ds.filetype == FileType.TRACK_ORBIT:
         raise TypeError(ds.filename + ' is not a track orbit dataset.')
     
-    pid = kwargs.get('id', 0)
-    
-    if not pid:
-        raise ValueError("No data for particle id '" + str(pid) + "'.")
-    
     xdata = ds.getData('x')
     ydata = ds.getData('y')
     ids   = ds.getData('ID')
-        
+    
     xdata = xdata[np.where(ids == pid)]
     ydata = ydata[np.where(ids == pid)]
-        
+    
     plt.plot(xdata, ydata)
-        
+    
     xlabel = ds.getLabel('x')
     xunit  = ds.getUnit('x')
     
