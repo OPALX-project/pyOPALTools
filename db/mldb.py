@@ -131,7 +131,8 @@ def buildBounded(pickle, baseFN):
     unbounded.append({'dvarValues':bxvec, 'objValues' :byvec})
 
     print('# bad pts:', str(np.size(bxvec[:,0])), '# good pts:', str(np.size(xvec[:,0])))
-    badbounds = checkBounds(unbounded, keys)
+    if (np.size(bxvec[:,0]) > 0):
+        badbounds = checkBounds(unbounded, keys)
 
     filename = baseFN+'-bounded.pk'
     print('Write ML-Database ' + filename)
