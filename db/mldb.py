@@ -43,16 +43,11 @@ def substring_before(s, delim):
 def checkBounds(data, keys):
     #nxs = number of x variables
     nxs  = len(keys)
-    npts = len(data)
-    hold = np.zeros((npts,nxs)) 
-    for i in range(0, npts):
-        for x in range(0,nxs):
-            hold[i,x] = data[i]['dvarValues'][x]
-
     #Print bounds 
     for j in range(0, nxs):
-        print("max of "+ keys[j] + '= '+ str(max(hold[:,j])))
-        print("min of "+ keys[j] + '= '+ str(min(hold[:,j])))
+        print('Now printing bounds of bad points:')
+        print("max of "+ keys[j] + '= '+ str(max(data[0]['dvarValues'][:,j])))
+        print("min of "+ keys[j] + '= '+ str(min(data[0]['dvarValues'][:,j])))
         print('\n')
 
 def buildBounded(pickle, baseFN):
@@ -63,59 +58,80 @@ def buildBounded(pickle, baseFN):
     
     keys = dbr.getXNames()   
     n    = len(keys) 
-    lb   = np.zeros((n))
-    ub   = np.zeros((n))
+    lb   = np.zeros((1, n))
+    ub   = np.zeros((1, n))
     #Make array with upper bounds (ub) 
     #and lower bounds (lb)    
     for i, key in enumerate(keys):
-        lb[i] = ulb[key][0]         
-        ub[i] = ulb[key][1]
-    
-    goodpts   = 0 
-    badpts    = 0
+        lb[0, i] = ulb[key][0]         
+        ub[0, i] = ulb[key][1]
+    print(lb)
+    print(ub) 
     totalgen  = dbr.getNumberOfSamples()  
     bounded   = []
     unbounded = [] 
+    xvec  = np.zeros((1, n))
+    bxvec = np.zeros((1, n))
+    objsNames  = dbr.getYNames()
+    nobjs = len(objsNames)
+    yvec  = np.zeros((1, len(objsNames)))
+    byvec = np.zeros((1, len(objsNames)))
+
     #Loop through each generation
     for gen in range(0, totalgen):
-        nsims = dbr.getSampleSize(i=gen)
-                #Save extra info            
+        nsims  = dbr.getSampleSize(i=gen)
+        gxvec  = np.zeros((1, n))
+        gyvec  = np.zeros((1, len(objsNames)))
+        #Save extra info            
         if (gen == 0):
-            objsNames  = dbr.getYNames()
             bounded.append({'sampleSize':totalgen,
-                            'dvarNames' :keys,
-                            'objNames'  :objsNames,
-                            'bounds'    :ulb})
+                'dvarNames' :keys,
+                'objNames'  :objsNames,
+                'bounds'    :ulb})
 
-        xvec  = np.zeros((nsims, n))
-        bxvec = np.zeros((nsims, n))
-        yvec  = np.zeros((nsims, len(objsNames)))
-        byvec = np.zeros((nsims, len(objsNames)))
         #Loop through each simulation in gen 
-        for x in range(0,nsims):
-            xvals  = dbr.getDVarVec(gen,x) 
-            ovals  = dbr.getObjVec(gen,x)
-            #Check if xvals <= lb
+        for x in range(0, nsims):
+            xvals  = (dbr.getDVarVec(gen,x)).reshape((1,n))
+            ovals  = (dbr.getObjVec(gen,x)).reshape((1,nobjs))
             testlb = np.less_equal(xvals, lb)
-            #Check if xvlas >= ub
             testub = np.greater_equal(xvals, ub)
+            #Check if xvals <= lb or xvlas >= ub
+            if (any(testlb[0]) == True) or (any(testub[0]) == True):  
+                bxvec = np.append(bxvec, xvals, axis=0)
+                byvec = np.append(byvec, ovals, axis=0)
+            #Check if xvlas within all bounds
+            elif (all(testlb[0]) == False) and (all(testub[0]) == False):
+                #print(testlb[0])
+                #print(testub[0])
+                #print(xvals)
+                xvec = np.append(xvec, xvals, axis=0)
+                yvec = np.append(yvec, ovals, axis=0)
+                gxvec = np.append(gxvec, xvals, axis=0)
+                gyvec = np.append(gyvec, ovals, axis=0)
 
-            if (any(testlb) == True) or (any(testub) == True):  
-                badpts  = badpts +1
-                bxvec[x,:] = xvals
-                byvec[x,:] = ovals
-            elif (all(testlb) == False) and (all(testub) == False):
-                goodpts = goodpts +1
-                xvec[x,:] = xvals
-                yvec[x,:] = ovals
             else:
                 print('Mistake, xvals not in boundaries expected.')
+                print('Don\'t trust the database.')
+        
+        gxvec = gxvec[1:,:]
+        gyvec = gyvec[1:,:]
+        #Saving good pts per generation
+        bounded.append({'dvarValues':gxvec,'objValues' :gyvec})
+        print('\ngeneration # '+ str(gen+1))
+        print('Number of sims:', nsims)
+        print('Number of bounded sims: ', np.size(gxvec[:,0]))
+    #Getting rid of place holders
+    xvec  = xvec[1:,:]
+    yvec  = yvec[1:,:]
+    bxvec = bxvec[1:,:]
+    byvec = byvec[1:,:]
+    #Saving all data in one entry
+    bounded.append({'allDvarValues':xvec, 'allObjValues':yvec})
+    #Saving all bad points, looses generation info
+    unbounded.append({'dvarValues':bxvec, 'objValues' :byvec})
 
-        bounded.append({'dvarValues':xvec,'objValues' :yvec})
-        unbounded.append({'dvarValues':bxvec, 'objValues' :byvec})
- 
-    print('# bad pts:', badpts, '# good pts:', goodpts)
-    #badbounds = checkBounds(unbounded, keys)
+    print('# bad pts:', str(np.size(bxvec[:,0])), '# good pts:', str(np.size(xvec[:,0])))
+    badbounds = checkBounds(unbounded, keys)
 
     filename = baseFN+'-bounded.pk'
     print('Write ML-Database ' + filename)
