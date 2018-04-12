@@ -104,6 +104,34 @@ def plot_centering(ds, **kwargs):
 
     return plt
 
+def plot_turns(ds, **kwargs):
+    """
+    Only with datasets of
+    type FileType.TRACK_ORBIT.
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)   datasets
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.TRACK_ORBIT:
+        raise TypeError(ds.filename + ' is not a track orbit dataset.')
+    
+    _, _, _, radius = calcTurnSeparation(ds)
+    
+    plt.plot(np.arange(2, len(radius)+2), radius, **kwargs)
+    plt.xlabel('Turn Number')
+    plt.ylabel('Radius [m]')
+    
+    return plt
 
 def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
     """
@@ -113,7 +141,8 @@ def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionO
     Parameters
     ----------
     ds      (DatasetBase)   datasets
-    
+    nsteps                  number of steps per turn
+
     Returns
     -------
     a matplotlib.pyplot handle
