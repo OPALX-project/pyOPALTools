@@ -117,9 +117,7 @@ def buildBounded(pickle, baseFN):
         gyvec = gyvec[1:,:]
         #Saving good pts per generation
         bounded.append({'dvarValues':gxvec,'objValues' :gyvec})
-        print('\ngeneration # '+ str(gen+1))
-        print('Number of sims:', nsims)
-        print('Number of bounded sims: ', np.size(gxvec[:,0]))
+        print('generation # '+ str(gen+1) + ' Number of sims:', str(nsims) + ' Number of bounded sims: ' + str(np.size(gxvec[:,0])), end='\r', flush=True)
     #Getting rid of place holders
     xvec  = xvec[1:,:]
     yvec  = yvec[1:,:]
