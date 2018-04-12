@@ -31,8 +31,6 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
     
     Optional parameters
     -------------------
-    step    (int)               of dataset
-    bins    (list or integer)   color energy bins
     xscale  (str)               'linear', 'log'
     yscale  (str)               'linear', 'log'
     xsci    (bool)              x-ticks in scientific notation
@@ -168,7 +166,9 @@ def plot_density(ds, xvar, yvar, **kwargs):
     Optional parameters
     -------------------
     step    (int)           of dataset
-    
+    bins    (list, array or integer) number of bins
+    cmap    (Colormap, string)  color map
+   
     Reference (22. March 2018)
     ---------
     https://stackoverflow.com/questions/20105364/how-can-i-make-a-scatter-plot-colored-by-density-in-matplotlib

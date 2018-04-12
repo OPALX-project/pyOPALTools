@@ -134,7 +134,7 @@ def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionO
         x = energy[1:] # From second turn
         plt.xlabel('Energy [MeV]')
     else:
-        x = radius[1:] / 1000. # From second turn, in meters
+        x = radius[1:] # From second turn, in meters
         plt.xlabel('Radius [m]')
 
     plt.plot(x, ts, 'o-', linewidth=2, **kwargs)
@@ -165,7 +165,7 @@ def plot_beta_beat(ds, **kwargs):
     
     _, _, phi, radius = calcTurnSeparation(ds)
 
-    plt.plot(radius / 1000, phi, 'o-', linewidth=2, **kwargs)
+    plt.plot(radius, phi, 'o-', linewidth=2, **kwargs)
     plt.xlabel('Radius [m]')
     plt.ylabel('Radial Direction [rad]')
     
