@@ -28,7 +28,7 @@ def poster_style():
     mpl.rcParams['axes.labelsize']  = 'xx-large'
     mpl.rcParams['axes.linewidth']  = 3.0
     mpl.rcParams['font.size']       = 22.0
-    mpl.rcParams['legend.fontsize'] = 'large'
+    mpl.rcParams['legend.fontsize'] = 'x-large'
     mpl.rcParams['xtick.labelsize'] = 'xx-large'
     mpl.rcParams['ytick.labelsize'] = 'xx-large'
     mpl.rcParams['lines.linewidth'] = 7.0

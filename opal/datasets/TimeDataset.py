@@ -100,6 +100,25 @@ class TimeDataset(DatasetBase):
         return var
     
     
+    def getLabels(self):
+        """
+        Obtain all timing names
+        
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        a list of strings with names
+        """
+        dataset = self.__parser.getTiming()
+        labels = []
+        for data in dataset:
+            labels.append( data['what'] )
+        return labels
+    
+    
     def getUnit(self, var):
         """
         Obtain unit for plotting.
