@@ -278,6 +278,116 @@ def plot_speedup(dsets, what, prop, **kwargs):
     return plt
 
 
+def plot_time_scaling(dsets, prop, **kwargs):
+    """
+    Plot timing benchmark.
+    
+    Parameters
+    ----------
+    dsets   ([DatasetBase]) all timing datasets
+    prop    (str)           property, 'wall' or 'cpu
+    
+    Optionals
+    ---------
+    first=None      (int)   take only the first N specialized
+    xscale          (str)           x-axis scale, 'linear' or 'log'
+    yscale          (str)           y-axis scale, 'linear' or 'log'
+    grid            (bool)          if true, plot grid
+    xlabel          (str)           label for x-axis. Default '#cores'
+    core2node       (int)           scale #cores == 1 node
+                                    (useful with xlabel='#nodes')
+    exclude         ([])            do not use *these* timings
+    tag=''          (str)           take only timings containing this tag
+    perfect_scaling (bool)          add speed-up perfect scaling line
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(dsets, list):
+        raise TypeError("Input 'dsets' has to be a list for.")
+    
+    if not dsets:
+        raise ValueError("No dataset in 'dsets'.")
+    
+    for ds in dsets:
+        if not isinstance(ds, DatasetBase):
+            raise TypeError("Dataset '" + ds.filename +
+                            "' not derived from 'DatasetBase'.")
+        if not ds.filetype == FileType.TIMING and not ds.filetype == FileType.OUTPUT:
+            raise TypeError("Dataset '" + ds.filename +
+                            "' is not a timing dataset.")
+    
+    if not prop == 'wall' and not prop == 'cpu':
+        raise ValueError("Wrong property value: prop = 'wall' or prop = 'cpu'.")
+    
+    cores = []
+    for ds in dsets:
+        cores.append( int(ds.getData(0, prop='cores')) )
+    
+    # sort
+    cores, dsets = zip(*sorted(zip(cores, dsets)))
+    
+    # tuple --> list
+    cores = list(cores)
+    
+    # transform cores --> nodes
+    core2node = kwargs.get('core2node', 1)
+    
+    for i, c in enumerate(cores):
+        cores[i] /= core2node
+    
+    labels = []
+    times  = []
+    excludeList = kwargs.get('exclude', [])
+    tag         = kwargs.get('tag', '')
+    
+    for name in dsets[0].getLabels():
+        skip = False
+        for ex in excludeList:
+            if ex in name:
+                skip = True
+                break
+        if not skip and not 'main' in name and tag in name:
+            labels.append( name )
+            times.append( dsets[0].getData(var=name, prop=prop + ' avg') )
+    
+    times, labels = mostConsuming(kwargs.get('first', 1e6), times, labels, prop + ' avg')
+    
+    times, labels = zip(*sorted(zip(times, labels),
+                            key=itemgetter(0),
+                            reverse=True))
+    
+    for label in labels:
+        tmin = []
+        tmax = []
+        tavg = []
+        for ds in dsets:
+            tavg.append( ds.getData(var=label, prop=prop + ' avg') )
+            tmin.append( tavg[-1] - ds.getData(var=label, prop=prop + ' min') )
+            tmax.append( ds.getData(var=label, prop=prop + ' max') - tavg[-1] )
+        
+        plt.errorbar(cores, tavg, yerr=[tmin, tmax], fmt='--o', label=label)
+    
+    plt.grid(kwargs.get('grid', False), which="both")
+    plt.xlabel(kwargs.get('xlabel', '#cores'))
+    plt.ylabel('time [' + ds.getUnit('') + ']')
+    plt.xlim([0.5*cores[0], 1.05*cores[-1]])
+    plt.xscale(kwargs.get('xscale', 'linear'))
+    plt.yscale(kwargs.get('yscale', 'linear'))
+    plt.tight_layout()
+    
+    
+    if kwargs.get('perfect_scaling', False):
+        ref = []
+        for c in cores:
+            ref.append( times[0] * cores[0] / c )
+        plt.plot(cores, ref, 'k', label='perfect scaling')
+    plt.legend(loc='best')
+    
+    return plt
+
+
 def plot_time_summary(ds, prop, **kwargs):
     """
     Create a plot with minimum, maximum and average timings
@@ -312,7 +422,12 @@ def plot_time_summary(ds, prop, **kwargs):
     excludeList = kwargs.get('exclude', [])
     tag         = kwargs.get('tag', '')
     for name in ds.getLabels():
-        if not 'main' in name and not name in excludeList and tag in name:
+        skip = False
+        for ex in excludeList:
+            if ex in name:
+                skip = True
+                break
+        if not skip and not 'main' in name and tag in name:
             labels.append( name )
     
     tmin = []
@@ -320,10 +435,9 @@ def plot_time_summary(ds, prop, **kwargs):
     tavg = []
     
     for name in labels:
-        if not name in excludeList and tag in name:
-            tavg.append( ds.getData(var=name, prop=prop + ' avg') )
-            tmin.append( tavg[-1] - ds.getData(var=name, prop=prop + ' min') )
-            tmax.append( ds.getData(var=name, prop=prop + ' max') - tavg[-1] )
+        tavg.append( ds.getData(var=name, prop=prop + ' avg') )
+        tmin.append( tavg[-1] - ds.getData(var=name, prop=prop + ' min') )
+        tmax.append( ds.getData(var=name, prop=prop + ' max') - tavg[-1] )
     
     n = len(tavg)
     x = np.linspace(0, n-1, n) 

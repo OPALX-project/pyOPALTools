@@ -24,4 +24,9 @@ def mostConsuming(n, times, labels, prop):
                                               key=itemgetter(0),
                                               reverse=True))
     
+    if n < 0:
+        n = 1
+    elif n > len(times_sorted):
+        n = len(times_sorted)
+    
     return list(times_sorted[0:n]), list(labels_sorted[0:n])
