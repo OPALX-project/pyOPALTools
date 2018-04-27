@@ -1,7 +1,6 @@
 from opal.statistics import impl_statistics as stat
-import scipy as sc
-from scipy import signal
 import numpy as np
+from opal.analysis import cyclotron
 
 def find_beams(data, **kwargs):
     """
@@ -14,13 +13,7 @@ def find_beams(data, **kwargs):
     
     Optionals
     ---------
-    npoints (int)           number of points to evaluate
-                            kernel density estimator
-    
-    References (31. March 2018)
-    ---------------------------
-    https://docs.scipy.org/doc/scipy-0.19.0/reference/generated/scipy.stats.gaussian_kde.html
-    https://docs.scipy.org/doc/scipy-0.16.1/reference/generated/scipy.signal.argrelmin.html
+    bins (int)              number of bins for histogram
     
     Returns
     -------
@@ -29,21 +22,20 @@ def find_beams(data, **kwargs):
     if data.size < 1:
         raise ValueError('Empty data container.')
     
-    npoints = kwargs.get('npoints', 500)
+    bins = kwargs.get('bins', 20)
     
-    kde = sc.stats.gaussian_kde(data)
+    hist = np.histogram(data, bins=bins, density=True)
     
-    xmin = min(data)
-    xmax = max(data)
-    points = np.linspace(xmin, xmax, npoints)
-    
-    pdf = kde.pdf(points)
-    
-    extrema = signal.argrelmin(pdf)
+    inv_hist = -hist[0]
+
+    extrema = cyclotron.detect_peaks(inv_hist)
+
+    xmin = min(hist[1])
+    xmax = max(hist[1])
     
     bc = [xmin]
-    for idx in extrema[0]:
-        bc.append(points[idx])
+    for idx in extrema:
+        bc.append(hist[1][idx])
     bc.append(xmax)
     
     return bc
