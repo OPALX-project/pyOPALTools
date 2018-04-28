@@ -4,6 +4,7 @@
 from opal.statistics import statistics as stat
 from opal.datasets.DatasetBase import DatasetBase
 from opal.analysis import impl_beam
+import numpy as np
 
 def halo_continuous_beam(ds, var, **kwargs):
     """
