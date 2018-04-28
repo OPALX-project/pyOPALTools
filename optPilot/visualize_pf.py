@@ -122,7 +122,7 @@ def onpick(event):
     xdata = thisline.get_xdata()
     ydata = thisline.get_ydata()
     ind = event.ind
-    print 'onpick points:', zip(xdata[ind], ydata[ind])
+    print ('onpick points:', zip(xdata[ind], ydata[ind]))
 
 
 def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
@@ -210,7 +210,7 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
 
     if show_single and plotAll:
         nrIDs = max(np.shape(data))
-        for name,i in nameToColumnMap.iteritems():
+        for name,i in nameToColumnMap.items():
             pl.figure()
             pl.hist(data[:,i],bins=nrIDs/10)
             pl.xlabel(name)
@@ -228,7 +228,7 @@ def saveVideo(img_path, video_name):
         output = commands.getoutput("ffmpeg -y -framerate 0.7 -i " + img_path + "/%04d.png " +
                                     "-qscale 0 -r 0.7 " + video_name)
     else:
-        print 'Video exporting is not possible, ffmpeg is not installed.'
+        print ('Video exporting is not possible, ffmpeg is not installed.')
 
 def computeLimits(data, selected_ids):
 
@@ -338,7 +338,7 @@ def main(argv):
             setupPlot()
             (xlim, ylim) = computeLimits(data, selected_ids)
             for i, _ in data.items():
-                print " >> saving " + str(i)
+                print (" >> saving " + str(i))
                 plot(data[str(i)], xlim, ylim,
                     str(i), outpath, selected_ids, show_single=False, plotAll=plotAll)
         else:
