@@ -141,8 +141,7 @@ def find_beams(ds, var, **kwargs):
     Optionals
     ---------
     step    (int)           of dataset
-    npoints (int)           number of points to evaluate
-                            kernel density estimator
+    bins    (int)           number of bins for histogram
     
     Returns
     -------
@@ -173,8 +172,7 @@ def get_beam(ds, var, k, **kwargs):
     Optionals
     ---------
     step    (int)           of dataset
-    npoints (int)           number of points to evaluate
-                            kernel density estimator
+    bins    (int)           number of bins for histogram
     
     Returns
     -------
@@ -220,8 +218,7 @@ def get_beam_indices(ds, var, k, **kwargs):
     Optionals
     ---------
     step    (int)           of dataset
-    npoints (int)           number of points to evaluate
-                            kernel density estimator
+    bins    (int)           number of bins for histogram
     
     Returns
     -------
