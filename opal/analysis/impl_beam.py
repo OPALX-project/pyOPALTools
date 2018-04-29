@@ -114,3 +114,42 @@ def projected_emittance(coords, momenta):
     cm = np.mean(np.asarray(coords) * np.asarray(momenta))
     
     return np.sqrt( m2 * c2 - cm ** 2 )
+
+
+def rotation(x, y, theta):
+    """
+    Rotate the coordinates (x, y) by theta (degree)
+    
+    Parameters
+    ----------
+    x       (array) is x-data
+    y       (array) is y-data
+    theta   (float) is the angle in degree
+    
+    
+    Note
+    ----
+    
+    R(theta) = [ cos(theta), -sin(theta)
+                 sin(theta), cos(theta) ]
+    
+    [rx, ry] = R(theta) * [x, y]
+    
+    Reference
+    ---------
+    https://en.wikipedia.org/wiki/Rotation_matrix
+    
+    Returns
+    -------
+    rotated coordinates (rx, ry)
+    """
+    
+    theta = np.deg2rad(theta)
+    
+    cos = np.cos(theta)
+    sin = np.sin(theta)
+    
+    rx = x * cos - y * sin
+    ry = x * sin + y * cos
+    
+    return rx, ry
