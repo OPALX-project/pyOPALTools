@@ -199,6 +199,7 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
     cbar.set_ticks([clow, cmiddle, chigh])
     cbarlabel_text = selected_obj[2]
     cbar.set_label(cbarlabel_text, labelpad=10)
+    
 
     if show_single:
         fig.canvas.mpl_connect('pick_event', onpick)
@@ -212,7 +213,7 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
         nrIDs = max(np.shape(data))
         for name,i in nameToColumnMap.items():
             pl.figure()
-            pl.hist(data[:,i],bins=nrIDs/10)
+            pl.hist(data[:,i],bins=int(nrIDs/10))
             pl.xlabel(name)
             pl.show()
 
