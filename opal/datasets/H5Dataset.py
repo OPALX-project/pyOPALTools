@@ -35,15 +35,16 @@ class H5Dataset(DatasetBase):
         self.__parser.parse(full_path)
         
         self.__variable_mapper = {
-            'rms_x':    'RMSX',
-            'rms_y':    'RMSX',
-            'rms_z':    'RMSX',
-            'rms_px':   'RMSP',
-            'rms_py':   'RMSP',
-            'rms_pz':   'RMSP',
-            'time':     'TIME',
-            'energy':   'ENERGY',
-            's':        'SPOS'
+            'rms_x':        'RMSX',
+            'rms_y':        'RMSX',
+            'rms_z':        'RMSX',
+            'rms_px':       'RMSP',
+            'rms_py':       'RMSP',
+            'rms_pz':       'RMSP',
+            'time':         'TIME',
+            'energy':       'ENERGY',
+            's':            'SPOS',
+            'flavour':      'OPAL_flavour'
         }
         
         self.__label_mapper  = {
@@ -116,7 +117,10 @@ class H5Dataset(DatasetBase):
             else:
                 for i in range(self.__parser.getNSteps()):
                     data.append(self.__parser.getStepAttribute(h5var, i))
-            
+                    
+                    # get strings
+                    if isinstance(data[-1], bytes):
+                        data[-1] = data[-1].decode('utf-8')
             return np.asarray(data)
         else:
             raise H5Error("'" + var + "' is not part of this step")
