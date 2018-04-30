@@ -103,15 +103,19 @@ class H5Dataset(DatasetBase):
             data = []
             
             # if vector type we need to get appropriate direction
-            dim = 0
-            for key in self.__direction:
-                if '_' + key in var:
-                    dim = self.__direction[key]
-                elif '_p' + key in var:
-                    dim = self.__direction[key]
-            
-            for i in range(self.__parser.getNSteps()):
-                data.append(self.__parser.getStepAttribute(h5var, i)[dim])
+            if '_' in var:
+                dim = 0
+                for key in self.__direction:
+                    if '_' + key in var:
+                        dim = self.__direction[key]
+                    elif '_p' + key in var:
+                        dim = self.__direction[key]
+                
+                for i in range(self.__parser.getNSteps()):
+                    data.append(self.__parser.getStepAttribute(h5var, i)[dim])
+            else:
+                for i in range(self.__parser.getNSteps()):
+                    data.append(self.__parser.getStepAttribute(h5var, i))
             
             return np.asarray(data)
         else:
