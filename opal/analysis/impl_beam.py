@@ -17,7 +17,7 @@ def find_beams(data, **kwargs):
     
     Returns
     -------
-    a list of minima locations
+    a list of minima locations and corresponding histogram
     """
     if data.size < 1:
         raise ValueError('Empty data container.')
@@ -38,7 +38,7 @@ def find_beams(data, **kwargs):
         bc.append(hist[1][idx])
     bc.append(xmax)
     
-    return bc
+    return bc, hist
 
 
 def halo_continuous_beam(data):
@@ -116,7 +116,7 @@ def projected_emittance(coords, momenta):
     return np.sqrt( m2 * c2 - cm ** 2 )
 
 
-def rotation(x, y, theta):
+def rotate(x, y, theta):
     """
     Rotate the coordinates (x, y) by theta (degree)
     

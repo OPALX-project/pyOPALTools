@@ -2,7 +2,7 @@
 # Date:     March 2018
 
 from opal.statistics import statistics as stat
-from opal.datasets.DatasetBase import DatasetBase
+from opal.datasets.DatasetBase import DatasetBase, FileType
 from opal.analysis import impl_beam
 import numpy as np
 
@@ -129,8 +129,7 @@ def projected_emittance(ds, dim, **kwargs):
 def find_beams(ds, var, **kwargs):
     """
     Compute the starting and end points of a beam via
-    kernel density estimation and the calculation of
-    relative minima of the dataset.
+    a histogram.
     The purpose of this script is to distinguish bunches
     of a multi-bunch simulation.
     
@@ -146,7 +145,7 @@ def find_beams(ds, var, **kwargs):
     
     Returns
     -------
-    a list of minima locations
+    a list of minima locations and corresponding histogram
     """
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
@@ -177,35 +176,19 @@ def get_beam(ds, var, k, **kwargs):
     
     Returns
     -------
-    the data as an array / list
+    the data as an array / list + histogram to find bunch
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
     
-    if k < 0:
-        raise ValueError("Bunch number has to be 'k >= 0'.")
+    indices, hist = get_beam_indices(ds, k, **kwargs)
     
     step    = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)
     
-    minima = impl_beam.find_beams(data, **kwargs)
+    return data[indices], hist
     
-    if k > len(minima) - 1:
-        raise ValueError("Bunch number has to be 'k < " + str(len(minima)) + "'.")
-    
-    # 1. April 2018
-    # https://stackoverflow.com/questions/16343752/numpy-where-function-multiple-conditions
-    if k == len(minima):
-        # last bunch includes particles from upper part [k, k+1]
-        return data[(data >= minima[k]) & (data <= minima[k+1])]
-    else:
-        # do not include upper part [k, k+1[
-        return data[(data >= minima[k]) & (data < minima[k+1])]
 
-
-def get_beam_indices(ds, var, k, **kwargs):
+def get_beam_indices(ds, k, **kwargs):
     """
     Obtain the indices of the data that belongs to the
     selected beam. Use in multi-bunch simulation data.
@@ -213,7 +196,6 @@ def get_beam_indices(ds, var, k, **kwargs):
     Parameters
     ----------
     ds      (DatasetBase)   datasets
-    var     (str)           the variable
     k       (int)           select k-th bunch
     
     Optionals
@@ -227,6 +209,7 @@ def get_beam_indices(ds, var, k, **kwargs):
     true if appropriate data belongs to **this** bunch.
     The 'True' entries can be exracted from a data array
     using numpy.extract.
+    It returns also the histogram.
     
     References
     ----------
@@ -236,23 +219,43 @@ def get_beam_indices(ds, var, k, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
+    if not ds.filetype == FileType.H5:
+        raise TypeError(ds.filename + ' is not a H5 dataset.')
+    
     if k < 0:
         raise ValueError("Bunch number has to be 'k >= 0'.")
     
     step    = kwargs.get('step', 0)
     
-    data = ds.getData(var, step=step)
+    # opal-t vs. opal-cycl
+    opal_flavour = ds.getData('flavour')[step]
     
-    minima = impl_beam.find_beams(data, **kwargs)
+    if opal_flavour == 'opal-cycl':
+        xdata = ds.getData('x', step=step)
+        ydata = ds.getData('y', step=step)
+        
+        # rotate beam around (0, 0) such that it's horizontal
+        # --> we can do histogram independent of azimuth (dumping angle)
+        azimuth = ds.getData('AZIMUTH')[step]
+        
+        #if ds.getUnit('REFAZIMUTH') == 'rad':
+            #azimuth = np.rad2deg(azimuth)
+        
+        xdata, _ = impl_beam.rotate(xdata, ydata, -azimuth)
+        
+        minima, hist = impl_beam.find_beams(xdata, **kwargs)
+        
+    else:
+        raise ValueError("Only implemented for OPAL-CYCL.")
     
     if k > len(minima) - 1:
         raise ValueError("Bunch number has to be 'k < " + str(len(minima)) + "'.")
     
-    data = np.asarray(data)
+    xdata = np.asarray(xdata)
     
     if k == len(minima):
         # last bunch includes particles from upper part [k, k+1]
-        return ((data >= minima[k]) & (data <= minima[k+1]))
+        return ((xdata >= minima[k]) & (xdata <= minima[k+1])), hist
     else:
         # do not include upper part [k, k+1[
-        return ((data >= minima[k]) & (data < minima[k+1]))
+        return ((xdata >= minima[k]) & (xdata < minima[k+1])), hist
