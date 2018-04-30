@@ -11,7 +11,7 @@ except:
     print ( "Install plotly: pip install plotly" )
 
 
-def plot_parcoords(path, filename_postfix, filename):
+def plot_parcoords(path, filename_postfix, generation, filename):
     """
     
     References (30. April 2018)
@@ -21,83 +21,46 @@ def plot_parcoords(path, filename_postfix, filename):
     https://stackoverflow.com/questions/40243446/how-to-save-plotly-offline-graph-in-format-png
     """
     
-    first = True
-    
-    values = {}
-    
-    min_error = 1e8
-    max_error = -1e-8
-    
-    
-    for infile in glob.glob(os.path.join(path,
-                            '*_' + filename_postfix)):
+    infile = os.path.join(path, str(generation) + '_' + filename_postfix)
         
-        dirname = os.path.dirname(infile)
-        optjson = jsonreader.OptPilotJsonReader(dirname + '/')
+    dirname = os.path.dirname(infile)
+    optjson = jsonreader.OptPilotJsonReader(dirname + '/')
         
-        # get the generation from the filename
-        basename = os.path.basename(infile)    
+    # get the generation from the filename
+    basename = os.path.basename(infile)    
         
-        generation = int( str.split(basename, "_", 1)[0] )
-        optjson.readGeneration(generation)
+    generation = int( str.split(basename, "_", 1)[0] )
+    optjson.readGeneration(generation)
         
-        if first:
-            first = False
+    dvar_names  = optjson.getDesignVariables()
+    dvar_bounds = optjson.getBounds()
+    obj_names   = optjson.getObjectives()
             
+    dimension = []
             
-            dvar_names  = optjson.getDesignVariables()
-            dvar_bounds = optjson.getBounds()
-            obj_names   = optjson.getObjectives()
-            
-            dimension = []
-            
-            for dvar in dvar_names:
-                dimension.append({
-                    'range': dvar_bounds[dvar],
-                    'label': dvar,
-                    'values': []
-                    }
-                )
+    for dvar in dvar_names:
+        dimension.append({
+            'range': dvar_bounds[dvar],
+            'label': dvar,
+            'values': []
+            }
+        )
                 
-                values[dvar] = []
-            
-            for obj in obj_names:
-                dimension.append({
-                    'label': obj,
-                    'values': []
-                    }
-                )
+    for obj in obj_names:
+        dimension.append({
+            'label': obj,
+            'values': []
+            }
+        )
                 
-                values[obj] = []
+    for i in optjson.getIDs():
+        data = optjson.getIndividualWithID(i)
         
-        for i in optjson.getIDs():
-            data = optjson.getIndividualWithID(i)
-            
-            j = 0
-            
-            for d in data:
-                
-                if j < len(dvar_names):
-                    values[dvar_names[j]].append(d)
-                elif j < len(dvar_names) + len(obj_names):
-                    values[obj_names[j - len(dvar_names)]].append(d)
-                    
-                    min_error = min(min_error, d)
-                    max_error = max(max_error, d)
-                    
-                j += 1
-    
-    
+        for j, d in enumerate(data):
+            if j < len(data) - 1: # skip ID
+                dimension[j]['values'].append(d)
     
     ids = optjson.getIDs()
-    
-    
-    for i, dvar in enumerate(dvar_names):
-        dimension[i]['values'] = values[dvar]
-    
-    for i, obj in enumerate(obj_names):
-        dimension[i + len(dvar_names)]['values'] = values[obj]
-    
     
     data = [
         go.Parcoords(
@@ -105,17 +68,18 @@ def plot_parcoords(path, filename_postfix, filename):
                         colorscale = 'Jet',
                         showscale = True,
                         reversescale = True,
-                        cmin = min_error,
-                        cmax = max_error),
+                        cmin = min(ids),
+                        cmax = max(ids)),
             dimensions = dimension
         )
     ]
     
     
     plot(data,
-         image='png',
-         image_filename=filename,
-         output_type='file')
+         #image='png',
+         #image_filename=filename,
+         #output_type='file',
+         filename='generation_' + str(generation) + '.html')
          #auto_open=False)
 
 
@@ -149,12 +113,23 @@ if __name__ == "__main__":
                             default=outpath,
                             help="path for storing resulting pngs")
         
-        args = parser.parse_args()
+        parser.add_argument("-g",
+                            "--generation",
+                            dest="generation",
+                            type=int,
+                            default=1,
+                            help="only displays the 'n'-th generation")
         
         
+        
+        args             = parser.parse_args()
+        generation       = args.generation
         path             = args.path
         filename_postfix = args.filename_postfix
         outpath          = args.outpath
+        
+        if generation < 0:
+            raise ValueError("Generation number cannot be negative.")
         
         if path == "":
             raise SyntaxError('No path for input data specified')
@@ -162,7 +137,7 @@ if __name__ == "__main__":
         if not os.path.isdir(outpath):
             os.mkdir(outpath)
         
-        plot_parcoords(path, filename_postfix, 'parcoords-advanced')
+        plot_parcoords(path, filename_postfix, generation, 'generation_' + str(generation))
         
     except:
         print ( '\n\t\033[01;31mError: ' + str(sys.exc_info()[1]) + '\n' )
