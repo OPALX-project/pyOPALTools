@@ -1,5 +1,7 @@
 from visualize_pf import readData, nameToColumnMap
 import argparse, os, sys, glob
+import re
+
 
 import OptPilotJsonReader as jsonreader
 
@@ -9,6 +11,32 @@ try:
     from plotly.offline import plot
 except:
     print ( "Install plotly: pip install plotly" )
+    
+
+# 2. Mai 2018
+# https://stackoverflow.com/questions/4836710/does-python-have-a-built-in-function-for-string-natural-sort
+def natural_sort(l): 
+    convert = lambda text: int(text) if text.isdigit() else text.lower() 
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
+    return sorted(l, key = alphanum_key)
+
+
+# 2. Mai 2018
+# https://stackoverflow.com/questions/4391697/find-the-index-of-a-dict-within-a-list-by-matching-the-dicts-value
+def find(lst, key, value):
+    for i, dic in enumerate(lst):
+        if dic[key] == value:
+            return i
+    return None
+
+
+def sort_list(names, dimension, key):
+    natsort_names = natural_sort(names)
+    natsort_dimension = []
+    for name in natsort_names:
+        idx = find(dimension, 'label', name)
+        natsort_dimension.append(dimension[idx])
+    return natsort_dimension
 
 
 def plot_parcoords(path, filename_postfix, generation, filename):
@@ -36,29 +64,45 @@ def plot_parcoords(path, filename_postfix, generation, filename):
     dvar_bounds = optjson.getBounds()
     obj_names   = optjson.getObjectives()
             
-    dimension = []
-            
+    dvar_dimension = []
+    obj_dimension = []
+    
     for dvar in dvar_names:
-        dimension.append({
+        dvar_dimension.append({
             'range': dvar_bounds[dvar],
             'label': dvar,
             'values': []
             }
         )
-                
+    
     for obj in obj_names:
-        dimension.append({
+        obj_dimension.append({
             'label': obj,
             'values': []
             }
         )
-                
+    
+    nDvars = len(dvar_names)
+    nObjs = len(obj_names)
     for i in optjson.getIDs():
         data = optjson.getIndividualWithID(i)
         
         for j, d in enumerate(data):
-            if j < len(data) - 1: # skip ID
-                dimension[j]['values'].append(d)
+            if j < nDvars:
+                dvar_dimension[j]['values'].append(d)
+            elif j < nDvars + nObjs:
+                obj_dimension[j - nDvars]['values'].append(d)
+    
+    # make a natural ordering of labels
+    dvar_dimension = sort_list(dvar_names,
+                               dvar_dimension,
+                               'label')
+    
+    obj_dimension = sort_list(obj_names,
+                              obj_dimension,
+                              'label')
+    
+    dimension = dvar_dimension + obj_dimension
     
     ids = optjson.getIDs()
     
