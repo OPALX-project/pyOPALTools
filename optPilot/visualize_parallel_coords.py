@@ -74,8 +74,13 @@ def plot_parcoords(path, filename_postfix, generation, filename):
         )
     ]
     
+    layout = go.Layout(
+        title = 'Generation ' + str(generation)
+    )
     
-    plot(data,
+    fig = go.Figure(data = data, layout = layout)
+    
+    plot(fig,
          #image='png',
          #image_filename=filename,
          #output_type='file',
