@@ -9,7 +9,7 @@ from opal.datasets.GridDataset import GridDataset
 from opal.datasets.SolverDataset import SolverDataset
 from opal.datasets.TrackOrbitDataset import TrackOrbitDataset
 from opal.datasets.OutputDataset import OutputDataset
-
+from opal.datasets.PeakDataset import PeakDataset
 
 def load_dataset(directory, **kwargs):
     """
@@ -96,6 +96,9 @@ def load_dataset(directory, **kwargs):
         elif ftype == FileType.TRACK_ORBIT:
             datasets.append(TrackOrbitDataset(directory, fname))
             print ( 'matches track orbit file type.' )
+        elif ftype == FileType.PEAK:
+            datasets.append(PeakDataset(directory, fname))
+            print ( 'matches peak file type.' )
         elif ftype == FileType.NONE:
             print ( 'no appropriate file match.' )
     print ( '\nDone.\n' )
