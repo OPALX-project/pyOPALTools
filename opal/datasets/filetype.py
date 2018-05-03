@@ -29,8 +29,8 @@ class FileType(IntEnum):
             '.out':     cls.OUTPUT,
             '.output':  cls.OUTPUT,
             '.grid':    cls.GRID,
-            '.solver':  cls.SOLVER
-            '.peaks':   cls.PEAK
+            '.solver':  cls.SOLVER,
+            '.peaks':   cls.PEAK,
             '.hist':    cls.HIST
         }
         

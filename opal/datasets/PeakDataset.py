@@ -15,8 +15,13 @@ class PeakDataset(DatasetBase):
         Members
         -------
         __parser            (PeakParser)    actual data holder
+        __variable_mapper   (dict)          map user input variable
         """
         self.__parser = PeakParser()
+        
+        self.__variable_mapper = {
+            'radius':   'radii'
+        }
         
         full_path = os.path.join(directory, fname)
         if not os.path.exists(full_path):
@@ -39,9 +44,15 @@ class PeakDataset(DatasetBase):
         -------
         an array of the data
         """
-        if not self.__parser.isVariable(var):
+        peakvar = var
+        
+        if var in self.__variable_mapper:
+            peakvar = self.__variable_mapper[var]
+        
+        if not self.__parser.isVariable(peakvar):
             raise ValueError("The variable '" + var + "' is not in dataset.")
-        return self.__parser.getDataOfVariable(var)
+        
+        return self.__parser.getDataOfVariable(peakvar)
     
     
     def getLabel(self, var):
@@ -56,7 +67,12 @@ class PeakDataset(DatasetBase):
         -------
         appropriate name plotting ready
         """
-        if not self.__parser.isVariable(var):
+        peakvar = var
+        
+        if var in self.__variable_mapper:
+            peakvar = self.__variable_mapper[var]
+        
+        if not self.__parser.isVariable(peakvar):
             raise ValueError("The variable '" + var + "' is not in dataset.")
         
         return var
@@ -74,9 +90,14 @@ class PeakDataset(DatasetBase):
         -------
         appropriate unit in math mode for plotting 
         """
-        if not self.__parser.isVariable(var):
+        peakvar = var
+        
+        if var in self.__variable_mapper:
+            peakvar = self.__variable_mapper[var]
+        
+        if not self.__parser.isVariable(peakvar):
             raise ValueError("The variable '" + var + "' is not in dataset.")
         
-        unit = self.__parser.getUnitOfVariable(var)
+        unit = self.__parser.getUnitOfVariable(peakvar)
         
-        return r'$' + unit + '$'
+        return unit

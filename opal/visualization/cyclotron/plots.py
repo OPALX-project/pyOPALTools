@@ -234,3 +234,58 @@ def plot_RF_phases(ds, RFcavity, **kwargs):
     plt.legend(loc=0)
     
     return plt
+
+
+def plot_peak_difference(dsets, **kwargs):
+    """
+    Plot the peak difference of a probe output.
+    This function works for FileType.PEAK (*.peaks)
+    files.
+    
+    Parameters
+    ----------
+    dsets       (DatasetBase)   2 datasets
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not len(dsets) == 2:
+        raise ValueError('Exactly 2 datasets expected. ' +
+                         'len(dsets) = ' + str(len(dsets)) + ' != 2.')
+    
+    for ds in dsets:
+        if not isinstance(ds, DatasetBase):
+            raise TypeError("Dataset '" + ds.filename +
+                            "' not derived from 'DatasetBase'.")
+    
+        if not ds.filetype == FileType.PEAK:
+            raise TypeError(ds.filename +
+                            ' is not a peak (*.peaks) file.')
+    
+    unit = dsets[0].getUnit('radius')
+    
+    if not unit == dsets[1].getUnit('radius'):
+        raise ValueError('Not same radius units.')
+    
+    peaks1 = dsets[0].getData('radius')
+    peaks2 = dsets[1].getData('radius')
+    
+    npeaks = min(len(peaks1), len(peaks2))
+    diff = peaks1[0:npeaks] - peaks1[0:npeaks]
+    
+    
+    xticks = range(1, npeaks + 1)
+    
+    ylim = [min(diff) - 0.001, max(diff) + 0.001]
+    
+    plt.plot(xticks, diff, 'o')
+    plt.xticks(xticks)
+    plt.ylim(ylim)
+    plt.grid(True)
+    
+    plt.xlabel('peak number')
+    
+    plt.ylabel('peak difference [' + unit + ']')
+    
+    return plt
