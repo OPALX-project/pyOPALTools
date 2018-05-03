@@ -9,3 +9,4 @@ import opal.datasets.GridDataset
 import opal.datasets.SolverDataset
 import opal.datasets.OutputDataset
 import opal.datasets.PeakDataset
+import opal.datasets.ProbeHistDataset
