@@ -16,7 +16,7 @@ class HistogramParser:
             'max':       list of maximum value and unit
             'nbins':     list of number of bins and unit
             'binsize':   list of size of bin and unit
-            'bincount':  list of bin counts
+            'bincount':  list of bin counts and unit
     }
     """
     
@@ -33,7 +33,7 @@ class HistogramParser:
     
     def parse(self, filename):
         
-        pattern = '# Histogram bin counts \((\w), (\w), (\w), (\w)\) (.*) (.*) (.*) (.*)'
+        pattern = r'# Histogram bin counts \((\w+), (\w+), (\w+), (\w+)\) (.*) (\w+) (.*) (\w+) (\d+) (.*) (\w+)'
         
         match = False
         
@@ -44,12 +44,24 @@ class HistogramParser:
                     # https://stackoverflow.com/questions/2077897/substitute-multiple-whitespace-with-single-whitespace-in-python
                     line = ' '.join(line.split())
                     obj = re.match(pattern, line)
+                    
                     if obj:
+                        j = 5
                         for i in range(1, 5):
                             key = obj.group(i)
                             if not key in self._info:
                                 raise ValueError("Not able to read info '" + key + "' from header.") 
-                            self._info[key]     = obj.group(i + 4)
+                            
+                            if not key == 'nbins':
+                                self._info[key].append( obj.group( j ) )     # value
+                                self._info[key].append( obj.group( j + 1 ) ) # unit
+                                j += 2
+                            else:
+                                # no unit
+                                self._info[key].append( obj.group( j ) )
+                                self._info[key].append( '' )
+                                j += 1
+                        
                         match = True
                     else:
                         break
@@ -57,11 +69,14 @@ class HistogramParser:
         if not match:
             raise RuntimeError('Not proper file format.')
         
-        self._info['bincount'] = np.genfromtxt(filename,
-                                               comments='#',
-                                               delimiter = ' ',
-                                               dtype=np.float64
-                                               )
+        self._info['bincount'].append( np.genfromtxt(filename,
+                                                     comments='#',
+                                                     delimiter = ' ',
+                                                     dtype=np.float64
+                                                     )
+        )
+        
+        self._info['bincount'].append('')
     
     
     def getDataOfVariable(self, var):
