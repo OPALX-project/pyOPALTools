@@ -1,4 +1,5 @@
-from opal.datasets.DatasetBase import DatasetBase, FileType
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
 from opal.analysis.cyclotron import *
 import numpy as np
 import matplotlib.pyplot as plt

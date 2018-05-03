@@ -2,7 +2,8 @@
 # Date:     April 2018
 
 import matplotlib.pyplot as plt
-from opal.datasets.DatasetBase import FileType, DatasetBase
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
 from opal.visualization.statistics import impl_plots
 
 def plot_histogram(ds, var, **kwargs):

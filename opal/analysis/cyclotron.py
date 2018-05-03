@@ -1,4 +1,5 @@
-from opal.datasets.DatasetBase import DatasetBase, FileType
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
 import numpy as np
 import scipy as sp
 import re

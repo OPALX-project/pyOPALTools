@@ -1,7 +1,8 @@
 # Author: Matthias Frey
 # Date:   December 2017 - March 2018
 
-from opal.datasets.DatasetBase import FileType, DatasetBase
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings

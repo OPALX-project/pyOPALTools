@@ -1,8 +1,9 @@
 # Author:   Matthias Frey
 # Date:     March 2018
 
+from opal.datasets.filetype import FileType
 from opal.statistics import statistics as stat
-from opal.datasets.DatasetBase import DatasetBase, FileType
+from opal.datasets.DatasetBase import DatasetBase
 from opal.analysis import impl_beam
 import numpy as np
 

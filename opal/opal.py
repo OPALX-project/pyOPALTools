@@ -1,5 +1,5 @@
 import os
-from opal.datasets.DatasetBase import *
+from opal.datasets.filetype import FileType
 from opal.datasets.H5Dataset import H5Dataset
 from opal.datasets.StatDataset import StatDataset
 from opal.datasets.TimeDataset import TimeDataset

@@ -1,5 +1,6 @@
 import numpy as np
-from opal.datasets.DatasetBase import FileType, DatasetBase
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
 from opal.statistics import impl_statistics
 
 def moment(ds, var, k, **kwargs):

@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from scipy.stats import gaussian_kde
 import numpy as np
-from opal.datasets.DatasetBase import FileType, DatasetBase
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
 from utilities.LatticeParser import LatticeParser
 import os
 
