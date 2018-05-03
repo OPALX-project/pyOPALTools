@@ -22,7 +22,7 @@ class ProbeHistDataset(DatasetBase):
         
         
         self.__variable_mapper = {
-            'bincount':     'dataset',
+            #'bincount':     'dataset',
             'radius':       'radii'
         }
         
@@ -110,4 +110,4 @@ class ProbeHistDataset(DatasetBase):
         
         unit = self.__parser.getUnitOfVariable(peakvar)
         
-        return r'$' + unit + '$'
+        return unit

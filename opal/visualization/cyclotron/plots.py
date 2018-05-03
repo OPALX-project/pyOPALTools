@@ -244,7 +244,11 @@ def plot_peak_difference(dsets, **kwargs):
     
     Parameters
     ----------
-    dsets       (DatasetBase)   2 datasets
+    dsets   (DatasetBase)   2 datasets
+    
+    Optionals
+    ---------
+    grid    (bool)          draw grid
     
     Returns
     -------
@@ -282,10 +286,51 @@ def plot_peak_difference(dsets, **kwargs):
     plt.plot(xticks, diff, 'o')
     plt.xticks(xticks)
     plt.ylim(ylim)
-    plt.grid(True)
+    plt.grid(kwargs.get('grid', False))
     
     plt.xlabel('peak number')
     
     plt.ylabel('peak difference [' + unit + ']')
+    
+    return plt
+
+
+def plot_probe_histogram(ds, **kwargs):
+    """
+    Plot a histogram of the probe histogram
+    bin count vs. radius.
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)   dataset
+    
+    Optionals
+    ---------
+    grid    (bool)          draw grid
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.HIST:
+        raise TypeError(ds.filename +
+                        ' is not a probe histogram (*.hist) file.')
+    
+    bincount = ds.getData('bincount')
+    rmin = ds.getData('min')
+    rmax = ds.getData('max')
+    nbins = ds.getData('nbins')
+    #dr = ds.getData('binsize')
+    
+    radius = np.linspace(float(rmin), float(rmax), nbins)
+    
+    plt.plot(radius, bincount)
+    plt.xlabel('radius [' + ds.getUnit('min') + ']')
+    plt.ylabel(ds.getLabel('bincount'))
+    plt.grid(kwargs.get('grid', False))
     
     return plt
