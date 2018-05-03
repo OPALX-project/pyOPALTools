@@ -27,28 +27,31 @@ class PeakParser:
     2403.6
     2424.6
     
+    It is also able to readd simulation files of the same form.
+    
     Members
     -------
-    self._names     ([str])     all supported variables
-    self._intensity (float)     current where measurement was
-                                performed
-    self._units     ([str])     all units
-    self._dataset   ([float)]   radii
+    self._peaks = {
+            'type':     simulation or measurement
+            'name':     list of all supported variables
+            'dataset':  list of radii and intensity
+            'unit':     list of units
+    }
     """
     
     def __init__(self):
         
-        self._names = ['radii', 'intensity']
-        self._intensity = 0.0
-        
-        self._units = ['', '']
-        
-        self._dataset = []
-        
+        self._peaks = {
+            'type':     '',
+            'name':     [],
+            'dataset':  [],
+            'unit':     []
+        }
     
     def parse(self, filename):
         
-        pattern =  r'# Peak Radii \((\w+)\), (.*), (\d+) (\w+) \((.*)\)'
+        measurement_pattern =  r'# Peak Radii \((\w+)\), (.*), (\d+) (\w+) \((.*)\)'
+        simulation_pattern = r'# Peak Radii \((\w+)\)'
         
         match = False
         
@@ -58,43 +61,59 @@ class PeakParser:
                     # 24. March
                     # https://stackoverflow.com/questions/2077897/substitute-multiple-whitespace-with-single-whitespace-in-python
                     line = ' '.join(line.split())
-                    obj = re.match(pattern, line)
+                    obj = re.match(measurement_pattern, line)
                     if obj:
-                        self._units[0] = obj.group(1)
-                        self._intensity = obj.group(3)
-                        self._units[1] = obj.group(4)
+                        self._peaks['type'] = 'measurement'
+                        
+                        # intensity
+                        self._peaks['name'].append( 'intensity' )
+                        self._peaks['unit'].append( obj.group(4) )                        
+                        self._peaks['dataset'].append( obj.group(3) )
+                        
+                        # radii
+                        self._peaks['name'].append( 'radii' )
+                        self._peaks['unit'].append( obj.group(1) )
+                        
                         match = True
-                else:
-                    break
+                    
+                    obj = re.match(simulation_pattern, line)
+                    if obj:
+                        self._peaks['type'] = 'simulation'
+                        
+                        # radii
+                        self._peaks['name'].append( 'radii' )
+                        self._peaks['unit'].append( obj.group(1) )
+
+                        match = True
+                    else:
+                        break
         
         if not match:
             raise RuntimeError('Not proper file format.')
         
-        self._dataset = np.genfromtxt(filename,
-                                      comments='#',
-                                      delimiter = ' ',
-                                      dtype=np.float64
-                                      )
+        self._peaks['dataset'].append( np.genfromtxt(filename,
+                                                     comments='#',
+                                                     delimiter = ' ',
+                                                     dtype=np.float64
+                                                     )
+        )
+    
     
     def getDataOfVariable(self, var):
-        
-        if not var in self._names:
+        if not self.isVariable(var):
             raise ValueError("No variable '" + var + "' in dataset.")
         
-        idx = self._names.index(var)
-        
-        if idx == 0:
-            return self._dataset
-        else:
-            return self._intensity
+        idx = self._peaks['name'].index(var)
+        return self._peaks['dataset'][idx]
     
     
     def getUnitOfVariable(self, var):
-        if not var in self._names:
+        if not self.isVariable(var):
             raise ValueError("No variable '" + var + "' in dataset.")
-        idx = self._names.index(var)
-        return self._units[idx]
+        
+        idx = self._peaks['name'].index(var)
+        return self._peaks['unit'][idx]
     
     
     def isVariable(self, var):
-        return var in self._names
+        return var in self._peaks['name']
