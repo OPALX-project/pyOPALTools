@@ -17,7 +17,8 @@ class FileType(IntEnum):
     TRACK_ORBIT = 8,
     PEAK        = 9,
     HIST        = 10,
-    NONE        = 11
+    JSON        = 11,
+    NONE        = 12
     
     @classmethod
     def extensionToFileType(cls, fname):
@@ -31,7 +32,8 @@ class FileType(IntEnum):
             '.grid':    cls.GRID,
             '.solver':  cls.SOLVER,
             '.peaks':   cls.PEAK,
-            '.hist':    cls.HIST
+            '.hist':    cls.HIST,
+            '.json':    cls.JSON
         }
         
         file = {

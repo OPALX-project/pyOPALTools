@@ -3,3 +3,4 @@ import opal.datasets
 import opal.statistics
 import opal.visualization
 import opal.analysis
+import opal.config

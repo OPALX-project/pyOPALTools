@@ -11,6 +11,7 @@ from opal.datasets.TrackOrbitDataset import TrackOrbitDataset
 from opal.datasets.OutputDataset import OutputDataset
 from opal.datasets.PeakDataset import PeakDataset
 from opal.datasets.ProbeHistDataset import ProbeHistDataset
+from opal.datasets.OptimizerDataset import OptimizerDataset
 
 def load_dataset(directory, **kwargs):
     """
@@ -103,6 +104,11 @@ def load_dataset(directory, **kwargs):
         elif ftype == FileType.HIST:
             datasets.append(ProbeHistDataset(directory, fname))
             print ( 'matches probe histogram file type.' )
+        elif ftype == FileType.JSON:
+            datasets.append(OptimizerDataset(directory, fname))
+            # after reading we leave since optimizer produces many files
+            print ( 'matches optimizer file type. Stop reading further.' )
+            break
         elif ftype == FileType.NONE:
             print ( 'no appropriate file match.' )
     print ( '\nDone.\n' )

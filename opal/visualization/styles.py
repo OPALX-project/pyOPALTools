@@ -1,9 +1,12 @@
 import matplotlib as mpl
 from cycler import cycler
+import opal.config as config
 
 # https://matplotlib.org/users/dflt_style_changes.html
 
 def default_style():
+    config.opal['style'] = 'default'
+    
     mpl.rcParams['figure.figsize']          = [7.0, 6.0]
     mpl.rcParams['figure.dpi']              = 100
     mpl.rcParams['savefig.dpi']             = 300
@@ -24,6 +27,8 @@ def poster_style():
     
     jupyter_style()
     
+    config.opal['style'] = 'poster'
+    
     mpl.rcParams['figure.figsize']  = [18.0, 13.0]       # figure size in inches
     mpl.rcParams['axes.labelsize']  = 'xx-large'
     mpl.rcParams['axes.linewidth']  = 3.0
@@ -43,7 +48,8 @@ def jupyter_style():
     ---------
     https://matplotlib.org/users/customizing.html
     """
-    
+    config.opal['style'] = 'jupyter'
+    print ( 'import: ', config.opal['style'] )
     
     mpl.rcParams['axes.autolimit_mode']             = 'data'
     mpl.rcParams['axes.axisbelow']                  = 'line'
@@ -166,3 +172,10 @@ def jupyter_style():
     mpl.rcParams['ytick.minor.visible']     = False
     mpl.rcParams['ytick.minor.width']       = 0.6
     mpl.rcParams['ytick.right']             = False
+    
+    
+    try:
+        from plotly import offline
+        offline.init_notebook_mode(connected=True)        
+    except:
+        print ( "Install plotly: pip install plotly" )
