@@ -6,8 +6,6 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
         import plotly.plotly as py
         import plotly.graph_objs as go
     
-        print ( 'plots: ', config.opal['style'] )
-        
         if config.opal['style'] == 'jupyter':
             from plotly.offline import iplot as pyplot
         else:
