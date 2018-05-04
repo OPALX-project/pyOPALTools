@@ -41,19 +41,24 @@ class OptimizerDataset(DatasetBase):
         
         self._loadGeneration( int( str.split(fname, "_", 1)[0] ) )
         
-        super(OptimizerDataset, self).__init__(directory, '')
+        super(OptimizerDataset, self).__init__(directory, fname)
     
     
-    def getData(self, ind, **kwargs):
+    def getData(self, var, **kwargs):
         """
-        Obtain the data of a variable
+        Obtain the data of a variable or all data
+        of an individual. An individual is returned
+        when setting 'ind' > 0. In that case the
+        'var' parameter is not considered.
         
         Parameters
         ----------
-        ind     (str)   individual identity number
+        var     (str)   a design variable
+                        or objective
         
         Optionals
         ---------
+        ind     (int)   individual identity number
         gen     (int)   generation, default: 1
         
         Returns
@@ -64,7 +69,21 @@ class OptimizerDataset(DatasetBase):
         
         self._loadGeneration(gen)
         
-        return self.__parser.getIndividualWithID(ind)
+        ind = kwargs.get('ind', -1)
+        
+        if not ind == -1:
+            return self.__parser.getIndividualWithID(ind)
+        
+        if not var in self.objectives and \
+            not var in self.design_variables:
+                raise ValueError("The variable '" + var + "' is not in dataset.")
+        
+        if var in self.objectives:
+            idx = self.objectives.index(var)
+            return self.__parser.getAllOutput()[:, idx]
+        else:
+            idx = self.design_variables.index(var)
+            return self.__parser.getAllInput()[:, idx]
     
     
     def getLabel(self, var):
@@ -79,11 +98,8 @@ class OptimizerDataset(DatasetBase):
         -------
         appropriate name plotting ready
         """
-        dvars = self.__parser.getDesignVariables()
-        objs  = self.__parser.getObjectives()
-        
-        if not var in dvars and \
-            not var in objs:
+        if not var in self.objectives and \
+            not var in self.design_variables:
             raise ValueError("The variable '" + var + "' is not in dataset.")
         
         return var
@@ -155,6 +171,14 @@ class OptimizerDataset(DatasetBase):
         Obtain design variable names
         """
         return self.__parser.getDesignVariables()
+    
+    
+    @property
+    def num_generations(self):
+        """
+        Obtain the number of generations
+        """
+        return self.__parser.getNumOfGenerations()
     
     
     @property

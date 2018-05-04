@@ -1,5 +1,9 @@
 from opal.visualization.optimizer.helper import sort_list
 import opal.config as config
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
+import matplotlib.pyplot as plt
+import numpy as np
 
 def plot_parallel_coordinates(ds, gen, **kwargs):
     try:
@@ -34,6 +38,12 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
     https://plot.ly/python/parallel-coordinates-plot/
     https://stackoverflow.com/questions/40243446/how-to-save-plotly-offline-graph-in-format-png
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.JSON:
+        raise TypeError(ds.filename + ' is not an optimizer dataset.')
     
     basename = ds.getGenerationBasename(gen)
     
@@ -64,7 +74,7 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
     nObjs = len(obj_names)
     
     for i in ids:
-        data = ds.getData(i)
+        data = ds.getData('', ind=i)
         
         for j, d in enumerate(data):
             if j < nDvars:
@@ -107,3 +117,53 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
            #output_type='file',
            filename='generation_' + str(gen) + '.html')
            #auto_open=False)
+
+
+def plot_objectives(ds, **kwargs):
+    """
+    Plotting function for multiobjective
+    optimizer output. Show the trend of
+    the sum of the objectives with the generation.
+    
+    Parameters
+    ----------
+    ds          (OptimizerDataset)  optimizer output dataset
+    
+    Optionals
+    ---------
+    xscale      (str)   'linear' or 'log',
+                        default: linear
+    yscale      (str)   'linear' or 'log',
+                        default: linear
+    grid        (bool)  show grid, default: False
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.JSON:
+        raise TypeError(ds.filename + ' is not an optimizer dataset.')
+    
+    
+    gens = range(1, ds.num_generations + 1)
+    objs = ds.objectives
+    
+    result = []
+    for g in gens:
+        s = 0.0
+        for obj in objs:
+            s += sum(ds.getData(obj, gen=g))
+        result.append( s )
+    
+    plt.plot(gens, result)
+    plt.xscale(kwargs.get('xscale', 'linear'))
+    plt.yscale(kwargs.get('yscale', 'linear'))
+    plt.grid(kwargs.get('grid', True), which='both')
+    plt.xlabel('generation')
+    plt.ylabel('sum of objectives (all individuals)')
+    
+    return plt
