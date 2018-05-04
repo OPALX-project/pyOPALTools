@@ -307,6 +307,8 @@ def plot_probe_histogram(ds, **kwargs):
     Optionals
     ---------
     grid    (bool)          draw grid
+    scale   (bool)          scales to 1.0
+                            (default: False)
     
     Returns
     -------
@@ -327,6 +329,9 @@ def plot_probe_histogram(ds, **kwargs):
     #dr = ds.getData('binsize')
     
     radius = np.linspace(float(rmin), float(rmax), nbins)
+    
+    if kwargs.get('scale', False):
+        bincount = np.asarray(bincount) / max(bincount )
     
     plt.plot(radius, bincount)
     plt.xlabel('radius [' + ds.getUnit('min') + ']')
