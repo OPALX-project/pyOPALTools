@@ -276,16 +276,16 @@ def plot_peak_difference(dsets, **kwargs):
     peaks2 = dsets[1].getData('radius')
     
     npeaks = min(len(peaks1), len(peaks2))
-    diff = peaks1[0:npeaks] - peaks1[0:npeaks]
+    diff = peaks1[0:npeaks] - peaks2[0:npeaks]
     
     
     xticks = range(1, npeaks + 1)
     
-    ylim = [min(diff) - 0.001, max(diff) + 0.001]
+    #ylim = [min(diff) - 0.001, max(diff) + 0.001]
     
     plt.plot(xticks, diff, 'o')
     plt.xticks(xticks)
-    plt.ylim(ylim)
+    #plt.ylim(ylim)
     plt.grid(kwargs.get('grid', False))
     
     plt.xlabel('peak number')
