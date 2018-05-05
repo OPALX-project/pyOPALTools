@@ -330,12 +330,15 @@ def plot_probe_histogram(ds, **kwargs):
     
     radius = np.linspace(float(rmin), float(rmax), nbins)
     
+    ylabel = ds.getLabel('bincount')
+    
     if kwargs.get('scale', False):
         bincount = np.asarray(bincount) / max(bincount )
+        ylabel += ' (normalized)'
     
     plt.plot(radius, bincount)
     plt.xlabel('radius [' + ds.getUnit('min') + ']')
-    plt.ylabel(ds.getLabel('bincount'))
+    plt.ylabel(ylabel)
     plt.grid(kwargs.get('grid', False))
     
     return plt
