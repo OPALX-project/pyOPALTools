@@ -46,19 +46,19 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    plt.figure()
-    plt.xscale(kwargs.get('yscale', 'linear'))
-    plt.yscale(kwargs.get('xscale', 'linear'))
+    #plt.figure()
+    plt.xscale(kwargs.pop('yscale', 'linear'))
+    plt.yscale(kwargs.pop('xscale', 'linear'))
     
-    if kwargs.get('xsci', False):
+    if kwargs.pop('xsci', False):
         plt.ticklabel_format(style='sci', axis='x', scilimits=(0,3))
     
-    if kwargs.get('ysci', False):
+    if kwargs.pop('ysci', False):
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
     
     xdata = ds.getData(xvar)
     ydata = ds.getData(yvar)
-    plt.plot(xdata, ydata)
+    plt.plot(xdata, ydata, **kwargs)
     
     xunit  = ds.getUnit(xvar)
     yunit  = ds.getUnit(yvar)
@@ -186,10 +186,10 @@ def plot_density(ds, xvar, yvar, **kwargs):
     step = kwargs.get('step', 0)
     bins = kwargs.get('bins', (50,50))
     cmap = kwargs.get('cmap', plt.cm.jet)
-
+    
     xdata = ds.getData(xvar, step=step)
     ydata = ds.getData(yvar, step=step)
-        
+    
     xy = np.vstack([xdata, ydata])
     plt.hist2d(xdata, ydata, bins = bins, cmap=cmap)
 

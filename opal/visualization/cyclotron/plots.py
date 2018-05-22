@@ -173,7 +173,7 @@ def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionO
     return plt
 
 
-def plot_beta_beat(ds, **kwargs):
+def plot_beta_beat(ds, nsteps=-1, **kwargs):
     """
     Only with datasets of
     type FileType.TRACK_ORBIT.
@@ -181,7 +181,8 @@ def plot_beta_beat(ds, **kwargs):
     Parameters
     ----------
     ds      (DatasetBase)   datasets
-    
+    nsteps                  number of steps per turn
+
     Returns
     -------
     a matplotlib.pyplot handle
@@ -193,7 +194,7 @@ def plot_beta_beat(ds, **kwargs):
     if not ds.filetype == FileType.TRACK_ORBIT:
         raise TypeError(ds.filename + ' is not a track orbit dataset.')
     
-    _, _, phi, radius = calcTurnSeparation(ds)
+    _, _, phi, radius = calcTurnSeparation(ds,nsteps)
 
     plt.plot(radius, phi, 'o-', linewidth=2, **kwargs)
     plt.xlabel('Radius [m]')
@@ -283,10 +284,11 @@ def plot_peak_difference(dsets, **kwargs):
     
     #ylim = [min(diff) - 0.001, max(diff) + 0.001]
     
-    plt.plot(xticks, diff, 'o')
+    plt.grid(kwargs.pop('grid', False))
+
+    plt.plot(xticks, diff, 'o', **kwargs)
     plt.xticks(xticks)
     #plt.ylim(ylim)
-    plt.grid(kwargs.get('grid', False))
     
     plt.xlabel('peak number')
     
@@ -332,13 +334,14 @@ def plot_probe_histogram(ds, **kwargs):
     
     ylabel = ds.getLabel('bincount')
     
-    if kwargs.get('scale', False):
+    if kwargs.pop('scale', False):
         bincount = np.asarray(bincount) / max(bincount )
         ylabel += ' (normalized)'
     
-    plt.plot(radius, bincount)
+    plt.grid(kwargs.pop('grid', False))
+
+    plt.plot(radius, bincount, **kwargs)
     plt.xlabel('radius [' + ds.getUnit('min') + ']')
     plt.ylabel(ylabel)
-    plt.grid(kwargs.get('grid', False))
     
     return plt
