@@ -1,7 +1,7 @@
 # Author:   Matthias Frey
 # Date:     March 2018
 
-from utilities.SDDSParser import SDDSParser
+from opal.parser.SDDSParser import SDDSParser
 from opal.datasets.DatasetBase import *
 import numpy as np
 

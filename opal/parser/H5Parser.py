@@ -3,7 +3,7 @@
 
 import h5py
 import numpy as np
-from utilities.H5Error import *
+from opal.parser.H5Error import *
 
 class H5Parser:
     

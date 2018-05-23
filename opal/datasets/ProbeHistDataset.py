@@ -2,7 +2,7 @@
 # Date:     May 2018
 
 import os
-from utilities.HistogramParser import HistogramParser
+from opal.parser.HistogramParser import HistogramParser
 from opal.datasets.DatasetBase import *
 import numpy as np
 

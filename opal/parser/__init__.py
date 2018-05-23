@@ -1,1 +1,8 @@
+import opal.parser.SDDSParser
+import opal.parser.H5Error
+import opal.parser.H5Parser
+import opal.parser.LatticeParser
+import opal.parser.TrackOrbitParser
+import opal.parser.HistogramParser
+import opal.parser.PeakParser
 import opal.parser.sampler

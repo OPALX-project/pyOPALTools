@@ -8,7 +8,7 @@ from scipy.stats import gaussian_kde
 import numpy as np
 from opal.datasets.filetype import FileType
 from opal.datasets.DatasetBase import DatasetBase
-from utilities.LatticeParser import LatticeParser
+from opal.parser.LatticeParser import LatticeParser
 import os
 
 from opal.visualization.timing.plots import *

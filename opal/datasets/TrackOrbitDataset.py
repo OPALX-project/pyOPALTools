@@ -2,7 +2,7 @@
 # Date:     March 2018
 
 import os
-from utilities.TrackOrbitParser import TrackOrbitParser
+from opal.parser.TrackOrbitParser import TrackOrbitParser
 from opal.datasets.DatasetBase import *
 import numpy as np
 

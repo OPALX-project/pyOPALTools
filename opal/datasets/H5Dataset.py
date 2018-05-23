@@ -2,7 +2,7 @@
 # Date:     March 2018
 
 import os
-from utilities.H5Parser import H5Parser
+from opal.parser.H5Parser import H5Parser
 import numpy as np
 from opal.datasets.DatasetBase import *
 

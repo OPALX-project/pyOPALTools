@@ -2,7 +2,7 @@
 # Date:     May 2018
 
 import os
-from utilities.PeakParser import PeakParser
+from opal.parser.PeakParser import PeakParser
 from opal.datasets.DatasetBase import *
 import numpy as np
 
