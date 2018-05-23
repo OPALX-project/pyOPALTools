@@ -1,13 +1,12 @@
 # Author:   Nicole Neveu 
 # Date:     May 2018
 
-
 import numpy as np
 import pandas as pd
 from opal.datasets.filetype import FileType
 from db import mldb
 
-def pareto(x, y, dvars=0):
+def pareto_pts(x, y):
     """
     Find Pareto points for 2 objectives, given
     all data recorded by optimization run. 
@@ -32,41 +31,38 @@ def pareto(x, y, dvars=0):
     #Check data is correct length
     lx = len(x)
     ly = len(y)
-    ld = len(dvars[:,0])
-    if lx==ly==ld:
+    if lx==ly:
         pass
     else: 
         print('Input data sizes do not match\n')
         print('Please check input arrays')
     
-    #Making holders for my pareto fronts            
+    #Making holders for my pareto fronts     
+    pts      = []
     pareto_y = []
     pareto_x = []
-    pdvar    = []
     pfdict   = {}
-    w  = np.arange(0,1.001, 0.001)
+    w  = np.arange(0,1.01, 0.01)
     sx = scaleData(x)
     sy = scaleData(y)
     
-    #Finding best point with respect to all weights (w)
+    #Finding locations of best points 
+    #with respect to all weights (w)
     for i in range(0, len(w)):
-        fobj     = sy * w[i] + sx *(1-w[i])
-        wmins    = np.where(fobj==min(fobj))[0][0]
-        pareto_y = np.append(pareto_y, y[wmins])
-        pareto_x = np.append(pareto_x, x[wmins])
+        fobj    = sy * w[i] + sx *(1-w[i])
+        wmins   = np.where(fobj==min(fobj))[0][0]
+        pts     = np.append(pts, wmins)
 
-    pareto_pts = delete_repeats(pareto_x, pareto_y)
-    ind        = np.array(pareto_pts.index.tolist())
+    ind = (np.unique(pts)).astype(int)
+    pareto_x = x[ind]
+    pareto_y = y[ind]
 
-    #Check dvars is correct length
-    if dvars!=0:
-        pdvar      = dvars[ind, :]
+    #Reordering values for easier plotting
+    #Maybe not the best way to do this?
+    reorder = sorted(zip(*[pareto_x, pareto_y, ind]))     
+    pfdict['x'], pfdict['y'], ind = list(zip(*reorder))
 
-    pfdict['x'] = pareto_pts.ix[:,0]
-    pfdict['y'] = pareto_pts.ix[:,1]
-    pfdict['dvars'] = pdvar
-    
-    return(pfdict)
+    return(pfdict, ind)
     #return(pareto_pts.ix[:,0], pareto_pts.ix[:,1], pdvar) #pareto_x, pareto_y, pdvar)
 
 
@@ -151,6 +147,9 @@ def delete_repeats(x, y, z=0):
     ---------
     z   (numpy array)   ND array of second design variables
 
+    Returns
+    -------
+    df  (pandas db) database with out repeats
     """
     if z==0:
         df = pd.DataFrame({'x':x, 'y':y}) #, 'z':z})
