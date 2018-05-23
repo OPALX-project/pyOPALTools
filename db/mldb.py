@@ -415,8 +415,15 @@ class mldb:
 
     def getYDim(self):
         return len(self.trainingSet[0]['objNames'])
+    
     def getYNames(self):
         return self.trainingSet[0]['objNames']
+
+    def getAllDvar(self,gen):
+        return self.trainingSet[gen+1]['dvarValues'][:]
+
+    def getAllObj(self,gen):
+        return self.trainingSet[gen+1]['objValues'][:]
 
     def getDVarVec(self,gen,indiv):
         return self.trainingSet[gen+1]['dvarValues'][indiv]
