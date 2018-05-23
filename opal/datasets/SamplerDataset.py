@@ -26,7 +26,7 @@ class SamplerDataset(DatasetBase):
         if not os.path.exists(full_path):
             raise ValueError("File '" + full_path + "' does not exist.")
         
-        self.__parser = SamplerParser(full_path)
+        self.__parser = SamplerParser()
         
         super(SamplerDataset, self).__init__(directory, fname)
     

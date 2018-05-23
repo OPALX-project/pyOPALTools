@@ -42,7 +42,7 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    if not ds.filetype == FileType.JSON:
+    if not ds.filetype == FileType.OPTIMIZER:
         raise TypeError(ds.filename + ' is not an optimizer dataset.')
     
     basename = ds.getGenerationBasename(gen)
@@ -145,7 +145,7 @@ def plot_objectives(ds, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    if not ds.filetype == FileType.JSON:
+    if not ds.filetype == FileType.OPTIMIZER:
         raise TypeError(ds.filename + ' is not an optimizer dataset.')
     
     

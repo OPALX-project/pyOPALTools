@@ -85,10 +85,6 @@ class SamplerParser:
             for key in self.__keys:
                 if not key in self.__parsed.keys():
                     raise # call IOError at end
-            
-            
-            
-            
         except:
             raise IOError("File '" + filename + "' isn't a proper Sample JSON file.")
     

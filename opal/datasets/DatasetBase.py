@@ -23,10 +23,12 @@ class DatasetBase:
         self._directory = directory
         self._fname = fname
         self._ftype = FileType.extensionToFileType(fname)
-        
+    
+    
     @property
     def filetype(self):
         return self._ftype
+    
     
     @property
     def filename(self):

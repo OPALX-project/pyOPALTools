@@ -49,7 +49,6 @@ def jupyter_style():
     https://matplotlib.org/users/customizing.html
     """
     config.opal['style'] = 'jupyter'
-    print ( 'import: ', config.opal['style'] )
     
     mpl.rcParams['axes.autolimit_mode']             = 'data'
     mpl.rcParams['axes.axisbelow']                  = 'line'

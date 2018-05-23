@@ -4,6 +4,8 @@
 import os
 from enum import IntEnum, unique
 
+from opal.parser.sampler import SamplerParser
+
 @unique
 class FileType(IntEnum):
     H5          = 0,
@@ -17,8 +19,9 @@ class FileType(IntEnum):
     TRACK_ORBIT = 8,
     PEAK        = 9,
     HIST        = 10,
-    JSON        = 11,
-    NONE        = 12
+    OPTIMIZER   = 11,
+    SAMPLER     = 12,
+    NONE        = 13
     
     @classmethod
     def extensionToFileType(cls, fname):
@@ -33,7 +36,7 @@ class FileType(IntEnum):
             '.solver':  cls.SOLVER,
             '.peaks':   cls.PEAK,
             '.hist':    cls.HIST,
-            '.json':    cls.JSON
+            '.json':    [cls.OPTIMIZER, cls.SAMPLER]
         }
         
         file = {
@@ -44,7 +47,19 @@ class FileType(IntEnum):
         _ , ext = os.path.splitext(fname)
         
         if ext in extension:
-            return extension[ext]
+            # FIXME not nice file handling
+            # currently only JSON could be for
+            # OPTIMIZER or SAMPLER --> try parsing
+            # if no exception is raised, it's a SAMPLER file
+            if isinstance(extension[ext], list):
+                parser = SamplerParser()
+                try:
+                    parser.parse(fname)
+                    return cls.SAMPLER
+                except:
+                    return cls.OPTIMIZER
+            else:
+                return extension[ext]
         elif fname in file:
             return file[fname]
         elif 'time' in fname.lower() or 'timing' in fname.lower():

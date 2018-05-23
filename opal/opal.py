@@ -1,3 +1,6 @@
+# Author:   Matthias Frey
+# Date:     March 2018
+
 import os
 from opal.datasets.filetype import FileType
 from opal.datasets.H5Dataset import H5Dataset
@@ -12,6 +15,7 @@ from opal.datasets.OutputDataset import OutputDataset
 from opal.datasets.PeakDataset import PeakDataset
 from opal.datasets.ProbeHistDataset import ProbeHistDataset
 from opal.datasets.OptimizerDataset import OptimizerDataset
+from opal.datasets.SamplerDataset import SamplerDataset
 
 def load_dataset(directory, **kwargs):
     """
@@ -51,7 +55,8 @@ def load_dataset(directory, **kwargs):
         fnames.append(fname)
     elif not ftype == FileType.NONE:
         for fname in os.listdir(directory):
-            if FileType.extensionToFileType(fname) == ftype:
+            full_path = os.path.join(directory, fname)
+            if FileType.extensionToFileType(full_path) == ftype:
                 fnames.append(fname)
         
         if not fnames:
@@ -66,7 +71,9 @@ def load_dataset(directory, **kwargs):
     datasets = []
     for fname in fnames:
         print ( '    ' + fname + ' ... ', end='' )
-        ftype = FileType.extensionToFileType(fname)
+        full_path = os.path.join(directory, fname)
+        ftype = FileType.extensionToFileType(full_path)
+        
         if  ftype == FileType.H5:
             datasets.append(H5Dataset(directory, fname))
             print ( 'matches H5 file type.' )
@@ -104,10 +111,14 @@ def load_dataset(directory, **kwargs):
         elif ftype == FileType.HIST:
             datasets.append(ProbeHistDataset(directory, fname))
             print ( 'matches probe histogram file type.' )
-        elif ftype == FileType.JSON:
+        elif ftype == FileType.OPTIMIZER:
             datasets.append(OptimizerDataset(directory, fname))
             # after reading we leave since optimizer produces many files
             print ( 'matches optimizer file type. Stop reading further.' )
+            break
+        elif ftype == FileType.SAMPLER:
+            datasets.append(SamplerDataset(directory, fname))
+            print ( 'matches sampler file type.' )
             break
         elif ftype == FileType.NONE:
             print ( 'no appropriate file match.' )
