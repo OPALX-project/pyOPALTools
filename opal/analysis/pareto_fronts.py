@@ -43,6 +43,7 @@ def pareto(x, y, dvars=0):
     pareto_y = []
     pareto_x = []
     pdvar    = []
+    pfdict   = {}
     w  = np.arange(0,1.001, 0.001)
     sx = scaleData(x)
     sy = scaleData(y)
@@ -61,7 +62,12 @@ def pareto(x, y, dvars=0):
     if dvars!=0:
         pdvar      = dvars[ind, :]
 
-    return(pareto_pts.ix[:,0], pareto_pts.ix[:,1], pdvar) #pareto_x, pareto_y, pdvar)
+    pfdict['x'] = pareto_pts.ix[:,0]
+    pfdict['y'] = pareto_pts.ix[:,1]
+    pfdict['dvars'] = pdvar
+    
+    return(pfdict)
+    #return(pareto_pts.ix[:,0], pareto_pts.ix[:,1], pdvar) #pareto_x, pareto_y, pdvar)
 
 
 def get_all_data_db(dbpath):
@@ -87,14 +93,30 @@ def get_all_data_db(dbpath):
     data = {}
     dbr = mldb.mldb()
     dbr.load(dbpath)
-    #dvars  = dbr.getXNames()
-    #obj    = dbr.getYNames()
-    gens   = dbr.getNumberOfSamples()
+    dvar_names = dbr.getXNames()
+    obj_names  = dbr.getYNames()
+    num_gens   = dbr.getNumberOfSamples()
+  
+    #Make arrays with data from all generations
+    for gen in range(0, num_gens):
+        dvals   = dbr.getAllDvar(gen)
+        objvals = dbr.getAllObj(gen)
+        if gen==0:
+            alldvals = dvals
+            allobjs  = objvals
+        else:
+            alldvals = np.append(alldvals, dvals, axis=0)
+            allobjs  = np.append(allobjs, objvals, axis=0)
 
+    #Make dict entries for design variables 
+    for i,dname in enumerate(dvar_names):
+        data[dname] = alldvals[:,i]
+
+    #Make dict entries for objectives
+    for j,objname in enumerate(obj_names):
+        data[objname] = allobjs[:,j]
     
     return(data)
-
-
 
 
 def scaleData(vals):
