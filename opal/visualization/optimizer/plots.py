@@ -52,6 +52,8 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
     obj_names   = ds.objectives
     ids = ds.individuals(gen)
     
+    print ( ids )
+    
     dvar_dimension = []
     obj_dimension = []
     
@@ -74,7 +76,7 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
     nObjs = len(obj_names)
     
     for i in ids:
-        data = ds.getData('', ind=i)
+        data = ds.getData('', gen=gen, ind=i)
         
         for j, d in enumerate(data):
             if j < nDvars:

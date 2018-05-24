@@ -312,7 +312,7 @@ class OptPilotJsonReader:
         None
         """
         
-        idlist = self.__table[:, self.__nDvars + self.__nObjs].tolist()
+        idlist = self.__table[:, self.__nDvars + self.__nObjs].astype(int).tolist()
         
         if ID not in idlist:
             raise RuntimeError("An individual with ID " + str(ID) + " is not present.")
@@ -485,7 +485,7 @@ class OptPilotJsonReader:
         --------
         None
         """
-        return self.__table[:, self.__nDvars + self.__nObjs].tolist()
+        return self.__table[:, self.__nDvars + self.__nObjs].astype(int).tolist()
     
     ##
     def __buildNameToColumnMap(self, filename):
