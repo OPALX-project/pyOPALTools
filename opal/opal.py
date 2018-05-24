@@ -123,7 +123,7 @@ def load_dataset(directory, **kwargs):
             break
         elif ftype == FileType.NONE:
             print ( 'no appropriate file match.' )
-        elif ftype == Filetype.PK:
+        elif ftype == FileType.PK:
             print( 'matches machine learning database file type.')
     print ( '\nDone.\n' )
     
