@@ -13,7 +13,7 @@ else:
 
 import optPilot.OptPilotJsonReader as jsonreader
 #
-from utilities import SDDSParser
+#from utilities import SDDSParser
 
 # From https://stackoverflow.com/questions/12141150/from-list-of-integers-get-number-closest-to-a-given-value
 def findClosestIndex(myList, myNumber):
@@ -117,7 +117,7 @@ def buildBounded(pickle, baseFN):
         gyvec = gyvec[1:,:]
         #Saving good pts per generation
         bounded.append({'dvarValues':gxvec,'objValues' :gyvec})
-        print('generation # '+ str(gen+1) + ' Number of sims:', str(nsims) + ' Number of bounded sims: ' + str(np.size(gxvec[:,0])), end='\r', flush=True)
+        print('generation # '+ str(gen+1) +', Number of sims:'+ str(nsims) + ', Number of bounded sims: ' + str(np.size(gxvec[:,0])), end='\r', flush=True)
     #Getting rid of place holders
     xvec  = xvec[1:,:]
     yvec  = yvec[1:,:]
@@ -128,7 +128,7 @@ def buildBounded(pickle, baseFN):
     #Saving all bad points, looses generation info
     unbounded.append({'dvarValues':bxvec, 'objValues' :byvec})
 
-    print('# bad pts:', str(np.size(bxvec[:,0])), '# good pts:', str(np.size(xvec[:,0])))
+    print('# bad pts:', str(np.size(bxvec[:,0])),', # good pts:', str(np.size(xvec[:,0])))
     if (np.size(bxvec[:,0]) > 0):
         badbounds = checkBounds(unbounded, keys)
 
@@ -415,8 +415,15 @@ class mldb:
 
     def getYDim(self):
         return len(self.trainingSet[0]['objNames'])
+    
     def getYNames(self):
         return self.trainingSet[0]['objNames']
+
+    def getAllDvar(self,gen):
+        return self.trainingSet[gen+1]['dvarValues'][:]
+
+    def getAllObj(self,gen):
+        return self.trainingSet[gen+1]['objValues'][:]
 
     def getDVarVec(self,gen,indiv):
         return self.trainingSet[gen+1]['dvarValues'][indiv]
