@@ -42,7 +42,7 @@ def pareto_pts(x, y):
     pareto_y = []
     pareto_x = []
     pfdict   = {}
-    w  = np.arange(0,1.01, 0.01)
+    w  = np.arange(0,1.001, 0.001)
     sx = scaleData(x)
     sy = scaleData(y)
     
@@ -62,7 +62,9 @@ def pareto_pts(x, y):
     reorder = sorted(zip(*[pareto_x, pareto_y, ind]))     
     pfdict['x'], pfdict['y'], ind = list(zip(*reorder))
 
-    return(pfdict, ind)
+    #Return array(ind) so it can be used as index
+    #in dictinary arrays
+    return(pfdict, np.array(ind))
     #return(pareto_pts.ix[:,0], pareto_pts.ix[:,1], pdvar) #pareto_x, pareto_y, pdvar)
 
 
@@ -70,8 +72,8 @@ def get_all_data_db(dbpath):
     """
     Get all objectives and design variables
     from every generation in an optimzation
-    database. Databases are made using OPAL 
-    output from json files or stat files. 
+    or ml database. Databases are made using 
+    OPAL output from json files or stat files. 
     Functions to make databases can be found
     in mldb.py. 
     

@@ -16,6 +16,7 @@ from opal.datasets.PeakDataset import PeakDataset
 from opal.datasets.ProbeHistDataset import ProbeHistDataset
 from opal.datasets.OptimizerDataset import OptimizerDataset
 from opal.datasets.SamplerDataset import SamplerDataset
+from opal.datasets.MlDataset import MlDataset
 
 def load_dataset(directory, **kwargs):
     """
@@ -122,6 +123,8 @@ def load_dataset(directory, **kwargs):
             break
         elif ftype == FileType.NONE:
             print ( 'no appropriate file match.' )
+        elif ftype == Filetype.PK:
+            print( 'matches machine learning database file type.')
     print ( '\nDone.\n' )
     
     return datasets
