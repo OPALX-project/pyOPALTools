@@ -124,6 +124,13 @@ def load_dataset(directory, **kwargs):
         elif ftype == FileType.NONE:
             print ( 'no appropriate file match.' )
         elif ftype == FileType.PK:
+            #print(dir(MlDataset().load(full_path)))
+            db = MlDataset()
+            db.load(full_path)
+            print(dir(db))
+            return db
+            #dataset = data
+            #datasets.append(data) 
             print( 'matches machine learning database file type.')
     print ( '\nDone.\n' )
     

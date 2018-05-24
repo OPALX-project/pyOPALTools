@@ -139,7 +139,10 @@ def buildBounded(pickle, baseFN):
 class MlDataset:
  
     def __init__(self):
+       
         print('OPAL ML Database Generator')
+        #full_path = os.path.join(directory, fname)
+        
 
     def build(self,filename_postfix, path):
         self.trainingSet = []
@@ -400,6 +403,7 @@ class MlDataset:
                 self.trainingSet = pick.load(f)
             else:
                 self.trainingSet = pick.load(f,encoding='latin1')
+        return self.trainingSet
 
     def getSampleSize(self,i=0):
         return len(self.trainingSet[i+1]['dvarValues'])
@@ -463,7 +467,7 @@ class MlDataset:
             print('Load data first')
             sys.exit()
 
-    def getPareto(self,xname,yname):
+    def get_all_data(self,xname,yname):
         return 
 
 
