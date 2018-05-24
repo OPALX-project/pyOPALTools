@@ -130,7 +130,7 @@ class SamplerParser:
         
         samples = self.__parsed['samples']
         
-        n = len(samples - 1)
+        n = len(samples) - 1
         
         if ind > n:
             raise ValueError('No individual with ID > ' + str(n) + '.')
