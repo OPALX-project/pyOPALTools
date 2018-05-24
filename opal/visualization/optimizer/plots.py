@@ -52,8 +52,6 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
     obj_names   = ds.objectives
     ids = ds.individuals(gen)
     
-    print ( ids )
-    
     dvar_dimension = []
     obj_dimension = []
     
