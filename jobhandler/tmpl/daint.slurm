@@ -6,7 +6,7 @@
 #SBATCH --ntasks-per-core=_TASKS-PER-CORE_
 #SBATCH --cpus-per-task=_OPENMP_
 #SBATCH --ntasks-per-node=_CORES-PER-NODE_
-#SBATCH --mem=_RAM_PER_NODE_
+#SBATCH --mem=_RAM-PER-NODE_
 #SBATCH --time=_TIME_
 #SBATCH --job-name=_SIM_
 #SBATCH --error=_SIM_.error
