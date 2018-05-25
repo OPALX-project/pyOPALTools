@@ -49,7 +49,7 @@ class JobSubmitter:
         self._write_run_file()
     
     
-    def submit():
+    def submit(self):
         """
         Submit all jobs.
         """
