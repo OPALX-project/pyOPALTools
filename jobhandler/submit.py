@@ -4,6 +4,7 @@
 import os
 import fileinput
 import shutil
+import re
 
 class JobSubmitter:
     
@@ -65,12 +66,22 @@ class JobSubmitter:
         """
         Create a 'run_job.sh' file for each simulation.
         """
+        pattern = r'.*_(.*)_.*'
+        
         for sdir in self._sim_dirs:
             shutil.copy(self._template, sdir)
             
             fname = os.path.basename(self._template)
             fname = os.path.join(sdir, fname)
             with fileinput.FileInput(fname, inplace=True) as file:
-                for line in file:
+                for i, line in enumerate(file):
                     for key, val in self._pair.items()
                         print(line.replace('_' + key + '_', val), end='')
+                    
+                    # check line if still contains words with '_'
+                    obj = re.match(pattern, line)
+                    
+                    if obj:
+                        raise RuntimeError("Line " + str(i) +
+                                           " still contains '" + obj.group(1) +
+                                           "'.")
