@@ -25,8 +25,7 @@ class JobSubmitter:
         
         Note
         ----
-        1. Create batch scripts with JobSubmitter.write_run_file function
-        2. Submit jobs with JobSubmitter.submit() function
+        1. Submit jobs with JobSubmitter.submit() function
         """
         self._sim_dirs = []
         
@@ -45,6 +44,8 @@ class JobSubmitter:
         self._template = template
         self._cmd = cmd
         self._runfile = 'run_job.sh'
+        
+        self._write_run_file()
     
     
     def submit():
@@ -60,7 +61,7 @@ class JobSubmitter:
             os.system(self._cmd + ' ' + self._runfile)
     
     
-    def write_run_file(self):
+    def _write_run_file(self):
         """
         Create a 'run_job.sh' file for each simulation.
         """
