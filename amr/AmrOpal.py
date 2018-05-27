@@ -56,10 +56,10 @@ class AmrOpal:
         if not self.ds:
             raise RuntimeError("AmrOpal.slice_plot: No dataset")
         
-        unit    = kwargs.get("unit", None)
-        save    = kwargs.get("save", False)
-        figsize = kwargs.get('figsize', (12, 9))
-        dpi     = kwargs.get('dpi', None)
+        unit    = kwargs.pop("unit", None)
+        save    = kwargs.pop("save", False)
+        figsize = kwargs.pop('figsize', (12, 9))
+        dpi     = kwargs.pop('dpi', None)
         
         
         # 27. May 2018
@@ -84,17 +84,16 @@ class AmrOpal:
         
         srt = np.argsort(ray[axis])
         
-        fig = plt.figure(figsize=figsize, dpi=dpi)
         plt.plot(np.array(ray[axis][srt]),
-                 np.array(ray[field][srt]))
+                 np.array(ray[field][srt]), **kwargs)
         plt.ylabel(field + ' (' + unit + ')')
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
         plt.xlabel(axis)
         
         if save:
             plt.savefig('line_plot_' + axis + '_' + field + '.png')
-        else:
-            plt.show()
+        
+        return plt
     
     
     def slice_plot(self, normal, field, **kwargs):
