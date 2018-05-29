@@ -138,8 +138,8 @@ def buildBounded(pickle, baseFN):
 
 class mldb:
  
-    def __init__(self):
-        print('OPAL ML Database Generator')
+    def __init__(self, descr=''):
+        print('OPAL ML Database Generator \x1b[6;30;42m' + descr + '\x1b[0m')
 
     def build(self,filename_postfix, path):
         self.trainingSet = []
