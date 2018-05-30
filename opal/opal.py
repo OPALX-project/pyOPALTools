@@ -2,6 +2,8 @@
 # Date:     March 2018
 
 import os
+import logging
+
 from opal.datasets.filetype import FileType
 from opal.datasets.H5Dataset import H5Dataset
 from opal.datasets.StatDataset import StatDataset
@@ -22,6 +24,8 @@ def load_dataset(directory, **kwargs):
     Load any file(s) produced by an OPAL simulation.
     If neither ftype nor fname is specified it tries to
     read in a *.stat file.
+
+    To see stdoutput, use the python logging module like an adult
     
     Parameters
     ----------
@@ -30,7 +34,7 @@ def load_dataset(directory, **kwargs):
     Optionals
     ---------
     ftype           (FileType)  type of file to read in (optional)
-    fname           (str)       file to read in (optional)
+    fname           (str/tuple) file(s) to read in (optional)
     astype          (FileType)  read a file according some dataset type
                                 E.g. OPAL standard output contains timings
                                 as well.
@@ -47,81 +51,93 @@ def load_dataset(directory, **kwargs):
         raise RuntimeError('Specify either file type or file name but not both.')
     
     fnames = []
-    
-    if fname:
+
+    if isinstance(fname,str):
         full_path = os.path.join(directory, fname)
         if not os.path.exists(full_path):
             raise RuntimeError("File '" + full_path + "' does not exist.")        
         fnames.append(fname)
+    
+    elif isinstance(fname,list) or isinstance(fname,tuple):
+        for file in fname:
+            full_path = os.path.join(directory, file)
+            if not os.path.exists(full_path):
+                raise RuntimeError("File '" + full_path + "' does not exist.")        
+            fnames.append(file)
+    
     elif not ftype == FileType.NONE:
-        for fname in os.listdir(directory):
-            full_path = os.path.join(directory, fname)
+        for file in os.listdir(directory):
+            full_path = os.path.join(directory, file)
             if FileType.extensionToFileType(full_path) == ftype:
-                fnames.append(fname)
+                fnames.append(file)
         
         if not fnames:
             raise RuntimeError('Could not find any files of this type.')
     else:
-        print ( "Neither file type 'ftype' nor file name 'fname' specified." )
-        print ( 'Try loading stat file.' )
-        load_dataset(directory, ftype=FileType.STAT)
+        logging.debug ( "Neither file type 'ftype' nor file name 'fname' specified." )
+        logging.debug ( 'Try loading stat file.' )
+        return load_dataset(directory, ftype=FileType.STAT)
     
     
-    print ( 'Start loading files ...\n' )
+    logging.info( 'Start loading files ...' )
     datasets = []
-    for fname in fnames:
-        print ( '    ' + fname + ' ... ', end='' )
-        full_path = os.path.join(directory, fname)
+    
+    for file in fnames:
+        logging.info (file)
+        full_path = os.path.join(directory, file)
         ftype = FileType.extensionToFileType(full_path)
         
         if  ftype == FileType.H5:
-            datasets.append(H5Dataset(directory, fname))
-            print ( 'matches H5 file type.' )
+            datasets.append(H5Dataset(directory, file))
+            logging.debug ( 'matches H5 file type.' )
         elif ftype == FileType.STAT:
-            datasets.append(StatDataset(directory, fname))
-            print ( 'matches stat file type.' )
+            datasets.append(StatDataset(directory, file))
+            logging.debug ( 'matches stat file type.' )
         elif ftype == FileType.TIMING:
-            datasets.append(TimeDataset(directory, fname, 'ippl'))
-            print ( 'matches timing file type.' )
+            datasets.append(TimeDataset(directory, file, 'ippl'))
+            logging.debug ( 'matches timing file type.' )
         elif ftype == FileType.OUTPUT:
             if astype == FileType.TIMING:
-                datasets.append(TimeDataset(directory, fname, 'output'))
-                print ( 'matches timing file type.' )
+                datasets.append(TimeDataset(directory, file, 'output'))
+                logging.debug ( 'matches timing file type.' )
             else:
-                datasets.append(OutputDataset(directory, fname))
-                print ( 'matches OPAL standard output file type.' )
+                datasets.append(OutputDataset(directory, file))
+                logging.debug ( 'matches OPAL standard output file type.' )
         elif ftype == FileType.MEM:
-            datasets.append(MemoryDataset(directory, fname))
-            print ( 'matches memory file type.' )
+            datasets.append(MemoryDataset(directory, file))
+            logging.debug ( 'matches memory file type.' )
         elif ftype == FileType.LBAL:
-            datasets.append(LBalDataset(directory, fname))
-            print ( 'matches load balancing file type.' )
+            datasets.append(LBalDataset(directory, file))
+            logging.debug ( 'matches load balancing file type.' )
         elif ftype == FileType.GRID:
-            datasets.append(GridDataset(directory, fname))
-            print ( 'matches grid file type.' )
+            datasets.append(GridDataset(directory, file))
+            logging.debug ( 'matches grid file type.' )
         elif ftype == FileType.SOLVER:
-            datasets.append(SolverDataset(directory, fname))
-            print ( 'matches solver file type.' )
+            datasets.append(SolverDataset(directory, file))
+            logging.debug ( 'matches solver file type.' )
         elif ftype == FileType.TRACK_ORBIT:
-            datasets.append(TrackOrbitDataset(directory, fname))
-            print ( 'matches track orbit file type.' )
+            datasets.append(TrackOrbitDataset(directory, file))
+            logging.debug ( 'matches track orbit file type.' )
         elif ftype == FileType.PEAK:
-            datasets.append(PeakDataset(directory, fname))
-            print ( 'matches peak file type.' )
+            datasets.append(PeakDataset(directory, file))
+            logging.debug ( 'matches peak file type.' )
         elif ftype == FileType.HIST:
-            datasets.append(ProbeHistDataset(directory, fname))
-            print ( 'matches probe histogram file type.' )
+            datasets.append(ProbeHistDataset(directory, file))
+            logging.debug ( 'matches probe histogram file type.' )
         elif ftype == FileType.OPTIMIZER:
-            datasets.append(OptimizerDataset(directory, fname))
+            datasets.append(OptimizerDataset(directory, file))
             # after reading we leave since optimizer produces many files
-            print ( 'matches optimizer file type. Stop reading further.' )
+            logging.debug ( 'matches optimizer file type. Stop reading further.' )
             break
         elif ftype == FileType.SAMPLER:
-            datasets.append(SamplerDataset(directory, fname))
-            print ( 'matches sampler file type.' )
+            datasets.append(SamplerDataset(directory, file))
+            logging.debug ( 'matches sampler file type.' )
             break
         elif ftype == FileType.NONE:
-            print ( 'no appropriate file match.' )
-    print ( '\nDone.\n' )
+            logging.debug ( 'no appropriate file match.' )
+    logging.info ( 'Done.' )
     
-    return datasets
+    if len(datasets) == 1:
+        return datasets[0]
+    else:
+        return datasets
