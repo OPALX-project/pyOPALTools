@@ -6,6 +6,8 @@ from enum import IntEnum, unique
 
 from opal.parser.sampler import SamplerParser
 
+from opal.utilities.logger import opal_logger
+
 @unique
 class FileType(IntEnum):
     H5          = 0,
@@ -26,6 +28,7 @@ class FileType(IntEnum):
     
     @classmethod
     def extensionToFileType(cls, fname):
+        opal_logger.debug('FileType.extensionToFileType: Check file type')
         extension = {
             '.h5':      cls.H5,
             '.stat':    cls.STAT,
@@ -54,6 +57,7 @@ class FileType(IntEnum):
             # OPTIMIZER or SAMPLER --> try parsing
             # if no exception is raised, it's a SAMPLER file
             if isinstance(extension[ext], list):
+                opal_logger.debug('FileType.extensionToFileType: Optimizer or sampler output')
                 parser = SamplerParser()
                 try:
                     parser.parse(fname)
