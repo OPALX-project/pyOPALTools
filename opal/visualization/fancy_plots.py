@@ -33,7 +33,7 @@ def plot_envelope(dsets, xvar='position', **kwargs):
     
     Returns
     -------
-    a matplotlib.pyplot handle
+    a matplotlib.figure.Figure object
     """
     if not isinstance(dsets, list):
         raise TypeError("Input 'dsets' has to be a list")
@@ -101,4 +101,4 @@ def plot_envelope(dsets, xvar='position', **kwargs):
     ax2.xaxis.set_ticks_position('bottom')
     
     fig.subplots_adjust(hspace = 0.0)
-    return plt
+    return fig
