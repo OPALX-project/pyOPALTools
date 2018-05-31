@@ -20,6 +20,7 @@ from opal.visualization.statistics.plots import *
 from opal.visualization.cyclotron.plots import *
 from opal.visualization.optimizer.plots import *
 
+from . import  helper
 
 def plot_profile1D(ds, xvar, yvar, **kwargs):
     """
@@ -33,42 +34,45 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
     
     Optional parameters
     -------------------
-    xscale  (str)               'linear', 'log'
-    yscale  (str)               'linear', 'log'
-    xsci    (bool)              x-ticks in scientific notation
-    ysci    (bool)              y-ticks in scientific notation
+    ax      (matplotlib.axes.Axes)     axes object for plotting
+    xscale  (str)                      'linear', 'log'
+    yscale  (str)                      'linear', 'log'
+    xsci    (bool)                     x-ticks in scientific notation
+    ysci    (bool)                     y-ticks in scientific notation
     
     Returns
     -------
-    a matplotlib.pyplot handle
+    a matplotlib.axes.Axes object
     """
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
+    ax = helper.get_axes(kwargs.pop('axes',''))
+
     #plt.figure()
-    plt.xscale(kwargs.pop('yscale', 'linear'))
-    plt.yscale(kwargs.pop('xscale', 'linear'))
+    ax.set_xscale(kwargs.pop('yscale', 'linear'))
+    ax.set_yscale(kwargs.pop('xscale', 'linear'))
     
     if kwargs.pop('xsci', False):
-        plt.ticklabel_format(style='sci', axis='x', scilimits=(0,3))
+        ax.ticklabel_format(style='sci', axis='x', scilimits=(0,3))
     
     if kwargs.pop('ysci', False):
-        plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
+        ax.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
     
     xdata = ds.getData(xvar)
     ydata = ds.getData(yvar)
-    plt.plot(xdata, ydata, **kwargs)
+    ax.plot(xdata, ydata, **kwargs)
     
     xunit  = ds.getUnit(xvar)
     yunit  = ds.getUnit(yvar)
     xlabel = ds.getLabel(xvar)
     ylabel = ds.getLabel(yvar)
     
-    plt.xlabel(xlabel + ' [' + xunit + ']')
-    plt.ylabel(ylabel + ' [' + yunit + ']')
+    ax.set_xlabel(xlabel + ' [' + xunit + ']')
+    ax.set_ylabel(ylabel + ' [' + yunit + ']')
     
-    return plt
+    return ax
 
 
 def plot_phase_space(ds, xvar, yvar, **kwargs):
@@ -83,36 +87,38 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
     
     Optional parameters
     -------------------
-    step    (int)               of dataset
-    bins    (list or integer)   color energy bins
-    xscale  (str)               'linear', 'log'
-    yscale  (str)               'linear', 'log'
-    xsci    (bool)              x-ticks in scientific notation
-    ysci    (bool)              y-ticks in scientific notation
+    ax      (matplotlib.axes.Axes)     axes object for plotting
+    step    (int)                      of dataset
+    bins    (list or integer)          color energy bins
+    xscale  (str)                      'linear', 'log'
+    yscale  (str)                      'linear', 'log'
+    xsci    (bool)                     x-ticks in scientific notation
+    ysci    (bool)                     y-ticks in scientific notation
     
     Returns
     -------
-    a matplotlib.pyplot handle
+    a matplotlib.axes.Axes object
     """
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
-    
+        
+    ax = helper.get_axes(kwargs.pop('axes',''))
+
     step = kwargs.get('step', 0)
     bins = kwargs.get('bins', [])
     
     if not ds.filetype == FileType.H5:
         raise TypeError("Dataset '" + ds.filename + "' is not a H5 file.")
     
-    plt.figure()
-    plt.xscale(kwargs.get('yscale', 'linear'))
-    plt.yscale(kwargs.get('xscale', 'linear'))
+    ax.set_xscale(kwargs.get('yscale', 'linear'))
+    ax.set_yscale(kwargs.get('xscale', 'linear'))
     
     if kwargs.get('xsci', False):
-        plt.ticklabel_format(style='sci', axis='x', scilimits=(0,3))
+        ax.ticklabel_format(style='sci', axis='x', scilimits=(0,3))
     
     if kwargs.get('ysci', False):
-        plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
+        ax.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
     
     xdata = ds.getData(xvar, step=step)
     ydata = ds.getData(yvar, step=step)
@@ -133,26 +139,24 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
         for i, b in enumerate(bins):
             xbin = xdata[np.where(bdata == b)]
             ybin = ydata[np.where(bdata == b)]
-            plt.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[i]))
+            ax.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[i]))
         # plot all skipped bins with same color
         for s in skipped:
             xbin = xdata[np.where(bdata == s)]
             ybin = ydata[np.where(bdata == s)]
-            plt.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[nBins]))
+            ax.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[nBins]))
     else:
-        plt.scatter(xdata, ydata, marker='.', s=1)
+        ax.scatter(xdata, ydata, marker='.', s=1)
     
     xunit  = ds.getUnit(xvar)
     yunit  = ds.getUnit(yvar)
     xlabel = ds.getLabel(xvar)
     ylabel = ds.getLabel(yvar)
     
-    plt.xlabel(xlabel + ' [' + xunit + ']')
-    plt.ylabel(ylabel + ' [' + yunit + ']')
+    ax.set_xlabel(xlabel + ' [' + xunit + ']')
+    ax.set_ylabel(ylabel + ' [' + yunit + ']')
     
-    plt.tight_layout()
-    
-    return plt
+    return ax
 
 
 def plot_density(ds, xvar, yvar, **kwargs):
@@ -167,6 +171,7 @@ def plot_density(ds, xvar, yvar, **kwargs):
     
     Optional parameters
     -------------------
+    ax      (matplotlib.axes.Axes)     axes object for plotting
     step    (int)           of dataset
     bins    (list, array or integer) number of bins
     cmap    (Colormap, string)  color map
@@ -177,12 +182,14 @@ def plot_density(ds, xvar, yvar, **kwargs):
     
     Returns
     -------
-    a matplotlib.pyplot handle
+    a matplotlib.axes.Axes object
     """
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
+    ax = helper.get_axes(kwargs.pop('axes',''))
+
     step = kwargs.get('step', 0)
     bins = kwargs.get('bins', (50,50))
     cmap = kwargs.get('cmap', plt.cm.jet)
@@ -191,97 +198,14 @@ def plot_density(ds, xvar, yvar, **kwargs):
     ydata = ds.getData(yvar, step=step)
     
     xy = np.vstack([xdata, ydata])
-    plt.hist2d(xdata, ydata, bins = bins, cmap=cmap)
+    ax.hist2d(xdata, ydata, bins = bins, cmap=cmap)
 
     xunit  = ds.getUnit(xvar)
     yunit  = ds.getUnit(yvar)
     xlabel = ds.getLabel(xvar)
     ylabel = ds.getLabel(yvar)
     
-    plt.xlabel(xlabel + ' [' + xunit + ']')
-    plt.ylabel(ylabel + ' [' + yunit + ']')
+    ax.set_xlabel(xlabel + ' [' + xunit + ']')
+    ax.set_ylabel(ylabel + ' [' + yunit + ']')
     
-    return plt
-
-
-def plot_envelope(dsets, xvar='position', **kwargs):
-    """
-    Create an envelope plot.
-    
-    Parameters
-    ----------
-    dsets   (DatasetBase)   datasets
-    lfile   (str)           lattice file (*.lattice) (optional)
-    xvar    (str)           x-axis variable
-    
-    Returns
-    -------
-    a matplotlib.pyplot handle
-    """
-    if not isinstance(dsets, list):
-        raise TypeError("Input 'dsets' has to be a list")
-    
-    if not dsets:
-        raise IndexError('Dataset list is empty.')
-    
-    for ds in dsets:
-        if not isinstance(ds, DatasetBase):
-            raise TypeError("Dataset '" + ds.filename +
-                            "' not derived from 'DatasetBase'.")
-    
-    ymax = kwargs.get('ymax', 0.03)
-    
-    lfile = kwargs.get('lfile', '')
-    
-    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, dpi=150)
-    fig.set_size_inches(9,4)
-    
-    if lfile:
-        lattice = LatticeParser()
-        lattice.plot(lfile, fig, ax1, ax2)
-    
-    y1label = dsets[0].getLabel('rms_x')
-    y2label = dsets[0].getLabel('rms_y')
-    
-    xunit = dsets[0].getUnit(xvar)
-    yunit = dsets[0].getUnit('rms_x')
-    
-    for ds in dsets:
-        xdata =  ds.getData(xvar)
-        y1data = ds.getData('rms_x')
-        ax1.plot(xdata, y1data, label=os.path.basename(ds.filename))
-    
-    # 27. March 2018
-    # https://stackoverflow.com/questions/20350503/remove-first-and-last-ticks-label-of-each-y-axis-subplot
-    plt.setp(ax1.get_yticklabels()[0], visible=False)
-    
-    ax2 = plt.gca()
-    plt.gca().invert_yaxis()
-    
-    for ds in dsets:
-        xdata =  ds.getData(xvar)
-        y2data = ds.getData('rms_y')
-        ax2.plot(xdata, y2data)
-    
-    # 27. March 2018
-    # https://stackoverflow.com/questions/925024/how-can-i-remove-the-top-and-right-axis-in-matplotlib
-    ax1.spines['bottom'].set_visible(False)
-    ax1.get_xaxis().set_visible(False)
-    
-    #for ax in [ax1,ax2]:
-    ax2.set_xlabel(xvar + ' [' + xunit + ']')
-    
-    ax1.set_ylabel(y1label + ' [' + yunit + ']')
-    ax2.set_ylabel(y2label + ' [' + yunit + ']')
-   
-    
-    ax1.set_ylim(ymin=0, ymax=ymax)
-    ax2.set_ylim(ymax=0, ymin=ymax)
-    
-    ax1.legend(bbox_to_anchor=(0.6, 1.08))
-    
-    ax2.xaxis.set_label_position('bottom') 
-    ax2.xaxis.set_ticks_position('bottom')
-    
-    fig.subplots_adjust(hspace = 0.0)
-    return plt
+    return ax
