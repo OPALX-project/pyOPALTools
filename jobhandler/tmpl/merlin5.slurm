@@ -8,6 +8,6 @@
 #SBATCH --nodes=_NODES_
 #SBATCH --ntasks=_CORES_
 #SBATCH --ntasks-per-node=_CORES-PER-NODE_
-#SBATCH --mem=_RAM-PER_NODE_
+#SBATCH --mem=_RAM-PER-NODE_
 
 mpirun _EXEC_ _ARGS_
