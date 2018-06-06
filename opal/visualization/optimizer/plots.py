@@ -106,6 +106,9 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
     ]
     
     layout = go.Layout(
+        height=800,
+        width=1600,
+        font=dict(size=18),
         title = 'Generation ' + str(gen)
     )
     
