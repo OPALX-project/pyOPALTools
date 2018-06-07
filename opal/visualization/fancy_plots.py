@@ -1,5 +1,6 @@
 # Author:   Ryan Roussel
 # Date:     May 2018
+# compound plotting which returns figure objects
 
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -20,6 +21,7 @@ from opal.visualization.cyclotron.plots import *
 from opal.visualization.optimizer.plots import *
 
 from . import  helper
+from . import plots
 
 def plot_envelope(dsets, xvar='position', **kwargs):
     """
@@ -101,4 +103,20 @@ def plot_envelope(dsets, xvar='position', **kwargs):
     ax2.xaxis.set_ticks_position('bottom')
     
     fig.subplots_adjust(hspace = 0.0)
+    return fig
+
+def plot_selected_phase_space(dset,spaces = [['x_y','z_x','z_y'],['x_px','y_py','z_pz']],step=0,density=True):
+    fig,axes = plt.subplots(len(spaces),len(spaces[0]),figsize=(8,4.5))
+
+    for i in range(len(spaces)):
+        for j in range(len(spaces[0])):
+            x_var = spaces[i][j].split('_')[0]
+            y_var = spaces[i][j].split('_')[1]
+            
+            if density:
+                plots.plot_density(dset,x_var,y_var,axes = axes[i][j],step=step)
+            else:
+                plots.plot_phase_space(dset,x_var,y_var,axes = axes[i][j],step=step)
+    
+    fig.tight_layout()
     return fig

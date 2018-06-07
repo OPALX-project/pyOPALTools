@@ -171,10 +171,11 @@ def plot_density(ds, xvar, yvar, **kwargs):
     
     Optional parameters
     -------------------
-    ax      (matplotlib.axes.Axes)     axes object for plotting
-    step    (int)           of dataset
-    bins    (list, array or integer) number of bins
-    cmap    (Colormap, string)  color map
+    ax      (matplotlib.axes.Axes)    axes object for plotting
+    step    (int)                     of dataset
+    bins    (list, array or integer)  number of bins
+    cmap    (Colormap, string)        color map
+    levels  (int)                     number of contour levels
    
     Reference (22. March 2018)
     ---------
@@ -193,12 +194,20 @@ def plot_density(ds, xvar, yvar, **kwargs):
     step = kwargs.get('step', 0)
     bins = kwargs.get('bins', (50,50))
     cmap = kwargs.get('cmap', plt.cm.jet)
+    lvls = kwargs.get('levels',50)
     
     xdata = ds.getData(xvar, step=step)
     ydata = ds.getData(yvar, step=step)
     
     xy = np.vstack([xdata, ydata])
-    ax.hist2d(xdata, ydata, bins = bins, cmap=cmap)
+    H,x_edges,y_edges = np.histogram2d(xdata, ydata, bins = bins)
+    x_centers = (x_edges[:-1] + x_edges[1:]) / 2
+    y_centers = (y_edges[:-1] + y_edges[1:]) / 2
+    XX,YY = np.meshgrid(x_centers,y_centers)
+
+    l = np.linspace(np.min(H),np.max(H),lvls)
+
+    ax.contourf(XX,YY,H,levels=l,cmap=cmap)
 
     xunit  = ds.getUnit(xvar)
     yunit  = ds.getUnit(yvar)

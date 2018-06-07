@@ -90,9 +90,9 @@ class H5Dataset(DatasetBase):
         
         step = kwargs.get('step', 0)
         
-        # take last step if negative
+        # subtract step from last step if negative
         if step < 0:
-            step = self.__parser.getNSteps() - 1
+            step = self.__parser.getNSteps() - abs(step) - 1
         
         h5var = var
         if var in self.__variable_mapper:

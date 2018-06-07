@@ -3,6 +3,7 @@
 
 from opal.datasets.filetype import FileType
 from opal.datasets.DatasetBase import DatasetBase
+from .. import helper
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings
@@ -18,36 +19,35 @@ def plot_total_memory(ds, **kwargs):
     
     if not ds.filetype == FileType.MEM:
         raise TypeError(ds.filename + ' is not a memory dataset.')
-    
+
+    ax = get_axes(kwargs.get('axes',''))
+
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
     yscale   = kwargs.get('yscale', 'linear')
     xscale   = kwargs.get('xscale', 'linear')
     
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    
     memory_usage = ds.getData('memory')
     time = ds.getData('t')
-    plt.plot(time, memory_usage)
+    ax.plot(time, memory_usage)
     
     ax.grid(grid, which='both')
     
     memory_unit = ds.getUnit('memory')
     time_unit = ds.getUnit('t')
     
-    plt.xlabel('time [' + time_unit + ']')
-    plt.xscale(xscale)
+    ax.set_xlabel('time [' + time_unit + ']')
+    ax.set_xscale(xscale)
     
-    plt.ylabel('total memory [' + memory_unit + ']')
-    plt.yscale(yscale)
+    ax.set_ylabel('total memory [' + memory_unit + ']')
+    ax.set_yscale(yscale)
     
     if title:
-        plt.title(title)
+        ax.set_title(title)
     
-    plt.tight_layout()
+    plt.gcf().set_tight_layout()
     
-    return plt
+    return ax
 
 
 def plot_memory_summary(ds, **kwargs):
@@ -62,6 +62,9 @@ def plot_memory_summary(ds, **kwargs):
     if not ds.filetype == FileType.MEM:
         raise TypeError(ds.filename + ' is not a memory dataset.')
     
+        
+    ax = get_axes(kwargs.get('axes',''))
+
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
     yscale   = kwargs.get('yscale', 'linear')
@@ -81,10 +84,7 @@ def plot_memory_summary(ds, **kwargs):
     # iterate through all steps and do a boxplot
     colStart = nTotal - nCols
     colEnd   = nCols + 1
-    
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    
+ 
     # each row is a time stamp
     minimum = []
     maximum = []
@@ -98,26 +98,26 @@ def plot_memory_summary(ds, **kwargs):
         mean.append(np.mean(stamp))
         maximum.append(max(stamp))
     
-    plt.plot(time, minimum, label='minimum')
-    plt.plot(time, maximum, label='maximum')
-    plt.plot(time, mean, label='mean')
+    ax.plot(time, minimum, label='minimum')
+    ax.plot(time, maximum, label='maximum')
+    ax.plot(time, mean, label='mean')
     
-    plt.xlabel('time [' + time_unit + ']')
+    ax.set_xlabel('time [' + time_unit + ']')
     plt.xscale(xscale)
         
-    plt.ylabel('memory [' + memory_unit + ']')
-    plt.yscale(yscale)
+    ax.set_ylabel('memory [' + memory_unit + ']')
+    ax.set_yscale(yscale)
     
     plt.legend()
     
-    plt.grid(grid, which='both')
+    ax.grid(grid, which='both')
     
     if title:
-        plt.title(title)
+        ax.set_title(title)
     
-    plt.tight_layout()
+    plt.gcf().set_tight_layout()
     
-    return plt
+    return ax
 
 
 def plot_memory_boxplot(ds, **kwargs):
@@ -129,6 +129,9 @@ def plot_memory_boxplot(ds, **kwargs):
     if not ds.filetype == FileType.MEM:
         raise TypeError(ds.filename + ' is not a memory dataset.')
     
+    
+    ax = get_axes(kwargs.get('axes',''))
+
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
     yscale   = kwargs.get('yscale', 'linear')
@@ -147,9 +150,6 @@ def plot_memory_boxplot(ds, **kwargs):
     # iterate through all steps and do a boxplot
     colStart = nTotal - nCols
     colEnd   = nCols + 1
-    
-    fig = plt.figure(figsize=figsize)
-    ax = fig.add_subplot(111)
     
     # each row is a time stamp
     stamps = []
@@ -169,19 +169,19 @@ def plot_memory_boxplot(ds, **kwargs):
                             RuntimeWarning)
             xscale='linear'
     
-    plt.boxplot(stamps, 0, '', positions=time)
+    ax.boxplot(stamps, 0, '', positions=time)
     
-    plt.xlabel('time [' + time_unit + ']')
-    plt.xscale(xscale)
+    ax.set_xlabel('time [' + time_unit + ']')
+    ax.set_xscale(xscale)
     
-    plt.ylabel('memory [' + memory_unit + ']')
-    plt.yscale(yscale)
+    ax.set_ylabel('memory [' + memory_unit + ']')
+    ax.set_yscale(yscale)
     
-    plt.grid(grid, which='both')
+    ax.grid(grid, which='both')
     
     if title:
-        plt.title(title)
+        ax.set_title(title)
     
-    plt.tight_layout()
+    plt.gcf().set_tight_layout()
     
     return plt
