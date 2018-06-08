@@ -106,7 +106,7 @@ def plot_envelope(dsets, xvar='position', **kwargs):
     return fig
 
 def plot_selected_phase_space(dset,spaces = [['x_y','z_x','z_y'],['x_px','y_py','z_pz']],step=0,density=True):
-    fig,axes = plt.subplots(len(spaces),len(spaces[0]),figsize=(8,4.5))
+    fig,axes = plt.subplots(len(spaces),len(spaces[0]),figsize=(8,5))
 
     for i in range(len(spaces)):
         for j in range(len(spaces[0])):
@@ -118,5 +118,11 @@ def plot_selected_phase_space(dset,spaces = [['x_y','z_x','z_y'],['x_px','y_py',
             else:
                 plots.plot_phase_space(dset,x_var,y_var,axes = axes[i][j],step=step)
     
-    fig.tight_layout()
+    if step < 0:
+        step = dset.getNSteps() - abs(step) - 1
+
+    ref_loc = dset.getData('RefPartR',step = step)
+
+    fig.suptitle('Phase space from step {} RefPartR:({:3.2},{:3.2},{:3.2})'.format(step,*ref_loc))
+    fig.tight_layout(rect=[0,0.03,1,0.95])
     return fig

@@ -74,6 +74,8 @@ class H5Dataset(DatasetBase):
         
         super(H5Dataset, self).__init__(directory, fname)
     
+    def getNSteps(self):
+        return self.__parser.getNSteps()
     
     def getData(self, var, **kwargs):
         """
@@ -93,6 +95,9 @@ class H5Dataset(DatasetBase):
         # subtract step from last step if negative
         if step < 0:
             step = self.__parser.getNSteps() - abs(step) - 1
+
+        if step > self.getNSteps() - 2:
+            raise IndexError('Step {} outside max indicies = {} for dataset'.format(step,self.getNSteps() - 2))
         
         h5var = var
         if var in self.__variable_mapper:
@@ -112,16 +117,18 @@ class H5Dataset(DatasetBase):
                     elif '_p' + key in var:
                         dim = self.__direction[key]
                 
-                for i in range(self.__parser.getNSteps()):
-                    data.append(self.__parser.getStepAttribute(h5var, i)[dim])
+                #see below
+                return self.__parser.getStepAttribute(h5var, step)[dim]
             else:
-                for i in range(self.__parser.getNSteps()):
-                    data.append(self.__parser.getStepAttribute(h5var, i))
+                #if someone wants this they should use the *.stat files
+                #user accessing a single step will use h5 file
+                #for i in range(self.__parser.getNSteps()):
+                return self.__parser.getStepAttribute(h5var, step)
                     
-                    # get strings
-                    if isinstance(data[-1], bytes):
-                        data[-1] = data[-1].decode('utf-8')
-            return np.asarray(data)
+                # get strings
+                if isinstance(data[-1], bytes):
+                    data[-1] = data[-1].decode('utf-8')
+
         else:
             raise H5Error("'" + var + "' is not part of this step")
     
