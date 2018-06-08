@@ -18,6 +18,7 @@ from opal.datasets.PeakDataset import PeakDataset
 from opal.datasets.ProbeHistDataset import ProbeHistDataset
 from opal.datasets.OptimizerDataset import OptimizerDataset
 from opal.datasets.SamplerDataset import SamplerDataset
+from opal.datasets.ElementDataset import ElementDataset
 
 def load_dataset(directory, **kwargs):
     """
@@ -133,6 +134,9 @@ def load_dataset(directory, **kwargs):
             datasets.append(SamplerDataset(directory, file))
             logging.debug ( 'matches sampler file type.' )
             break
+        elif ftype == FileType.ELEMENT:
+            datasets.append(ElementDataset(directory, file))
+            logging.debug( ' matches element file type')
         elif ftype == FileType.NONE:
             logging.debug ( 'no appropriate file match.' )
     logging.info ( 'Done.' )

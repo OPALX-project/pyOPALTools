@@ -21,7 +21,8 @@ class FileType(IntEnum):
     HIST        = 10,
     OPTIMIZER   = 11,
     SAMPLER     = 12,
-    NONE        = 13
+    ELEMENT     = 13,
+    NONE        = 14
     
     @classmethod
     def extensionToFileType(cls, fname):
@@ -36,6 +37,7 @@ class FileType(IntEnum):
             '.solver':  cls.SOLVER,
             '.peaks':   cls.PEAK,
             '.hist':    cls.HIST,
+            '.gpl':     cls.ELEMENT,
             '.json':    [cls.OPTIMIZER, cls.SAMPLER]
         }
         
