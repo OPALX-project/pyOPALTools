@@ -116,7 +116,7 @@ def plot_selected_phase_space(dset,spaces = [['x_y','z_x','z_y'],['x_px','y_py',
             if density:
                 plots.plot_density(dset,x_var,y_var,axes = axes[i][j],step=step)
             else:
-                plots.plot_phase_space(dset,x_var,y_var,axes = axes[i][j],step=step)
+                plots.plot_H5(dset,x_var,y_var,axes = axes[i][j],step=step)
     
     if step < 0:
         step = dset.getNSteps() - abs(step) - 1

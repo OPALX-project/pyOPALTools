@@ -1,5 +1,6 @@
 # Author:   Matthias Frey,
 #           Philippe Ganz
+#           Ryan Roussel
 # Date:     March 2018
 
 import matplotlib.pyplot as plt
@@ -7,7 +8,8 @@ import matplotlib.cm as cm
 from scipy.stats import gaussian_kde
 import numpy as np
 from opal.datasets.filetype import FileType
-from opal.datasets.DatasetBase import DatasetBase
+from opal.datasets.H5Dataset import H5Dataset
+from opal.datasets.StatDataset import StatDataset
 from opal.parser.LatticeParser import LatticeParser
 import os
 
@@ -22,19 +24,20 @@ from opal.visualization.optimizer.plots import *
 
 from . import  helper
 
-def plot_profile1D(ds, xvar, yvar, **kwargs):
+def plot_stat(ds, xvar, yvar, **kwargs):
     """
-    Plot a 1D profile.
+    Plot stat file data.
     
     Parameters
     ----------
-    ds      (DatasetBase)   datasets
+    ds      (StatDataset)   datasets
     xvar    (str)           variable for x-axis
     yvar    (str)           variable for y-axis
     
     Optional parameters
     -------------------
     ax      (matplotlib.axes.Axes)     axes object for plotting
+    cvar    (str)                      point coloring, line->scatter
     xscale  (str)                      'linear', 'log'
     yscale  (str)                      'linear', 'log'
     xsci    (bool)                     x-ticks in scientific notation
@@ -44,9 +47,9 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
     -------
     a matplotlib.axes.Axes object
     """
-    if not isinstance(ds, DatasetBase):
+    if not isinstance(ds, StatDataset):
         raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
+                        "not StatDataset.")
     
     ax = helper.get_axes(kwargs.pop('axes',''))
 
@@ -59,10 +62,17 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
     
     if kwargs.pop('ysci', False):
         ax.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
-    
+
+    c = kwargs.pop('cvar','')
+
     xdata = ds.getData(xvar)
     ydata = ds.getData(yvar)
-    ax.plot(xdata, ydata, **kwargs)
+
+    if c:
+        cdata = ds.getData(c)
+        ax.scatter(xdata,ydata,c=cdata)
+    else:
+        ax.plot(xdata, ydata, **kwargs)
     
     xunit  = ds.getUnit(xvar)
     yunit  = ds.getUnit(yvar)
@@ -75,13 +85,13 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
     return ax
 
 
-def plot_phase_space(ds, xvar, yvar, **kwargs):
+def plot_H5(ds, xvar, yvar, **kwargs):
     """
-    Plot a 2D phase space plot.
+    Plot 2D data from H5Dataset.
     
     Parameters
     ----------
-    ds      (DatasetBase)       datasets
+    ds      (H5Dataset)         datasets
     xvar    (str)               variable for x-axis
     yvar    (str)               variable for y-axis
     
@@ -99,9 +109,9 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
     -------
     a matplotlib.axes.Axes object
     """
-    if not isinstance(ds, DatasetBase):
+    if not isinstance(ds, H5Dataset):
         raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
+                        "' not derived from 'H5Dataset'.")
         
     ax = helper.get_axes(kwargs.pop('axes',''))
 

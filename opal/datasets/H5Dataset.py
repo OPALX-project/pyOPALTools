@@ -125,10 +125,6 @@ class H5Dataset(DatasetBase):
                 #for i in range(self.__parser.getNSteps()):
                 return self.__parser.getStepAttribute(h5var, step)
                     
-                # get strings
-                if isinstance(data[-1], bytes):
-                    data[-1] = data[-1].decode('utf-8')
-
         else:
             raise H5Error("'" + var + "' is not part of this step")
     

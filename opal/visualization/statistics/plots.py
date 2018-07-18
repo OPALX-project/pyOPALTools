@@ -2,9 +2,12 @@
 # Date:     April 2018
 
 import matplotlib.pyplot as plt
+import numpy as np
 from opal.datasets.filetype import FileType
 from opal.datasets.DatasetBase import DatasetBase
 from opal.visualization.statistics import impl_plots
+
+from .. import helper
 
 def plot_histogram(ds, var, **kwargs):
     """
@@ -22,6 +25,7 @@ def plot_histogram(ds, var, **kwargs):
                             (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
     density (bool)          normalize such that integral over
                             range is 1.
+    axes    (matplotlib.axes.Axes)    axes object for plotting
     
     Returns
     -------
@@ -34,23 +38,34 @@ def plot_histogram(ds, var, **kwargs):
     step    = kwargs.get('step', 0)
     bins    = kwargs.get('bins', 'sturges')
     density = kwargs.get('density', True)
+
+    axes = kwargs.pop('axes','')
+    
+    ax = helper.get_axes(axes)
     
     data = ds.getData(var, step=step)
     
-    plt.hist(data, bins=bins, density=density)
+    #add a twin axes if this is overlayed on another axes
+    if axes:
+        ax = ax.twinx()
+
+    hist,bins = np.histogram(data,bins=bins,density=density)
+    bins = (bins[1:] + bins[:-1])/2
+
+    ax.plot(bins,hist,'r-')
     
     xunit  = ds.getUnit(var)
     xlabel = ds.getLabel(var)
     
-    plt.xlabel(xlabel + ' [' + xunit + ']')
+    ax.set_xlabel(xlabel + ' [' + xunit + ']')
     
     ylabel = '#entries'
     
     if density:
         ylabel += ' (normalized)'
-    plt.ylabel(ylabel)
+    ax.set_ylabel(ylabel)
     
-    return plt
+    return ax
 
 
 def plot_classification(ds, xvar, yvar, value, **kwargs):
