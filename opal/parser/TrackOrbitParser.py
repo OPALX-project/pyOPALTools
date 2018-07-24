@@ -11,11 +11,11 @@ class TrackOrbitParser:
         
         self._units = {
             self._names[0]:   '1',
-            self._names[1]:   'mm',
+            self._names[1]:   'm',
             self._names[2]:   r'\beta\gamma',
-            self._names[3]:   'mm',
+            self._names[3]:   'm',
             self._names[4]:   r'\beta\gamma',
-            self._names[5]:   'mm',
+            self._names[5]:   'm',
             self._names[6]:   r'\beta\gamma'
         }
         
@@ -24,9 +24,7 @@ class TrackOrbitParser:
     
     def parse(self, filename):
         
-        pattern =  '# Part. ID x [mm] beta_x*gamma '
-        pattern += 'y [mm] beta_y*gamma z [mm] beta_z*gamma'
-        
+        pattern =  '# Part. ID'
         match = False
         
         with open(filename) as f:
@@ -35,7 +33,7 @@ class TrackOrbitParser:
                     # 24. March
                     # https://stackoverflow.com/questions/2077897/substitute-multiple-whitespace-with-single-whitespace-in-python
                     line = ' '.join(line.split())
-                    if line == pattern:
+                    if pattern in line:
                         match = True
                 else:
                     break
