@@ -128,10 +128,78 @@ def plot_turns(ds, **kwargs):
     
     _, _, _, radius = calcTurnSeparation(ds)
     
-    plt.plot(np.arange(2, len(radius)+2), radius, **kwargs)
+    plt.plot(np.arange(2, len(radius)+2), radius, **kwargs) # From second turn
     plt.xlabel('Turn Number')
     plt.ylabel('Radius [m]')
     
+    return plt
+
+def plot_energy(ds, nsteps=-1, **kwargs):
+    """
+    Only with datasets of
+    type FileType.TRACK_ORBIT.
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)   datasets
+    nsteps                  number of steps per turn (default -1: detect automatically)
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.TRACK_ORBIT:
+        raise TypeError(ds.filename + ' is not a track orbit dataset.')
+
+    _, energy, _, radius = calcTurnSeparation(ds,nsteps)
+
+    plt.xlabel('Turn Number')
+    plt.ylabel('Energy [MeV]')
+    # From second turn
+    plt.plot(np.arange(2, len(radius)+2), energy, linewidth=2, **kwargs)
+    plt.show()
+
+
+    return plt
+
+def plot_energy_gain(ds, nsteps=-1, **kwargs):
+    """
+    Only with datasets of
+    type FileType.TRACK_ORBIT.
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)   datasets
+    nsteps                  number of steps per turn (default -1: detect automatically)
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.TRACK_ORBIT:
+        raise TypeError(ds.filename + ' is not a track orbit dataset.')
+
+    _, energy, _, radius = calcTurnSeparation(ds, nsteps)
+
+    x = np.arange(2, len(radius)+1)
+    y = np.diff(energy)
+    plt.xlabel('Turn Number')
+    plt.ylabel('Energy Gain [MeV]')
+    # From second turn
+    plt.plot(x, y, linewidth=2, **kwargs)
+    plt.show()
+
+
     return plt
 
 def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
@@ -142,7 +210,7 @@ def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionO
     Parameters
     ----------
     ds      (DatasetBase)   datasets
-    nsteps                  number of steps per turn
+    nsteps                  number of steps per turn (default -1: detect automatically)
 
     Returns
     -------
@@ -167,11 +235,10 @@ def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionO
         x = radius[1:] # From second turn, in meters
         plt.xlabel('Radius [m]')
 
-    plt.plot(x, ts, 'o-', linewidth=2, **kwargs)
+    plt.plot(x, ts, linewidth=2, **kwargs)
     plt.ylabel('Turn Separation [mm]')
     
     return plt
-
 
 def plot_beta_beat(ds, nsteps=-1, **kwargs):
     """
@@ -181,7 +248,7 @@ def plot_beta_beat(ds, nsteps=-1, **kwargs):
     Parameters
     ----------
     ds      (DatasetBase)   datasets
-    nsteps                  number of steps per turn
+    nsteps                  number of steps per turn (default -1: detect automatically)
 
     Returns
     -------
