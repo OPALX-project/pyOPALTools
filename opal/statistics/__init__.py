@@ -1,1 +1,1 @@
-from opal.statistics.plots import *
+from opal.statistics.statistics import *

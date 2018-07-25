@@ -1,0 +1,3 @@
+opal = {
+    'style':    'default'
+}

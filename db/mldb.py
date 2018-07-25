@@ -13,7 +13,7 @@ else:
 
 import optPilot.OptPilotJsonReader as jsonreader
 #
-from utilities import SDDSParser
+#from utilities import SDDSParser
 
 # From https://stackoverflow.com/questions/12141150/from-list-of-integers-get-number-closest-to-a-given-value
 def findClosestIndex(myList, myNumber):
@@ -40,13 +40,106 @@ def substring_after(s, delim):
 def substring_before(s, delim):
     return s.partition(delim)[0]
 
+def checkBounds(data, keys):
+    #nxs = number of x variables
+    nxs  = len(keys)
+    #Print bounds 
+    for j in range(0, nxs):
+        print('Now printing bounds of bad points:')
+        print("max of "+ keys[j] + '= '+ str(max(data[0]['dvarValues'][:,j])))
+        print("min of "+ keys[j] + '= '+ str(min(data[0]['dvarValues'][:,j])))
+        print('\n')
 
+def buildBounded(pickle, baseFN):
+    #Build a data base using simulations within bounds given
+    dbr = mldb()
+    dbr.load(pickle)
+    ulb = dbr.getBounds()
+    
+    keys = dbr.getXNames()   
+    n    = len(keys) 
+    lb   = np.zeros((1, n))
+    ub   = np.zeros((1, n))
+    #Make array with upper bounds (ub) 
+    #and lower bounds (lb)    
+    for i, key in enumerate(keys):
+        lb[0, i] = ulb[key][0]         
+        ub[0, i] = ulb[key][1]
+    print(lb)
+    print(ub) 
+    totalgen  = dbr.getNumberOfSamples()  
+    bounded   = []
+    unbounded = [] 
+    xvec  = np.zeros((1, n))
+    bxvec = np.zeros((1, n))
+    objsNames  = dbr.getYNames()
+    nobjs = len(objsNames)
+    yvec  = np.zeros((1, len(objsNames)))
+    byvec = np.zeros((1, len(objsNames)))
 
+    #Loop through each generation
+    for gen in range(0, totalgen):
+        nsims  = dbr.getSampleSize(i=gen)
+        gxvec  = np.zeros((1, n))
+        gyvec  = np.zeros((1, len(objsNames)))
+        #Save extra info            
+        if (gen == 0):
+            bounded.append({'sampleSize':totalgen,
+                'dvarNames' :keys,
+                'objNames'  :objsNames,
+                'bounds'    :ulb})
+
+        #Loop through each simulation in gen 
+        for x in range(0, nsims):
+            xvals  = (dbr.getDVarVec(gen,x)).reshape((1,n))
+            ovals  = (dbr.getObjVec(gen,x)).reshape((1,nobjs))
+            testlb = np.less_equal(xvals, lb)
+            testub = np.greater_equal(xvals, ub)
+            #Check if xvals <= lb or xvlas >= ub
+            if (any(testlb[0]) == True) or (any(testub[0]) == True):  
+                bxvec = np.append(bxvec, xvals, axis=0)
+                byvec = np.append(byvec, ovals, axis=0)
+            #Check if xvlas within all bounds
+            elif (all(testlb[0]) == False) and (all(testub[0]) == False):
+                #print(testlb[0])
+                #print(testub[0])
+                #print(xvals)
+                xvec = np.append(xvec, xvals, axis=0)
+                yvec = np.append(yvec, ovals, axis=0)
+                gxvec = np.append(gxvec, xvals, axis=0)
+                gyvec = np.append(gyvec, ovals, axis=0)
+
+            else:
+                print('Mistake, xvals not in boundaries expected.')
+                print('Don\'t trust the database.')
+        
+        gxvec = gxvec[1:,:]
+        gyvec = gyvec[1:,:]
+        #Saving good pts per generation
+        bounded.append({'dvarValues':gxvec,'objValues' :gyvec})
+        print('generation # '+ str(gen+1) +', Number of sims:'+ str(nsims) + ', Number of bounded sims: ' + str(np.size(gxvec[:,0])), end='\r', flush=True)
+    #Getting rid of place holders
+    xvec  = xvec[1:,:]
+    yvec  = yvec[1:,:]
+    bxvec = bxvec[1:,:]
+    byvec = byvec[1:,:]
+    #Saving all data in one entry
+    bounded.append({'allDvarValues':xvec, 'allObjValues':yvec})
+    #Saving all bad points, looses generation info
+    unbounded.append({'dvarValues':bxvec, 'objValues' :byvec})
+
+    print('# bad pts:', str(np.size(bxvec[:,0])),', # good pts:', str(np.size(xvec[:,0])))
+    if (np.size(bxvec[:,0]) > 0):
+        badbounds = checkBounds(unbounded, keys)
+
+    filename = baseFN+'-bounded.pk'
+    print('Write ML-Database ' + filename)
+    pick.dump(bounded,open(filename,'wb'),-1)
 
 class mldb:
  
-    def __init__(self):
-        print('OPAL ML Database Generator')
+    def __init__(self, descr=''):
+        print('OPAL ML Database Generator \x1b[6;30;42m' + descr + '\x1b[0m')
 
     def build(self,filename_postfix, path):
         self.trainingSet = []
@@ -59,9 +152,11 @@ class mldb:
             if (i == 0):
                 dvarsNames = optjson.getDesignVariables()
                 objsNames  = optjson.getObjectives()
+                bounds     = optjson.getBounds()
                 self.trainingSet.append({'sampleSize':numGenerations, 
                                          'dvarNames' :dvarsNames, 
-                                         'objNames'  :objsNames})
+                                         'objNames'  :objsNames,
+                                         'bounds'    :bounds})
             dvars      = optjson.getAllInput()
             ovars      = optjson.getAllOutput()
 
@@ -314,13 +409,21 @@ class mldb:
 
     def getXDim(self):
         return len(self.trainingSet[0]['dvarNames'])
+
     def getXNames(self):
         return self.trainingSet[0]['dvarNames']
 
     def getYDim(self):
         return len(self.trainingSet[0]['objNames'])
+    
     def getYNames(self):
         return self.trainingSet[0]['objNames']
+
+    def getAllDvar(self,gen):
+        return self.trainingSet[gen+1]['dvarValues'][:]
+
+    def getAllObj(self,gen):
+        return self.trainingSet[gen+1]['objValues'][:]
 
     def getDVarVec(self,gen,indiv):
         return self.trainingSet[gen+1]['dvarValues'][indiv]
@@ -330,6 +433,9 @@ class mldb:
 
     def getTimes(self,gen,indiv):
         return self.trainingSet[gen+1]['times'][indiv]
+    
+    def getBounds(self):
+        return self.trainingSet[0]['bounds']
 
     def printOverview(self):
         if (self.trainingSet):
@@ -356,6 +462,7 @@ class mldb:
         else:
             print('Load data first')
             sys.exit()
+
 
 #def main(argv):
 #    readAscii           = False # read ASCII or JSON

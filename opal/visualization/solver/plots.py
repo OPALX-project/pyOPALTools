@@ -1,7 +1,8 @@
 # Author: Matthias Frey
 # Date:   February 2018 - March 2018
 
-from opal.datasets.DatasetBase import FileType
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -10,9 +11,12 @@ def plot_solver_histogram(ds, var, **kwargs):
     Plot a time series of solver output, e.g. error,
     number of iterations, etc.
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.SOLVER:
-        raise RuntimeError(ds.filename + ' is not a solver dataset.')
+        raise TypeError(ds.filename + ' is not a solver dataset.')
     
     hspan  = kwargs.get('hspan', [None, None])
     grid   = kwargs.get('grid', False)

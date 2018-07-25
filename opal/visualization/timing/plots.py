@@ -1,35 +1,504 @@
-from opal.datasets.DatasetBase import FileType
-import timing.TimePlot as TimePlot
-import matplotlib.pyplot as plt
+# Author:   Matthias Frey
+# Date:     March 2018
 
-def plot_time(ds, kind='pie', **kwargs):
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
+import matplotlib.pyplot as plt
+from opal.visualization.timing.manipulate import mostConsuming
+from operator import itemgetter
+import numpy as np
+
+def plot_efficiency(dsets, what, prop, **kwargs):
     """
-    Do timing plots.
+    Efficiency plot of a timing benchmark study
+    
+    E_p = S_p / p
+    
+    where E_p is the efficiency and S_p the
+    speed-up with p cores / nodes.
     
     Parameters
     ----------
-    ds      (DatasetBase)   dataset
-    kind    (str)           of plot
+    dsets   ([DatasetBase]) all timing datasets
+    what    (str)           timing name
+    prop    (str)           property, i.e. 'cpu avg', 'cpu max', 'cpu min',
+                            'wall avg', 'wall max', 'wall min' or
+                            'cpu tot' and 'wall tot' (only for main timing)
+    
+    Optionals
+    ---------
+    xscale      (str)           x-axis scale, 'linear' or 'log'
+    yscale      (str)           y-axis scale, 'linear' or 'log'
+    grid        (bool)          if true, plot grid
+    percent     (bool)          efficiency in percentage
+    xlabel      (str)           label for x-axis. Default '#cores'
+    core2node   (int)           scale #cores == 1 node
+                                (useful with xlabel='#nodes')
     
     Returns
     -------
     a matplotlib.pyplot handle
     """
+    if not isinstance(dsets, list):
+        raise TypeError("Input 'dsets' has to be a list for.")
+    
+    if not dsets:
+        raise ValueError("No dataset in 'dsets'.")
+    
+    for ds in dsets:
+        if not isinstance(ds, DatasetBase):
+            raise TypeError("Dataset '" + ds.filename +
+                            "' not derived from 'DatasetBase'.")
+        if not ds.filetype == FileType.TIMING and not ds.filetype == FileType.OUTPUT:
+            raise TypeError("Dataset '" + ds.filename +
+                            "' is not a timing dataset.")
+    
+    cores = []
+    time = []
+    
+    for ds in dsets:
+        #access main timing
+        cores.append( int(ds.getData(0, prop='cores')) )
+        
+        time.append( ds.getData(var=what, prop=prop) )
+    
+    # sort
+    cores, time = zip(*sorted(zip(cores, time)))
+    
+    # tuple --> list
+    cores = list(cores)
+    
+    # transform cores --> nodes
+    core2node = kwargs.get('core2node', 1)
+    
+    for i, c in enumerate(cores):
+        cores[i] /= core2node
     
     
-    if not ds.filetype == FileType.TIMING:
-        raise RuntimeError('Not a timing dataset.')
+    # obtain speed-up
+    speedup = []
+    for t in time:
+        speedup.append( time[0] / t )
     
-    tp = TimePlot()
+    # obtain core increase
+    incr = []
+    for c in cores:
+        incr.append( c / cores[0] )   
     
-    # treat special case
-    if kind == 'line':
-        if len(ds) < 2:
-            raise RuntimeError('More than one dataset required for this plot.')
-        files = []
-        for d in ds:
-            files.append(d.filename)
-        return tp.automatic(kind, fname=files, **kwargs)
-    else:
-        return tp.automatic(kind=kind,
-                            fname=ds.filename, **kwargs)
+    # obtain efficiency
+    efficiency = []
+    
+    percent = 1.0
+    ylabel  = 'efficiency'
+    if kwargs.get('percent', True):
+        percent = 100.0
+        ylabel += ' [%]'
+    
+    for i, s in enumerate(speedup):
+        efficiency.append( s / incr[i] * percent ) # in percent
+    
+    xscale = kwargs.get('xscale', 'linear')
+    yscale = kwargs.get('yscale', 'linear')
+    grid   = kwargs.get('grid', False)
+    
+    plt.plot(cores, efficiency)
+    plt.xlabel(kwargs.get('xlabel', '#cores'))
+    plt.ylabel(ylabel)
+    plt.xscale(xscale)
+    plt.yscale(yscale)
+    plt.grid(grid, which='both')
+    plt.tight_layout()
+    
+    return plt
+
+
+def plot_speedup(dsets, what, prop, **kwargs):
+    """
+    Speedup plot of a timing benchmark study
+    
+    S_p = T_1 / T_p
+    
+    where T_1 is the time for a single core run
+    (or reference run with several cores / nodes)
+    and T_p the time with p cores. S_p then represents the
+    speed-up with p cores / nodes.
+    
+    Parameters
+    ----------
+    dsets   ([DatasetBase]) all timing datasets
+    what    (str)           timing name
+    prop    (str)           property, i.e. 'cpu avg', 'cpu max', 'cpu min',
+                            'wall avg', 'wall max', 'wall min' or
+                            'cpu tot' and 'wall tot' (only for main timing)
+    
+    Optionals
+    ---------
+    xscale          (str)           x-axis scale, 'linear' or 'log'
+    yscale          (str)           y-axis scale, 'linear' or 'log'
+    grid            (bool)          if true, plot grid
+    efficiency      (bool)          add efficiency to plot
+    xlabel          (str)           label for x-axis. Default '#cores'
+    core2node       (int)           scale #cores == 1 node
+                                    (useful with xlabel='#nodes')
+    perfect_scaling (bool)          add speed-up perfect scaling line
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(dsets, list):
+        raise TypeError("Input 'dsets' has to be a list for.")
+    
+    if not dsets:
+        raise ValueError("No dataset in 'dsets'.")
+    
+    for ds in dsets:
+        if not isinstance(ds, DatasetBase):
+            raise TypeError("Dataset '" + ds.filename +
+                            "' not derived from 'DatasetBase'.")
+        if not ds.filetype == FileType.TIMING and not ds.filetype == FileType.OUTPUT:
+            raise TypeError("Dataset '" + ds.filename +
+                            "' is not a timing dataset.")
+    
+    cores = []
+    time = []
+    
+    for ds in dsets:
+        #access main timing
+        cores.append( int(ds.getData(0, prop='cores')) )
+        
+        time.append( ds.getData(var=what, prop=prop) )
+    
+    # sort
+    cores, time = zip(*sorted(zip(cores, time)))
+    
+    # tuple --> list
+    cores = list(cores)
+    
+    # transform cores --> nodes
+    core2node = kwargs.get('core2node', 1)
+    
+    for i, c in enumerate(cores):
+        cores[i] /= core2node
+    
+    # obtain speed-up
+    speedup = []
+    for t in time:
+        speedup.append( time[0] / t )
+    
+    xscale = kwargs.get('xscale', 'linear')
+    yscale = kwargs.get('yscale', 'linear')
+    grid   = kwargs.get('grid', False)
+    
+    ax1 = plt.gca()
+    loc = 'best'
+    
+    if kwargs.get('efficiency', False):
+        loc = 'lower center'
+        
+        # obtain core increase
+        incr = []
+        for c in cores:
+            incr.append( c / cores[0] )   
+        
+        # obtain efficiency
+        efficiency = []
+        
+        ax2 = ax1.twinx()
+        ax2.set_ylabel('efficiency', color='r')
+        ax2.set_yscale(yscale)
+        # 8. April 2018
+        # https://stackoverflow.com/questions/15256660/set-the-colour-of-matplotlib-ticks-on-a-log-scaled-axes
+        ax2.tick_params('y', colors='r', which='both')
+        ax2.grid(grid, which='both', color='r', linestyle='dashed', alpha=0.4)
+        
+        for i, s in enumerate(speedup):
+            efficiency.append( s / incr[i] )
+        
+        ax2.plot(cores, efficiency, 'r')
+    
+    ax1.plot(cores, speedup, label=ds.getLabel(what))
+    ax1.set_xlabel(kwargs.get('xlabel', '#cores'))
+    ax1.set_ylabel('speed-up')
+    ax1.set_xscale(xscale)
+    ax1.set_yscale(yscale)
+    ax1.grid(grid, which='both')
+    
+    if kwargs.get('perfect_scaling', False):
+        ref = []
+        for c in cores:
+            ref.append( c / cores[0] )
+        ax1.plot(cores, ref, 'k--', label='perfect scaling')
+        ax1.legend(frameon=True, loc=loc)
+    
+    plt.tight_layout()
+        
+    return plt
+
+
+def plot_time_scaling(dsets, prop, **kwargs):
+    """
+    Plot timing benchmark.
+    
+    Parameters
+    ----------
+    dsets   ([DatasetBase]) all timing datasets
+    prop    (str)           property, 'wall' or 'cpu
+    
+    Optionals
+    ---------
+    first=None      (int)   take only the first N specialized
+    xscale          (str)           x-axis scale, 'linear' or 'log'
+    yscale          (str)           y-axis scale, 'linear' or 'log'
+    grid            (bool)          if true, plot grid
+    xlabel          (str)           label for x-axis. Default '#cores'
+    core2node       (int)           scale #cores == 1 node
+                                    (useful with xlabel='#nodes')
+    exclude         ([])            do not use *these* timings
+    tag=''          (str)           take only timings containing this tag
+    perfect_scaling (bool)          add speed-up perfect scaling line
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(dsets, list):
+        raise TypeError("Input 'dsets' has to be a list for.")
+    
+    if not dsets:
+        raise ValueError("No dataset in 'dsets'.")
+    
+    for ds in dsets:
+        if not isinstance(ds, DatasetBase):
+            raise TypeError("Dataset '" + ds.filename +
+                            "' not derived from 'DatasetBase'.")
+        if not ds.filetype == FileType.TIMING and not ds.filetype == FileType.OUTPUT:
+            raise TypeError("Dataset '" + ds.filename +
+                            "' is not a timing dataset.")
+    
+    if not prop == 'wall' and not prop == 'cpu':
+        raise ValueError("Wrong property value: prop = 'wall' or prop = 'cpu'.")
+    
+    cores = []
+    for ds in dsets:
+        cores.append( int(ds.getData(0, prop='cores')) )
+    
+    # sort
+    cores, dsets = zip(*sorted(zip(cores, dsets)))
+    
+    # tuple --> list
+    cores = list(cores)
+    
+    # transform cores --> nodes
+    core2node = kwargs.get('core2node', 1)
+    
+    for i, c in enumerate(cores):
+        cores[i] /= core2node
+    
+    labels = []
+    times  = []
+    excludeList = kwargs.get('exclude', [])
+    tag         = kwargs.get('tag', '')
+    
+    for name in dsets[0].getLabels():
+        skip = False
+        for ex in excludeList:
+            if ex in name:
+                skip = True
+                break
+        if not skip and not 'main' in name and tag in name:
+            labels.append( name )
+            times.append( dsets[0].getData(var=name, prop=prop + ' avg') )
+    
+    times, labels = mostConsuming(kwargs.get('first', 1e6), times, labels, prop + ' avg')
+    
+    times, labels = zip(*sorted(zip(times, labels),
+                            key=itemgetter(0),
+                            reverse=True))
+    
+    for label in labels:
+        tmin = []
+        tmax = []
+        tavg = []
+        for ds in dsets:
+            tavg.append( ds.getData(var=label, prop=prop + ' avg') )
+            tmin.append( tavg[-1] - ds.getData(var=label, prop=prop + ' min') )
+            tmax.append( ds.getData(var=label, prop=prop + ' max') - tavg[-1] )
+        
+        plt.errorbar(cores, tavg, yerr=[tmin, tmax], fmt='--o', label=label)
+    
+    plt.grid(kwargs.get('grid', False), which="both")
+    plt.xlabel(kwargs.get('xlabel', '#cores'))
+    plt.ylabel('time [' + ds.getUnit('') + ']')
+    plt.xlim([0.5*cores[0], 1.05*cores[-1]])
+    plt.xscale(kwargs.get('xscale', 'linear'))
+    plt.yscale(kwargs.get('yscale', 'linear'))
+    plt.tight_layout()
+    
+    
+    if kwargs.get('perfect_scaling', False):
+        ref = []
+        for c in cores:
+            ref.append( times[0] * cores[0] / c )
+        plt.plot(cores, ref, 'k', label='perfect scaling')
+    plt.legend(loc='best')
+    
+    return plt
+
+
+def plot_time_summary(ds, prop, **kwargs):
+    """
+    Create a plot with minimum, maximum and average timings
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)   timing dataset
+    prop    (str)           property, 'wall' or 'cpu
+    
+    Optionals
+    ---------
+    yscale          (str)           y-axis scale, 'linear' or 'log'
+    grid            (bool)          if true, plot grid
+    exclude         ([])            do not use *these* timings
+    tag=''          (str)           take only timings containing this tag
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    if not ds.filetype == FileType.TIMING and not ds.filetype == FileType.OUTPUT:
+        raise TypeError("Dataset '" + ds.filename +
+                        "' is not a timing dataset.")
+    
+    if not prop == 'wall' and not prop == 'cpu':
+        raise ValueError("Wrong property value: prop = 'wall' or prop = 'cpu'.")
+    
+    labels = []
+    excludeList = kwargs.get('exclude', [])
+    tag         = kwargs.get('tag', '')
+    for name in ds.getLabels():
+        skip = False
+        for ex in excludeList:
+            if ex in name:
+                skip = True
+                break
+        if not skip and not 'main' in name and tag in name:
+            labels.append( name )
+    
+    tmin = []
+    tmax = []
+    tavg = []
+    
+    for name in labels:
+        tavg.append( ds.getData(var=name, prop=prop + ' avg') )
+        tmin.append( tavg[-1] - ds.getData(var=name, prop=prop + ' min') )
+        tmax.append( ds.getData(var=name, prop=prop + ' max') - tavg[-1] )
+    
+    n = len(tavg)
+    x = np.linspace(0, n-1, n) 
+    plt.errorbar(x, tavg, yerr=[tmin, tmax], fmt='o')
+    plt.xlim([-1, n])
+    plt.ylim([-10, max(tmax)+max(tavg)])
+    plt.ylabel('time [' + ds.getUnit('') + ']')
+    # 2. Feb. 2018
+    # https://stackoverflow.com/questions/14852821/aligning-rotated-xticklabels-with-their-respective-xticks
+    plt.xticks(x, labels, rotation=45, ha='right')
+    plt.grid(kwargs.get('grid', False), which="both")
+    plt.yscale(kwargs.get('yscale', 'linear'))
+    
+    plt.tight_layout()
+    
+    return plt
+
+
+def plot_pie_chart(ds, prop, **kwargs):
+    """
+    Create a pie plot of the first N most time consuming timings.
+    
+    Parameters
+    ----------
+    ds      (DatasetBase)   timing dataset
+    prop    (str)           property, i.e. 'cpu avg', 'cpu max', 'cpu min',
+                            'wall avg', 'wall max', 'wall min' or
+                            'cpu tot' and 'wall tot' (only for main timing)
+    
+    Optionals
+    ---------
+    first=None          (int)   take only the first N specialized
+                                timings
+    exclude             ([])    do not use *these* timings
+    tag=''              (str)   what tag should be in name
+    cmap_name='YlGn'    (str)   color scheme
+    
+    Notes
+    -----
+    Throws an exception if file not available or the key is not part
+    of the dictionary
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.TIMING and not ds.filetype == FileType.OUTPUT:
+        raise TypeError("Dataset '" + ds.filename +
+                        "' is not a timing dataset.")
+    
+    first = kwargs.get('first', None)
+    cmap_name = kwargs.get('cmap', 'YlGn')
+    
+    names = ds.getLabels()
+    
+    labels = []
+    times  = []
+    for name in names:
+        if not 'main' in name:
+            labels.append(name)
+            times.append( ds.getData(var=name, prop=prop) )
+    
+    times_sorted, labels_sorted = mostConsuming(first, times, labels, prop)
+    
+    # sum up all others
+    if first:
+        labels_sorted.append('others')
+        t = 0.0
+        for name in names:
+            if not 'main' in name and name not in labels_sorted:
+                t += ds.getData(var=name, prop=prop)
+        times_sorted.append(t)
+    
+    times_sorted, labels_sorted = zip(*sorted(zip(times_sorted, labels_sorted),
+                                              key=itemgetter(0),
+                                              reverse=True))
+    
+    # 15. Jan. 2017, https://gist.github.com/vals/5257113
+    cmap = plt.get_cmap(cmap_name)
+    colors = cmap(np.linspace(0, 1, len(times_sorted)))
+        
+    explode = [0.0] * len(times_sorted)
+
+    # 15. Jan. 2017,
+    # http://stackoverflow.com/questions/7082345/how-to-set-the-labels-size-on-a-pie-chart-in-python
+    patches, texts, autotexts = plt.pie(times_sorted,
+                                        autopct='%1.1f%%',
+                                        pctdistance=0.7,
+                                        labeldistance=1.0,
+                                        startangle=90,
+                                        explode=explode,
+                                        colors=colors,
+                                        radius=1.1,
+                                        shadow=False)
+    
+    for at in autotexts:
+        at.set_fontsize(10)
+    
+    plt.legend(patches, labels_sorted, loc='best', bbox_to_anchor=(0.95, 0.98), borderaxespad=0.1)
+    plt.axis('equal')
+    
+    return plt

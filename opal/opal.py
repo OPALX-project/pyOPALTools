@@ -1,5 +1,8 @@
+# Author:   Matthias Frey
+# Date:     March 2018
+
 import os
-from opal.datasets.DatasetBase import *
+from opal.datasets.filetype import FileType
 from opal.datasets.H5Dataset import H5Dataset
 from opal.datasets.StatDataset import StatDataset
 from opal.datasets.TimeDataset import TimeDataset
@@ -8,7 +11,11 @@ from opal.datasets.LBalDataset import LBalDataset
 from opal.datasets.GridDataset import GridDataset
 from opal.datasets.SolverDataset import SolverDataset
 from opal.datasets.TrackOrbitDataset import TrackOrbitDataset
-
+from opal.datasets.OutputDataset import OutputDataset
+from opal.datasets.PeakDataset import PeakDataset
+from opal.datasets.ProbeHistDataset import ProbeHistDataset
+from opal.datasets.OptimizerDataset import OptimizerDataset
+from opal.datasets.SamplerDataset import SamplerDataset
 
 def load_dataset(directory, **kwargs):
     """
@@ -19,15 +26,22 @@ def load_dataset(directory, **kwargs):
     Parameters
     ----------
     directory       (str)       root directory of the OPAL simulation
+    
+    Optionals
+    ---------
     ftype           (FileType)  type of file to read in (optional)
     fname           (str)       file to read in (optional)
+    astype          (FileType)  read a file according some dataset type
+                                E.g. OPAL standard output contains timings
+                                as well.
     """
     
     if not os.path.exists(directory):
         raise RuntimeError("No such directory: '" + directory + "'.")
     
-    ftype = kwargs.get('ftype', FileType.NONE)
-    fname = kwargs.get('fname', '')
+    ftype  = kwargs.get('ftype', FileType.NONE)
+    fname  = kwargs.get('fname', '')
+    astype = kwargs.get('astype', FileType.NONE)
     
     if not ftype == FileType.NONE and fname:
         raise RuntimeError('Specify either file type or file name but not both.')
@@ -41,7 +55,8 @@ def load_dataset(directory, **kwargs):
         fnames.append(fname)
     elif not ftype == FileType.NONE:
         for fname in os.listdir(directory):
-            if FileType.extensionToFileType(fname) == ftype:
+            full_path = os.path.join(directory, fname)
+            if FileType.extensionToFileType(full_path) == ftype:
                 fnames.append(fname)
         
         if not fnames:
@@ -56,7 +71,9 @@ def load_dataset(directory, **kwargs):
     datasets = []
     for fname in fnames:
         print ( '    ' + fname + ' ... ', end='' )
-        ftype = FileType.extensionToFileType(fname)
+        full_path = os.path.join(directory, fname)
+        ftype = FileType.extensionToFileType(full_path)
+        
         if  ftype == FileType.H5:
             datasets.append(H5Dataset(directory, fname))
             print ( 'matches H5 file type.' )
@@ -64,8 +81,15 @@ def load_dataset(directory, **kwargs):
             datasets.append(StatDataset(directory, fname))
             print ( 'matches stat file type.' )
         elif ftype == FileType.TIMING:
-            datasets.append(TimeDataset(directory, fname))
+            datasets.append(TimeDataset(directory, fname, 'ippl'))
             print ( 'matches timing file type.' )
+        elif ftype == FileType.OUTPUT:
+            if astype == FileType.TIMING:
+                datasets.append(TimeDataset(directory, fname, 'output'))
+                print ( 'matches timing file type.' )
+            else:
+                datasets.append(OutputDataset(directory, fname))
+                print ( 'matches OPAL standard output file type.' )
         elif ftype == FileType.MEM:
             datasets.append(MemoryDataset(directory, fname))
             print ( 'matches memory file type.' )
@@ -81,6 +105,21 @@ def load_dataset(directory, **kwargs):
         elif ftype == FileType.TRACK_ORBIT:
             datasets.append(TrackOrbitDataset(directory, fname))
             print ( 'matches track orbit file type.' )
+        elif ftype == FileType.PEAK:
+            datasets.append(PeakDataset(directory, fname))
+            print ( 'matches peak file type.' )
+        elif ftype == FileType.HIST:
+            datasets.append(ProbeHistDataset(directory, fname))
+            print ( 'matches probe histogram file type.' )
+        elif ftype == FileType.OPTIMIZER:
+            datasets.append(OptimizerDataset(directory, fname))
+            # after reading we leave since optimizer produces many files
+            print ( 'matches optimizer file type. Stop reading further.' )
+            break
+        elif ftype == FileType.SAMPLER:
+            datasets.append(SamplerDataset(directory, fname))
+            print ( 'matches sampler file type.' )
+            break
         elif ftype == FileType.NONE:
             print ( 'no appropriate file match.' )
     print ( '\nDone.\n' )

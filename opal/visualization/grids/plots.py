@@ -1,7 +1,8 @@
 # Author: Matthias Frey
 # Date:   February 2018 - March 2018
 
-from opal.datasets.DatasetBase import FileType
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -10,9 +11,12 @@ def plot_grids_per_level(ds, **kwargs):
     Plot a time series of the number of grids per level
     and the total number of grids.
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
     
     if not ds.filetype == FileType.GRID:
-        raise RuntimeError(ds.filename + ' is not a grid dataset.')
+        raise TypeError(ds.filename + ' is not a grid dataset.')
     
     hspan  = kwargs.get('hspan', [None, None])
     grid   = kwargs.get('grid', False)
@@ -54,8 +58,12 @@ def plot_grid_histogram(ds, **kwargs):
     Plot a time series of the minimum, maximum and
     average number of grids per core.
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
     if not ds.filetype == FileType.GRID:
-        raise RuntimeError(ds.filename + ' is not a grid dataset.')
+        raise TypeError(ds.filename + ' is not a grid dataset.')
     
     hspan  = kwargs.get('hspan', [None, None])
     grid   = kwargs.get('grid', False)

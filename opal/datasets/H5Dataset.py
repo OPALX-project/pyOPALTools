@@ -2,7 +2,7 @@
 # Date:     March 2018
 
 import os
-from utilities.H5Parser import H5Parser
+from opal.parser.H5Parser import H5Parser
 import numpy as np
 from opal.datasets.DatasetBase import *
 
@@ -35,15 +35,16 @@ class H5Dataset(DatasetBase):
         self.__parser.parse(full_path)
         
         self.__variable_mapper = {
-            'rms_x':    'RMSX',
-            'rms_y':    'RMSX',
-            'rms_z':    'RMSX',
-            'rms_px':   'RMSP',
-            'rms_py':   'RMSP',
-            'rms_pz':   'RMSP',
-            'time':     'TIME',
-            'energy':   'ENERGY',
-            's':        'SPOS'
+            'rms_x':        'RMSX',
+            'rms_y':        'RMSX',
+            'rms_z':        'RMSX',
+            'rms_px':       'RMSP',
+            'rms_py':       'RMSP',
+            'rms_pz':       'RMSP',
+            'time':         'TIME',
+            'energy':       'ENERGY',
+            's':            'SPOS',
+            'flavour':      'OPAL_flavour'
         }
         
         self.__label_mapper  = {
@@ -89,6 +90,10 @@ class H5Dataset(DatasetBase):
         
         step = kwargs.get('step', 0)
         
+        # take last step if negative
+        if step < 0:
+            step = self.__parser.getNSteps() - 1
+        
         h5var = var
         if var in self.__variable_mapper:
             h5var = self.__variable_mapper[var]
@@ -99,16 +104,23 @@ class H5Dataset(DatasetBase):
             data = []
             
             # if vector type we need to get appropriate direction
-            dim = 0
-            for key in self.__direction:
-                if '_' + key in var:
-                    dim = self.__direction[key]
-                elif '_p' + key in var:
-                    dim = self.__direction[key]
-            
-            for i in range(self.__parser.getNSteps()):
-                data.append(self.__parser.getStepAttribute(h5var, i)[dim])
-            
+            if '_' in var:
+                dim = 0
+                for key in self.__direction:
+                    if '_' + key in var:
+                        dim = self.__direction[key]
+                    elif '_p' + key in var:
+                        dim = self.__direction[key]
+                
+                for i in range(self.__parser.getNSteps()):
+                    data.append(self.__parser.getStepAttribute(h5var, i)[dim])
+            else:
+                for i in range(self.__parser.getNSteps()):
+                    data.append(self.__parser.getStepAttribute(h5var, i))
+                    
+                    # get strings
+                    if isinstance(data[-1], bytes):
+                        data[-1] = data[-1].decode('utf-8')
             return np.asarray(data)
         else:
             raise H5Error("'" + var + "' is not part of this step")

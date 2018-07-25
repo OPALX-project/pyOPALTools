@@ -1,118 +1,116 @@
-from utils import tableau20
-
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
 import numpy as np
 import scipy as sp
-
-from matplotlib import rc
-import matplotlib.pylab as plt
-
 import re
 
-# stores the turnseparation
-
-global ts_m
-global energy_m
-global phases_m
-global phaseProbeNames_m
-global radius_m
-global phi_r_m
-
-#
-# functions associated with track-orbit computations
-#
-def calcTurnSeparation(filename):
-    """ Calculate turn separation from OPAL xxx--trackOrbit.dat file
+def calcTurnSeparation(ds, nsteps=-1):
+    """
+    Calculate turn separation from OPAL xxx--trackOrbit.dat file
 
     Parameters
     ----------
-    filename : the xxx--trackOrbit.dat
-    
+    ds      (DatasetBase)   datasets of type FileType.TRACK_ORBIT
+    nsteps                  number of steps per turn
+
     Returns
     -------
     none
     
-    Notes
-    -----
-    set the internal data structure ts_m
-
     References
     ----------
     none
 
     Examples
     --------
-    Check testCycl-1.py in the test directory
-
+    Check Cyclotron.ipynb in the opal/test directory
+    
+    Returns
+    -------
+    turn separation, energy, phi_r and radius
     """
+    
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.TRACK_ORBIT:
+        raise TypeError(ds.filename + ' is not a track orbit dataset.')
+    
+    # first particles only
+    id0s = [index for index,ID in enumerate(ds.getData('ID')) if ID==0]
 
-    global ts_m, energy_m, phi_r_m, radius_m
-    headers = ["ID","x","betx","y","bety","z","betz"]
-    df = np.genfromtxt(filename,
-                       dtype       = None,
-                       names       = headers,
-                       skip_header = 2) # skip first two lines
-
-    x=df['x']
-    y=df['y']
+    x  = ds.getData('x') [id0s]
+    y  = ds.getData('y') [id0s]
+    px = ds.getData('px')[id0s]
+    py = ds.getData('py')[id0s]
+    pz = ds.getData('pz')[id0s]
     
     # Get x-axis crossings
     pksx = detect_peaks(x, mph=0.04, mpd=100)
-    mx=x[pksx]
+    # Correct as peaks might not correspond to each other
+    # Use number of steps per turn
+    if not nsteps==-1:
+        for pknr in range(1,len(pksx)):
+            pksx[pknr] = pksx[pknr-1] + nsteps
+            if pksx[pknr] + nsteps >= len(x):
+                break
+
+    mx = x[pksx]
 
     # Turn separation is the difference between crossings
-    ts_m=np.diff(mx)
+    ts = np.diff(mx)
 
     # Particle energy
     p_mass = 938.28 # proton mass in MeV / c^2
     # Beta*gamma
-    beta_gamma = np.sqrt(df['betx']*df['betx']+df['bety']*df['bety']+df['betz']*df['betz'])
+    beta_gamma = np.sqrt(px * px + py * py + pz * pz)
     # Gamma
     gamma = np.sqrt(1+beta_gamma*beta_gamma)
     # Energy
     energy = (gamma - 1) * p_mass
     # Radius
-    radius = np.sqrt(x*x+y*y)
+    radius = np.sqrt( x * x + y * y)
     # Radial direction v_r (normalise with momentum?)
-    phi_r = np.arctan(df['betx']/df['bety']) - np.arctan(y/x)
+    phi_r = np.arctan( px / py ) - np.arctan( y / x )
     
     # Mask
-    energy_m = energy[pksx]
-    radius_m = radius[pksx]
-    phi_r_m  = phi_r[pksx]
+    energy = energy[pksx]
+    radius = radius[pksx]
+    phi_r  = phi_r[pksx]
+    
+    return ts, energy, phi_r, radius
 
-def calcCenteringExtraction(turnCorrection=1.35,phaseCorrection=0.0,amplitudeCorrection=1):
-    """ Calculate betatron tune values and zentrierung
+
+def calcCenteringExtraction(radius, turnCorrection=1.35,phaseCorrection=0.0,amplitudeCorrection=1):
+    """
+    Calculate betatron tune values and zentrierung
 
     Based on Fortran routine from Martin Humbel
     "Bestimmung der horizontalen Betatronschwingungsgroessen R0, DR, A und B mit der Methode der Normalengleichung"
 
     Parameters
     ----------
+    radius
     turnCorrection      : Betatron oscillations per turn (tune), default value based on PSI Ring
     phaseCorrection     : Phase correction for betatron calculation in grad (radial angle between measurement and extraction)
     amplitudeCorrection : Amplitude correction for betatron calculation
 
-    Returns
-    -------
-    None
-
-    Notes
-    -----
-    Sets the internal data structure centering_m
-
+    
     Examples
     --------
-    TODO
-
+    Check Cyclotron.ipynb in the opal/test directory
+    
+    Returns
+    -----
+    the centering
     """
-
-    global centering_m, radius_m
-
+    
     # Use last 7 turns
-    totalTurns = len(radius_m)
+    totalTurns = len(radius)
     turnsToAnalyse = min(7,totalTurns)
      
-    centering_m = np.zeros(4) # R0, DR, sine (aka E), cosine (aka F)
+    centering = np.zeros(4) # R0, DR, sine (aka E), cosine (aka F)
     if (turnsToAnalyse < 2):
         return
 
@@ -136,10 +134,10 @@ def calcCenteringExtraction(turnCorrection=1.35,phaseCorrection=0.0,amplitudeCor
         A[2][3] += cosq * sinq
         A[3][3] += sinq * sinq
 
-        B[0] += radius_m[turnNumber]
-        B[1] += radius_m[turnNumber] * turnsFromExtraction
-        B[2] += radius_m[turnNumber] * cosq
-        B[3] += radius_m[turnNumber] * sinq
+        B[0] += radius[turnNumber]
+        B[1] += radius[turnNumber] * turnsFromExtraction
+        B[2] += radius[turnNumber] * cosq
+        B[3] += radius[turnNumber] * sinq
 
     # Make A symmetric
     for i in range(0,dim):
@@ -148,8 +146,8 @@ def calcCenteringExtraction(turnCorrection=1.35,phaseCorrection=0.0,amplitudeCor
     
     # No solution for 3 and 4 turns
     if (turnsToAnalyse == 3 or turnsToAnalyse == 4):
-        centering_m[0] = radius_m[turnsToAnalyse-1]
-        centering_m[1] = radius_m[turnsToAnalyse-1] - radius_m[turnsToAnalyse-2]
+        centering[0] = radius[turnsToAnalyse-1]
+        centering[1] = radius[turnsToAnalyse-1] - radius[turnsToAnalyse-2]
         return
     
     # Solve linear equations Ax = B
@@ -158,176 +156,13 @@ def calcCenteringExtraction(turnCorrection=1.35,phaseCorrection=0.0,amplitudeCor
     
     # Correction factors
     phaseCorrInRad = phaseCorrection * np.pi / 180.;
-    centering_m[0] = centering[0]
-    centering_m[1] = centering[1]
-    centering_m[2] = amplitudeCorrection * ( centering[2]*np.cos(phaseCorrInRad) + centering[3]*np.sin(phaseCorrInRad))
-    centering_m[3] = amplitudeCorrection * (-centering[2]*np.sin(phaseCorrInRad) + centering[3]*np.cos(phaseCorrInRad))
-    print 'Centering values [R0,DR,E,F] =',centering_m
+    centering[0] = centering[0]
+    centering[1] = centering[1]
+    centering[2] = amplitudeCorrection * ( centering[2]*np.cos(phaseCorrInRad) + centering[3]*np.sin(phaseCorrInRad))
+    centering[3] = amplitudeCorrection * (-centering[2]*np.sin(phaseCorrInRad) + centering[3]*np.cos(phaseCorrInRad))
+    print ( 'Centering values [R0,DR,E,F] =', centering )
+    return centering
 
-def getTurnSeparation():
-    return ts_m
-
-def getTurnCount():
-    return len(ts_m)
-
-def getEnergy():
-    return energy_m
-
-def getRadius():
-    return radius_m
-
-def getRadialDirection():
-    return phi_r_m
-
-def getCentering():
-    return centering_m
-
-def writeTurnSeparationToFile(fn):
-    out_file = open(fn, 'w')
-    for turn_sep in ts_m:
-          out_file.write("%s\n" % turn_sep)
-
-def plotTurnSeparation(figureNumber=1, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
-    fig=plt.figure(figureNumber,figsize=(18,6))
-    #ax=plt.subplot(111)
-    if asFunctionOfTurnNumber:
-        x = np.arange(2, getTurnCount()+2) # From second turn
-        plt.xlabel('Turn Number')
-    elif asFunctionOfEnergy:
-        x = getEnergy()[1:] # From second turn
-        plt.xlabel('Energy [MeV]')
-    else:
-        x = getRadius()[1:] / 1000. # From second turn, in meters
-        plt.xlabel('Radius [m]')
-
-    plt.plot(x,getTurnSeparation(), 'o-', linewidth=2, **kwargs)
-    plt.ylabel('Turn Separation [mm]')
-    plt.show()
-
-def plotBetaBeat(figureNumber=1, **kwargs):
-    fig=plt.figure(figureNumber,figsize=(18,6))
-    x = getRadius() / 1000. # in meters
-    plt.plot(x,getRadialDirection(), 'o-', linewidth=2, **kwargs)
-    plt.xlabel('Radius [m]')
-    plt.ylabel('Radial Direction [rad]')
-    plt.show()
-
-def plotCentering(figureNumber=1, **kwargs):
-    fig=plt.figure(figureNumber,figsize=(8,8))
-    ax = fig.add_subplot(1, 1, 1)
-    x = getCentering()
-    plt.plot(x[2], x[3], 'o', **kwargs)
-    # Add circles
-    circle1 = plt.Circle((0, 0), radius=2, fc='black', fill=False)
-    plt.gca().add_artist(circle1)
-    circle2 = plt.Circle((0, 0), radius=4, fc='black', fill=False)
-    plt.gca().add_artist(circle2)
-    
-    # Move left y-axis and bottim x-axis to centre, passing through (0,0)
-    ax.set_xlim(-5,5)
-    ax.set_ylim(-5,5)
-    ax.spines['left'].set_position('center')
-    ax.spines['bottom'].set_position('center')
-    # Eliminate upper and right axes
-    ax.spines['right'].set_color('none')
-    ax.spines['top'].set_color('none')
-    
-    # Show ticks in the left and lower axes only
-    ax.xaxis.set_ticks_position('bottom')
-    ax.yaxis.set_ticks_position('left')
-
-    plt.xlabel('E')
-    plt.ylabel('F')
-    ax.xaxis.set_label_coords(0.9, -0.025)
-    ax.yaxis.set_label_coords(-0.025,0.9)
-
-    plt.show()
-
-def calcRFphases(fn,RFcavity):
-    """ Calculate the phases of individual cavities in the simulation
-    
-
-    Parameters
-    ----------
-    fn : the filename with the std out of OPAL
-    RFcavity: name of the RFcavity as specifed in the input file
-    Returns
-    -------
-    none
-    
-
-    Notes
-    -----
-    set the internal data structure phases_m
-
-    References
-    ----------
-    none
-
-    Examples
-    --------
-    Check testCycl-2.py in the test directory
-
-    """
-    global phases_m
-    global phaseProbeNames_m
-    phases_m = []
-    phaseProbeNames_m = RFcavity
-
-    for i,cname in enumerate(getRFphaseProbeNames()):
-        turnNumber = 1
-        file = open(fn, "r")
-        turns  = []
-        phases = []
-        for line in file:
-            if re.search("Finished turn",line):
-                turnNumber += 1
-            if re.search(cname, line):
-                phase = float(line.split()[5])
-                turns.append(turnNumber)
-                phases.append(phase)
-        phases_m.append([turns,phases])
-        file.close()
-            
-def getRFphaseProbeNames():
-        return phaseProbeNames_m
-
-def getRFphases(i):
-        return phases_m[i]
-
-def plotRFphases(**kwargs):
-    fig=plt.figure(figsize=(8,6))
-    ax=plt.subplot(111)
-    for i,cname in enumerate(getRFphaseProbeNames()):
-        turns  = getRFphases(i)[0]
-        phases = getRFphases(i)[1]
-        plt.plot(turns, phases, linewidth=3, label=cname, **kwargs)
-    plt.xlabel("Turn number")
-    plt.ylabel("RF phase [deg]")
-    plt.legend(loc=0)
-    plt.show()
-
-def plotOrbit(filename, figureNumber=1, **kwargs):
-    """Plots orbit in x-y from OPAL trackOrbit.dat
-
-    """
-    headers = ["ID","x","betx","y","bety","z","betz"]
-    data = np.genfromtxt(filename,
-                         dtype       = None,
-                         names       = headers,
-                         skip_header = 2) # skip first two lines
-
-    fig = plt.figure(figureNumber,figsize=(8,8))
-    plt.plot(data['x']/1000, data['y']/1000, linewidth=1, **kwargs)
-    plt.xlabel("x [m]")
-    plt.ylabel("y [m]")
-    plt.show()
-
-# Using detect_peaks module for peak detection
-
-__author__ = "Marcos Duarte, https://github.com/demotu/BMC"
-__version__ = "1.0.4"
-__license__ = "MIT"
 
 def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
                  kpsh=False, valley=False, show=False, ax=None):
@@ -368,7 +203,7 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
     The detection of valleys instead of peaks is performed internally by simply
     negating the data: `ind_valleys = detect_peaks(-x)`
     
-    The function can handle NaN's 
+    The function can handle NaN's
 
     See this IPython Notebook [1]_.
 
@@ -465,3 +300,51 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
 
     return ind
 
+
+def calcRFphases(ds, RFcavity):
+    """
+    Calculate the phases of individual cavities in the simulation
+    
+
+    Parameters
+    ----------
+    ds          (DatasetBase)   datasets of type FileType.OUTPUT
+    RFcavity    ([str])         name of the RFcavity as specifed in the input file
+    
+    Returns
+    -------
+    phases
+    
+    References
+    ----------
+    none
+
+    Examples
+    --------
+    Check Cyclotron.ipynb in the opal/test directory
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.OUTPUT:
+        raise TypeError(ds.filename + ' is not an OPAL standard output file.')
+    
+    out_phases = []
+    
+    for i, cname in enumerate(RFcavity):
+        turnNumber = 1
+        file = open(ds.filename, "r")
+        turns  = []
+        phases = []
+        for line in file:
+            if re.search("Finished turn", line):
+                turnNumber += 1
+            if re.search(cname, line):
+                phase = float(line.split()[5])
+                turns.append(turnNumber)
+                phases.append(phase)
+        out_phases.append([turns,phases])
+        file.close()
+    
+    return out_phases

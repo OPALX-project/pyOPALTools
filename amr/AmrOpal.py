@@ -56,35 +56,44 @@ class AmrOpal:
         if not self.ds:
             raise RuntimeError("AmrOpal.slice_plot: No dataset")
         
-        unit    = kwargs.get("unit", None)
-        save    = kwargs.get("save", False)
-        figsize = kwargs.get('figsize', (12, 9))
-        dpi     = kwargs.get('dpi', None)
+        unit    = kwargs.pop("unit", None)
+        save    = kwargs.pop("save", False)
+        figsize = kwargs.pop('figsize', (12, 9))
+        dpi     = kwargs.pop('dpi', None)
+        
+        
+        # 27. May 2018
+        # http://yt-project.org/doc/visualizing/manual_plotting.html
+        cut1 = 1
+        cut2 = 2
         
         ax = 0
         if axis == 'y':
             ax = 1
+            cut1 = 0
+            cut2 = 2
         elif axis == 'z':
             ax = 2
+            cut1 = 0
+            cut2 = 1
         elif not axis == 'x':
             raise RuntimeError("AmrOpal.line_plot: Use either 'x', 'y' or 'z' axis")
         
         c = self.ds.find_max(field)[1]
-        ray = self.ds.ortho_ray(ax, c)
+        ray = self.ds.ortho_ray(ax, (c[cut1], c[cut2]))
         
         srt = np.argsort(ray[axis])
         
-        fig = plt.figure(figsize=figsize, dpi=dpi)
         plt.plot(np.array(ray[axis][srt]),
-                 np.array(ray[field][srt]))
+                 np.array(ray[field][srt]), **kwargs)
         plt.ylabel(field + ' (' + unit + ')')
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
         plt.xlabel(axis)
         
         if save:
             plt.savefig('line_plot_' + axis + '_' + field + '.png')
-        else:
-            plt.show()
+        
+        return plt
     
     
     def slice_plot(self, normal, field, **kwargs):

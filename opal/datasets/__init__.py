@@ -1,3 +1,4 @@
+import opal.datasets.filetype
 import opal.datasets.DatasetBase
 import opal.datasets.H5Dataset
 import opal.datasets.StatDataset
@@ -6,3 +7,8 @@ import opal.datasets.LBalDataset
 import opal.datasets.MemoryDataset
 import opal.datasets.GridDataset
 import opal.datasets.SolverDataset
+import opal.datasets.OutputDataset
+import opal.datasets.PeakDataset
+import opal.datasets.ProbeHistDataset
+import opal.datasets.OptimizerDataset
+import opal.datasets.SamplerDataset

@@ -4,6 +4,7 @@ import sys
 import glob
 import json
 import math
+import argparse
 
 import numpy as np
 import pylab as pl
@@ -122,7 +123,7 @@ def onpick(event):
     xdata = thisline.get_xdata()
     ydata = thisline.get_ydata()
     ind = event.ind
-    print 'onpick points:', zip(xdata[ind], ydata[ind])
+    print ('onpick points:', zip(xdata[ind], ydata[ind]))
 
 
 def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
@@ -199,19 +200,21 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
     cbar.set_ticks([clow, cmiddle, chigh])
     cbarlabel_text = selected_obj[2]
     cbar.set_label(cbarlabel_text, labelpad=10)
+    
 
     if show_single:
         fig.canvas.mpl_connect('pick_event', onpick)
         pl.show()
+        pl.savefig(prefix + '/pf.png')
     else:
         pl.savefig(prefix + '/' + num.zfill(4) + '.png')
         pl.close(fig)
 
     if show_single and plotAll:
         nrIDs = max(np.shape(data))
-        for name,i in nameToColumnMap.iteritems():
+        for name,i in nameToColumnMap.items():
             pl.figure()
-            pl.hist(data[:,i],bins=nrIDs/10)
+            pl.hist(data[:,i],bins=int(nrIDs/10))
             pl.xlabel(name)
             pl.show()
 
@@ -219,15 +222,15 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
 ##############################################################################
 
 def saveVideo(img_path, video_name):
-    import commands
+    import subprocess
     import distutils
     from distutils import spawn
     video_name = video_name + ".mp4"
     if distutils.spawn.find_executable("ffmpeg") != None:
-        output = commands.getoutput("ffmpeg -y -framerate 0.7 -i " + img_path + "/%04d.png " +
+        output = subprocess.getoutput("ffmpeg -y -framerate 0.7 -i " + img_path + "/%04d.png " +
                                     "-qscale 0 -r 0.7 " + video_name)
     else:
-        print 'Video exporting is not possible, ffmpeg is not installed.'
+        print ('Video exporting is not possible, ffmpeg is not installed.')
 
 def computeLimits(data, selected_ids):
 
@@ -278,55 +281,102 @@ def main(argv):
     plotAll = False
     
     try:
-        for arg in argv:
-            if arg.startswith("--objectives"):
-                objectives = str.split(arg, "=")[1]
-                for obj in str.split(objectives, ","):
-                    obj = improveName(obj)
-                    selected_ids.append(obj)
-    
-            elif arg.startswith("--dvars"):
-                dvars = str.split(arg, "=")[1]
-                for obj in str.split(dvars, ","):
-                    obj = improveName(obj)
-                    selected_ids.append(obj)
-    
-            elif arg.startswith("--path"):
-                path = str.split(arg, "=")[1]
-    
-            elif arg.startswith("--filename-postfix"):
-                filename_postfix = str.split(arg, "=")[1]
-    
-            elif arg.startswith("--outpath"):
-                outpath = str.split(arg, "=")[1]
-    
-            elif arg.startswith("--video"):
-                videoname = str.split(arg, "=")[1]
-    
-            elif arg.startswith("--generation"):
-                generation = str.split(arg, "=")[1]
+        ## Parse input arguments
+        parser = argparse.ArgumentParser()
+        
+        parser.add_argument("-o",
+                            "--objectives",
+                            dest="objectives",
+                            type=str,
+                            default='',
+                            help="specify 3 objectives you want to visualize (check header of "
+                            "result file for available objectives), e.g. --objectives=%OBJ1,%OBJ2,%OBJ3")
+        
+        parser.add_argument("-d",
+                            "--dvars",
+                            dest="dvars",
+                            type=str,
+                            default='',
+                            help="Design variables")
             
-            elif arg.startswith("--plot-all"):
-                plotAll = True
-            else:
-                raise SyntaxError(arg + ' is not a valid argument')
-                return
+        parser.add_argument("-p",
+                            "--path",
+                            dest="path",
+                            type=str,
+                            default=path,
+                            help="specify the path of the result files")
     
+        parser.add_argument("-f",
+                            "--filename-postfix",
+                            dest="filename_postfix",
+                            type=str,
+                            default=filename_postfix,
+                            help="(default: 'results.json'): specify a custom file postfix of result files")
+        
+        parser.add_argument("-u",
+                            "--outpath",
+                            dest="outpath",
+                            type=str,
+                            default=outpath,
+                            help="path for storing resulting pngs")
+        
+        parser.add_argument("-a",
+                            "--plotall",
+                            dest="plotall",
+                            type=bool,
+                            default=plotAll,
+                            help="display additional histogram distributions for the design variables "
+                            "and objectives (for a specific generation only)")
+        
+        parser.add_argument("-g",
+                            "--generation",
+                            dest="generation",
+                            type=int,
+                            default=generation,
+                            help="only displays the 'n'-th generation")
+        
+        parser.add_argument("-v",
+                            "--video",
+                            dest="video",
+                            type=str,
+                            default=videoname,
+                            help="(untested): name of the video")
+        
+        args = parser.parse_args()
+        
+        
+        if args.objectives:
+            for obj in str.split(args.objectives, ","):
+                obj = improveName(obj)
+                selected_ids.append(obj)
+        
+        if args.dvars:
+            for obj in str.split(args.dvars, ","):
+                obj = improveName(obj)
+                selected_ids.append(obj)
+        
+        path             = args.path
+        filename_postfix = args.filename_postfix
+        outpath          = args.outpath
+        videoname        = args.video
+        generation       = args.generation
+        plotAll          = args.plotall
+        
         if path == "":
             raise SyntaxError('No path for input data specified')
     
         if len(selected_ids) != 3:
-            raise SyntaxError('Please select 3 things to visualize')
+            raise SyntaxError('Please select exactly 3 things to visualize')
             return
         
         if generation != -1:
             print("Show generation " + generation)
     
+        if not os.path.isdir(outpath):
+            os.mkdir(outpath)
         data = {}
         if generation == -1:
-            if not os.path.isdir(outpath):
-                os.mkdir(outpath)
-            for infile in glob.glob(os.path.join(path + '/',
+            for infile in glob.glob(os.path.join(path,
                                     '*_' + filename_postfix)):
                 print("Reading data file " + infile)
                 num       = str.rsplit(infile, "/", 1)[1]
@@ -336,7 +386,7 @@ def main(argv):
             setupPlot()
             (xlim, ylim) = computeLimits(data, selected_ids)
             for i, _ in data.items():
-                print " >> saving " + str(i)
+                print (" >> saving " + str(i))
                 plot(data[str(i)], xlim, ylim,
                     str(i), outpath, selected_ids, show_single=False, plotAll=plotAll)
         else:

@@ -1,7 +1,8 @@
 # Author: Matthias Frey
 # Date:   March 2018
 
-from opal.datasets.DatasetBase import FileType
+from opal.datasets.filetype import FileType
+from opal.datasets.DatasetBase import DatasetBase
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings
@@ -11,8 +12,12 @@ def plot_total_memory(ds, **kwargs):
     Plot the total memory consumption vs. simulation time.
     
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
     if not ds.filetype == FileType.MEM:
-        raise RuntimeError(ds.filename + ' is not a memory dataset.')
+        raise TypeError(ds.filename + ' is not a memory dataset.')
     
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
@@ -50,8 +55,12 @@ def plot_memory_summary(ds, **kwargs):
     Plot the maximum, minimum and average memory consumption
     vs. simulation time.
     """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
     if not ds.filetype == FileType.MEM:
-        raise RuntimeError(ds.filename + ' is not a memory dataset.')
+        raise TypeError(ds.filename + ' is not a memory dataset.')
     
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
@@ -113,8 +122,12 @@ def plot_memory_summary(ds, **kwargs):
 
 def plot_memory_boxplot(ds, **kwargs):
     
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
     if not ds.filetype == FileType.MEM:
-        raise RuntimeError(ds.filename + ' is not a memory dataset.')
+        raise TypeError(ds.filename + ' is not a memory dataset.')
     
     grid     = kwargs.get('grid', False)
     title    = kwargs.get('title', None)
