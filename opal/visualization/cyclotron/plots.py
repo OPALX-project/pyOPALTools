@@ -36,7 +36,7 @@ def plot_orbits(ds, pid=0, **kwargs):
     xdata = xdata[np.where(ids == pid)]
     ydata = ydata[np.where(ids == pid)]
     
-    plt.plot(xdata, ydata)
+    plt.plot(xdata, ydata, **kwargs)
     
     xlabel = ds.getLabel('x')
     xunit  = ds.getUnit('x')
@@ -262,10 +262,17 @@ def plot_beta_beat(ds, nsteps=-1, **kwargs):
         raise TypeError(ds.filename + ' is not a track orbit dataset.')
     
     _, _, phi, radius = calcTurnSeparation(ds,nsteps)
-
+    
+    
+    angle_unit = kwargs.pop('angle_unit', 'rad')
+    
+    if 'deg' in angle_unit:
+        phi = np.degrees(phi)
+        angle_unit == 'deg'
+    
     plt.plot(radius, phi, 'o-', linewidth=2, **kwargs)
     plt.xlabel('Radius [m]')
-    plt.ylabel('Radial Direction [rad]')
+    plt.ylabel('Radial Direction [' + angle_unit + ']')
     
     return plt
     
