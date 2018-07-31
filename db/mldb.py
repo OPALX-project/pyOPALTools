@@ -15,6 +15,16 @@ import optPilot.OptPilotJsonReader as jsonreader
 #
 #from utilities import SDDSParser
 
+
+def strToFloat(in_array):
+  out_array=[]
+  for in_row in in_array:
+    out_row = [float(i) for i in in_row]
+    out_array.append(out_row)
+  return out_array
+
+
+
 # From https://stackoverflow.com/questions/12141150/from-list-of-integers-get-number-closest-to-a-given-value
 def findClosestIndex(myList, myNumber):
   """
@@ -424,6 +434,29 @@ class mldb:
 
     def getAllObj(self,gen):
         return self.trainingSet[gen+1]['objValues'][:]
+
+    def getAllDvarData(self):
+        data = self.getAllDvar(0)
+        for i in range(1,self.getNumberOfSamples()):
+          data = np.append(data, self.getAllDvar(i), axis=0)
+        data = strToFloat(data)    
+        nQoIs   = len(self.getXNames())
+        data = np.asarray(data)
+        data = data[:,:nQoIs]
+        return data
+
+    def getAllObjData(self):
+        data = self.getAllObj(0)
+        for i in range(1,self.getNumberOfSamples()):
+            data = np.append(data, self.getAllObj(i), axis=0)
+        data = strToFloat(data)    
+        nQoIs   = len(self.getYNames())
+        data = np.asarray(data)
+        data = data[:,:nQoIs]
+        return data
+
+
+
 
     def getDVarVec(self,gen,indiv):
         return self.trainingSet[gen+1]['dvarValues'][indiv]
