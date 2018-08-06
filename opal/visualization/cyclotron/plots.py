@@ -3,6 +3,7 @@ from opal.datasets.DatasetBase import DatasetBase
 from opal.analysis.cyclotron import *
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 def plot_orbits(ds, pid=0, **kwargs):
     """
@@ -324,6 +325,7 @@ def plot_peak_difference(dsets, **kwargs):
     Optionals
     ---------
     grid    (bool)          draw grid
+    raxis   (bool)          do radius vs radius plot instead
     
     Returns
     -------
@@ -351,22 +353,39 @@ def plot_peak_difference(dsets, **kwargs):
     peaks2 = dsets[1].getData('radius')
     
     npeaks = min(len(peaks1), len(peaks2))
-    diff = peaks1[0:npeaks] - peaks2[0:npeaks]
-    
-    
-    xticks = range(1, npeaks + 1)
-    
-    #ylim = [min(diff) - 0.001, max(diff) + 0.001]
+    p1 = peaks1[0:npeaks]
+    p2 = peaks2[0:npeaks]
     
     plt.grid(kwargs.pop('grid', False))
-
-    plt.plot(xticks, diff, 'o', **kwargs)
-    plt.xticks(xticks)
-    #plt.ylim(ylim)
     
-    plt.xlabel('peak number')
+    if kwargs.pop('raxis'):
+        lowest = min(min(p1), min(p2))
+        highest = max(max(p1), max(p2))
+        
+        plt.plot([lowest, highest], [lowest, highest],
+                 linestyle='dashed', color='black',
+                 label='y = x')
+        
+        plt.plot(p1, p2, marker='o', **kwargs)
+        
+        plt.xlabel('radius [' + unit + '] (' +
+                   os.path.basename(dsets[0].filename) + ')')
+        plt.ylabel('radius [' + unit + '] (' +
+                   os.path.basename(dsets[1].filename) + ')')
+    else:
+        diff = p1 - p2
     
-    plt.ylabel('peak difference [' + unit + ']')
+        xticks = range(1, npeaks + 1)
+        
+        #ylim = [min(diff) - 0.001, max(diff) + 0.001]
+    
+        plt.plot(xticks, diff, 'o', **kwargs)
+        plt.xticks(xticks)
+        #plt.ylim(ylim)
+        
+        plt.xlabel('peak number')
+        
+        plt.ylabel('peak difference [' + unit + ']')
     
     return plt
 
