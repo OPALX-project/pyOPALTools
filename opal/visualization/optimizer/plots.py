@@ -139,6 +139,8 @@ def plot_objectives(ds, **kwargs):
     yscale      (str)   'linear' or 'log',
                         default: linear
     grid        (bool)  show grid, default: False
+    avg         (bool)  take averaged sum over all objectives
+                        default: true
     
     Returns
     -------
@@ -161,6 +163,10 @@ def plot_objectives(ds, **kwargs):
         for obj in objs:
             s += sum(ds.getData(obj, gen=g))
         result.append( s )
+    
+    if kwargs.pop('avg', True):
+        n = float(len(objs))
+        result = np.asarray(result) / n
     
     plt.plot(gens, result)
     plt.xscale(kwargs.get('xscale', 'linear'))
