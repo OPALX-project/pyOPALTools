@@ -157,16 +157,17 @@ def plot_objectives(ds, **kwargs):
     gens = range(1, ds.num_generations + 1)
     objs = ds.objectives
     
+    
+    avg = kwargs.pop('avg', True)
     result = []
     for g in gens:
         s = 0.0
         for obj in objs:
-            s += sum(ds.getData(obj, gen=g))
+            if avg:
+                s += np.mean(ds.getData(obj, gen=g))
+            else:
+                s += sum(ds.getData(obj, gen=g))
         result.append( s )
-    
-    if kwargs.pop('avg', True):
-        n = float(len(objs))
-        result = np.asarray(result) / n
     
     plt.plot(gens, result)
     plt.xscale(kwargs.get('xscale', 'linear'))
