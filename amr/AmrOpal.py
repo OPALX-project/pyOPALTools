@@ -118,6 +118,9 @@ class AmrOpal:
         origin            = kwargs.get("origin", 'native')
         save              = kwargs.get("save", False)
         overlay_particles = kwargs.get("overlay_particles", False)
+        time              = kwargs.get("time", True)
+        gridcmap          = kwargs.get("gridcmap", 'B-W LINEAR_r')
+        grids             = kwargs.get("grids", True)
             
         if not self.ds:
             raise RuntimeError("AmrOpal.slice_plot: No dataset")
@@ -129,12 +132,17 @@ class AmrOpal:
             slc.set_unit(field, unit)
         
         slc.zoom(zoom)
-        slc.annotate_grids()
-        slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
+        
+        if time:
+            slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
+        
         slc.annotate_scale(corner='upper_right', size_bar_args={'color':color})
         
         if overlay_particles:
             slc.annotate_particles(1.0)
+        
+        if grids:
+            slc.annotate_grids(cmap=gridcmap)
         
         if save:
             slc.save()
@@ -168,6 +176,10 @@ class AmrOpal:
         origin  = kwargs.get("origin", 'native')
         method  = kwargs.get("method", 'mip')
         save    = kwargs.get("save", False)
+        overlay_particles = kwargs.get("overlay_particles", False)
+        time    = kwargs.get("time", True)
+        gridcmap= kwargs.get("gridcmap", 'B-W LINEAR_r')
+        grids   = kwargs.get("grids", True)
             
         if not self.ds:
             raise RuntimeError("AmrOpal.slice_plot: No dataset")
@@ -180,8 +192,16 @@ class AmrOpal:
             slc.set_unit(field, unit)
     
         slc.zoom(zoom)
-        slc.annotate_grids()
-        slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
+        
+        if overlay_particles:
+            slc.annotate_particles(1.0)
+        
+        if grids:
+            slc.annotate_grids(cmap=gridcmap)
+        
+        if time:
+            slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
+        
         slc.annotate_scale(corner='upper_right', size_bar_args={'color':color})
         
         if save:
