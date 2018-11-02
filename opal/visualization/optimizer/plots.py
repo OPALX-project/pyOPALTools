@@ -264,9 +264,13 @@ def plot_individual_bounds(ds, n, **kwargs):
         ax = plt.subplot(gs[i])
         axes.append( ax )
         
-        sc = ax.scatter(np.linspace(0, n+1), data[:, i], c=values, marker='o')
+        sc = ax.scatter(np.linspace(1, n+2), data[:, i], c=values, marker='o')
+        ax.set_xlabel('n-th best individual')
+        ax.set_ylabel(dvar)
         
         ax.axhline(y=bnds[dvar][0], linestyle='dashed', color='black')
-        ax.axhline(y=bnds[dvar][1], linestyle='dashed', color='black')
+        ax.axhline(y=bnds[dvar][1], linestyle='dashed', color='black', label='upper and lower bounds')
     
-    plt.colorbar(sc, ax=axes)
+    cbar = plt.colorbar(sc, ax=axes)
+    cbar.set_label('total absolute deviation')
+    #plt.legend()
