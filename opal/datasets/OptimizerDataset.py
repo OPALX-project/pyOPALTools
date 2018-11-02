@@ -67,23 +67,35 @@ class OptimizerDataset(DatasetBase):
         """
         gen = kwargs.get('gen', 1)
         
+        al = kwargs.get('all', True)
+        
         self._loadGeneration(gen)
         
         ind = kwargs.get('ind', -1)
         
-        if not ind == -1:
+        if not ind == -1 and al:
             return self.__parser.getIndividualWithID(ind)
         
         if not var in self.objectives and \
             not var in self.design_variables:
                 raise ValueError("The variable '" + var + "' is not in dataset.")
         
-        if var in self.objectives:
-            idx = self.objectives.index(var)
-            return self.__parser.getAllOutput()[:, idx]
+        if ind == -1:
+            if var in self.objectives:
+                idx = self.objectives.index(var)
+                return self.__parser.getAllOutput()[:, idx]
+            else:
+                idx = self.design_variables.index(var)
+                return self.__parser.getAllInput()[:, idx]
         else:
-            idx = self.design_variables.index(var)
-            return self.__parser.getAllInput()[:, idx]
+            if var in self.objectives:
+                idx = self.objectives.index(var)
+                iidx = self.__parser.getIndexOfID(ind)
+                return self.__parser.getAllOutput()[iidx, idx]
+            else:
+                idx = self.design_variables.index(var)
+                iidx = self.__parser.getIndexOfID(ind)
+                return self.__parser.getAllInput()[iidx, idx]
     
     
     def getLabel(self, var):

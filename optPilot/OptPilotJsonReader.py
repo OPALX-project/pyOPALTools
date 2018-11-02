@@ -311,15 +311,23 @@ class OptPilotJsonReader:
         --------
         None
         """
-        
+        idx = self.getIndexOfID(ID)
+        return self.__table[idx, :]
+    
+    
+    ##
+    def getIndexOfID(self, ID):
+        """
+        Returns
+        -------
+        the index of the individual with certain ID
+        """
         idlist = self.__table[:, self.__nDvars + self.__nObjs].astype(int).tolist()
         
         if ID not in idlist:
             raise RuntimeError("An individual with ID " + str(ID) + " is not present.")
+        return idlist.index(ID)
         
-        idx = idlist.index(ID)
-        return self.__table[idx, :]
-    
     
     ##
     def getDesignVariables(self):

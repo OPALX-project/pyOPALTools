@@ -4,6 +4,8 @@ from opal.datasets.filetype import FileType
 from opal.datasets.DatasetBase import DatasetBase
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.gridspec as gridspec
+import bisect
 
 def plot_parallel_coordinates(ds, gen, **kwargs):
     try:
@@ -177,3 +179,94 @@ def plot_objectives(ds, **kwargs):
     plt.ylabel('sum of objectives (all individuals)')
     
     return plt
+
+
+def plot_individual_bounds(ds, n, **kwargs):
+    """
+    Plot all design variables and their bounds. This
+    will show if a design variable is close to one
+    of its bounds.
+    
+    Parameters
+    ----------
+    ds          (OptimizerDataset)  optimizer output dataset
+    n           (int)               take the first n-th best individuals
+    
+    Returns
+    -------
+    a matplotlib.pyplot handle
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.OPTIMIZER:
+        raise TypeError(ds.filename + ' is not an optimizer dataset.')
+    
+    
+    # 02. Nov. 2018
+    # https://stackoverflow.com/questions/8024571/insert-an-item-into-sorted-list-in-python
+    
+    objs = ds.objectives
+    
+    ids = ds.individuals(1)
+    
+    # restrict
+    if n < 1:
+        n = 1
+    if n > len(ids):
+        n = len(ids)
+    
+    nbests = []
+    values = []
+    for gen in range(1, ds.num_generations + 1):
+        ids = ds.individuals(gen)
+        
+        for ind in ids:
+            s = 0.0
+            for obj in objs:
+                s += ds.getData(var=obj, gen=gen, ind=ind, all=False)
+            # [sum, generation, individual id]
+            
+            if s not in values:
+                bisect.insort(nbests, [gen, ind])
+                bisect.insort(values, s)
+            
+            if len(nbests) > n:
+                del nbests[-1]
+                del values[-1]
+    
+    dvars = ds.design_variables
+    
+    if not dvars:
+        raise IndexError('No design variables found.')
+    
+    nrows = int(np.sqrt(len(dvars)))
+    ncols = int(len(dvars) / nrows + 0.5)
+    
+    gs = gridspec.GridSpec(nrows, ncols)
+    
+    # each row is an individual
+    # each col is a design variable value
+    data = np.zeros([n, len(dvars)])
+    
+    for i, best in enumerate(nbests):
+        # each list index has a dictionary
+        # that contains just 1 entry, i.e. a list of 2 values (gen, ind)
+        gen, ind = best
+        
+        for j, dvar in enumerate(dvars):
+            data[i][j] = ds.getData(var=dvar, gen=gen, ind=ind, all=False)
+    
+    bnds = ds.bounds
+    axes = []
+    for i, dvar in enumerate(dvars):
+        ax = plt.subplot(gs[i])
+        axes.append( ax )
+        
+        sc = ax.scatter(np.linspace(0, n+1), data[:, i], c=values, marker='o')
+        
+        ax.axhline(y=bnds[dvar][0], linestyle='dashed', color='black')
+        ax.axhline(y=bnds[dvar][1], linestyle='dashed', color='black')
+    
+    plt.colorbar(sc, ax=axes)
