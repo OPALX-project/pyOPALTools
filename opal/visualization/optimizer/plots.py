@@ -241,8 +241,8 @@ def plot_individual_bounds(ds, n, **kwargs):
     if not dvars:
         raise IndexError('No design variables found.')
     
-    nrows = int(np.sqrt(len(dvars)))
-    ncols = int(len(dvars) / nrows + 0.5)
+    ncols = kwargs.pop('ncols', 4)
+    nrows = np.ceil(len(dvars) / ncols + 0.5)
     
     gs = gridspec.GridSpec(nrows, ncols)
     
