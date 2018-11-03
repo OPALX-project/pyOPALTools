@@ -260,17 +260,32 @@ def plot_individual_bounds(ds, n, **kwargs):
     
     bnds = ds.bounds
     axes = []
+    
+    xticks = np.linspace(1, n, num=n)
+    xtickstep = kwargs.pop('xtickstep', 1)
     for i, dvar in enumerate(dvars):
         ax = plt.subplot(gs[i])
         axes.append( ax )
         
-        sc = ax.scatter(np.linspace(1, n+2), data[:, i], c=values, marker='o')
+        sc = ax.scatter(xticks, data[:, i], c=values, marker='o')
         ax.set_xlabel('n-th best individual')
         ax.set_ylabel(dvar)
+        ax.set_xticks(np.arange(1, n+1, step=xtickstep))
         
         ax.axhline(y=bnds[dvar][0], linestyle='dashed', color='black')
-        ax.axhline(y=bnds[dvar][1], linestyle='dashed', color='black', label='upper and lower bounds')
+        ax.axhline(y=bnds[dvar][1], linestyle='dashed', color='black',
+                   label='design variable upper and lower bound')
+        
+        uplim = bnds[dvar][1] * 1.01
+        lowlim = bnds[dvar][0] * 0.99
+        if bnds[dvar][0] < 0:
+            lowlim = bnds[dvar][0] * 1.01
+        if bnds[dvar][1] < 0:
+            uplim = bnds[dvar][1] * 0.99
+        ax.set_ylim([lowlim, uplim])
     
     cbar = plt.colorbar(sc, ax=axes)
-    cbar.set_label('total absolute deviation')
-    #plt.legend()
+    cbar.set_label('sum of objective values')
+    # 3. Nov. 2018
+    # https://stackoverflow.com/questions/9834452/how-do-i-make-a-single-legend-for-many-subplots-with-matplotlib
+    plt.figlegend(loc = 'lower center', ncol=ncols, labelspacing=0. )
