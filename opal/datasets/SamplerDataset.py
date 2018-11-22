@@ -52,13 +52,10 @@ class SamplerDataset(DatasetBase):
         """
         ind = kwargs.get('ind', 0)
         
-        if not ind == -1:
-            return self.__parser.getIndividualWithID(ind)
-        
         if not var in self.__parser.design_variables:
             raise ValueError("The variable '" + var + "' is not in dataset.")
         
-        return self.__parser.getIndividual(ind)
+        return self.__parser.getIndividual(ind)[var]
     
     
     def getLabel(self, var):

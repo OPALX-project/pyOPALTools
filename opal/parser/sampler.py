@@ -10,7 +10,7 @@ class SamplerParser:
     
     Notes
     -----
-    Expects following JSON format:
+    Supports following JSON formats:
     {
         "name": "sampler",
         "dvar-bounds": {
@@ -35,14 +35,47 @@ class SamplerParser:
         ]
     }
     
+    {
+        "samples": {
+            "0": {
+                "dvar": {
+                    "MX": "16",
+                    "nstep": "10"
+                }
+            },
+            "1": {
+                "dvar": {
+                    "MX": "19",
+                    "nstep": "11"
+                }
+            },
+            "2": {
+                "dvar": {
+                    "MX": "22",
+                    "nstep": "12"
+                }
+            }
+        },
+        "name": "sampler",
+        "OPAL version": "2.0.0",
+        "git revision": "1849b7e5130657e8be50d524de0f6c50134f330a",
+        "dvar-bounds": {
+            "MX": "[ 16, 32 ]",
+            "nstep": "[ 10, 40 ]"
+        }
+    }
+    
+    
     Members
     -------
     __id (= 'sampler')  (str)   used to identify the file to be
                                 a SAMPLE output
     __tag (= 'name')    (str)   id tag for file identification
-    __keys              (list)  all allowed JSON keys
-                                (check property SamplerParser.keys)
-    __parsed            (dict)  loaded file
+    __nSamples          (int)   number of samples
+    __dvars             ([])    the design variables of each
+                                individual
+    __dvar_bounds       ({})    all design variable bounds
+    __objs              ([])    the objectives of each individual
     """
     
     def __init__(self):
@@ -50,12 +83,31 @@ class SamplerParser:
         self.__id = 'sampler'
         self.__tag = 'name'
         
-        self.__keys = [
-            'dvar-bounds',
-            'samples'
-        ]
+        self.__nSamples = 0
+        self.__dvars = []
+        self.__dvar_bounds = {}
+        self.__objs  = []
+    
+    def __parse_version_2_0_0(self, data):
+        samples = data['samples']
+        self.__nSamples = len(samples)
         
-        self.__parsed = None
+        self.__dvar_bounds = data['dvar-bounds']
+        
+        for ind in range(0, self.__nSamples):
+            # make sure it's sorted
+            real_id = int(samples[ind]['ID'])
+            self.__dvars.insert(real_id, samples[ind]['dvar'])
+    
+    
+    def __parse_version_2_0_1(self, data):
+        samples = data['samples']
+        self.__nSamples = len(samples)
+        
+        self.__dvar_bounds = data['dvar-bounds']
+        
+        for ind in range(0, self.__nSamples):
+            self.__dvars.append(samples[str(ind)]['dvar'])
     
     
     def parse(self, filename):
@@ -74,38 +126,21 @@ class SamplerParser:
             raise IOError("File '" + filename + "' doesn't exist.")
         
         try:
-            self.__parsed = json.load( open(filename) )
+            parsed = json.load( open(filename) )
             
-            if not self.__tag in self.__parsed.keys():
+            if not self.__tag in parsed.keys():
                 raise # call IOError at end
             
-            if not self.__parsed[self.__tag] == self.__id:
+            if not parsed[self.__tag] == self.__id:
                 raise # call IOError at end
             
-            for key in self.__keys:
-                if not key in self.__parsed.keys():
-                    raise # call IOError at end
+            if 'OPAL version' in parsed.keys():
+                self.__parse_version_2_0_1(parsed)
+            else:
+                self.__parse_version_2_0_0(parsed)
+            
         except:
             raise IOError("File '" + filename + "' isn't a proper Sample JSON file.")
-    
-    
-    def getValue(self, key):
-        """
-        Obtain either bounds or all samples
-        (i.e. all individual input values).
-        
-        Parameter
-        --------
-        key     (str)   of SAMPLE JSON
-        
-        
-        Returns
-        -------
-        data
-        """
-        if not key in self.__parsed.keys():
-            raise KeyError("Key '" + key + "' not in SAMPLE JSON file.")
-        return self.__parsed[key]
     
     
     def getIndividual(self, ind):
@@ -128,34 +163,12 @@ class SamplerParser:
         if ind < 0:
             raise ValueError('No individual with ID < 0.')
         
-        samples = self.__parsed['samples']
-        
-        n = len(samples) - 1
+        n = self.__nSamples - 1
         
         if ind > n:
             raise ValueError('No individual with ID > ' + str(n) + '.')
         
-        if int(samples[ind]['ID']) == ind:
-            # fast access (if ordered)
-            return samples[ind]['dvar']
-        else:
-            # slow access
-            for i, sample in enumerate(samples):
-                if int(sample['ID']) == ind:
-                    return sample['dvar']
-            raise ValueError('Individual with ID ' + str(ind) + ' not found.')
-    
-    
-    @property
-    def keys(self):
-        """
-        Obtain all available keys.
-        
-        Returns
-        -------
-        list of strings
-        """
-        return self.__keys
+        return self.__dvars[ind]
     
     
     @property
@@ -179,4 +192,4 @@ class SamplerParser:
         -------
         a dictionary of design variable names (key) and their bounds
         """
-        return self.__parsed['dvar-bounds']
+        return self.__dvar_bounds
