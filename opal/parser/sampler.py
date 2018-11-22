@@ -87,6 +87,11 @@ class SamplerParser:
         self.__dvars = []
         self.__dvar_bounds = {}
         self.__objs  = []
+        
+        self.__version_tag = 'OPAL version'
+        self.__version_support = {
+            '2.1.0': self.__parse_version_2_1_0
+        }
     
     def __parse_version_2_0_0(self, data):
         samples = data['samples']
@@ -100,7 +105,7 @@ class SamplerParser:
             self.__dvars.insert(real_id, samples[ind]['dvar'])
     
     
-    def __parse_version_2_0_1(self, data):
+    def __parse_version_2_1_0(self, data):
         samples = data['samples']
         self.__nSamples = len(samples)
         
@@ -129,18 +134,23 @@ class SamplerParser:
             parsed = json.load( open(filename) )
             
             if not self.__tag in parsed.keys():
-                raise # call IOError at end
+                raise IOError("File '" + filename + "' isn't a proper Sample JSON file.")
             
             if not parsed[self.__tag] == self.__id:
-                raise # call IOError at end
+                raise IOError("File '" + filename + "' isn't a proper Sample JSON file.")
             
-            if 'OPAL version' in parsed.keys():
-                self.__parse_version_2_0_1(parsed)
+            if self.__version_tag in parsed.keys():
+                version = parsed[self.__version_tag]
+                
+                if not version in self.__version_support.keys():
+                    raise IOError("Version " + version + " not supported.")
+                
+                self.__version_support[version](parsed)
             else:
                 self.__parse_version_2_0_0(parsed)
             
-        except:
-            raise IOError("File '" + filename + "' isn't a proper Sample JSON file.")
+        except Exception as e:
+            print ( e )
     
     
     def getIndividual(self, ind):
