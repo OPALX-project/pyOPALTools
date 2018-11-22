@@ -150,7 +150,7 @@ class SamplerParser:
                 self.__parse_version_2_0_0(parsed)
             
         except Exception as e:
-            print ( e )
+            raise e
     
     
     def getIndividual(self, ind):

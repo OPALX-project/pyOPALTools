@@ -2,7 +2,7 @@
 # Date:     May 2018
 
 import os
-from optPilot.OptPilotJsonReader import OptPilotJsonReader
+from opal.parser.OptimizerParser import OptimizerParser
 from opal.datasets.DatasetBase import *
 from string import digits
 
@@ -19,7 +19,7 @@ class OptimizerDataset(DatasetBase):
         
         Members
         -------
-        __parser            (OptPilotJsonReader)    actual data holder
+        __parser            (OptimizerParser)       actual data holder
         __postfix           (str)                   substring of generation
                                                     filenames that is
                                                     identical to all files
@@ -31,7 +31,7 @@ class OptimizerDataset(DatasetBase):
         if not os.path.exists(full_path):
             raise ValueError("File '" + full_path + "' does not exist.")
         
-        self.__parser = OptPilotJsonReader(directory)
+        self.__parser = OptimizerParser(directory)
         
         # 4. Mai 2018
         # https://stackoverflow.com/questions/37915189/removing-leading-digits-from-string-using-python
