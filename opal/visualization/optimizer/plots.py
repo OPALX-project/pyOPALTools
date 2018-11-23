@@ -184,7 +184,7 @@ def plot_objectives(ds, **kwargs):
 def plot_objective_evolution(ds, obj='', op=min, **kwargs):
     """
     Plot the improvement of the objectives with
-    generation. The operator 'op' is executed on all
+    generation. The operator 'op' is executed between
     individuals per population
     
     Parameters
