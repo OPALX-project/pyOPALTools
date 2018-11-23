@@ -60,6 +60,8 @@ class OptimizerDataset(DatasetBase):
         ---------
         ind     (int)   individual identity number
         gen     (int)   generation, default: 1
+        all     (bool)  get all info of an individual
+                        (i.e. objectives, design variables)
         
         Returns
         -------
