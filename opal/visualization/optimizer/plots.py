@@ -181,6 +181,145 @@ def plot_objectives(ds, **kwargs):
     return plt
 
 
+def plot_objective_evolution(ds, obj='', op=min, **kwargs):
+    """
+    Plot the improvement of the objectives with
+    generation. The operator 'op' is executed on all
+    individuals per population
+    
+    Parameters
+    ----------
+    ds          (OptimizerDataset)  optimizer output dataset
+    obj         (string)            objective, if not specified
+                                    all are plotted
+    op          (function)          operator, e.g. max, min, etc
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.OPTIMIZER:
+        raise TypeError(ds.filename + ' is not an optimizer dataset.')
+    
+    objs = ds.objectives
+    ngen = ds.num_generations
+    
+    objs_show = objs
+    
+    if obj:
+        if obj in objs_show:
+            objs_show = [obj]
+        else:
+            raise ValueError(ds.filename + ' does only has following objectives: '
+                             + str(objs))
+    
+    result = np.zeros((len(objs_show), ngen))
+    
+    for j in range(0, ngen):
+        ids = ds.individuals(j+1)
+        
+            # val, id
+        cur = [0, -1]
+        for idx in ids:
+            s = 0
+            for obj in objs:
+                s += ds.getData(var=obj, gen=j+1, ind=idx, all=False)
+            
+            if cur[1] < 0:
+                cur = [s, idx]
+            else:
+                cur = op([s, idx], cur)
+        
+        for i, obj in enumerate(objs_show):
+            result[i, j] = ds.getData(obj, gen=j+1, ind=cur[1], all=False)
+    
+    for i, obj in enumerate(objs_show):
+        plt.plot(range(1, ngen + 1), result[i, :], label=obj)
+    
+    plt.xlabel('generation')
+    
+    plt.xscale(kwargs.get('xscale', 'linear'))
+    plt.yscale(kwargs.get('yscale', 'linear'))
+    plt.grid(kwargs.get('grid', True), which='both')
+    
+    if len(objs_show) > 1:
+        plt.ylabel(op.__name__)
+        plt.legend()
+    else:
+        plt.ylabel(obj)
+    
+    return plt
+
+
+def plot_dvar_evolution(ds, dvar='', op=min, **kwargs):
+    """
+    Plot the evolution of the design variable values
+    dependent on the improvement of the objectives with
+    generation. The operator 'op' is executed per objective
+    per population.
+    
+    Parameters
+    ----------
+    ds          (OptimizerDataset)  optimizer output dataset
+    dvar        (string)            design variable, if not specified
+                                    all are plotted
+    op          (function)          operator, e.g. max, min, etc
+    """
+    if not isinstance(ds, DatasetBase):
+        raise TypeError("Dataset '" + ds.filename +
+                        "' not derived from 'DatasetBase'.")
+    
+    if not ds.filetype == FileType.OPTIMIZER:
+        raise TypeError(ds.filename + ' is not an optimizer dataset.')
+    
+    objs = ds.objectives
+    ngen = ds.num_generations
+    dvars = ds.design_variables
+    
+    if dvar:
+        if dvar in dvars:
+            dvars = [dvar]
+        else:
+            raise ValueError(ds.filename + ' does only has following design variables: '
+                             + str(dvars))
+    
+    result = np.zeros((len(dvars), ngen))
+    
+    for j in range(0, ngen):
+        ids = ds.individuals(j+1)
+        
+            # val, id
+        cur = [0, -1]
+        for idx in ids:
+            s = 0
+            for obj in objs:
+                s += ds.getData(var=obj, gen=j+1, ind=idx, all=False)
+            
+            if cur[1] < 0:
+                cur = [s, idx]
+            else:
+                cur = op([s, idx], cur)
+        
+        for i, dvar in enumerate(dvars):
+            result[i, j] = ds.getData(dvar, gen=j+1, ind=cur[1], all=False)
+    
+    for i, dvar in enumerate(dvars):
+        plt.plot(range(1, ngen + 1), result[i, :], label=dvar)
+    
+    plt.xlabel('generation')
+    plt.xscale(kwargs.get('xscale', 'linear'))
+    plt.yscale(kwargs.get('yscale', 'linear'))
+    plt.grid(kwargs.get('grid', True), which='both')
+    
+    if len(dvars) > 1:
+        plt.ylabel(op.__name__)
+        plt.legend()
+    else:
+        plt.ylabel(dvar)
+    
+    return plt
+
+
 def plot_individual_bounds(ds, n, **kwargs):
     """
     Plot all design variables and their bounds. This
