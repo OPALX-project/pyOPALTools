@@ -255,8 +255,8 @@ def plot_dvar_evolution(ds, dvar='', op=min, **kwargs):
     """
     Plot the evolution of the design variable values
     dependent on the improvement of the objectives with
-    generation. The operator 'op' is executed per objective
-    per population.
+    generation. The operator 'op' is executed on two
+    objective value sums of two individuals.
     
     Parameters
     ----------
