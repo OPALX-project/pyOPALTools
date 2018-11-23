@@ -181,7 +181,7 @@ def plot_objectives(ds, **kwargs):
     return plt
 
 
-def plot_objective_evolution(ds, obj='', op=min, **kwargs):
+def plot_objective_evolution(ds, objs=[], op=min, **kwargs):
     """
     Plot the improvement of the objectives with
     generation. The operator 'op' is executed between
@@ -190,9 +190,16 @@ def plot_objective_evolution(ds, obj='', op=min, **kwargs):
     Parameters
     ----------
     ds          (OptimizerDataset)  optimizer output dataset
-    obj         (string)            objective, if not specified
+    objs        ([str])             list of objectives, if not specified
                                     all are plotted
     op          (function)          operator, e.g. max, min, etc
+    
+    Optionals
+    ---------
+    xscale      (str)               'linear', 'log'
+    yscale      (str)               'linear', 'log'
+    grid        (bool)
+    sum         (bool)              show sum of objectives
     """
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
@@ -201,19 +208,18 @@ def plot_objective_evolution(ds, obj='', op=min, **kwargs):
     if not ds.filetype == FileType.OPTIMIZER:
         raise TypeError(ds.filename + ' is not an optimizer dataset.')
     
-    objs = ds.objectives
+    objectives = ds.objectives
     ngen = ds.num_generations
     
-    objs_show = objs
+    if objs:
+        for obj in objs:
+            if not obj in objectives:
+                raise ValueError(ds.filename + ' does only has following objectives: '
+                                 + str(objectives))
+    else:
+        objs = objectives
     
-    if obj:
-        if obj in objs_show:
-            objs_show = [obj]
-        else:
-            raise ValueError(ds.filename + ' does only has following objectives: '
-                             + str(objs))
-    
-    result = np.zeros((len(objs_show), ngen))
+    result = np.zeros((len(objs), ngen))
     
     for j in range(0, ngen):
         ids = ds.individuals(j+1)
@@ -222,7 +228,7 @@ def plot_objective_evolution(ds, obj='', op=min, **kwargs):
         cur = [0, -1]
         for idx in ids:
             s = 0
-            for obj in objs:
+            for obj in objectives:
                 s += ds.getData(var=obj, gen=j+1, ind=idx, all=False)
             
             if cur[1] < 0:
@@ -230,11 +236,19 @@ def plot_objective_evolution(ds, obj='', op=min, **kwargs):
             else:
                 cur = op([s, idx], cur)
         
-        for i, obj in enumerate(objs_show):
+        for i, obj in enumerate(objs):
             result[i, j] = ds.getData(obj, gen=j+1, ind=cur[1], all=False)
     
-    for i, obj in enumerate(objs_show):
+    for i, obj in enumerate(objs):
         plt.plot(range(1, ngen + 1), result[i, :], label=obj)
+    
+    if kwargs.pop('total', False):
+        total = result.sum(axis=0)
+        plt.plot(range(1, ngen + 1), total, label='objective sum')
+    
+    if kwargs.pop('mean', False):
+        mean = result.mean(axis=0)
+        plt.plot(range(1, ngen + 1), mean, label='objective mean')
     
     plt.xlabel('generation')
     
@@ -242,7 +256,7 @@ def plot_objective_evolution(ds, obj='', op=min, **kwargs):
     plt.yscale(kwargs.get('yscale', 'linear'))
     plt.grid(kwargs.get('grid', True), which='both')
     
-    if len(objs_show) > 1:
+    if len(objs) > 1:
         plt.ylabel(op.__name__)
         plt.legend()
     else:
@@ -251,7 +265,7 @@ def plot_objective_evolution(ds, obj='', op=min, **kwargs):
     return plt
 
 
-def plot_dvar_evolution(ds, dvar='', op=min, **kwargs):
+def plot_dvar_evolution(ds, dvars=[], op=min, **kwargs):
     """
     Plot the evolution of the design variable values
     dependent on the improvement of the objectives with
@@ -261,9 +275,15 @@ def plot_dvar_evolution(ds, dvar='', op=min, **kwargs):
     Parameters
     ----------
     ds          (OptimizerDataset)  optimizer output dataset
-    dvar        (string)            design variable, if not specified
+    dvars       ([str])             list of design variables, if not specified
                                     all are plotted
     op          (function)          operator, e.g. max, min, etc
+    
+    Optionals
+    ---------
+    xscale      (str)               'linear', 'log'
+    yscale      (str)               'linear', 'log'
+    grid        (bool)
     """
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
@@ -274,14 +294,15 @@ def plot_dvar_evolution(ds, dvar='', op=min, **kwargs):
     
     objs = ds.objectives
     ngen = ds.num_generations
-    dvars = ds.design_variables
+    dvs  = ds.design_variables
     
-    if dvar:
-        if dvar in dvars:
-            dvars = [dvar]
-        else:
-            raise ValueError(ds.filename + ' does only has following design variables: '
-                             + str(dvars))
+    if dvars:
+        for dvar in dvars:
+            if not dvar in dvs:
+                raise ValueError(ds.filename + ' does only has following design variables: '
+                                 + str(dvs))
+    else:
+         dvars = dvs
     
     result = np.zeros((len(dvars), ngen))
     
