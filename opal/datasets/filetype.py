@@ -65,6 +65,8 @@ class FileType(IntEnum):
         elif 'time' in fname.lower() or 'timing' in fname.lower():
             # hopeful test for timing files
             return cls.TIMING
+        elif '.o' in fname:
+            return cls.OUTPUT
         elif '-trackOrbit.dat' in fname:
             return cls.TRACK_ORBIT
         else:
