@@ -618,8 +618,11 @@ class OptimizerParser:
         
         population = data["population"]
         
-        nDvars = len(population['0']['dvar'])
-        nObjs  = len(population['0']['obj'])
+        # get first individual id
+        first_ind = next(iter(population))
+        
+        nDvars = len(population[first_ind]['dvar'])
+        nObjs  = len(population[first_ind]['obj'])
         nInds  = len(population)
         
         self.__dvar_values = np.zeros((nInds, nDvars))
