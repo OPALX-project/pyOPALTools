@@ -529,26 +529,27 @@ class OptPilotJsonReader:
         if "constraints" not in data:
             raise KeyError("Error in JSON format: " \
                            "Constraints are not present.")
-        
-        for idx, name in enumerate(data["solutions"][0].keys()):
+            
+
+        population = data["population"]
+        first_indv_key = list(population.keys())[0]
+        for idx, name in enumerate(data["population"][first_indv_key].keys()):
             name = name.replace(" ", "")
             #self.__nameToColumnMap[name] = idx
             if name == 'dvar':
-                for jdx, dvars in enumerate(sorted(data["solutions"][0][name].keys())):
+                for jdx, dvars in enumerate(sorted(data["population"][first_indv_key][name].keys())):
                     self.__dvarNameToColumnMap[dvars] = jdx
             elif name == 'obj':
-                for jdx, objs in enumerate(sorted(data["solutions"][0][name].keys())):
+                for jdx, objs in enumerate(sorted(data["population"][first_indv_key][name].keys())):
                     self.__objNameToColumnMap[objs] = jdx
-            elif name == 'ID':
-                pass
             else:
-                raise RuntimeError("Not expected json format.")
-        
+                raise KeyError("Error in JSON format: " \
+                           "Unexpected keys in population.")
+
         self.__nDvars       = len(self.__dvarNameToColumnMap)
         self.__nObjs        = len(self.__objNameToColumnMap)
         self.__nColumns     = self.__nDvars + self.__nObjs + 1 # + ID
-        
-        
+
     ##
     def __readJSONData(self, filename):
         """ Read in data
@@ -574,25 +575,30 @@ class OptPilotJsonReader:
         
         self.__dvarBounds = data["dvar-bounds"]
         self.__constraints = data["constraints"]
-        solutions = data["solutions"]
-        self.__nIndividuals = len(data["solutions"])
+        population = data["population"]
+        self.__nIndividuals = len(data["population"])
         
         table     = np.zeros((self.__nIndividuals, self.__nColumns))
-        
-        for i, solution in enumerate(solutions):
-            for j, key in enumerate(solution):
+
+        for i, pop in enumerate(population):
+            for j, key in enumerate(population[str(pop)]):
+
                 if key == 'dvar':
                     k = 0
-                    for dvar, value in sorted(solution[key].items()):
+                    for dvar, value in sorted(population[str(pop)][key].items()):
                         table[i, k] = float(value)
                         k += 1
+
                 elif key == 'obj':
                     k = self.__nDvars
-                    for obj, value in sorted(solution[key].items()):
+                    for obj, value in sorted(population[str(pop)][key].items()):
+                        #print(obj,value)
                         table[i, k] = float(value)
                         k += 1
-                elif key == 'ID':
-                    k = self.__nDvars + self.__nObjs
-                    table[i, k] = int(solution[key])
-        
+                else:
+                    pass
+
+            k = self.__nDvars + self.__nObjs
+            table[i, k] = int(pop)
+
         return table
