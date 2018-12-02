@@ -3,7 +3,7 @@ import argparse, os, sys, glob
 import re
 
 
-import OptPilotJsonReader as jsonreader
+from opal.parser.OptimizerParser import OptimizerParser as jsonreader
 
 try:
     import plotly.plotly as py
@@ -52,7 +52,7 @@ def plot_parcoords(path, filename_postfix, generation, filename):
     infile = os.path.join(path, str(generation) + '_' + filename_postfix)
         
     dirname = os.path.dirname(infile)
-    optjson = jsonreader.OptPilotJsonReader(dirname + '/')
+    optjson = jsonreader(dirname + '/')
         
     # get the generation from the filename
     basename = os.path.basename(infile)    

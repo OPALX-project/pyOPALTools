@@ -1,15 +1,16 @@
-from pyOPALTools.optPilot import OptPilotJsonReader as optreader
+from opal.parser.OptimizerParser import OptimizerParser as optreader
 import sys
 import numpy as np
 
 from scipy.interpolate import LinearNDInterpolator
 
-from pyOPALTools.optPilot import Interpolator as inpl
+from optPilot import Interpolator as inpl
 
 try:
     
     # 1. Find all .json files of a directory, e.g. "./"
-    optjson = optreader.OptPilotJsonReader("./data/")
+    optjson = optreader("./data/")
+    optjson.readGeneration(1)
     
     length = len( optjson.getDesignVariables() )
     coords = np.empty( (0, length), float)

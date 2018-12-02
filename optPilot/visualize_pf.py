@@ -15,7 +15,7 @@ from collections import OrderedDict
 
 from optPilot.Annotate import AnnoteFinder
 
-import OptPilotJsonReader as jsonreader
+from opal.parser.OptimizerParser import OptimizerParser as jsonreader
 
 
 # Data parsing
@@ -24,17 +24,9 @@ import OptPilotJsonReader as jsonreader
 # name of the columns in the solution data
 nameToColumnMap = {}
 
-def buildNameToColumnMapJSON(filename):
-    data = json.load(open(filename), object_pairs_hook=OrderedDict)
-
-    for idx, name in enumerate(data["solutions"][0].keys()):
-        # name improvement
-        name = improveName(name)
-        nameToColumnMap[name] = idx
-
 def readJSONData(filename):
     dirname = os.path.dirname(filename)
-    optjson = jsonreader.OptPilotJsonReader(dirname + '/')
+    optjson = jsonreader(dirname + '/')
     
     # get the generation from the filename
     basename = os.path.basename(filename)    

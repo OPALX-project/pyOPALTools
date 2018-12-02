@@ -1,4 +1,4 @@
-from pyOPALTools.optPilot import OptPilotJsonReader as optreader
+from opal.parser.OptimizerParser import OptimizerParser as optreader
 
 import sys,os
 
@@ -6,10 +6,10 @@ import sys,os
 try:
     
     # 1. Find all .json files of a directory, e.g. "./"
-    optjson = optreader.OptPilotJsonReader("./data/")
+    optjson = optreader("./data/")
     print ( "Read generation ", sys.argv[1])
     # 2. Read in a generation file, e.g. 450  
-    optjson.readGeneration(sys.argv[1])
+    optjson.readGeneration(int(sys.argv[1]))
     
     # 3. Obtain an individual
     print ( optjson.getDesignVariables() )

@@ -11,7 +11,7 @@ else:
   # Python 3
   import pickle as pick
 
-import optPilot.OptPilotJsonReader as jsonreader
+from opal.parser.OptimizerParser import OptimizerParser
 #
 #from utilities import SDDSParser
 
@@ -153,7 +153,7 @@ class mldb:
 
     def build(self,filename_postfix, path):
         self.trainingSet = []
-        optjson = jsonreader.OptPilotJsonReader(path + '/')
+        optjson = OptimizerParser(path + '/')
         
         numGenerations = optjson.getNumOfGenerations()
 

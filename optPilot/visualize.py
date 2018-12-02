@@ -14,7 +14,7 @@ from collections import OrderedDict
 
 from optPilot.Annotate import AnnoteFinder
 
-import pyOPALTools.optPilot.OptPilotJsonReader as jsonreader
+import opal.parser.OptimizerParser import OptimizerParser as jsonreader
 
 # Data parsing
 ##############################################################################
@@ -31,17 +31,9 @@ plotAll = False
     
 data = { } 
 
-def buildNameToColumnMapJSON(filename):
-    data = json.load(open(filename), object_pairs_hook=OrderedDict)
-
-    for idx, name in enumerate(data["solutions"][0].keys()):
-        # name improvement
-        name = improveName(name)
-        nameToColumnMap[name] = idx
-
 def readJSONData(filename):
     dirname = os.path.dirname(filename)
-    optjson = jsonreader.OptPilotJsonReader(dirname + '/')
+    optjson = jsonreader(dirname + '/')
     
     # get the generation from the filename
     basename = os.path.basename(filename)    
@@ -117,8 +109,6 @@ def getXY(generation,path,filename_postfix,selected_ids):
     fn = path + '/' + str(generation) + '_' + filename_postfix
 
     data[str(generation)] = readJSONData(fn)
-
-#    buildNameToColumnMapJSON(fn)
 
     (xlim, ylim) = computeLimits(data, selected_ids)
 
