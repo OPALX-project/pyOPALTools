@@ -41,18 +41,30 @@ class SamplerParser:
                 "dvar": {
                     "MX": "16",
                     "nstep": "10"
+                },
+                "obj": {
+                    "o1": 22.2,
+                    "o2": 22.1
                 }
             },
             "1": {
                 "dvar": {
                     "MX": "19",
                     "nstep": "11"
+                },
+                "obj": {
+                    "o1": 21.2,
+                    "o2": 23.1
                 }
             },
             "2": {
                 "dvar": {
                     "MX": "22",
                     "nstep": "12"
+                },
+                "obj": {
+                    "o1": 12.2,
+                    "o2": 32.1
                 }
             }
         },
@@ -113,6 +125,9 @@ class SamplerParser:
         
         for ind in range(0, self.__nSamples):
             self.__dvars.append(samples[str(ind)]['dvar'])
+
+            if samples[str(ind)]['obj']:
+                self.__objs.append(samples[str(ind)]['obj'])
     
     
     def parse(self, filename):
@@ -181,6 +196,34 @@ class SamplerParser:
         return self.__dvars[ind]
     
     
+    def getObjectives(self, ind):
+        """
+        Obtain output values of an individual
+
+        Parameter
+        ---------
+        ind     (int)   individual number
+
+        Returns
+        -------
+        a dictionary with design variable names (keys)
+        and their input value.
+        """
+
+        if not isinstance(ind, int):
+            raise TypeError("Input '" + ind + "' not of type 'int'.")
+
+        if ind < 0:
+            raise ValueError('No individual with ID < 0.')
+
+        n = self.__nSamples - 1
+
+        if ind > n:
+            raise ValueError('No individual with ID > ' + str(n) + '.')
+
+        return self.__objs[ind]
+
+
     @property
     def design_variables(self):
         """
@@ -203,3 +246,17 @@ class SamplerParser:
         a dictionary of design variable names (key) and their bounds
         """
         return self.__dvar_bounds
+
+
+    @property
+    def objectives(self):
+        """
+        Obtain names of objectives.
+
+        Returns
+        -------
+        a list of strings
+        """
+        if self.__objs:
+            return list( self.__objs[0].keys() )
+        return []
