@@ -83,7 +83,8 @@ class SamplerParser:
     __id (= 'sampler')  (str)   used to identify the file to be
                                 a SAMPLE output
     __tag (= 'name')    (str)   id tag for file identification
-    __nSamples          (int)   number of samples
+    __begin             (int)   start individual id
+    __end               (int)   end individual id
     __dvars             ([])    the design variables of each
                                 individual
     __dvar_bounds       ({})    all design variable bounds
@@ -95,7 +96,6 @@ class SamplerParser:
         self.__id = 'sampler'
         self.__tag = 'name'
         
-        self.__nSamples = 0
         self.__dvars = []
         self.__dvar_bounds = {}
         self.__objs  = []
@@ -107,23 +107,32 @@ class SamplerParser:
     
     def __parse_version_2_0_0(self, data):
         samples = data['samples']
-        self.__nSamples = len(samples)
+        nSamples = len(samples)
         
         self.__dvar_bounds = data['dvar-bounds']
         
-        for ind in range(0, self.__nSamples):
+        self.__begin = 0
+        self.__end   = 0
+        
+        for ind in range(0, nSamples):
             # make sure it's sorted
             real_id = int(samples[ind]['ID'])
+            
+            self.__begin = min(real_id, self.__begin)
+            self.__end   = max(real_id, self.__end)
+            
             self.__dvars.insert(real_id, samples[ind]['dvar'])
     
     
     def __parse_version_2_1_0(self, data):
         samples = data['samples']
-        self.__nSamples = len(samples)
         
         self.__dvar_bounds = data['dvar-bounds']
         
-        for ind in range(0, self.__nSamples):
+        self.__begin = int(min(samples.keys()))
+        self.__end   = int(max(samples.keys()))
+        
+        for ind in range(self.__begin, self.__end+1):
             self.__dvars.append(samples[str(ind)]['dvar'])
             
             if 'obj' in samples[str(ind)].keys() and samples[str(ind)]['obj']:
@@ -185,13 +194,8 @@ class SamplerParser:
         if not isinstance(ind, int):
             raise TypeError("Input '" + ind + "' not of type 'int'.")
         
-        if ind < 0:
-            raise ValueError('No individual with ID < 0.')
-        
-        n = self.__nSamples - 1
-        
-        if ind > n:
-            raise ValueError('No individual with ID > ' + str(n) + '.')
+        if ind < self.__begin or ind > self.__end:
+            raise ValueError('No individual with ID > ' + str(ind) + '.')
         
         return self.__dvars[ind]
     
@@ -213,13 +217,8 @@ class SamplerParser:
         if not isinstance(ind, int):
             raise TypeError("Input '" + ind + "' not of type 'int'.")
 
-        if ind < 0:
-            raise ValueError('No individual with ID < 0.')
-
-        n = self.__nSamples - 1
-
-        if ind > n:
-            raise ValueError('No individual with ID > ' + str(n) + '.')
+        if ind < self.__begin or ind > self.__end:
+            raise ValueError('No individual with ID > ' + str(ind) + '.')
 
         return self.__objs[ind]
 
@@ -263,4 +262,4 @@ class SamplerParser:
 
     @property
     def num_samples(self):
-        return self.__nSamples
+        return self.__end - self.__begin + 1
