@@ -129,8 +129,8 @@ class SamplerParser:
         
         self.__dvar_bounds = data['dvar-bounds']
         
-        self.__begin = int(min(samples.keys()))
-        self.__end   = int(max(samples.keys()))
+        self.__begin = min(list(map(int, samples.keys())))
+        self.__end   = max(list(map(int, samples.keys())))
         
         for ind in range(self.__begin, self.__end+1):
             self.__dvars.append(samples[str(ind)]['dvar'])
