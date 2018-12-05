@@ -125,8 +125,8 @@ class SamplerParser:
         
         for ind in range(0, self.__nSamples):
             self.__dvars.append(samples[str(ind)]['dvar'])
-
-            if samples[str(ind)]['obj']:
+            
+            if 'obj' in samples[str(ind)].keys() and samples[str(ind)]['obj']:
                 self.__objs.append(samples[str(ind)]['obj'])
     
     
@@ -260,3 +260,7 @@ class SamplerParser:
         if self.__objs:
             return list( self.__objs[0].keys() )
         return []
+
+    @property
+    def num_samples(self):
+        return self.__nSamples
