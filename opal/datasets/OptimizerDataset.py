@@ -24,6 +24,7 @@ class OptimizerDataset(DatasetBase):
                                                     filenames that is
                                                     identical to all files
         _loaded_generation  (int)                   currently loaded generation
+        _loaded_optimizer   (int)                   currently loaded optimizer
         _loadedGeneration   (function)              load a generation file
         """
         
@@ -38,6 +39,7 @@ class OptimizerDataset(DatasetBase):
         self.__postfix = fname.lstrip(digits)
         
         self._loaded_generation = -1
+        self._loaded_optimizer = -1
         
         self._loadGeneration( int( str.split(fname, "_", 1)[0] ) )
         
@@ -60,6 +62,7 @@ class OptimizerDataset(DatasetBase):
         ---------
         ind     (int)   individual identity number
         gen     (int)   generation, default: 1
+        opt     (int)   optimizer, default: 0
         all     (bool)  get all info of an individual
                         (i.e. objectives, design variables)
         
@@ -68,10 +71,11 @@ class OptimizerDataset(DatasetBase):
         an array of the data
         """
         gen = kwargs.get('gen', 1)
+        opt = kwargs.get('opt', 0)
         
         al = kwargs.get('all', True)
         
-        self._loadGeneration(gen)
+        self._loadGeneration(gen, opt)
         
         ind = kwargs.get('ind', -1)
         
@@ -203,7 +207,7 @@ class OptimizerDataset(DatasetBase):
         return self.__parser.getBounds()
     
     
-    def individuals(self, gen):
+    def individuals(self, gen, opt=0):
         """
         Obtain the ID of every individual of the
         currently loaded generation file
@@ -211,24 +215,28 @@ class OptimizerDataset(DatasetBase):
         Parameters
         ----------
         gen         (int)   generation
+        opt         (int)   optimizer (default: 0)
         """
-        self._loadGeneration(gen)
+        self._loadGeneration(gen, opt)
         
         return self.__parser.getIDs()
     
     
-    def _loadGeneration(self, gen):
+    def _loadGeneration(self, gen, opt=0):
         """
         Load data of generation into memory.
         
         Parameters
         ----------
         gen         (int)   generation
+        opt         (int)   optimizer (default: 0)
         
         Returns
         -------
         None
         """
-        if not gen == self._loaded_generation:
-            self.__parser.readGeneration(gen)
+        if not gen == self._loaded_generation or \
+            not opt == self._loaded_optimizer:
+            self.__parser.readGeneration(gen, opt)
             self._loaded_generation = gen
+            self._loaded_optimizer = opt
