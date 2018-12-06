@@ -329,7 +329,8 @@ class OptimizerParser:
         else:
             return
         
-        filename = self.__directory + str(gen) + self.__basename + str(opt) + '.json'
+        filename = os.path.join(self.__directory,
+                                str(gen) + self.__basename + str(opt) + '.json')
         
         if not os.path.isfile(filename):
             raise IOError("File '" + filename + "' does not exist.")
