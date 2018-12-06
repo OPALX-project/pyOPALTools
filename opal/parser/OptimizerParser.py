@@ -298,7 +298,7 @@ class OptimizerParser:
 
     ##
     def getNumOfGenerations(self):
-        return self.__nJsonFiles / self.__nOptimizers
+        return int(self.__nJsonFiles / self.__nOptimizers)
     
     ##
     def readGeneration(self, gen, opt=0):
