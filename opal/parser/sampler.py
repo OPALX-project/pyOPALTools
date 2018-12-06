@@ -139,6 +139,38 @@ class SamplerParser:
                 self.__objs.append(samples[str(ind)]['obj'])
     
     
+    def __reset_attributes(self):
+        """
+        Clear all private members.
+        """
+        self.__dvars = []
+        self.__dvar_bounds = {}
+        self.__objs  = []
+        self.__begin = 0
+        self.__end   = 0
+    
+    
+    def check_file(self, filename):
+        """
+        Check if a file is really a sampler output
+        
+        Parameters
+        ----------
+        filename    (str)   JSON file to be loaded
+        
+        Returns
+        -------
+        True if a sampler file, otherwise False
+        """
+        try:
+            self.parse(filename)
+            self.__reset_attributes()
+        except:
+            self.__reset_attributes()
+            return False
+        return True
+    
+    
     def parse(self, filename):
         """
         Load the JSON file.
@@ -263,3 +295,21 @@ class SamplerParser:
     @property
     def num_samples(self):
         return self.__end - self.__begin + 1
+
+    @property
+    def begin(self):
+        """
+        Returns
+        -------
+        lowest individual ID
+        """
+        return self.__begin
+    
+    @property
+    def end(self):
+        """
+        Returns
+        -------
+        highest individual ID
+        """
+        return self.__end
