@@ -152,6 +152,7 @@ class OptimizerDataset(DatasetBase):
         Parameters
         ----------
         gen         (int)   generation
+        opt         (int)   optimizer number (default: 0)
         
         Returns
         -------
