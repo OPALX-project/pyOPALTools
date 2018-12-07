@@ -173,7 +173,11 @@ class OptimizerDataset(DatasetBase):
             raise IOError("File '" + filename + "' does not exist.")
         
         return genfile
-    
+
+
+    @property
+    def num_optimizers(self):
+        return self.__parser.num_optimizers
     
     @property
     def objectives(self):

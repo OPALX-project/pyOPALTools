@@ -293,8 +293,12 @@ class OptimizerParser:
         self.__nOptimizers += 1
         print ( "Found " + str(self.__nJsonFiles) + " json files from " +
                 str(self.__nOptimizers) +  " optimizers." )
-        
-    
+
+
+    @property
+    def num_optimizers(self):
+        return self.__nOptimizers
+
 
     ##
     def getNumOfGenerations(self):
