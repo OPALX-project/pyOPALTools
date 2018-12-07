@@ -33,10 +33,8 @@ class OptimizerDataset(DatasetBase):
             raise ValueError("File '" + full_path + "' does not exist.")
         
         self.__parser = OptimizerParser(directory)
-        
-        # 4. Mai 2018
-        # https://stackoverflow.com/questions/37915189/removing-leading-digits-from-string-using-python
-        self.__postfix = fname.lstrip(digits)
+
+        self.__postfix = '_' + str.split(fname, "_", 2)[1] + '_'
         
         self._loaded_generation = -1
         self._loaded_optimizer = -1
@@ -146,7 +144,7 @@ class OptimizerDataset(DatasetBase):
         return
     
     
-    def getGenerationBasename(self, gen):
+    def getGenerationBasename(self, gen, opt=0):
         """
         Obtain the basename of a specific
         generation.
@@ -167,8 +165,8 @@ class OptimizerDataset(DatasetBase):
                              'greater than ' + str(maxgen) + '.')
         
         
-        genfile = str(gen) + self.__postfix
-        filename = self._directory + genfile
+        genfile = str(gen) + self.__postfix + str(opt) + '.json'
+        filename = os.path.join(self._directory, genfile)
         
         if not os.path.isfile(filename):
             raise IOError("File '" + filename + "' does not exist.")
