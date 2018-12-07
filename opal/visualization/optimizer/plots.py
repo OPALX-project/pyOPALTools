@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.gridspec as gridspec
 import bisect
 
-def plot_parallel_coordinates(ds, gen, **kwargs):
+def plot_parallel_coordinates(ds, gen, opt=0, **kwargs):
     try:
         import plotly.plotly as py
         import plotly.graph_objs as go
@@ -28,6 +28,7 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
     ----------
     ds          (OptimizerDataset)  optimizer output dataset
     gen         (int)               generation to plot
+    opt         (int)               optimizer number (default: 0)
     
     Returns
     -------
@@ -47,12 +48,12 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
     if not ds.filetype == FileType.OPTIMIZER:
         raise TypeError(ds.filename + ' is not an optimizer dataset.')
     
-    basename = ds.getGenerationBasename(gen)
+    basename = ds.getGenerationBasename(gen, opt)
     
     dvar_names  = ds.design_variables
     dvar_bounds = ds.bounds
     obj_names   = ds.objectives
-    ids = ds.individuals(gen)
+    ids = ds.individuals(gen, opt)
     
     dvar_dimension = []
     obj_dimension = []
@@ -76,7 +77,7 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
     nObjs = len(obj_names)
     
     for i in ids:
-        data = ds.getData('', gen=gen, ind=i)
+        data = ds.getData('', gen=gen, ind=i, opt=opt)
         
         for j, d in enumerate(data):
             if j < nDvars:
@@ -124,7 +125,7 @@ def plot_parallel_coordinates(ds, gen, **kwargs):
            #auto_open=False)
 
 
-def plot_objectives(ds, **kwargs):
+def plot_objectives(ds, opt=0, **kwargs):
     """
     Plotting function for multiobjective
     optimizer output. Show the trend of
@@ -133,6 +134,7 @@ def plot_objectives(ds, **kwargs):
     Parameters
     ----------
     ds          (OptimizerDataset)  optimizer output dataset
+    opt         (int)               optimizer number (default: 0)
     
     Optionals
     ---------
@@ -166,9 +168,9 @@ def plot_objectives(ds, **kwargs):
         s = 0.0
         for obj in objs:
             if avg:
-                s += np.mean(ds.getData(obj, gen=g))
+                s += np.mean(ds.getData(obj, gen=g, opt=opt))
             else:
-                s += sum(ds.getData(obj, gen=g))
+                s += sum(ds.getData(obj, gen=g, opt=opt))
         result.append( s )
     
     plt.plot(gens, result)
@@ -181,7 +183,7 @@ def plot_objectives(ds, **kwargs):
     return plt
 
 
-def plot_objective_evolution(ds, objs=[], op=min, **kwargs):
+def plot_objective_evolution(ds, opt=0, objs=[], op=min, **kwargs):
     """
     Plot the improvement of the objectives with
     generation. The operator 'op' is executed between
@@ -190,6 +192,7 @@ def plot_objective_evolution(ds, objs=[], op=min, **kwargs):
     Parameters
     ----------
     ds          (OptimizerDataset)  optimizer output dataset
+    opt         (int)               optimizer number (default: 0)
     objs        ([str])             list of objectives, if not specified
                                     all are plotted
     op          (function)          operator, e.g. max, min, etc
@@ -222,14 +225,14 @@ def plot_objective_evolution(ds, objs=[], op=min, **kwargs):
     result = np.zeros((len(objs), ngen))
     
     for j in range(0, ngen):
-        ids = ds.individuals(j+1)
+        ids = ds.individuals(j+1, opt=opt)
         
             # val, id
         cur = [0, -1]
         for idx in ids:
             s = 0
             for obj in objectives:
-                s += ds.getData(var=obj, gen=j+1, ind=idx, all=False)
+                s += ds.getData(var=obj, gen=j+1, ind=idx, all=False, opt=opt)
             
             if cur[1] < 0:
                 cur = [s, idx]
@@ -237,7 +240,7 @@ def plot_objective_evolution(ds, objs=[], op=min, **kwargs):
                 cur = op([s, idx], cur)
         
         for i, obj in enumerate(objs):
-            result[i, j] = ds.getData(obj, gen=j+1, ind=cur[1], all=False)
+            result[i, j] = ds.getData(obj, gen=j+1, ind=cur[1], all=False, opt=opt)
     
     for i, obj in enumerate(objs):
         plt.plot(range(1, ngen + 1), result[i, :], label=obj)
@@ -265,7 +268,7 @@ def plot_objective_evolution(ds, objs=[], op=min, **kwargs):
     return plt
 
 
-def plot_dvar_evolution(ds, dvars=[], op=min, **kwargs):
+def plot_dvar_evolution(ds, opt=0, dvars=[], op=min, **kwargs):
     """
     Plot the evolution of the design variable values
     dependent on the improvement of the objectives with
@@ -275,6 +278,7 @@ def plot_dvar_evolution(ds, dvars=[], op=min, **kwargs):
     Parameters
     ----------
     ds          (OptimizerDataset)  optimizer output dataset
+    opt         (int)               optimizer number (default: 0)
     dvars       ([str])             list of design variables, if not specified
                                     all are plotted
     op          (function)          operator, e.g. max, min, etc
@@ -307,14 +311,14 @@ def plot_dvar_evolution(ds, dvars=[], op=min, **kwargs):
     result = np.zeros((len(dvars), ngen))
     
     for j in range(0, ngen):
-        ids = ds.individuals(j+1)
+        ids = ds.individuals(j+1, opt=opt)
         
             # val, id
         cur = [0, -1]
         for idx in ids:
             s = 0
             for obj in objs:
-                s += ds.getData(var=obj, gen=j+1, ind=idx, all=False)
+                s += ds.getData(var=obj, gen=j+1, ind=idx, all=False, opt=opt)
             
             if cur[1] < 0:
                 cur = [s, idx]
@@ -322,7 +326,7 @@ def plot_dvar_evolution(ds, dvars=[], op=min, **kwargs):
                 cur = op([s, idx], cur)
         
         for i, dvar in enumerate(dvars):
-            result[i, j] = ds.getData(dvar, gen=j+1, ind=cur[1], all=False)
+            result[i, j] = ds.getData(dvar, gen=j+1, ind=cur[1], all=False, opt=opt)
     
     for i, dvar in enumerate(dvars):
         plt.plot(range(1, ngen + 1), result[i, :], label=dvar)
@@ -341,7 +345,7 @@ def plot_dvar_evolution(ds, dvars=[], op=min, **kwargs):
     return plt
 
 
-def plot_individual_bounds(ds, n, **kwargs):
+def plot_individual_bounds(ds, n, opt=0, **kwargs):
     """
     Plot all design variables and their bounds. This
     will show if a design variable is close to one
@@ -350,6 +354,7 @@ def plot_individual_bounds(ds, n, **kwargs):
     Parameters
     ----------
     ds          (OptimizerDataset)  optimizer output dataset
+    opt         (int)               optimizer number (default: 0)
     n           (int)               take the first n-th best individuals
     
     Returns
@@ -369,7 +374,7 @@ def plot_individual_bounds(ds, n, **kwargs):
     
     objs = ds.objectives
     
-    ids = ds.individuals(1)
+    ids = ds.individuals(1, opt=opt)
     
     # restrict
     if n < 1:
@@ -380,12 +385,12 @@ def plot_individual_bounds(ds, n, **kwargs):
     nbests = []
     values = []
     for gen in range(1, ds.num_generations + 1):
-        ids = ds.individuals(gen)
+        ids = ds.individuals(gen, opt=opt)
         
         for ind in ids:
             s = 0.0
             for obj in objs:
-                s += ds.getData(var=obj, gen=gen, ind=ind, all=False)
+                s += ds.getData(var=obj, gen=gen, ind=ind, all=False, opt=opt)
             # [sum, generation, individual id]
             
             if s not in values:
@@ -416,7 +421,7 @@ def plot_individual_bounds(ds, n, **kwargs):
         gen, ind = best
         
         for j, dvar in enumerate(dvars):
-            data[i][j] = ds.getData(var=dvar, gen=gen, ind=ind, all=False)
+            data[i][j] = ds.getData(var=dvar, gen=gen, ind=ind, all=False, opt=opt)
     
     bnds = ds.bounds
     axes = []
