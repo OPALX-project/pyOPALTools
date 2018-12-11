@@ -76,7 +76,10 @@ class StatDataset(DatasetBase):
             'Ey_ref':   r'$E_y$-field component of ref. particle',
             'Ez_ref':   r'$E_z$-field component of ref. particle',
             'dE':       'energy spread of the beam',
-            'dt':       'time step size'
+            'dt':       'time step size',
+            'halo_x':   r'$h_x$',
+            'halo_y':   r'$h_y$',
+            'halo_z':   r'$h_z$'
         }
         
         self.__unit_label_mapper = [
