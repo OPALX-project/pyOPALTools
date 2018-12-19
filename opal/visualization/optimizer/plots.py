@@ -202,7 +202,8 @@ def plot_objective_evolution(ds, opt=0, objs=[], op=min, **kwargs):
     xscale      (str)               'linear', 'log'
     yscale      (str)               'linear', 'log'
     grid        (bool)
-    sum         (bool)              show sum of objectives
+    total       (bool)              show sum of objectives
+    label_rep   (dict)              replace labels by
     """
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
@@ -242,22 +243,32 @@ def plot_objective_evolution(ds, opt=0, objs=[], op=min, **kwargs):
         for i, obj in enumerate(objs):
             result[i, j] = ds.getData(obj, gen=j+1, ind=cur[1], all=False, opt=opt)
     
+    xscale    = kwargs.pop('xscale', 'linear')
+    yscale    = kwargs.pop('yscale', 'linear')
+    grid      = kwargs.pop('grid', True)
+    label_rep = kwargs.pop('label_rep', {})
+    t         = kwargs.pop('total', False)
+    m         = kwargs.pop('mean', False)
+
     for i, obj in enumerate(objs):
-        plt.plot(range(1, ngen + 1), result[i, :], label=obj)
+        label = obj
+        if obj in label_rep.keys():
+            label = label_rep[obj]
+        plt.plot(range(1, ngen + 1), result[i, :], label=label, **kwargs)
     
-    if kwargs.pop('total', False):
+    if t:
         total = result.sum(axis=0)
-        plt.plot(range(1, ngen + 1), total, label='objective sum')
+        plt.plot(range(1, ngen + 1), total, label='objective sum', **kwargs)
     
-    if kwargs.pop('mean', False):
+    if m:
         mean = result.mean(axis=0)
-        plt.plot(range(1, ngen + 1), mean, label='objective mean')
+        plt.plot(range(1, ngen + 1), mean, label='objective mean', **kwargs)
     
     plt.xlabel('generation')
     
-    plt.xscale(kwargs.get('xscale', 'linear'))
-    plt.yscale(kwargs.get('yscale', 'linear'))
-    plt.grid(kwargs.get('grid', True), which='both')
+    plt.xscale(xscale)
+    plt.yscale(yscale)
+    plt.grid(grid, which='both')
     
     if len(objs) > 1:
         plt.ylabel(op.__name__)
