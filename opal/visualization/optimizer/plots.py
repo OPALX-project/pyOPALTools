@@ -215,6 +215,43 @@ def plot_objective_evolution(ds, opt=0, objs=[], op=min, **kwargs):
     objectives = ds.objectives
     ngen = ds.num_generations
     
+    xscale      = kwargs.pop('xscale', 'linear')
+    yscale      = kwargs.pop('yscale', 'linear')
+    grid        = kwargs.pop('grid', True)
+    label_rep   = kwargs.pop('label_rep', {})
+    t           = kwargs.pop('total', False)
+    objmean     = kwargs.pop('objmean', False)
+    objmeandict = kwargs.pop('objmeandict', {
+        'linewidth': 2,
+        'linestyle': 'dashed',
+        'color':     'black',
+        'label':     'objective mean'
+    })
+    indmean = kwargs.pop('indmean', False)
+    indmeandict = kwargs.pop('indmeandict', {
+        'linewidth': 2,
+        'linestyle': 'dashed',
+        'color':     'black',
+        'label':     'individual mean'
+    })
+
+    totaldict  = kwargs.pop('totaldict', {
+        'linewidth': 2,
+        'linestyle': 'dashed',
+        'color':     'black',
+        'label':     'objective sum'
+    })
+
+    legenddict = kwargs.pop('legenddict', {
+        'fontsize':       18,
+        'ncol':           4,
+        'labelspacing':   0.5,
+        'bbox_to_anchor': (0.25,0.65 + (indmean) * 0.2, 0.5, 0.5)
+    })
+
+    as_bar    = kwargs.pop('asbar', False)
+    colorlist = kwargs.pop('colorlist', [])
+
     if objs:
         for obj in objs:
             if not obj in objectives:
@@ -222,8 +259,9 @@ def plot_objective_evolution(ds, opt=0, objs=[], op=min, **kwargs):
                                  + str(objectives))
     else:
         objs = objectives
-    
+
     result = np.zeros((len(objs), ngen))
+    ind_mean = np.zeros(ngen)
     
     for j in range(0, ngen):
         ids = ds.individuals(j+1, opt=opt)
@@ -233,39 +271,66 @@ def plot_objective_evolution(ds, opt=0, objs=[], op=min, **kwargs):
         for idx in ids:
             s = 0
             for obj in objectives:
-                s += ds.getData(var=obj, gen=j+1, ind=idx, all=False, opt=opt)
+                val = ds.getData(var=obj, gen=j+1, ind=idx, all=False, opt=opt)
+                s += val
+                if indmean:
+                    ind_mean[j] += val
             
             if cur[1] < 0:
                 cur = [s, idx]
             else:
                 cur = op([s, idx], cur)
         
+        if indmean:
+            ind_mean[j] /= len(ids)
+
         for i, obj in enumerate(objs):
             result[i, j] = ds.getData(obj, gen=j+1, ind=cur[1], all=False, opt=opt)
-    
-    xscale    = kwargs.pop('xscale', 'linear')
-    yscale    = kwargs.pop('yscale', 'linear')
-    grid      = kwargs.pop('grid', True)
-    label_rep = kwargs.pop('label_rep', {})
-    t         = kwargs.pop('total', False)
-    m         = kwargs.pop('mean', False)
 
+    label = []
     for i, obj in enumerate(objs):
-        label = obj
+        label.append( obj )
         if obj in label_rep.keys():
-            label = label_rep[obj]
-        plt.plot(range(1, ngen + 1), result[i, :], label=label, **kwargs)
+            label[-1] = label_rep[obj]
+
+    if indmean:
+        plt.subplot(2, 1, 1)
+        plt.semilogy(range(1, ngen + 1), ind_mean, **indmeandict)
+        plt.xscale(xscale)
+        plt.xlabel('generation')
+        plt.ylabel('individual mean')
+        plt.grid(grid, which='both')
+        
+        plt.subplot(2, 1, 2)
+
+    if as_bar:
+        # bar plot
+        bottom = [0] * np.shape(result)[1]
+        for i, obj in enumerate(objs):
+            if i < len(colorlist) - 1:
+                kwargs['color'] = colorlist[i]
+            else:
+                kwargs.pop('color', 'black')
+            plt.bar(range(1, ngen + 1), result[i, :], label=label[i],
+                    bottom=bottom, **kwargs)
+            bottom += result[i, :]
+    else:
+        for i, obj in enumerate(objs):
+            if i < len(colorlist) - 1:
+                kwargs['color'] = colorlist[i]
+            else:
+                kwargs.pop('color', 'black')
+            plt.plot(range(1, ngen + 1), result[i, :], label=label[i], **kwargs)
     
-    if t:
-        total = result.sum(axis=0)
-        plt.plot(range(1, ngen + 1), total, label='objective sum', **kwargs)
-    
-    if m:
+        if t:
+            total = result.sum(axis=0)
+            plt.plot(range(1, ngen + 1), total, **totaldict)
+
+    if objmean:
         mean = result.mean(axis=0)
-        plt.plot(range(1, ngen + 1), mean, label='objective mean', **kwargs)
+        plt.plot(range(1, ngen + 1), mean, **objmeandict)
     
     plt.xlabel('generation')
-    
     plt.xscale(xscale)
     plt.yscale(yscale)
     plt.grid(grid, which='both')
@@ -276,6 +341,11 @@ def plot_objective_evolution(ds, opt=0, objs=[], op=min, **kwargs):
     else:
         plt.ylabel(obj)
     
+    plt.legend(loc = 'upper center', **legenddict)
+
+    if indmean:
+        plt.subplots_adjust(hspace = 10)
+
     return plt
 
 
