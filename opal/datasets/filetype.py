@@ -21,13 +21,15 @@ class FileType(IntEnum):
     HIST        = 10,
     OPTIMIZER   = 11,
     SAMPLER     = 12,
-    NONE        = 13
+    SMB         = 13,
+    NONE        = 14
     
     @classmethod
     def extensionToFileType(cls, fname):
         extension = {
             '.h5':      cls.H5,
             '.stat':    cls.STAT,
+            '.smb':     cls.SMB,
             '.mem':     cls.MEM,
             '.lbal':    cls.LBAL,
             '.out':     cls.OUTPUT,

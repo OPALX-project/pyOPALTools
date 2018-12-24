@@ -80,6 +80,9 @@ def load_dataset(directory, **kwargs):
         elif ftype == FileType.STAT:
             datasets.append(StatDataset(directory, fname))
             print ( 'matches stat file type.' )
+        elif ftype == FileType.SMB:
+            datasets.append(StatDataset(directory, fname))
+            print ( 'matches smb file type.' )
         elif ftype == FileType.TIMING:
             datasets.append(TimeDataset(directory, fname, 'ippl'))
             print ( 'matches timing file type.' )
