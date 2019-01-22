@@ -55,7 +55,8 @@ def jupyter_style():
     mpl.rcParams['axes.edgecolor']                  = 'k'
     mpl.rcParams['axes.facecolor']                  = 'w'
     mpl.rcParams['axes.formatter.limits']           = [-7, 7]
-    mpl.rcParams['axes.formatter.min_exponent']     = 0
+    if mpl.__version__ >= '2.1':
+        mpl.rcParams['axes.formatter.min_exponent'] = 0
     mpl.rcParams['axes.formatter.offset_threshold'] = 4
     mpl.rcParams['axes.formatter.use_locale']       = False
     mpl.rcParams['axes.formatter.use_mathtext']     = False
