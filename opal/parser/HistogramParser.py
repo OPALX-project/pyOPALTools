@@ -99,7 +99,7 @@ class HistogramParser:
         
         if not radius == None:
             # measurement file
-            r, c = np.loadtxt(filename, skiprows=1, unpack=True)
+            r, c = np.loadtxt(filename, skiprows=1, usecols=(0,1), unpack=True)
             self._info['nbins'] = [len(r), '']
             self._info['min'] = [min(r), runit]
             self._info['max'] = [max(r), runit]
