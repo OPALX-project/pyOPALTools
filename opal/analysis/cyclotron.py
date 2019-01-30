@@ -43,7 +43,7 @@ def calcTurnSeparation(ds, nsteps=-1, angle=0.0):
     py = ds.getData('py')[id0s]
     pz = ds.getData('pz')[id0s]
     
-    refline = x * cos(angle) + y * sin(angle)
+    refline = x * np.cos(angle) + y * np.sin(angle)
     # Get axis crossings
     pksx = detect_peaks(refline, mph=0.04, mpd=100)
     # Correct as peaks might not correspond to each other

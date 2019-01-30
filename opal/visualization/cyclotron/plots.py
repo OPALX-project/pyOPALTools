@@ -238,7 +238,7 @@ def plot_turn_separation(ds, nsteps=-1, angle=0.0, asFunctionOfTurnNumber=True, 
         plt.xlabel('Radius [m]')
 
     plt.plot(x, ts, linewidth=2, **kwargs)
-    plt.ylabel('Turn Separation [mm]')
+    plt.ylabel('Turn Separation [m]')
     
     return plt
 
