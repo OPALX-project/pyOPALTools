@@ -13,10 +13,6 @@ def calcTurnSeparation(ds, nsteps=-1):
     ds      (DatasetBase)   datasets of type FileType.TRACK_ORBIT
     nsteps                  number of steps per turn
 
-    Returns
-    -------
-    none
-    
     References
     ----------
     none

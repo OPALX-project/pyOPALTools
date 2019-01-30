@@ -103,7 +103,7 @@ do the following steps:
 * Create an SSH tunnel:
  
 ```bash
-$ ssh -L ssh -L hport:localhost:rport username@remote
+$ ssh -L hport:localhost:rport username@remote
 ```
  where ```hport``` is the host port, e.g. 8000 and
  ```rport``` the remote port, e.g. 8888. You have to
