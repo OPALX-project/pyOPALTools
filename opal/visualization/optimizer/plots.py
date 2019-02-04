@@ -204,6 +204,8 @@ def plot_objective_evolution(ds, opt=0, objs=[], op=min, **kwargs):
     grid        (bool)
     total       (bool)              show sum of objectives
     label_rep   (dict)              replace labels by
+    as_bar      (bool)
+    colorlist   ([str])
     """
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
