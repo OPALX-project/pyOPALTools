@@ -48,6 +48,11 @@ def jupyter_style():
     ---------
     https://matplotlib.org/users/customizing.html
     """
+
+    if mpl.__version__ < '2':
+        print('jupyter style not available for matplotlib version',mpl.__version__,'loading default style')
+        return default_style()
+
     config.opal['style'] = 'jupyter'
     
     mpl.rcParams['axes.autolimit_mode']             = 'data'

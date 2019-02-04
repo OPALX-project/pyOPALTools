@@ -203,7 +203,7 @@ def plot_energy_gain(ds, nsteps=-1, **kwargs):
 
     return plt
 
-def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
+def plot_turn_separation(ds, nsteps=-1, angle=0.0, asFunctionOfTurnNumber=True, asFunctionOfEnergy=False,**kwargs):
     """
     Only with datasets of
     type FileType.TRACK_ORBIT.
@@ -212,6 +212,7 @@ def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionO
     ----------
     ds      (DatasetBase)   datasets
     nsteps                  number of steps per turn (default -1: detect automatically)
+    angle                   angle of reference line in radians
 
     Returns
     -------
@@ -224,7 +225,7 @@ def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionO
     if not ds.filetype == FileType.TRACK_ORBIT:
         raise TypeError(ds.filename + ' is not a track orbit dataset.')
     
-    ts, energy, _, radius = calcTurnSeparation(ds, nsteps)
+    ts, energy, _, radius = calcTurnSeparation(ds, nsteps, angle)
     
     if asFunctionOfTurnNumber:
         x = np.arange(2, len(ts)+2) # From second turn
@@ -237,7 +238,7 @@ def plot_turn_separation(ds, nsteps=-1, asFunctionOfTurnNumber=True, asFunctionO
         plt.xlabel('Radius [m]')
 
     plt.plot(x, ts, linewidth=2, **kwargs)
-    plt.ylabel('Turn Separation [mm]')
+    plt.ylabel('Turn Separation [m]')
     
     return plt
 

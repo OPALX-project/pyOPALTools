@@ -4,7 +4,7 @@ import numpy as np
 import scipy as sp
 import re
 
-def calcTurnSeparation(ds, nsteps=-1):
+def calcTurnSeparation(ds, nsteps=-1, angle=0.0):
     """
     Calculate turn separation from OPAL xxx--trackOrbit.dat file
 
@@ -12,11 +12,8 @@ def calcTurnSeparation(ds, nsteps=-1):
     ----------
     ds      (DatasetBase)   datasets of type FileType.TRACK_ORBIT
     nsteps                  number of steps per turn
+    angle                   angle of reference line in radians
 
-    Returns
-    -------
-    none
-    
     References
     ----------
     none
@@ -46,8 +43,9 @@ def calcTurnSeparation(ds, nsteps=-1):
     py = ds.getData('py')[id0s]
     pz = ds.getData('pz')[id0s]
     
-    # Get x-axis crossings
-    pksx = detect_peaks(x, mph=0.04, mpd=100)
+    refline = x * np.cos(angle) + y * np.sin(angle)
+    # Get axis crossings
+    pksx = detect_peaks(refline, mph=0.04, mpd=100)
     # Correct as peaks might not correspond to each other
     # Use number of steps per turn
     if not nsteps==-1:
@@ -56,7 +54,7 @@ def calcTurnSeparation(ds, nsteps=-1):
             if pksx[pknr] + nsteps >= len(x):
                 break
 
-    mx = x[pksx]
+    mx = refline[pksx]
 
     # Turn separation is the difference between crossings
     ts = np.diff(mx)
