@@ -227,13 +227,16 @@ class AmrOpal:
         x_unit   = kwargs.get('x_unit', None)
         y_unit   = kwargs.get('y_unit', None)
         z_unit   = kwargs.get('z_unit', None)
+        z_log    = kwargs.get('z_log', True)
         color    = kwargs.get('color', 'b')
         #origin   = kwargs.get('origin', 'native')
         fontsize = kwargs.get('fontsize', 16)
         save     = kwargs.get("save", False)
+        deposit  = kwargs.get("deposition", 'ngp') # or 'cic'
         
         pp = yt.ParticlePlot(self.ds, x_field, y_field, z_field,
-                             fontsize=fontsize) #, origin=origin)
+                             fontsize=fontsize, deposition=deposit) #, origin=origin)
+        
         
         if x_unit:
             pp.set_unit(x_field, x_unit)
@@ -242,6 +245,9 @@ class AmrOpal:
             pp.set_unit(y_field, y_unit)    
         
         if z_unit:
+            #pp.set_cmap(z_field, 'RdBu')
+            pp.set_log(z_field, z_log)
+            #pp.set_zlim(z_field, zmin=-1e5, zmax=1e5)
             pp.set_unit(z_field, z_unit)
         
         if save:
