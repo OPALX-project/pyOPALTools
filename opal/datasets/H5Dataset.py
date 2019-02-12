@@ -3,6 +3,7 @@
 
 import os
 from opal.parser.H5Parser import H5Parser
+from opal.parser.H5Error import *
 import numpy as np
 from opal.datasets.DatasetBase import *
 
