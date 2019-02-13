@@ -377,8 +377,8 @@ def plot_time_summary(ds, prop, **kwargs):
         raise ValueError("Wrong property value: prop = 'wall' or prop = 'cpu'.")
     
     labels = []
-    excludeList = kwargs.get('exclude', [])
-    tag         = kwargs.get('tag', '')
+    excludeList = kwargs.pop('exclude', [])
+    tag         = kwargs.pop('tag', '')
     for name in ds.getLabels():
         skip = False
         for ex in excludeList:
@@ -398,17 +398,23 @@ def plot_time_summary(ds, prop, **kwargs):
         tmax.append( ds.getData(var=name, prop=prop + ' max') - tavg[-1] )
     
     n = len(tavg)
-    x = np.linspace(0, n-1, n) 
-    plt.errorbar(x, tavg, yerr=[tmin, tmax], fmt='o')
+    x = np.linspace(0, n-1, n)
+
+    grid   = kwargs.pop('grid', False)
+    yscale = kwargs.pop('yscale', 'linear')
+    plt.errorbar(x, tavg, yerr=[tmin, tmax], fmt='o', **kwargs)
     plt.xlim([-1, n])
     plt.ylim([-10, max(tmax)+max(tavg)])
     plt.ylabel('time [' + ds.getUnit('') + ']')
     # 2. Feb. 2018
     # https://stackoverflow.com/questions/14852821/aligning-rotated-xticklabels-with-their-respective-xticks
     plt.xticks(x, labels, rotation=45, ha='right')
-    plt.grid(kwargs.get('grid', False), which="both")
-    plt.yscale(kwargs.get('yscale', 'linear'))
-    
+    plt.grid(grid, which="both")
+
+    ax = plt.gca()
+    if yscale == 'log':
+        ax.set_yscale('log', nonposy='clip')
+
     plt.tight_layout()
     
     return plt
