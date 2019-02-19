@@ -405,8 +405,8 @@ def plot_probe_histogram(ds, **kwargs):
     grid    (bool)          draw grid
     scale   (bool)          scales to 1.0
                             (default: False)
-    nbins   (int)           number of bins (only for H5
-                            file)
+    kwargs                  in case of H5: all arguments
+                            of matplotlib.pyplot.hist
     
     Returns
     -------
@@ -438,9 +438,8 @@ def plot_probe_histogram(ds, **kwargs):
     elif ds.filetype == FileType.H5:
         x2 = ds.getData('x')**2
         y2 = ds.getData('y')**2
-        nbins = kwargs.pop('nbins', 2000)
 
-        plt.hist(np.sqrt(x2 + y2), bins=nbins, **kwargs)
+        plt.hist(np.sqrt(x2 + y2), **kwargs)
         plt.xlabel('radius [' + ds.getUnit('x') + ']')
 
         if kwargs.get('density', False):
