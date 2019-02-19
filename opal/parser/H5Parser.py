@@ -40,14 +40,16 @@ class H5Parser:
         if self.__h5f:
             self.__all_h5_objs = []
             self.__h5f.visit(self.__all_h5_objs.append)
-            self.__all_groups   = [ obj for obj in self.__all_h5_objs if isinstance(self.__h5f[obj],h5py.Group) ]
+            self.__all_groups   = [
+                obj for obj in self.__all_h5_objs # Attachment is in probes and should be neglected
+                    if isinstance(self.__h5f[obj],h5py.Group) and not obj == 'Attachment'
+            ]
             self.__all_datasets = [ obj for obj in self.__all_h5_objs if isinstance(self.__h5f[obj],h5py.Dataset) ]
             
             self.__nsteps = len(self.__h5f.keys())
-            
+
             if info:                
                 print ( self.__str__() )
-            
         else:
             raise H5ParseError("Cannot read '" + fname + "'")
         
