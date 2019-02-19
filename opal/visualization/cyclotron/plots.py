@@ -439,12 +439,16 @@ def plot_probe_histogram(ds, **kwargs):
         x2 = ds.getData('x')**2
         y2 = ds.getData('y')**2
         nbins = kwargs.pop('nbins', 2000)
-        plt.hist(np.sqrt(x2 + y2), bins=nbins)
+
+        plt.hist(np.sqrt(x2 + y2), bins=nbins, **kwargs)
         plt.xlabel('radius [' + ds.getUnit('x') + ']')
+
+        if kwargs.get('density', False):
+            ylabel = 'density'
     else:
         raise TypeError(ds.filename +
                         ' is not a probe histogram (*.hist) file or probe H5 file.')
 
     plt.ylabel(ylabel)
-    
+
     return plt
