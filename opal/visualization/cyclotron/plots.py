@@ -405,6 +405,8 @@ def plot_probe_histogram(ds, **kwargs):
     grid    (bool)          draw grid
     scale   (bool)          scales to 1.0
                             (default: False)
+    nbins   (int)           number of bins (only for H5
+                            file)
     
     Returns
     -------
@@ -413,29 +415,36 @@ def plot_probe_histogram(ds, **kwargs):
     if not isinstance(ds, DatasetBase):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
-    
-    if not ds.filetype == FileType.HIST:
-        raise TypeError(ds.filename +
-                        ' is not a probe histogram (*.hist) file.')
-    
-    bincount = ds.getData('bincount')
-    rmin = ds.getData('min')
-    rmax = ds.getData('max')
-    nbins = ds.getData('nbins')
-    #dr = ds.getData('binsize')
-    
-    radius = np.linspace(float(rmin), float(rmax), nbins)
-    
+
     ylabel = ds.getLabel('bincount')
     
-    if kwargs.pop('scale', False):
-        bincount = np.asarray(bincount) / max(bincount )
-        ylabel += ' (normalized)'
-    
-    plt.grid(kwargs.pop('grid', False))
+    if ds.filetype == FileType.HIST:
+        bincount = ds.getData('bincount')
+        rmin = ds.getData('min')
+        rmax = ds.getData('max')
+        nbins = ds.getData('nbins')
+        #dr = ds.getData('binsize')
 
-    plt.plot(radius, bincount, **kwargs)
-    plt.xlabel('radius [' + ds.getUnit('min') + ']')
+        radius = np.linspace(float(rmin), float(rmax), nbins)
+
+        if kwargs.pop('scale', False):
+            bincount = np.asarray(bincount) / max(bincount )
+            ylabel += ' (normalized)'
+
+        plt.grid(kwargs.pop('grid', False))
+
+        plt.plot(radius, bincount, **kwargs)
+        plt.xlabel('radius [' + ds.getUnit('min') + ']')
+    elif ds.filetype == FileType.H5:
+        x2 = ds.getData('x')**2
+        y2 = ds.getData('y')**2
+        nbins = kwargs.pop('nbins', 2000)
+        plt.hist(np.sqrt(x2 + y2), bins=nbins)
+        plt.xlabel('radius [' + ds.getUnit('x') + ']')
+    else:
+        raise TypeError(ds.filename +
+                        ' is not a probe histogram (*.hist) file or probe H5 file.')
+
     plt.ylabel(ylabel)
     
     return plt
