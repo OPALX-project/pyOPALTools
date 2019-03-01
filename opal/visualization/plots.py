@@ -104,7 +104,6 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
     if not ds.filetype == FileType.H5:
         raise TypeError("Dataset '" + ds.filename + "' is not a H5 file.")
     
-    plt.figure()
     plt.xscale(kwargs.get('yscale', 'linear'))
     plt.yscale(kwargs.get('xscale', 'linear'))
     
