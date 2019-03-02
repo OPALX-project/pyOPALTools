@@ -37,7 +37,7 @@ class JobSubmitter:
             self._sim_dirs.append( tmp )
         self._pair = pair
         
-        if !os.path.isabs(template):
+        if not os.path.isabs(template):
             template = os.path.abspath(template)
         if not os.path.isfile(template):
             raise IOError( "Error: Template file '" + template + "' doesn't exist." )
