@@ -145,7 +145,7 @@ class SamplerDataset(DatasetBase):
         """
         Obtain unit for plotting.
         
-        Note: The optimizer does not yet write the units
+        Note: The sampler does not yet write the units
               of each variable to the files. This function
               raises an error.
         
@@ -184,3 +184,11 @@ class SamplerDataset(DatasetBase):
             raise RuntimeError('No dataset loaded yet.')
         
         return self.__parser.bounds
+    
+    
+    @property
+    def size(self):
+        """
+        Returns the number of individuals
+        """
+        return self.__parser.end + 1

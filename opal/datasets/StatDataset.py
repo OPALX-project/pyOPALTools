@@ -190,3 +190,8 @@ class StatDataset(DatasetBase):
             unit = r'\mathrm{' + unit + '}'
         
         return r'$' + unit + '$'
+
+
+    @property
+    def size(self):
+        return self.__parser.size

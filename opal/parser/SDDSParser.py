@@ -205,3 +205,8 @@ class SDDSParser:
             else:
                 print ('file '+fn+' does not exists')
         return (x,y,fns)
+    
+    
+    @property
+    def size(self):
+        return np.shape(self._dataset)[0]

@@ -22,7 +22,7 @@ class DatasetBase:
         """
         self._directory = directory
         self._fname = fname
-        self._ftype = FileType.extensionToFileType(fname)
+        self._ftype = FileType.extensionToFileType(os.path.join(directory, fname))
     
     
     @property
@@ -55,3 +55,9 @@ class DatasetBase:
         """
         pass
     
+    @property
+    def size(self):
+        """
+        To be implemented by derived class.
+        """
+        return None
