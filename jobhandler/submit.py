@@ -8,7 +8,7 @@ import re
 
 class JobSubmitter:
     
-    def __init__(self, sim_dirs, template, pair, cmd):
+    def __init__(self, sim_dirs, template, pair, cmd, additions=[]):
         """
         Instantiation.
         
@@ -22,6 +22,9 @@ class JobSubmitter:
                             in the template file (keys do not have
                             '_') with corresponding value.
         cmd         (str)   batch submit command, e.g. sbatch for SLURM
+        additions   ([str]) additional commands like 'source', export
+                            that should be added to the file. These will be
+                            prepended
         
         
         Note
@@ -46,7 +49,7 @@ class JobSubmitter:
         self._cmd = cmd
         self._runfile = os.path.basename(template)
         
-        self._write_run_file()
+        self._write_run_file(additions)
     
     
     def submit(self):
@@ -62,17 +65,35 @@ class JobSubmitter:
             os.system(self._cmd + ' ' + self._runfile)
     
     
-    def _write_run_file(self):
+    def _write_run_file(self, additions):
         """
         Create a 'run_job.sh' file for each simulation.
         """
         pattern = r'_(.*?)_'
         
+        if additions:
+            for i, add in enumerate(additions):
+                additions[i] = add + '\n'
+            additions[-1] += '\n'
+
         for sdir in self._sim_dirs:
             shutil.copy(self._template, sdir)
             
             fname = os.path.basename(self._template)
             fname = os.path.join(sdir, fname)
+
+            if additions:
+                with open(fname, "r") as f:
+                    lines = []
+                    for line in f:
+                        lines.append(line)
+                lines = additions + lines
+                ftmp = fname + '.tmp'
+                with open(ftmp, "w") as f:
+                    for a in lines:
+                        f.write(a)
+                os.rename(ftmp, fname)
+
             with fileinput.FileInput(fname, inplace=True) as f:
                 for line in f:
                     obj = re.findall(pattern, line)
