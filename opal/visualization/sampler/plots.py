@@ -43,16 +43,18 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
         # load simulation directory
         sdir = os.path.join(dirname, str(i))
         out = load_dataset(sdir, fname=fname)[0]
-        ydata += out.getData(yvar)
-        ymin = np.minimum(ymin, ydata)
-        ymax = np.maximum(ymax, ydata)
+        data = out.getData(yvar)
+        ydata += data
+        ymin = np.minimum(ymin, data)
+        ymax = np.maximum(ymax, data)
 
     mean = np.zeros(len(ydata), dtype=np.float)
     mean = ydata / np.float(nsamples)
 
-    plt.plot(xdata, mean, **kwargs, color='black')
+    plt.plot(xdata, mean, **kwargs, color='black', linestyle='dashed', label='mean')
     plt.fill_between(xdata, ymin, ymax,
-                     facecolor='blue', alpha=0.2)
+                     facecolor='blue', alpha=0.2, label='variability region')
+    plt.legend()
 
     xlabel = out.getLabel(xvar)
     xunit  = out.getUnit(xvar)

@@ -75,11 +75,8 @@ class SamplerDataset(DatasetBase):
             beg = self._loaded_file + 1
         
         for i in range(beg, end+1):
-            fname = self.filename
-            base  = os.path.basename(fname)
-            dirname = os.path.dirname(fname)
-            split = str.split(base, '_', 2)
             print ( 'load ' + str(i) )
+            self.__actual_file_load(i)
             self.__parser.parse(os.path.join(dirname,
                                              split[0] + '_' + \
                                              split[1] + '_' + \
@@ -89,6 +86,17 @@ class SamplerDataset(DatasetBase):
                ind >= self.__parser.begin and \
                ind <= self.__parser.end:
                    break
+    
+    
+    def __actual_file_load(self, i):
+        fname = self.filename
+        base  = os.path.basename(fname)
+        dirname = os.path.dirname(fname)
+        split = str.split(base, '_', 2)
+        self.__parser.parse(os.path.join(dirname,
+                                         split[0] + '_' + \
+                                         split[1] + '_' + \
+                                         str(i) + '.json'))
     
     
     def getData(self, var, **kwargs):
@@ -191,4 +199,11 @@ class SamplerDataset(DatasetBase):
         """
         Returns the number of individuals
         """
-        return self.__parser.end + 1
+        if self.__nFiles == 0:
+            return 0
+        
+        n = 0
+        for i in range(self.__nFiles):
+            self.__actual_file_load(i)
+            n += self.__parser.num_samples
+        return n
