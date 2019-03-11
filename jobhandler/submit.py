@@ -38,10 +38,12 @@ class JobSubmitter:
             if not os.path.isdir(tmp):
                 raise IOError( "Error: Directory '" + tmp + "' doesn't exist." )
             self._sim_dirs.append( tmp )
-        
         self._pair = pair
         
-        template = os.path.abspath(template)
+        # expand environment variables
+        template = os.path.expandvars(template)
+        if not os.path.isabs(template):
+            template = os.path.abspath(template)
         if not os.path.isfile(template):
             raise IOError( "Error: Template file '" + template + "' doesn't exist." )
         

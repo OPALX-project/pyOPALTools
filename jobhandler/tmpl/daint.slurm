@@ -12,6 +12,7 @@
 #SBATCH --error=_SIM_.error
 #SBATCH --output=_SIM_.output
 #SBATCH --constraint=mc
+#SBATCH --account=_ACCOUNT_
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
