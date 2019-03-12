@@ -168,3 +168,8 @@ class H5Dataset(DatasetBase):
         
         unit = r'$' + unit + '$'
         return unit
+
+
+    @property
+    def size(self):
+        returen self.__parser.getNSteps()
