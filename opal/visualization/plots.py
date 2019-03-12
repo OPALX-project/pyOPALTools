@@ -129,7 +129,7 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
         skipped = set(range(bmin, bmax+1)) - set(bins)
         
         nBins = len(bins) + 1
-        colors = np.linspace(0, 1, nBins)
+        colors = np.linspace(0, 1, nBins + 1)
         
         for i, b in enumerate(bins):
             xbin = xdata[np.where(bdata == b)]
@@ -150,7 +150,7 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
         skipped = set(range(bmin, bmax+1)) - set(bunches)
         
         nBunches = len(bunches) + 1
-        colors = np.linspace(0, 1, nBunches)
+        colors = np.linspace(0, 1, nBunches + 1)
         
         for i, b in enumerate(bunches):
             xbin = xdata[np.where(bdata == b)]
