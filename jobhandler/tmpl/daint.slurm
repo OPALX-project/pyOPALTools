@@ -1,6 +1,4 @@
 #!/bin/bash -l
-
-
 #SBATCH --partition=_QUEUE_
 #SBATCH --nodes=_NODES_
 #SBATCH --ntasks-per-core=_TASKS-PER-CORE_

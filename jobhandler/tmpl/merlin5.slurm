@@ -1,5 +1,4 @@
 #!/bin/bash -l
-
 #SBATCH --job-name=_SIM_
 #SBATCH --error=_SIM_.error
 #SBATCH --output=_SIM_.output
