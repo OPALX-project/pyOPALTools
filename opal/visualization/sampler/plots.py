@@ -69,7 +69,7 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
         plt.fill_between(ind, ymin, ymax,
                          facecolor='blue', alpha=0.2, label='variability region')
         nticks=len(plt.gca().get_xticklabels())
-        plt.xticks(xdata)
+        plt.xticks(ind, xdata)
         # 12. March 2019
         # https://stackoverflow.com/questions/6682784/reducing-number-of-plot-ticks
         plt.locator_params(nbins=nticks)
