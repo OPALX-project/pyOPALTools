@@ -128,7 +128,7 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
         # https://stackoverflow.com/questions/6486450/python-compute-list-difference
         skipped = set(range(bmin, bmax+1)) - set(bins)
         
-        nBins = len(bins) + 1
+        nBins = bmax - bmin + 1
         colors = np.linspace(0, 1, nBins + 1)
         
         for i, b in enumerate(bins):
@@ -149,7 +149,7 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
         # https://stackoverflow.com/questions/6486450/python-compute-list-difference
         skipped = set(range(bmin, bmax+1)) - set(bunches)
         
-        nBunches = len(bunches) + 1
+        nBunches = bmax - bmin + 1
         colors = np.linspace(0, 1, nBunches + 1)
         
         # plot all skipped bunches with same color
