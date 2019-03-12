@@ -172,4 +172,4 @@ class H5Dataset(DatasetBase):
 
     @property
     def size(self):
-        returen self.__parser.getNSteps()
+        return self.__parser.getNSteps()
