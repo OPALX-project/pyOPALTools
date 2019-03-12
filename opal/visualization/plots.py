@@ -99,8 +99,9 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    step = kwargs.get('step', 0)
-    bins = kwargs.get('bins', [])
+    step    = kwargs.get('step', 0)
+    bins    = kwargs.get('bins', [])
+    bunches = kwargs.get('bunches', [])
     
     if not ds.filetype == FileType.H5:
         raise TypeError("Dataset '" + ds.filename + "' is not a H5 file.")
@@ -139,6 +140,27 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
             xbin = xdata[np.where(bdata == s)]
             ybin = ydata[np.where(bdata == s)]
             plt.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[nBins]))
+    elif bunches and ds.filetype == FileType.H5:
+        bdata = ds.getData('bunchNumber', step=step)
+        # get all bunches
+        bmin = min(bdata)
+        bmax = max(bdata)
+        # 27. March 2018
+        # https://stackoverflow.com/questions/6486450/python-compute-list-difference
+        skipped = set(range(bmin, bmax+1)) - set(bunches)
+        
+        nBunches = len(bunches) + 1
+        colors = np.linspace(0, 1, nBunches)
+        
+        for i, b in enumerate(bunches):
+            xbin = xdata[np.where(bdata == b)]
+            ybin = ydata[np.where(bdata == b)]
+            plt.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[i]))
+        # plot all skipped bunches with same color
+        for s in skipped:
+            xbin = xdata[np.where(bdata == s)]
+            ybin = ydata[np.where(bdata == s)]
+            plt.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[nBunches]))
     else:
         plt.scatter(xdata, ydata, marker='.', s=1)
     
