@@ -134,12 +134,12 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
         for i, b in enumerate(bins):
             xbin = xdata[np.where(bdata == b)]
             ybin = ydata[np.where(bdata == b)]
-            plt.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[i]))
+            plt.scatter(xbin, ybin, marker='.', s=1, color=cm.tab20(colors[i]))
         # plot all skipped bins with same color
         for s in skipped:
             xbin = xdata[np.where(bdata == s)]
             ybin = ydata[np.where(bdata == s)]
-            plt.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[nBins]))
+            plt.scatter(xbin, ybin, marker='.', s=1, color=cm.tab20(colors[nBins]))
     elif bunches and ds.filetype == FileType.H5:
         bdata = ds.getData('bunchNumber', step=step)
         # get all bunches
@@ -155,12 +155,12 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
         for i, b in enumerate(bunches):
             xbin = xdata[np.where(bdata == b)]
             ybin = ydata[np.where(bdata == b)]
-            plt.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[i]))
+            plt.scatter(xbin, ybin, marker='.', s=1, color=cm.tab20(colors[i]))
         # plot all skipped bunches with same color
         for s in skipped:
             xbin = xdata[np.where(bdata == s)]
             ybin = ydata[np.where(bdata == s)]
-            plt.scatter(xbin, ybin, marker='.', s=1, c=cm.tab20(colors[nBunches]))
+            plt.scatter(xbin, ybin, marker='.', s=1, color=cm.tab20(colors[nBunches]))
     else:
         plt.scatter(xdata, ydata, marker='.', s=1)
     
