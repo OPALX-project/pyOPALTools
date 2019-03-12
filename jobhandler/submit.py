@@ -89,7 +89,10 @@ class JobSubmitter:
                     lines = []
                     for line in f:
                         lines.append(line)
-                lines = additions + lines
+                # 12. March 2019
+                # https://stackoverflow.com/questions/2170900/get-first-list-index-containing-sub-string
+                index = [idx for idx, s in enumerate(lines) if not '#' in s][0]
+                lines = lines[0:index] + additions + lines[index:]
                 ftmp = fname + '.tmp'
                 with open(ftmp, "w") as f:
                     for a in lines:
