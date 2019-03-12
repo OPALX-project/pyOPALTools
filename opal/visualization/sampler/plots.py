@@ -24,6 +24,7 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
                             data order but uses the indices to plot
                             and the values as ticks), useful for
                             periodic values (e.g. azimuth)
+    nticks  (int)           number of ticks on axes (only for idx=True)
 
     Returns
     -------
@@ -46,6 +47,8 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
     ymax  = np.finfo(np.float).min + np.zeros(out.size, dtype=np.float)
 
     xdata = out.getData(xvar)
+
+    nticks = kwargs.pop('nticks', 10)
 
     for i in range(nsamples):
         # load simulation directory
@@ -70,12 +73,11 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
         plt.fill_between(ind, ymin, ymax,
                          facecolor='blue', alpha=0.2, label='variability region')
         ax = plt.gca()
-        nticks=len(ax.get_xticklabels())
         plt.xticks(ind, xdata)
-        ax.ticklabel_format(axis='x', style='sci', scilimits=(-1,-1))
         # 12. March 2019
         # https://stackoverflow.com/questions/29188757/matplotlib-specify-format-of-floats-for-tick-lables
         ax.xaxis.set_major_formatter(FormatScalarFormatter('%.0f'))
+        ax.ticklabel_format(axis='x', style='sci', scilimits=(-3, 3))
         # 12. March 2019
         # https://stackoverflow.com/questions/6682784/reducing-number-of-plot-ticks
         plt.locator_params(nbins=nticks)
