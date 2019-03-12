@@ -19,7 +19,10 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
     
     Optional
     --------
-    sort    (bool)          sort the data according to x-values
+    idx     (bool)          fix the x-axis labels (takes the original
+                            data order but uses the indices to plot
+                            and the values as ticks), useful for
+                            periodic values (e.g. azimuth)
 
     Returns
     -------
@@ -43,11 +46,6 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
 
     xdata = out.getData(xvar)
 
-    sort = kwargs.pop('sort', False)
-    ind  = np.argsort(xdata)
-    if sort:
-        xdata = xdata[ind]
-
     for i in range(nsamples):
         # load simulation directory
         sdir = os.path.join(dirname, str(i))
@@ -62,9 +60,24 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
     mean = np.zeros(len(ydata), dtype=np.float)
     mean = ydata / np.float(nsamples)
 
-    plt.plot(xdata, mean, **kwargs, color='black', linestyle='dashed', label='mean')
-    plt.fill_between(xdata, ymin, ymax,
-                     facecolor='blue', alpha=0.2, label='variability region')
+    if not kwargs.pop('idx', False):
+        plt.plot(xdata, mean, **kwargs, color='black', linestyle='dashed', label='mean')
+        plt.fill_between(xdata, ymin, ymax,
+                         facecolor='blue', alpha=0.2, label='variability region')
+    else:
+        l = len(xdata)
+        ind = np.linspace(0, l-1, l, dtype=int)
+        plt.plot(ind, mean, **kwargs, color='black', linestyle='dashed', label='mean')
+        plt.fill_between(ind, ymin, ymax,
+                         facecolor='blue', alpha=0.2, label='variability region')
+        nticks=len(plt.gca().get_xticklabels())
+        plt.xticks(xdata)
+        # 12. March 2019
+        # https://stackoverflow.com/questions/6682784/reducing-number-of-plot-ticks
+        plt.locator_params(nbins=nticks)
+        
+    
+    
     plt.legend()
 
     xlabel = out.getLabel(xvar)
