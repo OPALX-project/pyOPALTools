@@ -51,8 +51,6 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
         sdir = os.path.join(dirname, str(i))
         out = load_dataset(sdir, fname=fname)[0]
         data = out.getData(yvar)
-        if sort:
-            data = data[ind]
         ydata += data
         ymin = np.minimum(ymin, data)
         ymax = np.maximum(ymax, data)
