@@ -152,15 +152,15 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
         nBunches = len(bunches) + 1
         colors = np.linspace(0, 1, nBunches + 1)
         
-        for i, b in enumerate(bunches):
-            xbin = xdata[np.where(bdata == b)]
-            ybin = ydata[np.where(bdata == b)]
-            plt.scatter(xbin, ybin, marker='.', s=1, color=cm.tab20(colors[i]))
         # plot all skipped bunches with same color
         for s in skipped:
             xbin = xdata[np.where(bdata == s)]
             ybin = ydata[np.where(bdata == s)]
             plt.scatter(xbin, ybin, marker='.', s=1, color=cm.tab20(colors[nBunches]))
+        for i, b in enumerate(bunches):
+            xbin = xdata[np.where(bdata == b)]
+            ybin = ydata[np.where(bdata == b)]
+            plt.scatter(xbin, ybin, marker='.', s=1, color=cm.tab20(colors[i]))
     else:
         plt.scatter(xdata, ydata, marker='.', s=1)
     
