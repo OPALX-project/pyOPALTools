@@ -4,6 +4,7 @@ from opal import load_dataset
 from opal.analysis.cyclotron import *
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FormatStrFormatter
 import os
 
 def plot_variability(ds, fname, xvar, yvar, **kwargs):
@@ -68,8 +69,13 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
         plt.plot(ind, mean, **kwargs, color='black', linestyle='dashed', label='mean')
         plt.fill_between(ind, ymin, ymax,
                          facecolor='blue', alpha=0.2, label='variability region')
-        nticks=len(plt.gca().get_xticklabels())
+        ax = plt.gca()
+        nticks=len(ax.get_xticklabels())
         plt.xticks(ind, xdata)
+        ax.ticklabel_format(axis='x', style='sci', scilimits=(-1,-1))
+        # 12. March 2019
+        # https://stackoverflow.com/questions/29188757/matplotlib-specify-format-of-floats-for-tick-lables
+        ax.xaxis.set_major_formatter(FormatStrFormatter('%.0f'))
         # 12. March 2019
         # https://stackoverflow.com/questions/6682784/reducing-number-of-plot-ticks
         plt.locator_params(nbins=nticks)
