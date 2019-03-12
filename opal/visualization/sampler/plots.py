@@ -81,10 +81,10 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
         # 12. March 2019
         # https://stackoverflow.com/questions/6682784/reducing-number-of-plot-ticks
         plt.locator_params(nbins=nticks)
-        
-    
-    
-    plt.legend()
+
+    plt.legend(loc = 'upper center',
+               ncol=2, labelspacing=0.5,
+               bbox_to_anchor=(0.5, 1.1, 0.0, 0.0))
 
     xlabel = out.getLabel(xvar)
     xunit  = out.getUnit(xvar)
@@ -94,5 +94,6 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
 
     plt.xlabel(xlabel + ' [' + xunit + ']')
     plt.ylabel(ylabel + ' [' + yunit + ']')
+    plt.tight_layout()
 
     return plt
