@@ -16,6 +16,10 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
     fname   (str)           file containing the data (xvar and yvar) 
     xvar    (str)           x-axis data
     yvar    (str)           y-axis data
+    
+    Optional
+    --------
+    sort    (bool)          sort the data according to x-values
 
     Returns
     -------
@@ -39,11 +43,18 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
 
     xdata = out.getData(xvar)
 
+    sort = kwargs.pop('sort', False)
+    ind  = np.argsort(xdata)
+    if sort:
+        xdata = xdata[ind]
+
     for i in range(nsamples):
         # load simulation directory
         sdir = os.path.join(dirname, str(i))
         out = load_dataset(sdir, fname=fname)[0]
         data = out.getData(yvar)
+        if sort:
+            data = data[ind]
         ydata += data
         ymin = np.minimum(ymin, data)
         ymax = np.maximum(ymax, data)
