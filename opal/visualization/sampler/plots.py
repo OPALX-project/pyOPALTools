@@ -72,22 +72,15 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
         plt.plot(ind, mean, **kwargs, color='black', linestyle='dashed', label='mean')
         plt.fill_between(ind, ymin, ymax,
                          facecolor='blue', alpha=0.2, label='variability region')
-        ax = plt.gca()
-        plt.xticks(ind, xdata)
-        # 12. March 2019
-        # https://stackoverflow.com/questions/29188757/matplotlib-specify-format-of-floats-for-tick-lables
-        ax.xaxis.set_major_formatter(FormatScalarFormatter('%.0f'))
-        ax.ticklabel_format(axis='x', style='sci', scilimits=(-3, 3), useMathText=True)
-        # 12. March 2019
-        # https://stackoverflow.com/questions/6682784/reducing-number-of-plot-ticks
-        plt.locator_params(nbins=nticks)
+        t = int(l / nticks) - 1
+        plt.xticks(ind[::t], np.round(xdata, 0)[::t].astype(int))
 
     plt.legend(loc = 'upper center',
                ncol=2, labelspacing=0.5,
                bbox_to_anchor=(0.5, 1.1, 0.0, 0.0))
 
     plt.gca().ticklabel_format(axis='y', style='sci', scilimits=(-2, 2),
-                               useMathText=True)
+                               useMathText=True, useOffset=True)
 
     xlabel = out.getLabel(xvar)
     xunit  = out.getUnit(xvar)
