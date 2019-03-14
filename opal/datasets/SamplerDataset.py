@@ -108,24 +108,37 @@ class SamplerDataset(DatasetBase):
         
         Parameters
         ----------
-        var     (str)   a design variable
+        var     (str)   a design variable or objective
+                        if var == '' the full dvar (dvar==True) or
+                        objective data is returned
         
         Optionals
         ---------
         ind     (int)   individual identity number
+        dvar    (bool)  return DVAR data in case of var==''
+                        (default: True)
         
         Returns
         -------
         design variable simulation input value.
         """
-        ind = kwargs.get('ind', 0)
+        ind   = kwargs.get('ind', 0)
+        dvar  = kwargs.get('dvar', True)
         
         self.__load_file(ind)
         
-        if not var in self.__parser.design_variables:
-            raise ValueError("The variable '" + var + "' is not in dataset.")
+        if var == '':
+            if dvar:
+                return self.__parser.getIndividual(ind)
+            else:
+                return self.__parser.getObjectives(ind)
         
-        return self.__parser.getIndividual(ind)[var]
+        if var in self.__parser.design_variables:
+            return self.__parser.getIndividual(ind)[var]
+        elif var in self.__parser.objectives:
+            return self.__parser.getObjectives(ind)[var]
+        else:
+            raise ValueError("The variable '" + var + "' is not in dataset.")
     
     
     def getLabel(self, var):
@@ -181,6 +194,17 @@ class SamplerDataset(DatasetBase):
             raise RuntimeError('No dataset loaded yet.')
         
         return self.__parser.design_variables
+    
+    
+    @property
+    def objectives(self):
+        """
+        Obtain objectives names
+        """
+        if self._loaded_file < 0:
+            raise RuntimeError('No dataset loaded yet.')
+        
+        return self.__parser.objectives
     
     
     @property
