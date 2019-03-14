@@ -46,7 +46,7 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
     ymin  = np.finfo(np.float).max + np.zeros(out.size, dtype=np.float)
     ymax  = np.finfo(np.float).min + np.zeros(out.size, dtype=np.float)
 
-    xdata = out.getData(xvar)
+    xdata = out.getData(xvar, **kwargs)
 
     nticks = kwargs.pop('nticks', 10)
 
@@ -54,7 +54,7 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
         # load simulation directory
         sdir = os.path.join(dirname, str(i))
         out = load_dataset(sdir, fname=fname)[0]
-        data = out.getData(yvar)
+        data = out.getData(yvar, **kwargs)
         ydata += data
         ymin = np.minimum(ymin, data)
         ymax = np.maximum(ymax, data)
