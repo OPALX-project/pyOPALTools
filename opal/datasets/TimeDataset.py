@@ -1,7 +1,7 @@
 # Author:   Matthias Frey
 # Date:     March 2018
 
-from timing.Timing import Timing
+from opal.timing.Timing import Timing
 from opal.datasets.DatasetBase import *
 import os
 

@@ -4,3 +4,5 @@ import opal.statistics
 import opal.visualization
 import opal.analysis
 import opal.config
+import opal.timing
+

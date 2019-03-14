@@ -3,7 +3,7 @@
 # @date July 2017
 #
 
-import timing.Timing as timing
+from opal.timing.Timing import Timing as timing
 import os
 import re
 

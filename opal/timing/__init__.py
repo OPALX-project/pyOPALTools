@@ -1,2 +1,2 @@
-from timing.Extractor import *
-from timing.Timing import *
+from opal.timing.Extractor import *
+from opal.timing.Timing import *
