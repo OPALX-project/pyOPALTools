@@ -69,7 +69,9 @@ def jupyter_style():
     mpl.rcParams['axes.grid']                       = False
     mpl.rcParams['axes.grid.axis']                  = 'both'
     mpl.rcParams['axes.grid.which']                 = 'both'
-    mpl.rcParams['axes.hold']                       = None
+    # axis.hold deprecated in version 2 and removed in version 3
+    if mpl.__version__ < '3':
+        mpl.rcParams['axes.hold']                       = None
     mpl.rcParams['axes.labelcolor']                 = 'k'
     mpl.rcParams['axes.labelpad']                   = 4.0
     mpl.rcParams['axes.labelsize']                  = 'medium'
