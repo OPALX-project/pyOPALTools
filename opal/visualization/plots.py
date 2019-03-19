@@ -260,9 +260,7 @@ def plot_envelope(dsets, xvar='position', **kwargs):
         if not isinstance(ds, DatasetBase):
             raise TypeError("Dataset '" + ds.filename +
                             "' not derived from 'DatasetBase'.")
-    
-    ymax = kwargs.get('ymax', 0.03)
-    
+        
     lfile = kwargs.get('lfile', '')
     
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, dpi=150)
@@ -277,10 +275,12 @@ def plot_envelope(dsets, xvar='position', **kwargs):
     
     xunit = dsets[0].getUnit(xvar)
     yunit = dsets[0].getUnit('rms_x')
-    
+
+    y1max = 0.0
     for ds in dsets:
-        xdata =  ds.getData(xvar)
+        xdata  = ds.getData(xvar)
         y1data = ds.getData('rms_x')
+        y1max  = max(max(y1data), y1max)
         ax1.plot(xdata, y1data, label=os.path.basename(ds.filename))
     
     # 27. March 2018
@@ -288,11 +288,12 @@ def plot_envelope(dsets, xvar='position', **kwargs):
     plt.setp(ax1.get_yticklabels()[0], visible=False)
     
     ax2 = plt.gca()
-    plt.gca().invert_yaxis()
-    
+
+    y2max = 0.0
     for ds in dsets:
         xdata =  ds.getData(xvar)
         y2data = ds.getData('rms_y')
+        y2max  = max(max(y2data), y2max)
         ax2.plot(xdata, y2data)
     
     # 27. March 2018
@@ -300,16 +301,18 @@ def plot_envelope(dsets, xvar='position', **kwargs):
     ax1.spines['bottom'].set_visible(False)
     ax1.get_xaxis().set_visible(False)
     
-    #for ax in [ax1,ax2]:
     ax2.set_xlabel(xvar + ' [' + xunit + ']')
     
     ax1.set_ylabel(y1label + ' [' + yunit + ']')
     ax2.set_ylabel(y2label + ' [' + yunit + ']')
    
-    
-    ax1.set_ylim(ymin=0, ymax=ymax)
-    ax2.set_ylim(ymax=0, ymin=ymax)
-    
+    ax1.set_ylim(bottom=0, top=y1max)
+    ax2.set_ylim(bottom=0, top=y2max)
+    # invert second y axis
+    ax2.invert_yaxis()
+    # show top spine on second axis (for matplotlib3)
+    ax2.spines['top'].set_visible(True)
+
     ax1.legend(bbox_to_anchor=(0.6, 1.08))
     
     ax2.xaxis.set_label_position('bottom') 
