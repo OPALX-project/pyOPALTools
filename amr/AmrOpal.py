@@ -57,7 +57,6 @@ class AmrOpal:
             raise RuntimeError("AmrOpal.slice_plot: No dataset")
         
         unit    = kwargs.pop("unit", None)
-        save    = kwargs.pop("save", False)
         figsize = kwargs.pop('figsize', (12, 9))
         dpi     = kwargs.pop('dpi', None)
         
@@ -90,9 +89,6 @@ class AmrOpal:
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
         plt.xlabel(axis)
         
-        if save:
-            plt.savefig('line_plot_' + axis + '_' + field + '.png')
-        
         return plt
     
     
@@ -109,14 +105,12 @@ class AmrOpal:
         zoom (float)        is the zoom factor (default: 1, i.e. no zoom)
         color   (str)       is the color for the time stamp and scale annotation
         origin  (str)       location of the origin of the plot coordinate system
-        save    (bool)      show or save plot
         """
         
         unit              = kwargs.get("unit", None)
         zoom              = kwargs.get("zoom", 1.0)
         color             = kwargs.get("color", 'white')
         origin            = kwargs.get("origin", 'native')
-        save              = kwargs.get("save", False)
         overlay_particles = kwargs.get("overlay_particles", False)
         time              = kwargs.get("time", True)
         gridcmap          = kwargs.get("gridcmap", 'B-W LINEAR_r')
@@ -144,10 +138,7 @@ class AmrOpal:
         if grids:
             slc.annotate_grids(cmap=gridcmap)
         
-        if save:
-            slc.save()
-        else:
-            slc.show()
+        return slc
     
     
     def projection_plot(self, axis, field, **kwargs):
@@ -167,7 +158,6 @@ class AmrOpal:
                             'mip':  maximum of field in the line of sight
                             'sum':  summation of the field along the given axis
                             'integrate': integrate the requested field along the line of sight
-        save    (bool)      show or save plot
         """
         
         unit    = kwargs.get("unit", None)
@@ -175,7 +165,6 @@ class AmrOpal:
         color   = kwargs.get("color", 'white')
         origin  = kwargs.get("origin", 'native')
         method  = kwargs.get("method", 'mip')
-        save    = kwargs.get("save", False)
         overlay_particles = kwargs.get("overlay_particles", False)
         time    = kwargs.get("time", True)
         gridcmap= kwargs.get("gridcmap", 'B-W LINEAR_r')
@@ -204,10 +193,7 @@ class AmrOpal:
         
         slc.annotate_scale(corner='upper_right', size_bar_args={'color':color})
         
-        if save:
-            slc.save()
-        else:
-            slc.show()
+        return slc
     
     
     def particle_plot(self, x_field, y_field, z_field=None, **kwargs):
@@ -231,7 +217,6 @@ class AmrOpal:
         color    = kwargs.get('color', 'b')
         #origin   = kwargs.get('origin', 'native')
         fontsize = kwargs.get('fontsize', 16)
-        save     = kwargs.get("save", False)
         deposit  = kwargs.get("deposition", 'ngp') # or 'cic'
         
         pp = yt.ParticlePlot(self.ds, x_field, y_field, z_field,
@@ -250,10 +235,7 @@ class AmrOpal:
             #pp.set_zlim(z_field, zmin=-1e5, zmax=1e5)
             pp.set_unit(z_field, z_unit)
         
-        if save:
-            pp.save()
-        else:
-            pp.show()
+        return pp
     
     
     def particle_phase_space_plot(self, axis, **kwargs):
@@ -273,7 +255,6 @@ class AmrOpal:
         color           = kwargs.get('color', 'b')
         deposition      = kwargs.get('deposition', 'ngp') # or 'cic'
         fontsize        = kwargs.get('fontsize', 16)
-        save            = kwargs.get('save', False)
         
         coordinate = 'particle_position_'
         momentum   = 'particle_momentum_'
@@ -294,7 +275,4 @@ class AmrOpal:
         if momentum_unit:
             pp.set_unit(momentum, momentum_unit)
         
-        if save:
-            pp.save()
-        else:
-            pp.show()
+        return pp
