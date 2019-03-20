@@ -41,7 +41,7 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
 
     dirname = os.path.dirname(ds.filename)
     sdir = os.path.join(dirname, str(0))
-    out = load_dataset(sdir, fname=fname)[0]
+    out = load_dataset(sdir, fname=fname, info=False)[0]
     ydata = np.zeros(out.size, dtype=np.float)
     ymin  = np.finfo(np.float).max + np.zeros(out.size, dtype=np.float)
     ymax  = np.finfo(np.float).min + np.zeros(out.size, dtype=np.float)
@@ -53,7 +53,7 @@ def plot_variability(ds, fname, xvar, yvar, **kwargs):
     for i in range(nsamples):
         # load simulation directory
         sdir = os.path.join(dirname, str(i))
-        out = load_dataset(sdir, fname=fname)[0]
+        out = load_dataset(sdir, fname=fname, info=False)[0]
         data = out.getData(yvar, **kwargs)
         ydata += data
         ymin = np.minimum(ymin, data)

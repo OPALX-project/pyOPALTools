@@ -67,8 +67,8 @@ def load_dataset(directory, **kwargs):
         print ( 'Try loading stat file.' )
         load_dataset(directory, ftype=FileType.STAT)
     
-    
-    print ( 'Start loading files ...\n' )
+    if info:
+        print ( 'Start loading files ...\n' )
     datasets = []
     for fname in fnames:
         if info:
@@ -143,6 +143,7 @@ def load_dataset(directory, **kwargs):
         elif ftype == FileType.NONE:
             if info:
                 print ( 'no appropriate file match.' )
-    print ( '\nDone.\n' )
+    if info:
+        print ( '\nDone.\n' )
     
     return datasets
