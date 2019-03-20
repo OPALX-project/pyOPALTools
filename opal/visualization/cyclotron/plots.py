@@ -358,9 +358,10 @@ def plot_peak_difference(dsets, **kwargs):
     p2 = peaks2[0:npeaks]
     
     plt.grid(kwargs.pop('grid', False))
+    radiusPlot = kwargs.pop('raxis', False)
     
-    if kwargs.pop('raxis'):
-        lowest = min(min(p1), min(p2))
+    if radiusPlot:
+        lowest  = min(min(p1), min(p2))
         highest = max(max(p1), max(p2))
         
         plt.plot([lowest, highest], [lowest, highest],
