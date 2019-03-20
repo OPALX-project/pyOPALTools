@@ -42,7 +42,7 @@ def load_dataset(directory, **kwargs):
     ftype  = kwargs.get('ftype', FileType.NONE)
     fname  = kwargs.get('fname', '')
     astype = kwargs.get('astype', FileType.NONE)
-    info    = kwargs.get('info', True)
+    info   = kwargs.get('info', True)
     
     if not ftype == FileType.NONE and fname:
         raise RuntimeError('Specify either file type or file name but not both.')
@@ -71,7 +71,8 @@ def load_dataset(directory, **kwargs):
     print ( 'Start loading files ...\n' )
     datasets = []
     for fname in fnames:
-        print ( '    ' + fname + ' ... ', end='' )
+        if info:
+            print ( '    ' + fname + ' ... ', end='' )
         full_path = os.path.join(directory, fname)
         ftype = FileType.extensionToFileType(full_path)
         
