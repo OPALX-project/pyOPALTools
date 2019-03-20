@@ -42,6 +42,7 @@ def load_dataset(directory, **kwargs):
     ftype  = kwargs.get('ftype', FileType.NONE)
     fname  = kwargs.get('fname', '')
     astype = kwargs.get('astype', FileType.NONE)
+    info    = kwargs.get('info', True)
     
     if not ftype == FileType.NONE and fname:
         raise RuntimeError('Specify either file type or file name but not both.')
@@ -76,55 +77,71 @@ def load_dataset(directory, **kwargs):
         
         if  ftype == FileType.H5:
             datasets.append(H5Dataset(directory, fname))
-            print ( 'matches H5 file type.' )
+            if info:
+                print ( 'matches H5 file type.' )
         elif ftype == FileType.STAT:
             datasets.append(StatDataset(directory, fname))
-            print ( 'matches stat file type.' )
+            if info:
+                print ( 'matches stat file type.' )
         elif ftype == FileType.SMB:
             datasets.append(StatDataset(directory, fname))
-            print ( 'matches smb file type.' )
+            if info:
+                print ( 'matches smb file type.' )
         elif ftype == FileType.TIMING:
             datasets.append(TimeDataset(directory, fname, 'ippl'))
-            print ( 'matches timing file type.' )
+            if info:
+                print ( 'matches timing file type.' )
         elif ftype == FileType.OUTPUT:
             if astype == FileType.TIMING:
                 datasets.append(TimeDataset(directory, fname, 'output'))
-                print ( 'matches timing file type.' )
+                if info:
+                    print ( 'matches timing file type.' )
             else:
                 datasets.append(OutputDataset(directory, fname))
-                print ( 'matches OPAL standard output file type.' )
+                if info:
+                    print ( 'matches OPAL standard output file type.' )
         elif ftype == FileType.MEM:
             datasets.append(MemoryDataset(directory, fname))
-            print ( 'matches memory file type.' )
+            if info:
+                print ( 'matches memory file type.' )
         elif ftype == FileType.LBAL:
             datasets.append(LBalDataset(directory, fname))
-            print ( 'matches load balancing file type.' )
+            if info:
+                print ( 'matches load balancing file type.' )
         elif ftype == FileType.GRID:
             datasets.append(GridDataset(directory, fname))
-            print ( 'matches grid file type.' )
+            if info:
+                print ( 'matches grid file type.' )
         elif ftype == FileType.SOLVER:
             datasets.append(SolverDataset(directory, fname))
-            print ( 'matches solver file type.' )
+            if info:
+                print ( 'matches solver file type.' )
         elif ftype == FileType.TRACK_ORBIT:
             datasets.append(TrackOrbitDataset(directory, fname))
-            print ( 'matches track orbit file type.' )
+            if info:
+                print ( 'matches track orbit file type.' )
         elif ftype == FileType.PEAK:
             datasets.append(PeakDataset(directory, fname))
-            print ( 'matches peak file type.' )
+            if info:
+                print ( 'matches peak file type.' )
         elif ftype == FileType.HIST:
             datasets.append(ProbeHistDataset(directory, fname))
-            print ( 'matches probe histogram file type.' )
+            if info:
+                print ( 'matches probe histogram file type.' )
         elif ftype == FileType.OPTIMIZER:
             datasets.append(OptimizerDataset(directory, fname))
             # after reading we leave since optimizer produces many files
-            print ( 'matches optimizer file type. Stop reading further.' )
+            if info:
+                print ( 'matches optimizer file type. Stop reading further.' )
             break
         elif ftype == FileType.SAMPLER:
             datasets.append(SamplerDataset(directory, fname))
-            print ( 'matches sampler file type.' )
+            if info:
+                print ( 'matches sampler file type.' )
             break
         elif ftype == FileType.NONE:
-            print ( 'no appropriate file match.' )
+            if info:
+                print ( 'no appropriate file match.' )
     print ( '\nDone.\n' )
     
     return datasets
