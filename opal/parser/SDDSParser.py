@@ -151,8 +151,6 @@ class SDDSParser:
             elif 'units' in line:
                 self._units[self._nColumns] = line[line.find('=')+1:-2]
             elif 'description' in line:
-                # 25. March 2019
-                # https://stackoverflow.com/questions/12851791/removing-numbers-from-string
                 self.__description[self._nColumns] = self.__removeNumber(line[line.find('=')+2:-2])
             elif '&end' in line:
                 break
@@ -169,6 +167,8 @@ class SDDSParser:
                 break
     
     def __removeNumber(self, s):
+        # 25. March 2019
+        # https://stackoverflow.com/questions/12851791/removing-numbers-from-string
         return ''.join([i for i in s if not i.isdigit()])
 
     def collectStatFileData(self, baseFN, root, yNames):
