@@ -18,15 +18,10 @@ def plot_grids_per_level(ds, **kwargs):
     if not ds.filetype == FileType.GRID:
         raise TypeError(ds.filename + ' is not a grid dataset.')
     
-    hspan  = kwargs.get('hspan', [None, None])
-    grid   = kwargs.get('grid', False)
-    xscale = kwargs.get('xscale', 'linear')
-    yscale = kwargs.get('yscale', 'linear')
-    
-    plt.figure()
-    
-    plt.xscale(xscale)
-    plt.yscale(yscale)
+    hspan  = kwargs.pop('hspan', [None, None])
+    grid   = kwargs.pop('grid', False)
+    xscale = kwargs.pop('xscale', 'linear')
+    yscale = kwargs.pop('yscale', 'linear')
     
     if hspan[0] and hspan[1]:
         plt.axhspan(hspan[0], hspan[1],
@@ -46,6 +41,8 @@ def plot_grids_per_level(ds, **kwargs):
     plt.plot(time, total, label='total')
     plt.xlabel(ds.getLabel('time') + ' [' + ds.getUnit('time') + ']')
     plt.ylabel('#grids')
+    plt.xscale(xscale)
+    plt.yscale(yscale)
     plt.grid(grid, which='both')
     plt.tight_layout()
     plt.legend()
@@ -65,16 +62,10 @@ def plot_grid_histogram(ds, **kwargs):
     if not ds.filetype == FileType.GRID:
         raise TypeError(ds.filename + ' is not a grid dataset.')
     
-    hspan  = kwargs.get('hspan', [None, None])
-    grid   = kwargs.get('grid', False)
-    xscale = kwargs.get('xscale', 'linear')
-    yscale = kwargs.get('yscale', 'linear')
-    
-    plt.figure()
-    
-    plt.xscale(xscale)
-    plt.yscale(yscale)
-    
+    hspan  = kwargs.pop('hspan', [None, None])
+    grid   = kwargs.pop('grid', False)
+    xscale = kwargs.pop('xscale', 'linear')
+    yscale = kwargs.pop('yscale', 'linear')
     
     nCores= ds.getNumCores()
     
@@ -110,6 +101,9 @@ def plot_grid_histogram(ds, **kwargs):
     plt.plot(time, low, label='minimum')
     plt.plot(time, high, label='maximum')
     plt.plot(time, avg, label='mean')
+    
+    plt.xscale(xscale)
+    plt.yscale(yscale)
     
     plt.xlabel(ds.getLabel('time') + ' [' + ds.getUnit('time') + ']')
     plt.ylabel('#grids per core')

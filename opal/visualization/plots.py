@@ -47,7 +47,6 @@ def plot_profile1D(ds, xvar, yvar, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    #plt.figure()
     plt.xscale(kwargs.pop('yscale', 'linear'))
     plt.yscale(kwargs.pop('xscale', 'linear'))
     
@@ -99,20 +98,20 @@ def plot_phase_space(ds, xvar, yvar, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    step    = kwargs.get('step', 0)
-    bins    = kwargs.get('bins', [])
-    bunches = kwargs.get('bunches', [])
+    step    = kwargs.pop('step', 0)
+    bins    = kwargs.pop('bins', [])
+    bunches = kwargs.pop('bunches', [])
     
     if not ds.filetype == FileType.H5:
         raise TypeError("Dataset '" + ds.filename + "' is not a H5 file.")
     
-    plt.xscale(kwargs.get('yscale', 'linear'))
-    plt.yscale(kwargs.get('xscale', 'linear'))
+    plt.xscale(kwargs.pop('yscale', 'linear'))
+    plt.yscale(kwargs.pop('xscale', 'linear'))
     
-    if kwargs.get('xsci', False):
+    if kwargs.pop('xsci', False):
         plt.ticklabel_format(style='sci', axis='x', scilimits=(0,3))
     
-    if kwargs.get('ysci', False):
+    if kwargs.pop('ysci', False):
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
     
     xdata = ds.getData(xvar, step=step)
@@ -215,9 +214,9 @@ def plot_density(ds, xvar, yvar, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    step = kwargs.get('step', 0)
-    bins = kwargs.get('bins', (50,50))
-    cmap = kwargs.get('cmap', plt.cm.jet)
+    step = kwargs.pop('step', 0)
+    bins = kwargs.pop('bins', (50,50))
+    cmap = kwargs.pop('cmap', plt.cm.jet)
     
     xdata = ds.getData(xvar, step=step)
     ydata = ds.getData(yvar, step=step)
@@ -261,7 +260,7 @@ def plot_envelope(dsets, xvar='position', **kwargs):
             raise TypeError("Dataset '" + ds.filename +
                             "' not derived from 'DatasetBase'.")
         
-    lfile = kwargs.get('lfile', '')
+    lfile = kwargs.pop('lfile', '')
     
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, dpi=150)
     fig.set_size_inches(9,4)

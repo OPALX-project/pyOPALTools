@@ -19,19 +19,16 @@ def plot_total_memory(ds, **kwargs):
     if not ds.filetype == FileType.MEM:
         raise TypeError(ds.filename + ' is not a memory dataset.')
     
-    grid     = kwargs.get('grid', False)
-    title    = kwargs.get('title', None)
-    yscale   = kwargs.get('yscale', 'linear')
-    xscale   = kwargs.get('xscale', 'linear')
-    
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+    grid     = kwargs.pop('grid', False)
+    title    = kwargs.pop('title', None)
+    yscale   = kwargs.pop('yscale', 'linear')
+    xscale   = kwargs.pop('xscale', 'linear')
     
     memory_usage = ds.getData('memory')
     time = ds.getData('t')
     plt.plot(time, memory_usage)
     
-    ax.grid(grid, which='both')
+    plt.grid(grid, which='both')
     
     memory_unit = ds.getUnit('memory')
     time_unit = ds.getUnit('t')
@@ -62,10 +59,10 @@ def plot_memory_summary(ds, **kwargs):
     if not ds.filetype == FileType.MEM:
         raise TypeError(ds.filename + ' is not a memory dataset.')
     
-    grid     = kwargs.get('grid', False)
-    title    = kwargs.get('title', None)
-    yscale   = kwargs.get('yscale', 'linear')
-    xscale   = kwargs.get('xscale', 'linear')
+    grid     = kwargs.pop('grid', False)
+    title    = kwargs.pop('title', None)
+    yscale   = kwargs.pop('yscale', 'linear')
+    xscale   = kwargs.pop('xscale', 'linear')
         
     nTotal = len(ds.getVariables())
     nCols = sum('processor' in var for var in ds.getVariables())
@@ -81,9 +78,6 @@ def plot_memory_summary(ds, **kwargs):
     # iterate through all steps and do a boxplot
     colStart = nTotal - nCols
     colEnd   = nCols + 1
-    
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
     
     # each row is a time stamp
     minimum = []
@@ -129,10 +123,10 @@ def plot_memory_boxplot(ds, **kwargs):
     if not ds.filetype == FileType.MEM:
         raise TypeError(ds.filename + ' is not a memory dataset.')
     
-    grid     = kwargs.get('grid', False)
-    title    = kwargs.get('title', None)
-    yscale   = kwargs.get('yscale', 'linear')
-    xscale   = kwargs.get('xscale', 'linear')
+    grid     = kwargs.pop('grid', False)
+    title    = kwargs.pop('title', None)
+    yscale   = kwargs.pop('yscale', 'linear')
+    xscale   = kwargs.pop('xscale', 'linear')
     
     nTotal = len(ds.getVariables())
     nCols = sum('processor' in var for var in ds.getVariables())
@@ -147,9 +141,6 @@ def plot_memory_boxplot(ds, **kwargs):
     # iterate through all steps and do a boxplot
     colStart = nTotal - nCols
     colEnd   = nCols + 1
-    
-    fig = plt.figure(figsize=figsize)
-    ax = fig.add_subplot(111)
     
     # each row is a time stamp
     stamps = []

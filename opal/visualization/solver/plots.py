@@ -18,15 +18,10 @@ def plot_solver_histogram(ds, var, **kwargs):
     if not ds.filetype == FileType.SOLVER:
         raise TypeError(ds.filename + ' is not a solver dataset.')
     
-    hspan  = kwargs.get('hspan', [None, None])
-    grid   = kwargs.get('grid', False)
-    xscale = kwargs.get('xscale', 'linear')
-    yscale = kwargs.get('yscale', 'linear')
-    
-    plt.figure()
-    
-    plt.xscale(xscale)
-    plt.yscale(yscale)
+    hspan  = kwargs.pop('hspan', [None, None])
+    grid   = kwargs.pop('grid', False)
+    xscale = kwargs.pop('xscale', 'linear')
+    yscale = kwargs.pop('yscale', 'linear')
     
     if hspan[0] and hspan[1]:
         plt.axhspan(hspan[0], hspan[1],
@@ -46,6 +41,8 @@ def plot_solver_histogram(ds, var, **kwargs):
         plt.ylabel(ds.getLabel(var) + ' [' + ds.getUnit(var) + ']')
         
     plt.grid(grid, which='both')
+    plt.xscale(xscale)
+    plt.yscale(yscale)
     plt.tight_layout()
     plt.legend()
     

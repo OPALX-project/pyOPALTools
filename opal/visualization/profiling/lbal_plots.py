@@ -24,12 +24,12 @@ def plot_lbal_histogram(ds, **kwargs):
     if not ds.filetype == FileType.LBAL:
         raise TypeError(ds.filename + ' is not a load balancing dataset.')
     
-    grid     = kwargs.get('grid', False)
-    title    = kwargs.get('title', None)
-    yscale   = kwargs.get('yscale', 'linear')
-    xscale   = kwargs.get('xscale', 'linear')
-    blower   = kwargs.get('blower', [0.0, 0.0,  25.0, 50.0, 75.0])
-    bupper   = kwargs.get('bupper', [0.0, 25.0, 50.0, 75.0, 100.0])
+    grid     = kwargs.pop('grid', False)
+    title    = kwargs.pop('title', None)
+    yscale   = kwargs.pop('yscale', 'linear')
+    xscale   = kwargs.pop('xscale', 'linear')
+    blower   = kwargs.pop('blower', [0.0, 0.0,  25.0, 50.0, 75.0])
+    bupper   = kwargs.pop('bupper', [0.0, 25.0, 50.0, 75.0, 100.0])
     
     if not len(blower) == len(bupper):
         raise ValueError('len(blower) != len(bupper)')
@@ -45,9 +45,6 @@ def plot_lbal_histogram(ds, **kwargs):
     # iterate through all steps and do a boxplot
     colStart = nTotal - nCols
     colEnd   = nCols + 1
-    
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
     
     # percentages with respect to expected average number p / t
     # where p is the number of particles per processes and t the total
@@ -120,10 +117,10 @@ def plot_lbal_summary(ds, **kwargs):
     if not ds.filetype == FileType.LBAL:
         raise TypeError(ds.filename + ' is not a load balancing dataset.')
     
-    grid     = kwargs.get('grid', False)
-    title    = kwargs.get('title', None)
-    yscale   = kwargs.get('yscale', 'linear')
-    xscale   = kwargs.get('xscale', 'linear')
+    grid     = kwargs.pop('grid', False)
+    title    = kwargs.pop('title', None)
+    yscale   = kwargs.pop('yscale', 'linear')
+    xscale   = kwargs.pop('xscale', 'linear')
     
     nTotal = len(ds.getVariables())
     nCols = sum('processor' in var for var in ds.getVariables())
@@ -137,9 +134,6 @@ def plot_lbal_summary(ds, **kwargs):
     # iterate through all steps
     colStart = nTotal - nCols
     colEnd   = nCols + 1
-    
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
     
     # each row is a time stamp
     minimum = []
@@ -190,10 +184,10 @@ def plot_lbal_boxplot(ds, **kwargs):
     if not ds.filetype == FileType.LBAL:
         raise TypeError(ds.filename + ' is not a load balancing dataset.')
     
-    grid     = kwargs.get('grid', False)
-    title    = kwargs.get('title', None)
-    yscale   = kwargs.get('yscale', 'linear')
-    xscale   = kwargs.get('xscale', 'linear')
+    grid     = kwargs.pop('grid', False)
+    title    = kwargs.pop('title', None)
+    yscale   = kwargs.pop('yscale', 'linear')
+    xscale   = kwargs.pop('xscale', 'linear')
     
     nTotal = len(ds.getVariables())
     nCols = sum('processor' in var for var in ds.getVariables())
@@ -207,9 +201,6 @@ def plot_lbal_boxplot(ds, **kwargs):
     # iterate through all steps and do a boxplot
     colStart = nTotal - nCols
     colEnd   = nCols + 1
-    
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
     
     # each row is a time stamp
     stamps = []
