@@ -61,3 +61,10 @@ class DatasetBase:
         To be implemented by derived class.
         """
         return None
+    
+    def __str__(self):
+        """
+        Print a short summary about the dataset.
+        To be implemented in the derived classes.
+        """
+        return 'Empty dataset.'

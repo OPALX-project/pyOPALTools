@@ -14,6 +14,7 @@ class SDDSParser:
         
         self.variables = {}
         self._units = {}
+        self.__description = {}
         
         # check file version
         version = self._checkVersion(filename)
@@ -66,6 +67,7 @@ class SDDSParser:
                     obj = re.match(column_pattern, line)
                     self.variables[obj.group(1)] = self._nColumns
                     self._units[self._nColumns] = obj.group(3)
+                    self.__description[self._nColumns] = self.__removeNumber(obj.group(4))
                     self._nColumns += 1
                 elif 'parameter' in line:
                     self._nRows += 1
@@ -111,6 +113,8 @@ class SDDSParser:
     def getVariables(self):
         return list(self.variables.keys())
     
+    def getDescriptionOfVariable(self, varname):
+        return self.__description[self.variables[varname]]
     
     def _description(self, f):
         for line in f:
@@ -147,7 +151,9 @@ class SDDSParser:
             elif 'units' in line:
                 self._units[self._nColumns] = line[line.find('=')+1:-2]
             elif 'description' in line:
-                pass
+                # 25. March 2019
+                # https://stackoverflow.com/questions/12851791/removing-numbers-from-string
+                self.__description[self._nColumns] = self.__removeNumber(line[line.find('=')+2:-2])
             elif '&end' in line:
                 break
     
@@ -161,6 +167,9 @@ class SDDSParser:
                 pass
             elif '&end' in line:
                 break
+    
+    def __removeNumber(self, s):
+        return ''.join([i for i in s if not i.isdigit()])
 
     def collectStatFileData(self, baseFN, root, yNames):
 
