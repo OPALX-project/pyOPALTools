@@ -111,3 +111,18 @@ class ProbeHistDataset(DatasetBase):
         unit = self.__parser.getUnitOfVariable(peakvar)
         
         return unit
+
+
+    @property
+    def size(self):
+        return self.__parser.size
+
+
+    def __str__(self):
+        variables = self.__parser.getVariables()
+        s  = '\n\tProbe histogram dataset.\n\n'
+        s += '\tSize: ' + str(self.size) + '\n\n'
+        s += '\tAvailable variables (' + str(len(variables)) + ') :\n\n'
+        for v in sorted(variables):
+            s += '\t' + '%-20s' % (v) + '\n'
+        return s
