@@ -101,3 +101,14 @@ class PeakDataset(DatasetBase):
         unit = self.__parser.getUnitOfVariable(peakvar)
         
         return unit
+
+    @property
+    def size(self):
+        return len(self.__parser.getDataOfVariable(self.__parser.getVariableName()[0]))
+
+
+    def __str__(self):
+        s  = '\n\tPeak dataset.\n\n'
+        s += '\tSize: ' + str(self.size) + '\n\n'
+        s += '\tType: ' + self.__parser.getType() + '\n'
+        return s
