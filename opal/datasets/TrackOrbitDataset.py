@@ -89,3 +89,19 @@ class TrackOrbitDataset(DatasetBase):
             unit = r'\mathrm{' + unit + '}'
         
         return r'$' + unit + '$'
+    
+    
+    @property
+    def size(self):
+        return self.__parser.size
+    
+    
+    def __str__(self):
+        s  = '\n\tTrack Orbit dataset.\n\n'
+        variables = self.__parser.getVariableNames()
+        s += '\tSize: ' + str(len(variables)) + ' x ' + str(self.size) + '\n\n'
+        s += '\tAvailable variables (' + str(len(variables)) + ') :\n\n'
+        for v in sorted(variables):
+            s += '\t' + '%-20s' % (v) + '\t' + '%-25s' % (self.__parser.description[v]) + \
+                 '\t' + self.__parser.getUnitOfVariable(v) + '\n'
+        return s
