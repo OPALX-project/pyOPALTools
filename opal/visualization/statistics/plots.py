@@ -31,9 +31,9 @@ def plot_histogram(ds, var, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    step    = kwargs.get('step', 0)
-    bins    = kwargs.get('bins', 'sturges')
-    density = kwargs.get('density', True)
+    step    = kwargs.pop('step', 0)
+    bins    = kwargs.pop('bins', 'sturges')
+    density = kwargs.pop('density', True)
     
     data = ds.getData(var, step=step)
     
@@ -78,7 +78,7 @@ def plot_classification(ds, xvar, yvar, value, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    step    = kwargs.get('step', 0)
+    step    = kwargs.pop('step', 0)
     
     xdata = ds.getData(xvar, step=step)
     ydata = ds.getData(yvar, step=step)
@@ -123,7 +123,7 @@ def plot_joint(ds, xvar, yvar, join, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    step    = kwargs.get('step', 0)
+    step    = kwargs.pop('step', 0)
     
     xdata = ds.getData(xvar, step=step)
     ydata = ds.getData(yvar, step=step)
@@ -164,7 +164,7 @@ def plot_density(ds, xvar, yvar, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' not derived from 'DatasetBase'.")
     
-    step    = kwargs.get('step', 0)
+    step    = kwargs.pop('step', 0)
     
     xdata = ds.getData(xvar, step=step)
     ydata = ds.getData(yvar, step=step)

@@ -69,7 +69,7 @@ def plot_efficiency(dsets, what, prop, **kwargs):
     cores = list(cores)
     
     # transform cores --> nodes
-    core2node = kwargs.get('core2node', 1)
+    core2node = kwargs.pop('core2node', 1)
     
     for i, c in enumerate(cores):
         cores[i] /= core2node
@@ -90,19 +90,19 @@ def plot_efficiency(dsets, what, prop, **kwargs):
     
     percent = 1.0
     ylabel  = 'efficiency'
-    if kwargs.get('percent', True):
+    if kwargs.pop('percent', True):
         percent = 100.0
         ylabel += ' [%]'
     
     for i, s in enumerate(speedup):
         efficiency.append( s / incr[i] * percent ) # in percent
     
-    xscale = kwargs.get('xscale', 'linear')
-    yscale = kwargs.get('yscale', 'linear')
-    grid   = kwargs.get('grid', False)
+    xscale = kwargs.pop('xscale', 'linear')
+    yscale = kwargs.pop('yscale', 'linear')
+    grid   = kwargs.pop('grid', False)
     
     plt.plot(cores, efficiency)
-    plt.xlabel(kwargs.get('xlabel', '#cores'))
+    plt.xlabel(kwargs.pop('xlabel', '#cores'))
     plt.ylabel(ylabel)
     plt.xscale(xscale)
     plt.yscale(yscale)
@@ -176,7 +176,7 @@ def plot_speedup(dsets, what, prop, **kwargs):
     cores = list(cores)
     
     # transform cores --> nodes
-    core2node = kwargs.get('core2node', 1)
+    core2node = kwargs.pop('core2node', 1)
     
     for i, c in enumerate(cores):
         cores[i] /= core2node
@@ -186,14 +186,14 @@ def plot_speedup(dsets, what, prop, **kwargs):
     for t in time:
         speedup.append( time[0] / t )
     
-    xscale = kwargs.get('xscale', 'linear')
-    yscale = kwargs.get('yscale', 'linear')
-    grid   = kwargs.get('grid', False)
+    xscale = kwargs.pop('xscale', 'linear')
+    yscale = kwargs.pop('yscale', 'linear')
+    grid   = kwargs.pop('grid', False)
     
     ax1 = plt.gca()
     loc = 'best'
     
-    if kwargs.get('efficiency', False):
+    if kwargs.pop('efficiency', False):
         loc = 'lower center'
         
         # obtain core increase
@@ -218,13 +218,13 @@ def plot_speedup(dsets, what, prop, **kwargs):
         ax2.plot(cores, efficiency, 'r')
     
     ax1.plot(cores, speedup, label=ds.getLabel(what))
-    ax1.set_xlabel(kwargs.get('xlabel', '#cores'))
+    ax1.set_xlabel(kwargs.pop('xlabel', '#cores'))
     ax1.set_ylabel('speed-up')
     ax1.set_xscale(xscale)
     ax1.set_yscale(yscale)
     ax1.grid(grid, which='both')
     
-    if kwargs.get('perfect_scaling', False):
+    if kwargs.pop('perfect_scaling', False):
         ref = []
         for c in cores:
             ref.append( c / cores[0] )
@@ -290,15 +290,15 @@ def plot_time_scaling(dsets, prop, **kwargs):
     cores = list(cores)
     
     # transform cores --> nodes
-    core2node = kwargs.get('core2node', 1)
+    core2node = kwargs.pop('core2node', 1)
     
     for i, c in enumerate(cores):
         cores[i] /= core2node
     
     labels = []
     times  = []
-    excludeList = kwargs.get('exclude', [])
-    tag         = kwargs.get('tag', '')
+    excludeList = kwargs.pop('exclude', [])
+    tag         = kwargs.pop('tag', '')
     
     for name in dsets[0].getLabels():
         skip = False
@@ -310,7 +310,7 @@ def plot_time_scaling(dsets, prop, **kwargs):
             labels.append( name )
             times.append( dsets[0].getData(var=name, prop=prop + ' avg') )
     
-    times, labels = mostConsuming(kwargs.get('first', 1e6), times, labels, prop + ' avg')
+    times, labels = mostConsuming(kwargs.pop('first', 1e6), times, labels, prop + ' avg')
     
     times, labels = zip(*sorted(zip(times, labels),
                             key=itemgetter(0),
@@ -327,16 +327,16 @@ def plot_time_scaling(dsets, prop, **kwargs):
         
         plt.errorbar(cores, tavg, yerr=[tmin, tmax], fmt='--o', label=label)
     
-    plt.grid(kwargs.get('grid', False), which="both")
-    plt.xlabel(kwargs.get('xlabel', '#cores'))
+    plt.grid(kwargs.pop('grid', False), which="both")
+    plt.xlabel(kwargs.pop('xlabel', '#cores'))
     plt.ylabel('time [' + ds.getUnit('') + ']')
     plt.xlim([0.5*cores[0], 1.05*cores[-1]])
-    plt.xscale(kwargs.get('xscale', 'linear'))
-    plt.yscale(kwargs.get('yscale', 'linear'))
+    plt.xscale(kwargs.pop('xscale', 'linear'))
+    plt.yscale(kwargs.pop('yscale', 'linear'))
     plt.tight_layout()
     
     
-    if kwargs.get('perfect_scaling', False):
+    if kwargs.pop('perfect_scaling', False):
         ref = []
         for c in cores:
             ref.append( times[0] * cores[0] / c )
@@ -456,8 +456,8 @@ def plot_pie_chart(ds, prop, **kwargs):
         raise TypeError("Dataset '" + ds.filename +
                         "' is not a timing dataset.")
     
-    first = kwargs.get('first', None)
-    cmap_name = kwargs.get('cmap', 'YlGn')
+    first = kwargs.pop('first', None)
+    cmap_name = kwargs.pop('cmap', 'YlGn')
     
     names = ds.getLabels()
     

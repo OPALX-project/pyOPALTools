@@ -78,9 +78,9 @@ def plot_joint(xdata, xlab,
     if xdata.size < 1 or ydata.size < 1:
         raise ValueError('Empty data container.')
     
-    marginals    = kwargs.get('marginals', 'hist')
-    size         = kwargs.get('size', 8)
-    cmap         = kwargs.get('cmap', 'Blues_d')
+    marginals    = kwargs.pop('marginals', 'hist')
+    size         = kwargs.pop('size', 8)
+    cmap         = kwargs.pop('cmap', 'Blues_d')
     
     g = sns.JointGrid(x=xdata, y=ydata, size=size)
     
@@ -163,12 +163,12 @@ def plot_density(xdata, xlab,
         raise ValueError('Empty data container.')
     
     
-    nxbin     = kwargs.get('nxbin', 300)
-    nybin     = kwargs.get('nybin', 300)
-    cmap      = kwargs.get('cmap', 'viridis')
-    doShading = kwargs.get('shading', False)
-    xlim      = kwargs.get('xlim', [])
-    ylim      = kwargs.get('ylim', [])
+    nxbin     = kwargs.pop('nxbin', 300)
+    nybin     = kwargs.pop('nybin', 300)
+    cmap      = kwargs.pop('cmap', 'viridis')
+    doShading = kwargs.pop('shading', False)
+    xlim      = kwargs.pop('xlim', [])
+    ylim      = kwargs.pop('ylim', [])
     
     shading = 'flat'
     if doShading:

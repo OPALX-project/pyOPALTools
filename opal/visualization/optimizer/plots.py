@@ -174,9 +174,9 @@ def plot_objectives(ds, opt=0, **kwargs):
         result.append( s )
     
     plt.plot(gens, result)
-    plt.xscale(kwargs.get('xscale', 'linear'))
-    plt.yscale(kwargs.get('yscale', 'linear'))
-    plt.grid(kwargs.get('grid', True), which='both')
+    plt.xscale(kwargs.pop('xscale', 'linear'))
+    plt.yscale(kwargs.pop('yscale', 'linear'))
+    plt.grid(kwargs.pop('grid', True), which='both')
     plt.xlabel('generation')
     plt.ylabel('sum of objectives (all individuals)')
     
@@ -415,9 +415,9 @@ def plot_dvar_evolution(ds, opt=0, dvars=[], op=min, **kwargs):
         plt.plot(range(1, ngen + 1), result[i, :], label=dvar)
     
     plt.xlabel('generation')
-    plt.xscale(kwargs.get('xscale', 'linear'))
-    plt.yscale(kwargs.get('yscale', 'linear'))
-    plt.grid(kwargs.get('grid', True), which='both')
+    plt.xscale(kwargs.pop('xscale', 'linear'))
+    plt.yscale(kwargs.pop('yscale', 'linear'))
+    plt.grid(kwargs.pop('grid', True), which='both')
     
     if len(dvars) > 1:
         plt.ylabel(op.__name__)

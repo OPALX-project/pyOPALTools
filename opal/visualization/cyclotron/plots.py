@@ -443,7 +443,7 @@ def plot_probe_histogram(ds, **kwargs):
         plt.hist(np.sqrt(x2 + y2), **kwargs)
         plt.xlabel('radius [' + ds.getUnit('x') + ']')
 
-        if kwargs.get('density', False):
+        if kwargs.pop('density', False):
             ylabel = 'density'
     else:
         raise TypeError(ds.filename +
