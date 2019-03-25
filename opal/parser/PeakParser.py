@@ -117,3 +117,10 @@ class PeakParser:
     
     def isVariable(self, var):
         return var in self._peaks['name']
+    
+    
+    def getVariableName(self):
+        return self._peaks['name']
+    
+    def getType(self):
+        return self._peaks['type']

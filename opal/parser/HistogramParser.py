@@ -136,3 +136,11 @@ class HistogramParser:
     
     def isVariable(self, var):
         return var in self._info
+    
+    @property
+    def size(self):
+        return self._info['nbins'][0]
+    
+    
+    def getVariables(self):
+        return self._info.keys()

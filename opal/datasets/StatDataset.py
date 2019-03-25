@@ -195,3 +195,13 @@ class StatDataset(DatasetBase):
     @property
     def size(self):
         return self.__parser.size
+
+
+    def __str__(self):
+        variables = self.__parser.getVariables()
+        s  = '\n\tStatistic dataset.\n\n'
+        s += '\tSize: ' + str(len(variables)) + ' x ' + str(self.size) + '\n\n'
+        s += '\tAvailable variables (' + str(len(variables)) + ') :\n\n'
+        for v in sorted(variables):
+            s += '\t' + '%-20s' % (v) + '\t' + self.__parser.getDescriptionOfVariable(v) + '\n'
+        return s

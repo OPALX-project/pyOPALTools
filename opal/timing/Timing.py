@@ -101,14 +101,14 @@ class Timing:
                      'what':        [],
                      'cores':       []}
         
-        special_dict = {'what':     [],
-                        'cpu max':  [],
-                        'wall max': [],
-                        'cpu min':  [],
-                        'wall min': [],
-                        'cpu avg':  [],
-                        'wall avg': []}
-        return main_dict, special_dict
+        self._special_dict = {'what':     [],
+                              'cpu max':  [],
+                              'wall max': [],
+                              'cpu min':  [],
+                              'wall min': [],
+                              'cpu avg':  [],
+                              'wall avg': []}
+        return main_dict, self._special_dict
     
     
     def read_output_file(self, f):
@@ -336,6 +336,10 @@ class Timing:
         None
         """
         return self._data
+    
+    @property
+    def properties(self):
+        return self._special_dict
     
     
     def getProblemSize(self):

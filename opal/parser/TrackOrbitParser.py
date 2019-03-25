@@ -19,6 +19,16 @@ class TrackOrbitParser:
             self._names[6]:   r'\beta\gamma'
         }
         
+        self._description = {
+            self._names[0]:   'particle identity number',
+            self._names[1]:   'particle coordinate in x',
+            self._names[2]:   'particle momentum in x',
+            self._names[3]:   'particle coordinate in y',
+            self._names[4]:   'particle momentum in y',
+            self._names[5]:   'particle coordinate in z',
+            self._names[6]:   'particle momentum in z',
+        }
+        
         self._dataset = []
         
     
@@ -77,3 +87,15 @@ class TrackOrbitParser:
     
     def isVariable(self, var):
         return var in self._names
+    
+    
+    def getVariableNames(self):
+        return self._names
+    
+    @property
+    def description(self):
+        return self._description
+    
+    @property
+    def size(self):
+        return len(self._dataset)

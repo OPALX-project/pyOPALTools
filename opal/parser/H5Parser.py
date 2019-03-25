@@ -198,7 +198,7 @@ class H5Parser:
         
         info += 'Global attributes:\n'
         info += '------------------\n'
-        for i, attr in enumerate(self.getGlobalAttributes()):
+        for i, attr in enumerate(sorted(self.getGlobalAttributes())):
             info += '  {:20}'.format(attr)
             
             if (i+1) % 5 == 0:
@@ -206,7 +206,7 @@ class H5Parser:
         
         info += '\n\nStep attributes:\n'
         info += '----------------\n'
-        for i, attr in enumerate(self.getStepAttributes()):
+        for i, attr in enumerate(sorted(self.getStepAttributes())):
             info += '  {:20}'.format(attr)
             
             if (i+1) % 5 == 0:
@@ -214,7 +214,7 @@ class H5Parser:
         
         info += '\n\nStep datasets:\n'
         info += '--------------\n'
-        for i, attr, in enumerate(self.getStepDatasets()):
+        for i, attr, in enumerate(sorted(self.getStepDatasets())):
             info += '  {:20}'.format(attr)
             
             if (i+1) % 5 == 0:

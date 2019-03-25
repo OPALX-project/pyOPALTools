@@ -173,3 +173,16 @@ class H5Dataset(DatasetBase):
     @property
     def size(self):
         return self.__parser.getNSteps()
+
+
+    def __str__(self):
+        #variables = self.__parser.getVariables()
+        s  = '\n\tH5 dataset.\n\n'
+        s += '\tNumber of steps: ' + str(self.__parser.getNSteps())
+        s += '\n\n\tAvailable step attributes (' + str(len(self.__parser.getStepAttributes())) + ')' + ':\n\n'
+        for v in sorted(self.__parser.getStepAttributes()):
+            s += '\t' + '%-20s' % (v) + '\n'
+        s += '\n\n\tAvailable step datasets (' + str(len(self.__parser.getStepDatasets())) + ')' + ':\n\n'
+        for v in sorted(self.__parser.getStepDatasets()):
+            s += '\t' + '%-20s' % (v) + '\n'
+        return s

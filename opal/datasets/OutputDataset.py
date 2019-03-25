@@ -64,3 +64,7 @@ class OutputDataset(DatasetBase):
         empty string
         """
         return ''
+    
+    @property
+    def size(self):
+        return 0

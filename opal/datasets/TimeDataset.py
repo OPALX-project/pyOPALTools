@@ -132,3 +132,21 @@ class TimeDataset(DatasetBase):
         the string 's' for seconds
         """
         return r'$s$'
+
+
+    @property
+    def size(self):
+        return len(self.__parser.getTiming())
+
+
+    def __str__(self):
+        s  = '\n\tTiming dataset.\n\n'
+        data = self.__parser.getTiming()
+        props = self.__parser.properties
+        s += '\tAvailable properties (' + str(len(props)) + ') :\n\n'
+        for p in props:
+            s += '\t' + p + '\n'
+        s += '\n\tAvailable timings (' + str(len(data)) + ') :\n\n'
+        for v in data:
+            s += '\t' + v['what'] + '\n'
+        return s

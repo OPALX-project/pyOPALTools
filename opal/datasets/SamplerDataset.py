@@ -77,10 +77,6 @@ class SamplerDataset(DatasetBase):
         for i in range(beg, end+1):
             print ( 'load ' + str(i) )
             self.__actual_file_load(i)
-            self.__parser.parse(os.path.join(dirname,
-                                             split[0] + '_' + \
-                                             split[1] + '_' + \
-                                             str(i) + '.json'))
             self._loaded_file = i
             if self.__parser.num_samples > 0 and \
                ind >= self.__parser.begin and \
@@ -231,3 +227,17 @@ class SamplerDataset(DatasetBase):
             self.__actual_file_load(i)
             n += self.__parser.num_samples
         return n
+
+
+    def __str__(self):
+        self.__load_file(0)
+        s  = '\n\tSampler dataset.\n\n'
+        s += '\tNumber of optimizers:  ' + str(self.__nFiles) + '\n\n'
+        s += '\tNumber of samples: ' + str(self.size) + ' per generation \n\n'
+        s += '\tAvailable design variables (' + str(len(self.design_variables)) + ') :\n\n'
+        for v in sorted(self.design_variables):
+            s += '\t' + '%-20s' % (v) + '\n'
+        s += '\n\tAvailable objectives (' + str(len(self.objectives)) + ') :\n\n'
+        for v in sorted(self.objectives):
+            s += '\t' + '%-20s' % (v) + '\n'
+        return s

@@ -243,3 +243,24 @@ class OptimizerDataset(DatasetBase):
             self.__parser.readGeneration(gen, opt)
             self._loaded_generation = gen
             self._loaded_optimizer = opt
+    
+    @property
+    def size(self):
+        """
+        Returns the number of individuals
+        """
+        return len(self.individuals(1))
+
+
+    def __str__(self):
+        s  = '\n\tOptimizer dataset.\n\n'
+        s += '\tNumber of optimizers:  ' + str(self.num_optimizers) + '\n\n'
+        s += '\tNumber of generations: ' + str(self.num_generations) + '\n\n'
+        s += '\tNumber of individuals: ' + str(self.size) + ' per generation \n\n'
+        s += '\tAvailable design variables (' + str(len(self.design_variables)) + ') :\n\n'
+        for v in sorted(self.design_variables):
+            s += '\t' + '%-20s' % (v) + '\n'
+        s += '\n\tAvailable objectives (' + str(len(self.objectives)) + ') :\n\n'
+        for v in sorted(self.objectives):
+            s += '\t' + '%-20s' % (v) + '\n'
+        return s
