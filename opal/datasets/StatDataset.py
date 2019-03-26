@@ -1,35 +1,12 @@
 # Author:   Matthias Frey
-# Date:     March 2018
+# Date:     March 2018 - 2019
 
-from opal.parser.SDDSParser import SDDSParser
-from opal.datasets.DatasetBase import *
-import numpy as np
+from opal.datasets.SDDSDatasetBase import *
 
-class StatDataset(DatasetBase):
+class StatDataset(SDDSDatasetBase):
     
     def __init__(self, directory, fname):
-        """
-        Constructor.
-        
-        Members
-        ----------
-        __parser            (SDDSParser)    actual data holder
-        __variable_mapper   (dict)          map user input variable
-                                            name to file variable name
-        __label_mapper      (dict)          map user input variable
-                                            name to plot label name
-        __unit_label_mapper ([])            map units of variables
-                                            to plotting style
-        """
-        self.__parser = SDDSParser()
-        
-        full_path = os.path.join(directory, fname)
-        if not os.path.exists(full_path):
-            raise RuntimeError("File '" + full_path + "' does not exist.")
-        
-        self.__parser.parse(full_path)
-        
-        self.__variable_mapper = {
+        vmapper = {
             'time':         't',
             'position':     's',
             '#particles':   'numParticles',
@@ -40,7 +17,7 @@ class StatDataset(DatasetBase):
             'max_z':        'max_s',
         }
         
-        self.__label_mapper  = {
+        lmapper  = {
             'rms_x':    r'$\sigma_x$',
             'rms_y':    r'$\sigma_y$',
             'rms_z':    r'$\sigma_z$',
@@ -82,7 +59,7 @@ class StatDataset(DatasetBase):
             'halo_z':   r'$h_z$'
         }
         
-        self.__unit_label_mapper = [
+        umapper = [
             'rms_x',
             'rms_y',
             'rms_z',
@@ -114,94 +91,8 @@ class StatDataset(DatasetBase):
             'dt'
         ]
         
-        super(StatDataset, self).__init__(directory, fname)
-    
-    def getData(self, var, **kwargs):
-        """
-        Obtain data of a variable
-        
-        Parameters
-        ----------
-        var     (str)   variable name
-        
-        Returns
-        -------
-        a list of the data
-        """
-        statvar = var
-        
-        if var in self.__variable_mapper:
-            statvar = self.__variable_mapper[var]
-        
-        if not statvar in self.__parser.getVariables():
-            raise RuntimeError("The variable '" + var + "' is not in dataset.")
-        return np.asarray(self.__parser.getDataOfVariable(statvar))
-    
-    
-    def getLabel(self, var):
-        """
-        Obtain label for plotting.
-        
-        Parameters
-        ----------
-        var     (str)   variable name
-        
-        Returns
-        -------
-        appropriate name plotting ready
-        """
-        statvar = var
-        
-        if var in self.__variable_mapper:
-            statvar = self.__variable_mapper[var]
-        
-        if not statvar in self.__parser.getVariables():
-            raise RuntimeError("The variable '" + var + "' is not in dataset.")
-        
-        if var in self.__label_mapper:
-            var = self.__label_mapper[var]
-        
-        return var
-    
-    
-    def getUnit(self, var):
-        """
-        Obtain unit for plotting.
-        
-        Parameters
-        ----------
-        var     (str)   variable name
-        
-        Returns
-        -------
-        appropriate unit in math mode for plotting 
-        """
-        statvar = var
-        
-        if var in self.__variable_mapper:
-            statvar = self.__variable_mapper[var]
-            
-        if not statvar in self.__parser.getVariables():
-            raise RuntimeError("The variable '" + var + "' is not in dataset.")
-        
-        unit = self.__parser.getUnitOfVariable(statvar)
-        
-        if var in self.__unit_label_mapper:
-            unit = r'\mathrm{' + unit + '}'
-        
-        return r'$' + unit + '$'
-
-
-    @property
-    def size(self):
-        return self.__parser.size
-
-
-    def __str__(self):
-        variables = self.__parser.getVariables()
-        s  = '\n\tStatistic dataset.\n\n'
-        s += '\tSize: ' + str(len(variables)) + ' x ' + str(self.size) + '\n\n'
-        s += '\tAvailable variables (' + str(len(variables)) + ') :\n\n'
-        for v in sorted(variables):
-            s += '\t' + '%-20s' % (v) + '\t' + self.__parser.getDescriptionOfVariable(v) + '\n'
-        return s
+        super(StatDataset, self).__init__(directory, fname,
+                                          variable_mapper=vmapper,
+                                          label_mapper=lmapper,
+                                          unit_label_mapper=umapper,
+                                          dataset_type='Statistic')
