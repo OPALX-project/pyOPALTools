@@ -1,5 +1,5 @@
 # Author:   Matthias Frey
-# Date:     March 2018
+# Date:     March 2019
 
 from opal.parser.SDDSParser import SDDSParser
 from opal.datasets.DatasetBase import *
