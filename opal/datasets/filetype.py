@@ -24,7 +24,8 @@ class FileType(IntEnum):
     OPTIMIZER   = 11,
     SAMPLER     = 12,
     SMB         = 13,
-    NONE        = 14
+    AMR         = 14,
+    NONE        = 15
     
     @classmethod
     def extensionToFileType(cls, fname):
@@ -75,5 +76,7 @@ class FileType(IntEnum):
             return cls.OUTPUT
         elif '-trackOrbit.dat' in fname:
             return cls.TRACK_ORBIT
+        elif os.path.basename(fname) == 'Header':
+            return cls.AMR
         else:
             return cls.NONE

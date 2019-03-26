@@ -8,3 +8,4 @@ from opal.visualization.grids.plots import *
 from opal.visualization.solver.plots import *
 from opal.visualization.statistics.plots import *
 from opal.visualization.cyclotron.plots import *
+from opal.visualization.amr.plots import *
