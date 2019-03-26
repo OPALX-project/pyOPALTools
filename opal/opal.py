@@ -2,7 +2,6 @@
 # Date:     March 2018 - 2019
 
 import os
-import logging
 
 from opal.datasets.filetype import FileType
 from opal.datasets.H5Dataset import H5Dataset
@@ -27,8 +26,6 @@ def load_dataset(directory, **kwargs):
     If neither ftype nor fname is specified it tries to
     read in a *.stat file.
 
-    To see stdoutput, use the python logging module like an adult
-    
     Parameters
     ----------
     directory       (str)       root directory of the OPAL simulation
