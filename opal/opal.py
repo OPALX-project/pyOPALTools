@@ -4,6 +4,7 @@
 import os
 
 from opal.datasets.filetype import FileType
+from opal.datasets.AmrDataset import AmrDataset
 from opal.datasets.H5Dataset import H5Dataset
 from opal.datasets.StatDataset import StatDataset
 from opal.datasets.TimeDataset import TimeDataset
@@ -131,6 +132,10 @@ def load_dataset(directory, **kwargs):
             elif ftype == FileType.SAMPLER:
                 datasets.append(SamplerDataset(directory, fname))
                 opal_logger.debug('    ' + fname + ' matches sampler file type.' )
+                break
+            elif ftype == FileType.AMR:
+                datasets.append(AmrDataset(directory))
+                opal_logger.debug('    ' + directory + ' matches AMR file type.' )
                 break
             elif ftype == FileType.NONE:
                 opal_logger.error('no appropriate file match.' )
