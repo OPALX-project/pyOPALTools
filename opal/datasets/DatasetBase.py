@@ -3,9 +3,9 @@
 
 import os
 from opal.datasets.filetype import FileType
-from opal.visualization.BasePlotter import BasePlotter
+#from opal.visualization.BasePlotter import BasePlotter
 
-class DatasetBase(BasePlotter):
+class DatasetBase: #(BasePlotter):
     """
     Class with member functions common to
     all datasets.
