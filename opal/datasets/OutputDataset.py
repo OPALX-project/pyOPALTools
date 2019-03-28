@@ -1,10 +1,11 @@
 # Author:   Matthias Frey
 # Date:     April 2018
 
-from opal.datasets.DatasetBase import *
+from opal.datasets.DatasetBase import DatasetBase
+from opal.visualization.OutputPlotter import OutputPlotter
 import numpy as np
 
-class OutputDataset(DatasetBase):
+class OutputDataset(DatasetBase, OutputPlotter):
     
     def __init__(self, directory, fname):
         """

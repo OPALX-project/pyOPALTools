@@ -3,10 +3,11 @@
 
 import os
 from opal.parser.OptimizerParser import OptimizerParser
-from opal.datasets.DatasetBase import *
+from opal.datasets.DatasetBase import DatasetBase
+from opal.visualization.OptimizerPlotter import OptimizerPlotter
 from string import digits
 
-class OptimizerDataset(DatasetBase):
+class OptimizerDataset(DatasetBase, OptimizerPlotter):
     
     def __init__(self, directory, fname):
         """
