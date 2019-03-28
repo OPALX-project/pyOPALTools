@@ -3,10 +3,11 @@
 
 import os
 from opal.parser.HistogramParser import HistogramParser
-from opal.datasets.DatasetBase import *
+from opal.datasets.DatasetBase import DatasetBase
+from opal.visualization.ProbePlotter import ProbePlotter
 import numpy as np
 
-class ProbeHistDataset(DatasetBase):
+class ProbeHistDataset(DatasetBase, ProbePlotter):
     
     def __init__(self, directory, fname):
         """
@@ -18,9 +19,11 @@ class ProbeHistDataset(DatasetBase):
         __variable_mapper   (dict)          map user input variable
         __label_mapper      (dict)          map user input variable
         """
+        super(ProbeHistDataset, self).__init__(directory, fname)
+
         self.__parser = HistogramParser()
-        
-        
+        self.__parser.parse(self.filename)
+                
         self.__variable_mapper = {
             #'bincount':     'dataset',
             'radius':       'radii'
@@ -29,14 +32,6 @@ class ProbeHistDataset(DatasetBase):
         self.__label_mapper  = {
             'bincount':     'bin count'
         }
-        
-        full_path = os.path.join(directory, fname)
-        if not os.path.exists(full_path):
-            raise RuntimeError("File '" + full_path + "' does not exist.")
-        
-        self.__parser.parse(full_path)
-        
-        super(ProbeHistDataset, self).__init__(directory, fname)
     
     
     def getData(self, var, **kwargs):

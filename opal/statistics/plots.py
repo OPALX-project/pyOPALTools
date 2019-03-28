@@ -16,9 +16,9 @@ def simple_kde_plot(xdata, ydata, **kwargs):
     n_levels     = kwargs.get('n_levels', 6)
     shade        = kwargs.get('shade', False)
     shade_lowest = kwargs.get('shade_lowest', False)
-    scipy        = kwargs.get('scipy', False)
+    sc           = kwargs.get('scipy', False)
     
-    if scipy:
+    if sc:
         if cbar:
             warnings.warn('SciPy mode: Colorbar not used.')
         

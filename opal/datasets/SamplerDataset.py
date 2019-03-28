@@ -3,10 +3,11 @@
 
 import os
 from opal.parser.sampler import SamplerParser
-from opal.datasets.DatasetBase import *
+from opal.datasets.DatasetBase import DatasetBase
+from opal.visualization.SamplerPlotter import SamplerPlotter
 from string import digits
 
-class SamplerDataset(DatasetBase):
+class SamplerDataset(DatasetBase, SamplerPlotter):
     
     def __init__(self, directory, fname):
         """
@@ -22,13 +23,9 @@ class SamplerDataset(DatasetBase):
         __parser            (SamplerParser)         actual data holder
         __nFiles            (int)                   number of sampler output files found
         """
-        
-        full_path = os.path.join(directory, fname)
+        super(SamplerDataset, self).__init__(directory, fname)
         
         base = str.split(fname, '_')[0]
-        
-        if not os.path.exists(full_path):
-            raise ValueError("File '" + full_path + "' does not exist.")
         
         self.__parser = SamplerParser()
         
@@ -44,7 +41,6 @@ class SamplerDataset(DatasetBase):
         print ( 'Sampler dataset consisting of ' +
                 str(self.__nFiles) + ' files.' )
         
-        super(SamplerDataset, self).__init__(directory, fname)
     
     
     def __load_file(self, ind):

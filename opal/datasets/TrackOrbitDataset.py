@@ -3,10 +3,11 @@
 
 import os
 from opal.parser.TrackOrbitParser import TrackOrbitParser
-from opal.datasets.DatasetBase import *
+from opal.datasets.DatasetBase import DatasetBase
+from opal.visualization.TrackOrbitPlotter import TrackOrbitPlotter
 import numpy as np
 
-class TrackOrbitDataset(DatasetBase):
+class TrackOrbitDataset(DatasetBase, TrackOrbitPlotter):
     
     def __init__(self, directory, fname):
         """
@@ -18,22 +19,16 @@ class TrackOrbitDataset(DatasetBase):
         __unit_label_mapper ([])                map units of variables
                                                 to plotting style
         """
+        super(TrackOrbitDataset, self).__init__(directory, fname)
+        
         self.__parser = TrackOrbitParser()
+        self.__parser.parse(self.filename)
         
         self.__unit_label_mapper = [
             'x',
             'y',
             'z'
         ]
-        
-        
-        full_path = os.path.join(directory, fname)
-        if not os.path.exists(full_path):
-            raise RuntimeError("File '" + full_path + "' does not exist.")
-        
-        self.__parser.parse(full_path)
-        
-        super(TrackOrbitDataset, self).__init__(directory, fname)
     
     
     def getData(self, var, **kwargs):

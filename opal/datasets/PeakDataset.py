@@ -3,10 +3,11 @@
 
 import os
 from opal.parser.PeakParser import PeakParser
-from opal.datasets.DatasetBase import *
+from opal.datasets.DatasetBase import DatasetBase
+from opal.visualization.PeakPlotter import PeakPlotter
 import numpy as np
 
-class PeakDataset(DatasetBase):
+class PeakDataset(DatasetBase, PeakPlotter):
     
     def __init__(self, directory, fname):
         """
@@ -17,19 +18,14 @@ class PeakDataset(DatasetBase):
         __parser            (PeakParser)    actual data holder
         __variable_mapper   (dict)          map user input variable
         """
+        super(PeakDataset, self).__init__(directory, fname)
+
         self.__parser = PeakParser()
+        self.__parser.parse(self.filename)
         
         self.__variable_mapper = {
             'radius':   'radii'
         }
-        
-        full_path = os.path.join(directory, fname)
-        if not os.path.exists(full_path):
-            raise RuntimeError("File '" + full_path + "' does not exist.")
-        
-        self.__parser.parse(full_path)
-        
-        super(PeakDataset, self).__init__(directory, fname)
     
     
     def getData(self, var, **kwargs):

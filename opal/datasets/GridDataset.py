@@ -2,8 +2,9 @@
 # Date:     March 2018 - 2019
 
 from opal.datasets.SDDSDatasetBase import *
+from opal.visualization.GridPlotter import GridPlotter
 
-class GridDataset(SDDSDatasetBase):
+class GridDataset(SDDSDatasetBase, GridPlotter):
     
     def __init__(self, directory, fname):
         vmapper = {

@@ -2,8 +2,9 @@
 # Date:     March 2018 - 2019
 
 from opal.datasets.SDDSDatasetBase import *
+from opal.visualization.SolverPlotter import SolverPlotter
 
-class SolverDataset(SDDSDatasetBase):
+class SolverDataset(SDDSDatasetBase, SolverPlotter):
     
     def __init__(self, directory, fname):
         vmapper = {

@@ -2,10 +2,11 @@
 # Date:     March 2018
 
 from opal.timing.Timing import Timing
-from opal.datasets.DatasetBase import *
+from opal.datasets.DatasetBase import DatasetBase
+from opal.visualization.TimingPlotter import TimingPlotter
 import os
 
-class TimeDataset(DatasetBase):
+class TimeDataset(DatasetBase, TimingPlotter):
     
     def __init__(self, directory, fname, ttype='ippl'):
         """

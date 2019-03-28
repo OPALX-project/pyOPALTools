@@ -3,8 +3,9 @@
 
 import os
 from opal.datasets.filetype import FileType
+from opal.visualization.BasePlotter import BasePlotter
 
-class DatasetBase:
+class DatasetBase(BasePlotter):
     """
     Class with member functions common to
     all datasets.
@@ -20,6 +21,10 @@ class DatasetBase:
         _fname      (str)           name of file
         _ftype      (FileType)      type of file
         """
+        full_path = os.path.join(directory, fname)
+        if not os.path.exists(full_path):
+            raise RuntimeError("File '" + full_path + "' does not exist.")
+        
         self._directory = directory
         self._fname = fname
         self._ftype = FileType.extensionToFileType(os.path.join(directory, fname))
@@ -68,3 +73,9 @@ class DatasetBase:
         To be implemented in the derived classes.
         """
         return 'Empty dataset.'
+
+
+    # inherited from BasePlotter
+    @property
+    def ds(self):
+        return self
