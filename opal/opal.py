@@ -13,7 +13,7 @@ from opal.datasets.LBalDataset import LBalDataset
 from opal.datasets.GridDataset import GridDataset
 from opal.datasets.SolverDataset import SolverDataset
 from opal.datasets.TrackOrbitDataset import TrackOrbitDataset
-from opal.datasets.OutputDataset import OutputDataset
+from opal.datasets.StdOpalOutputDataset import StdOpalOutputDataset
 from opal.datasets.PeakDataset import PeakDataset
 from opal.datasets.ProbeHistDataset import ProbeHistDataset
 from opal.datasets.OptimizerDataset import OptimizerDataset
@@ -101,7 +101,7 @@ def load_dataset(directory, **kwargs):
                     datasets.append(TimeDataset(directory, fname, 'output'))
                     opal_logger.debug('    ' + fname + ' matches timing file type.' )
                 else:
-                    datasets.append(OutputDataset(directory, fname))
+                    datasets.append(StdOpalOutputDataset(directory, fname))
                     opal_logger.debug('    ' + fname + ' matches OPAL standard output file type.' )
             elif ftype == FileType.MEM:
                 datasets.append(MemoryDataset(directory, fname))
