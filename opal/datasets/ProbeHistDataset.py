@@ -3,10 +3,11 @@
 
 import os
 from opal.parser.HistogramParser import HistogramParser
-from opal.datasets.DatasetBase import *
+from opal.datasets.DatasetBase import DatasetBase
+from opal.visualization.ProbePlotter import ProbePlotter
 import numpy as np
 
-class ProbeHistDataset(DatasetBase):
+class ProbeHistDataset(DatasetBase, ProbePlotter):
     
     def __init__(self, directory, fname):
         """

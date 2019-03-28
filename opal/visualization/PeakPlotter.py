@@ -1,7 +1,8 @@
-from opal.visualization.TimingPlotter import *
+from opal.visualization.BasePlotter import *
 import numpy as np
+import os
 
-class PeakPlotter(TimingPlotter):
+class PeakPlotter(BasePlotter):
     
     def __init__(self):
         pass

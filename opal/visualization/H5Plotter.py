@@ -1,7 +1,7 @@
-from opal.visualization.BasePlotter import *
+from opal.visualization.ProbePlotter import *
 import numpy as np
 
-class H5Plotter(BasePlotter):
+class H5Plotter(ProbePlotter):
     
     def __init__(self):
         pass
