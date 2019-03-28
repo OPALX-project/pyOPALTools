@@ -8,7 +8,7 @@ class PeakPlotter(BasePlotter):
         pass
     
     
-    def plot_peak_difference(dset, **kwargs):
+    def plot_peak_difference(self, dset, **kwargs):
         """
         Plot the peak difference of a probe output.
         
@@ -25,17 +25,14 @@ class PeakPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
-        if not len(dsets) == 1:
+        if isinstance(dset, list):
             raise ValueError('Exactly 1 datasets expected. ' +
-                            'len(dsets) = ' + str(len(dsets)) + ' != 1.')
+                            'len(dsets) = ' + str(len(dset)) + ' != 1.')
         
         dsets = [self.ds, dset]
         
         for ds in dsets:
-            if not isinstance(ds, DatasetBase):
-                raise TypeError("Dataset '" + ds.filename +
-                                "' not derived from 'DatasetBase'.")
-        
+            from opal.datasets.filetype import FileType
             if not ds.filetype == FileType.PEAK:
                 raise TypeError(ds.filename +
                                 ' is not a peak (*.peaks) file.')

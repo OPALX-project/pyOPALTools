@@ -52,7 +52,7 @@ class StatPlotter(BasePlotter):
         return plt
 
     
-    def plot_envelope(dset, xvar='position', **kwargs):
+    def plot_envelope(self, xvar='position', **kwargs):
         """
         Create an envelope plot.
         
@@ -61,17 +61,29 @@ class StatPlotter(BasePlotter):
         
         Parameters
         ----------
-        dset    (StatDataset)   another statistic dataset
         lfile   (str)           lattice file (*.lattice) (optional)
         xvar    (str)           x-axis variable
+        
+        Optional
+        --------
+        dset    ([StatDataset]) list of other statistic datasets
         
         Returns
         -------
         a matplotlib.pyplot handle
         """
-        if not isinstance(dset, StatDataset):
-            raise TypeError("Dataset '" + dset.filename +
-                            "' is not an instance of 'StatDataset'.")
+        dsets = kwargs.pop('dsets', [])
+        
+        if not isinstance(dsets, list):
+            dsets = [dsets]
+        
+        dsets = [self.ds] + dsets
+        
+        for ds in dsets:
+            from opal.datasets.StatDataset import StatDataset
+            if not isinstance(ds, StatDataset):
+                raise TypeError("Dataset '" + ds.filename +
+                                "' is not an instance of 'StatDataset'.")
             
         lfile = kwargs.pop('lfile', '')
         
@@ -82,13 +94,11 @@ class StatPlotter(BasePlotter):
             lattice = LatticeParser()
             lattice.plot(lfile, fig, ax1, ax2)
         
-        y1label = self.ds.getLabel('rms_x')
-        y2label = self.ds.getLabel('rms_y')
+        y1label = dsets[0].getLabel('rms_x')
+        y2label = dsets[0].getLabel('rms_y')
         
-        xunit = self.ds.getUnit(xvar)
-        yunit = self.ds.getUnit('rms_x')
-        
-        dsets = [self.ds, dset]
+        xunit = dsets[0].getUnit(xvar)
+        yunit = dsets[0].getUnit('rms_x')
     
         y1max = 0.0
         for ds in dsets:

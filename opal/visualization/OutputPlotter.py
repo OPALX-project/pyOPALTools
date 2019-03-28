@@ -1,6 +1,8 @@
 from opal.visualization.TimingPlotter import *
 import numpy as np
 
+from opal.analysis.cyclotron import calcRFphases
+
 class OutputPlotter(TimingPlotter):
     
     def __init__(self):

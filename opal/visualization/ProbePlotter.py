@@ -27,6 +27,8 @@ class ProbePlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
+        from opal.datasets.filetype import FileType
+        
         ylabel = self.ds.getLabel('bincount')
         
         if self.ds.filetype == FileType.HIST:

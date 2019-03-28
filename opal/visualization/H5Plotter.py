@@ -1,4 +1,5 @@
 from opal.visualization.ProbePlotter import *
+from opal.visualization.statistics import impl_plots
 import numpy as np
 
 class H5Plotter(ProbePlotter):
@@ -154,5 +155,166 @@ class H5Plotter(ProbePlotter):
         
         plt.xlabel(xlabel + ' [' + xunit + ']')
         plt.ylabel(ylabel + ' [' + yunit + ']')
+        
+        return plt
+
+
+    def plot_histogram(self, var, **kwargs):
+        """
+        Plot a 1D histogram.
+        
+        Parameters
+        ----------
+        ds      (DatasetBase)       dataset
+        var     (str)               variable to consider
+        
+        Optional parameters
+        -------------------
+        step    (int)           of dataset
+        bins    (int /str)      binning type or #bins
+                                (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
+        density (bool)          normalize such that integral over
+                                range is 1.
+        
+        Returns
+        -------
+        a matplotlib.pyplot handle
+        """
+        step    = kwargs.pop('step', 0)
+        bins    = kwargs.pop('bins', 'sturges')
+        density = kwargs.pop('density', True)
+        
+        data = self.ds.getData(var, step=step)
+        
+        plt.hist(data, bins=bins, density=density)
+        
+        xunit  = self.ds.getUnit(var)
+        xlabel = self.ds.getLabel(var)
+        
+        plt.xlabel(xlabel + ' [' + xunit + ']')
+        
+        ylabel = '#entries'
+        
+        if density:
+            ylabel += ' (normalized)'
+        plt.ylabel(ylabel)
+        
+        return plt
+
+
+    def plot_classification(self, xvar, yvar, value, **kwargs):
+        """
+        Scatter plot where the points are colored according
+        the value of the probability density function
+        pdf(x, y) computed through kernel density estimation.
+        
+        Parameters
+        ----------
+        ds      (DatasetBase)       dataset
+        xvar    (str)               x-axis variable to consider
+        yvar    (str)               y-axis variable to consider
+        value   (float)             boundary value of classification
+        
+        Optional parameters
+        -------------------
+        step    (int)           of dataset
+        
+        Returns
+        -------
+        a matplotlib.pyplot handle
+        """
+        step    = kwargs.pop('step', 0)
+        
+        xdata = self.ds.getData(xvar, step=step)
+        ydata = self.ds.getData(yvar, step=step)
+        
+        xunit  = self.ds.getUnit(xvar)
+        xlabel = self.ds.getLabel(xvar)
+        
+        yunit  = self.ds.getUnit(yvar)
+        ylabel = self.ds.getLabel(yvar)
+        
+        plt = impl_plots.plot_classification(xdata, xlabel,
+                                            ydata, ylabel,
+                                            value)
+        
+        plt.xlabel(xlabel + ' [' + xunit + ']')
+        plt.ylabel(ylabel + ' [' + yunit + ']')
+        
+        return plt
+
+
+    def plot_joint(self, xvar, yvar, join, **kwargs):
+        """
+        Do a joint plot (marginals + contour / scatter)
+        
+        Parameters
+        ----------
+        ds      (DatasetBase)       dataset
+        xvar    (str)               x-axis variable to consider
+        yvar    (str)               y-axis variable to consider
+        join    (str)               'all', 'contour' or 'scatter'
+        
+        Optional parameters
+        -------------------
+        step        (int)           of dataset
+        see also                    help(impl_plots.plot_joint)
+        
+        Returns
+        -------
+        a matplotlib.pyplot handle
+        """
+        step    = kwargs.pop('step', 0)
+        
+        xdata = self.ds.getData(xvar, step=step)
+        ydata = self.ds.getData(yvar, step=step)
+        
+        xunit  = self.ds.getUnit(xvar)
+        xlabel = self.ds.getLabel(xvar)
+        
+        yunit  = self.ds.getUnit(yvar)
+        ylabel = self.ds.getLabel(yvar)
+        
+        plt = impl_plots.plot_joint(xdata, xlabel + ' [' + xunit + ']',
+                                    ydata, ylabel + ' [' + yunit + ']',
+                                    join, **kwargs)
+        
+        return plt
+
+
+    def plot_density_scipy(self, xvar, yvar, **kwargs):
+        """
+        Do a density plot
+        
+        Parameters
+        ----------
+        ds      (DatasetBase)       dataset
+        xvar    (str)               x-axis variable to consider
+        yvar    (str)               y-axis variable to consider
+        
+        Optional parameters
+        -------------------
+        step        (int)           of dataset
+        see also                    help(impl_plots.plot_density)
+        
+        Returns
+        -------
+        a matplotlib.pyplot handle
+        """
+        step    = kwargs.pop('step', 0)
+        
+        xdata = self.ds.getData(xvar, step=step)
+        ydata = self.ds.getData(yvar, step=step)
+        
+        xunit  = self.ds.getUnit(xvar)
+        xlabel = self.ds.getLabel(xvar)
+        
+        yunit  = self.ds.getUnit(yvar)
+        ylabel = self.ds.getLabel(yvar)
+        clab   = ''
+        
+        plt = impl_plots.plot_density(xdata, xlabel + ' [' + xunit + ']',
+                                    ydata, ylabel + ' [' + yunit + ']',
+                                    clab, **kwargs)
         
         return plt

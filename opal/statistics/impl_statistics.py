@@ -1,4 +1,4 @@
-import scipy as sc
+from scipy import stats
 import numpy as np
 
 def moment(data, k):
@@ -14,7 +14,7 @@ def moment(data, k):
     if data.size < 1:
         raise ValueError('Empty data container.')
     
-    return sc.stats.moment(data, axis=0, moment=k)
+    return stats.moment(data, axis=0, moment=k)
 
 
 def mean(data):
@@ -44,7 +44,7 @@ def skew(data):
     if data.size < 1:
         raise ValueError('Empty data container.')
     
-    return sc.stats.skew(data, axis=0)
+    return stats.skew(data, axis=0)
 
 
 def kurtosis(data):
@@ -59,7 +59,7 @@ def kurtosis(data):
     if data.size < 1:
         raise ValueError('Empty data container.')
     
-    return sc.stats.kurtosis(data, axis=0, fisher=True)
+    return stats.kurtosis(data, axis=0, fisher=True)
 
 
 def gaussian_kde(data):
@@ -78,7 +78,7 @@ def gaussian_kde(data):
     if data.size < 1:
         raise ValueError('Empty data container.')
     
-    return sc.stats.gaussian_kde(data)
+    return stats.gaussian_kde(data)
 
 
 def histogram(data, **kwargs):
