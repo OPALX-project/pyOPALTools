@@ -2,7 +2,7 @@
 # Date:     March 2018 - 2019
 
 from opal.datasets.SDDSDatasetBase import *
-from opa.visualization.MemoryPlotter import MemoryPlotter
+from opal.visualization.MemoryPlotter import MemoryPlotter
 
 class MemoryDataset(SDDSDatasetBase, MemoryPlotter):
     

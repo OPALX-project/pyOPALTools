@@ -10,7 +10,7 @@ class MemoryPlotter(BasePlotter):
     def __init__(self):
         pass
     
-        def plot_total_memory(self, **kwargs):
+    def plot_total_memory(self, **kwargs):
         """
         Plot the total memory consumption vs. simulation time.
         

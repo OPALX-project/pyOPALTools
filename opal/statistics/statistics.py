@@ -1,6 +1,5 @@
 import numpy as np
 from opal.datasets.filetype import FileType
-from opal.datasets.DatasetBase import DatasetBase
 from opal.statistics import impl_statistics
 
 def moment(ds, var, k, **kwargs):
@@ -22,10 +21,6 @@ def moment(ds, var, k, **kwargs):
     -----
     https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html#scipy.stats.moment
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     step = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)
@@ -52,10 +47,6 @@ def mean(ds, var, **kwargs):
     step    (int)           of dataset
     bin     (int)           energy bin for which to compute
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     step = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)
@@ -85,10 +76,6 @@ def skew(ds, var, **kwargs):
     step    (int)           of dataset
     bin     (int)           energy bin for which to compute
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     step = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)
@@ -122,10 +109,6 @@ def kurtosis(ds, var, **kwargs):
     step    (int)           of dataset
     bin     (int)           energy bin for which to compute
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     step = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)
@@ -162,10 +145,6 @@ def gaussian_kde(ds, var, **kwargs):
     -------
     kernel density estimator of scipy.
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     step    = kwargs.get('step', 0)
     bins    = kwargs.get('bins', 'sturges')
     density = kwargs.get('density', True)
@@ -197,10 +176,6 @@ def histogram(ds, var, **kwargs):
     a numpy.histogram with bin edges
     (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     step    = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)

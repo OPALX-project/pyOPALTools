@@ -3,7 +3,6 @@
 
 from opal.datasets.filetype import FileType
 from opal.statistics import statistics as stat
-from opal.datasets.DatasetBase import DatasetBase
 from opal.analysis import impl_beam
 import numpy as np
 
@@ -30,13 +29,7 @@ def halo_continuous_beam(ds, var, **kwargs):
     K. R. Crandall, TechSource, Santa Fe, NM 87594-1057,
     BEAM HALO IN PROTON LINAC BEAMS,
     XX International Linac Conference, Monterey, California
-    """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
-    step = kwargs.get('step', 0)
-    
+    """    
     data = ds.getData(var, step=step)
     
     energy_bin = kwargs.get('bin', -1)
@@ -71,10 +64,6 @@ def halo_ellipsoidal_beam(ds, var, **kwargs):
     BEAM HALO IN PROTON LINAC BEAMS,
     XX International Linac Conference, Monterey, California
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     step = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)
@@ -109,10 +98,6 @@ def projected_emittance(ds, dim, **kwargs):
     -------
     the projected emittance
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     step = kwargs.get('step', 0)
     
     coords = ds.getData(dim, step=step)
@@ -148,10 +133,6 @@ def find_beams(ds, var, **kwargs):
     -------
     a list of minima locations and corresponding histogram
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     step    = kwargs.get('step', 0)
     
     data = ds.getData(var, step=step)
@@ -216,10 +197,6 @@ def get_beam_indices(ds, k, **kwargs):
     ----------
     https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.extract.html
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     if not ds.filetype == FileType.H5:
         raise TypeError(ds.filename + ' is not a H5 dataset.')
     

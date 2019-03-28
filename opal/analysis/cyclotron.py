@@ -1,5 +1,4 @@
 from opal.datasets.filetype import FileType
-from opal.datasets.DatasetBase import DatasetBase
 import numpy as np
 import scipy as sp
 import re
@@ -26,11 +25,6 @@ def calcTurnSeparation(ds, nsteps=-1, angle=0.0):
     -------
     turn separation, energy, phi_r and radius
     """
-    
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     if not ds.filetype == FileType.TRACK_ORBIT:
         raise TypeError(ds.filename + ' is not a track orbit dataset.')
     
@@ -321,10 +315,6 @@ def calcRFphases(ds, RFcavity):
     --------
     Check Cyclotron.ipynb in the opal/test directory
     """
-    if not isinstance(ds, DatasetBase):
-        raise TypeError("Dataset '" + ds.filename +
-                        "' not derived from 'DatasetBase'.")
-    
     if not ds.filetype == FileType.OUTPUT:
         raise TypeError(ds.filename + ' is not an OPAL standard output file.')
     
