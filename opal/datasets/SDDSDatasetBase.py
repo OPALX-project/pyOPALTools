@@ -1,8 +1,9 @@
 # Author:   Matthias Frey
 # Date:     March 2019
 
+import os
 from opal.parser.SDDSParser import SDDSParser
-from opal.datasets.DatasetBase import *
+from opal.datasets.DatasetBase import DatasetBase
 import numpy as np
 
 class SDDSDatasetBase(DatasetBase):

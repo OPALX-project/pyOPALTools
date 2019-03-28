@@ -5,9 +5,10 @@ import os
 from opal.parser.H5Parser import H5Parser
 from opal.parser.H5Error import *
 import numpy as np
-from opal.datasets.DatasetBase import *
+from opal.datasets.DatasetBase import DatasetBase
+from opal.visualization.H5Plotter import H5Plotter
 
-class H5Dataset(DatasetBase):
+class H5Dataset(DatasetBase, H5Plotter):
     
     def __init__(self, directory, fname):
         """

@@ -2,8 +2,9 @@
 # Date:     March 2018 - 2019
 
 from opal.datasets.SDDSDatasetBase import *
+from opal.visualization.StatPlotter import StatPlotter
 
-class StatDataset(SDDSDatasetBase):
+class StatDataset(SDDSDatasetBase, StatPlotter):
     
     def __init__(self, directory, fname):
         vmapper = {

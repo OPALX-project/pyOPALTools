@@ -2,8 +2,9 @@
 # Date:     March 2018 - 2019
 
 from opal.datasets.SDDSDatasetBase import *
+from opal.visualization.ProfilingPlotter import ProfilingPlotter
 
-class LBalDataset(SDDSDatasetBase):
+class LBalDataset(SDDSDatasetBase, ProfilingPlotter):
     
     def __init__(self, directory, fname):
         vmapper = {
