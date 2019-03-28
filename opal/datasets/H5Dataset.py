@@ -7,8 +7,9 @@ from opal.parser.H5Error import *
 import numpy as np
 from opal.datasets.DatasetBase import DatasetBase
 from opal.visualization.H5Plotter import H5Plotter
+from opal.analysis.H5Statistics import H5Statistics
 
-class H5Dataset(DatasetBase, H5Plotter):
+class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
     
     def __init__(self, directory, fname):
         """

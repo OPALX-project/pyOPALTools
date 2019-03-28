@@ -2,10 +2,11 @@
 # Date:     April 2018
 
 from opal.datasets.DatasetBase import DatasetBase
-from opal.visualization.OutputPlotter import OutputPlotter
+from opal.visualization.StdOpalOutputPlotter import StdOpalOutputPlotter
+from opal.analysis.StdOpalOutputAnalysis import StdOpalOutputAnalysis
 import numpy as np
 
-class OutputDataset(DatasetBase, OutputPlotter):
+class StdOpalOutputDataset(DatasetBase, StdOpalOutputPlotter, StdOpalOutputAnalysis):
     
     def __init__(self, directory, fname):
         """
@@ -15,7 +16,7 @@ class OutputDataset(DatasetBase, OutputPlotter):
         ----------
         None
         """
-        super(OutputDataset, self).__init__(directory, fname)
+        super(StdOpalOutputDataset, self).__init__(directory, fname)
     
     def getData(self, var, **kwargs):
         """

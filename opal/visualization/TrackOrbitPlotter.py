@@ -1,8 +1,6 @@
 from opal.visualization.BasePlotter import *
 import numpy as np
 from opal.analysis.cyclotron import \
-    calcTurnSeparation, \
-    calcRFphases, \
     calcCenteringExtraction
 
 class TrackOrbitPlotter(BasePlotter):
@@ -55,7 +53,7 @@ class TrackOrbitPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
-        _, _, _, radius = calcTurnSeparation(self.ds)
+        _, _, _, radius = self.calcTurnSeparation()
         
         x = calcCenteringExtraction(radius)
         
@@ -100,7 +98,7 @@ class TrackOrbitPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
-        _, _, _, radius = calcTurnSeparation(self.ds)
+        _, _, _, radius = self.calcTurnSeparation()
         
         plt.plot(np.arange(2, len(radius)+2), radius, **kwargs) # From second turn
         plt.xlabel('Turn Number')
@@ -120,7 +118,7 @@ class TrackOrbitPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
-        _, energy, _, radius = calcTurnSeparation(self.ds,nsteps)
+        _, energy, _, radius = self.calcTurnSeparation(nsteps)
 
         plt.xlabel('Turn Number')
         plt.ylabel('Energy [MeV]')
@@ -143,7 +141,7 @@ class TrackOrbitPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
-        _, energy, _, radius = calcTurnSeparation(self.ds, nsteps)
+        _, energy, _, radius = self.calcTurnSeparation(nsteps)
 
         x = np.arange(2, len(radius)+1)
         y = np.diff(energy)
@@ -169,7 +167,7 @@ class TrackOrbitPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
-        ts, energy, _, radius = calcTurnSeparation(self.ds, nsteps, angle)
+        ts, energy, _, radius = self.calcTurnSeparation(nsteps, angle)
         
         if asFunctionOfTurnNumber:
             x = np.arange(2, len(ts)+2) # From second turn
@@ -198,7 +196,7 @@ class TrackOrbitPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
-        _, _, phi, radius = calcTurnSeparation(self.ds,nsteps)
+        _, _, phi, radius = self.calcTurnSeparation(nsteps)
         
         
         angle_unit = kwargs.pop('angle_unit', 'rad')

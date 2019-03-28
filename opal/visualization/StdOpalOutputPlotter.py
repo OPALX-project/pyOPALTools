@@ -1,9 +1,7 @@
 from opal.visualization.TimingPlotter import *
 import numpy as np
 
-from opal.analysis.cyclotron import calcRFphases
-
-class OutputPlotter(TimingPlotter):
+class StdOpalOutputPlotter(TimingPlotter):
     
     def __init__(self):
         pass
@@ -20,7 +18,7 @@ class OutputPlotter(TimingPlotter):
         -------
         a matplotlib.pyplot handle
         """
-        data = calcRFphases(self.ds, RFcavity)
+        data = self.calcRFphases(RFcavity)
         
         for i, cname in enumerate(RFcavity):
             turns  = data[i][0]

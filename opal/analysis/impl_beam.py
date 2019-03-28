@@ -1,4 +1,4 @@
-from opal.statistics import impl_statistics as stat
+from opal.analysis.Statistics import Statistics
 import numpy as np
 from opal.analysis import cyclotron
 
@@ -62,6 +62,8 @@ def halo_continuous_beam(data):
     if data.size < 1:
         raise ValueError('Empty data container.')
     
+    stat = Statistics()
+    
     m4 = stat.moment(data, k=4)
     m2 = stat.moment(data, k=2)
     
@@ -89,6 +91,8 @@ def halo_ellipsoidal_beam(data):
     if data.size < 1:
         raise ValueError('Empty data container.')
     
+    stat = Statistics()
+    
     m4 = stat.moment(data, k=4)
     m2 = stat.moment(data, k=2)
     
@@ -103,6 +107,9 @@ def projected_emittance(coords, momenta):
     
     \varepsilon = \sqrt{ <coords^2><momenta^2> - <coords*momenta>^2 }
     """
+    
+    stat = Statistics()
+    
     c2 = stat.moment(coords, k=2)
     m2 = stat.moment(momenta, k=2)
     

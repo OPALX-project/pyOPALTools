@@ -5,9 +5,10 @@ import os
 from opal.parser.TrackOrbitParser import TrackOrbitParser
 from opal.datasets.DatasetBase import DatasetBase
 from opal.visualization.TrackOrbitPlotter import TrackOrbitPlotter
+from opal.analysis.TrackOrbitAnalysis import TrackOrbitAnalysis
 import numpy as np
 
-class TrackOrbitDataset(DatasetBase, TrackOrbitPlotter):
+class TrackOrbitDataset(DatasetBase, TrackOrbitPlotter, TrackOrbitAnalysis):
     
     def __init__(self, directory, fname):
         """
