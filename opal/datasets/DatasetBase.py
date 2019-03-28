@@ -3,9 +3,8 @@
 
 import os
 from opal.datasets.filetype import FileType
-#from opal.visualization.BasePlotter import BasePlotter
 
-class DatasetBase: #(BasePlotter):
+class DatasetBase:
     """
     Class with member functions common to
     all datasets.
@@ -75,7 +74,11 @@ class DatasetBase: #(BasePlotter):
         return 'Empty dataset.'
 
 
-    # inherited from BasePlotter
     @property
     def ds(self):
+        """
+        Returns
+        -------
+        reference to dataset. Used in plotting classes.
+        """
         return self
