@@ -22,13 +22,10 @@ class SDDSDatasetBase(DatasetBase):
         _unit_label_mapper ([])            map units of variables
                                            to plotting style
         """
+        super(SDDSDatasetBase, self).__init__(directory, fname)
+        
         self._parser = SDDSParser()
-        
-        full_path = os.path.join(directory, fname)
-        if not os.path.exists(full_path):
-            raise RuntimeError("File '" + full_path + "' does not exist.")
-        
-        self._parser.parse(full_path)
+        self._parser.parse(self.filename)
         
         self._variable_mapper = kwargs.pop('variable_mapper', {})
         
@@ -40,7 +37,6 @@ class SDDSDatasetBase(DatasetBase):
         
         self._print_limit = kwargs.pop('print_limit', -1)
         
-        super(SDDSDatasetBase, self).__init__(directory, fname)
     
     def getData(self, var, **kwargs):
         """

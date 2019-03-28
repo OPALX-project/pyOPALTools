@@ -15,11 +15,6 @@ class OutputDataset(DatasetBase, OutputPlotter):
         ----------
         None
         """
-        
-        full_path = os.path.join(directory, fname)
-        if not os.path.exists(full_path):
-            raise RuntimeError("File '" + full_path + "' does not exist.")
-        
         super(OutputDataset, self).__init__(directory, fname)
     
     def getData(self, var, **kwargs):

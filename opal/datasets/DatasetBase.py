@@ -21,6 +21,10 @@ class DatasetBase(BasePlotter):
         _fname      (str)           name of file
         _ftype      (FileType)      type of file
         """
+        full_path = os.path.join(directory, fname)
+        if not os.path.exists(full_path):
+            raise RuntimeError("File '" + full_path + "' does not exist.")
+        
         self._directory = directory
         self._fname = fname
         self._ftype = FileType.extensionToFileType(os.path.join(directory, fname))

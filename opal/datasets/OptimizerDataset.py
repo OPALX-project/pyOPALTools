@@ -28,10 +28,7 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter):
         _loaded_optimizer   (int)                   currently loaded optimizer
         _loadedGeneration   (function)              load a generation file
         """
-        
-        full_path = os.path.join(directory, fname)
-        if not os.path.exists(full_path):
-            raise ValueError("File '" + full_path + "' does not exist.")
+        super(OptimizerDataset, self).__init__(directory, fname)
         
         self.__parser = OptimizerParser(directory)
 
@@ -42,7 +39,6 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter):
         
         self._loadGeneration( int( str.split(fname, "_", 1)[0] ) )
         
-        super(OptimizerDataset, self).__init__(directory, fname)
     
     
     def getData(self, var, **kwargs):

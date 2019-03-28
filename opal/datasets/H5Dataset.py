@@ -27,14 +27,10 @@ class H5Dataset(DatasetBase, H5Plotter):
                                             direction in case of
                                             vector type data
         """
+        super(H5Dataset, self).__init__(directory, fname)
         
         self.__parser = H5Parser()
-        
-        full_path = os.path.join(directory, fname)
-        if not os.path.exists(full_path):
-            raise RuntimeError("File '" + full_path + "' does not exist.")
-        
-        self.__parser.parse(full_path)
+        self.__parser.parse(self.filename)
         
         self.__variable_mapper = {
             'rms_x':        'RMSX',
@@ -73,8 +69,6 @@ class H5Dataset(DatasetBase, H5Plotter):
             'y':    1,
             'z':    2
         }
-        
-        super(H5Dataset, self).__init__(directory, fname)
     
     
     def getData(self, var, **kwargs):

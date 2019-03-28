@@ -19,9 +19,11 @@ class ProbeHistDataset(DatasetBase, ProbePlotter):
         __variable_mapper   (dict)          map user input variable
         __label_mapper      (dict)          map user input variable
         """
+        super(ProbeHistDataset, self).__init__(directory, fname)
+
         self.__parser = HistogramParser()
-        
-        
+        self.__parser.parse(self.filename)
+                
         self.__variable_mapper = {
             #'bincount':     'dataset',
             'radius':       'radii'
@@ -30,14 +32,6 @@ class ProbeHistDataset(DatasetBase, ProbePlotter):
         self.__label_mapper  = {
             'bincount':     'bin count'
         }
-        
-        full_path = os.path.join(directory, fname)
-        if not os.path.exists(full_path):
-            raise RuntimeError("File '" + full_path + "' does not exist.")
-        
-        self.__parser.parse(full_path)
-        
-        super(ProbeHistDataset, self).__init__(directory, fname)
     
     
     def getData(self, var, **kwargs):

@@ -2,7 +2,8 @@ from opal.visualization.BasePlotter import *
 import numpy as np
 from opal.analysis.cyclotron import \
     calcTurnSeparation, \
-    calcRFphases
+    calcRFphases, \
+    calcCenteringExtraction
 
 class TrackOrbitPlotter(BasePlotter):
     
