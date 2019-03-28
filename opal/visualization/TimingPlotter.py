@@ -11,7 +11,7 @@ class Timinglotter(BasePlotter):
         pass
     
     
-        def __mostConsuming(self, n, times, labels, prop):
+    def __mostConsuming(self, n, times, labels, prop):
         """
         Retturn time and label of the first n most time
         consuming timings.
