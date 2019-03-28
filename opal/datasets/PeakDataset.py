@@ -3,10 +3,11 @@
 
 import os
 from opal.parser.PeakParser import PeakParser
-from opal.datasets.DatasetBase import *
+from opal.datasets.DatasetBase import DatasetBase
+from opal.visualization.PeakPlotter import PeakPlotter
 import numpy as np
 
-class PeakDataset(DatasetBase):
+class PeakDataset(DatasetBase, PeakPlotter):
     
     def __init__(self, directory, fname):
         """
