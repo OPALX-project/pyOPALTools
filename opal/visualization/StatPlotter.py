@@ -1,4 +1,6 @@
 from opal.visualization.BasePlotter import *
+from opal.parser.LatticeParser import LatticeParser
+import os
 
 class StatPlotter(BasePlotter):
     
@@ -53,6 +55,9 @@ class StatPlotter(BasePlotter):
     def plot_envelope(dset, xvar='position', **kwargs):
         """
         Create an envelope plot.
+        
+        Author: Philippe Ganz
+        Date:   2018
         
         Parameters
         ----------

@@ -38,7 +38,7 @@ class SolverPlotter(BasePlotter):
             
         plt.grid(grid, which='both')
         plt.xscale(xscale)
-            plt.yscale(yscale)
+        plt.yscale(yscale)
         plt.tight_layout()
         plt.legend()
         

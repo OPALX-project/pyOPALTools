@@ -61,12 +61,12 @@ class H5Plotter(ProbePlotter):
             for i, b in enumerate(bins):
                 xbin = xdata[np.where(bdata == b)]
                 ybin = ydata[np.where(bdata == b)]
-                plt.scatter(xbin, ybin, marker='.', s=1, color=cm.tab20(colors[i]))
+                plt.scatter(xbin, ybin, marker='.', s=1, color=plt.cm.tab20(colors[i]))
             # plot all skipped bins with same color
             for s in skipped:
                 xbin = xdata[np.where(bdata == s)]
                 ybin = ydata[np.where(bdata == s)]
-                plt.scatter(xbin, ybin, marker='.', s=1, color=cm.tab20(colors[nBins]))
+                plt.scatter(xbin, ybin, marker='.', s=1, color=plt.cm.tab20(colors[nBins]))
         elif bunches:
             bdata = self.ds.getData('bunchNumber', step=step)
             # get all bunches
@@ -87,13 +87,13 @@ class H5Plotter(ProbePlotter):
                 if i == 0:
                     lab = 'others'
                 plt.scatter(xbin, ybin, marker='.', s=1,
-                            color=cm.tab20(colors[nBunches]),
+                            color=plt.cm.tab20(colors[nBunches]),
                             label=lab)
             for i, b in enumerate(bunches):
                 xbin = xdata[np.where(bdata == b)]
                 ybin = ydata[np.where(bdata == b)]
                 plt.scatter(xbin, ybin, marker='.',
-                            s=1, color=cm.tab20(colors[i]),
+                            s=1, color=plt.cm.tab20(colors[i]),
                             label='bunch ' + str(i))
             plt.legend(loc = 'upper center',
                     ncol=4, labelspacing=0.5,

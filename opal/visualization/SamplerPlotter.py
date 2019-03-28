@@ -1,7 +1,6 @@
 from opal.visualization.BasePlotter import *
 import numpy as np
 
-from opal import load_dataset
 from opal.visualization.formatter import FormatScalarFormatter
 import os
 
@@ -33,6 +32,8 @@ class SamplerPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
+        from opal import load_dataset
+        
         nsamples = self.ds.size
     
         dirname = os.path.dirname(self.ds.filename)

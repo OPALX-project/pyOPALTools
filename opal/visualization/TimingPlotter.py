@@ -5,7 +5,7 @@ from opal.visualization.BasePlotter import *
 import numpy as np
 from operator import itemgetter
 
-class Timinglotter(BasePlotter):
+class TimingPlotter(BasePlotter):
     
     def __init__(self):
         pass
