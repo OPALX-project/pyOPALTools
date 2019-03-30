@@ -3,23 +3,27 @@
 
 import os
 
-from opal.datasets.filetype import FileType
-from opal.datasets.AmrDataset import AmrDataset
-from opal.datasets.H5Dataset import H5Dataset
-from opal.datasets.StatDataset import StatDataset
-from opal.datasets.TimeDataset import TimeDataset
-from opal.datasets.MemoryDataset import MemoryDataset
-from opal.datasets.LBalDataset import LBalDataset
-from opal.datasets.GridDataset import GridDataset
-from opal.datasets.SolverDataset import SolverDataset
-from opal.datasets.TrackOrbitDataset import TrackOrbitDataset
-from opal.datasets.StdOpalOutputDataset import StdOpalOutputDataset
-from opal.datasets.PeakDataset import PeakDataset
-from opal.datasets.ProbeHistDataset import ProbeHistDataset
-from opal.datasets.OptimizerDataset import OptimizerDataset
-from opal.datasets.SamplerDataset import SamplerDataset
+from .datasets.filetype import FileType
+from .datasets.AmrDataset import AmrDataset
+from .datasets.H5Dataset import H5Dataset
+from .datasets.StatDataset import StatDataset
+from .datasets.TimeDataset import TimeDataset
+from .datasets.MemoryDataset import MemoryDataset
+from .datasets.LBalDataset import LBalDataset
+from .datasets.GridDataset import GridDataset
+from .datasets.SolverDataset import SolverDataset
+from .datasets.TrackOrbitDataset import TrackOrbitDataset
+from .datasets.StdOpalOutputDataset import StdOpalOutputDataset
+from .datasets.PeakDataset import PeakDataset
+from .datasets.ProbeHistDataset import ProbeHistDataset
+from .datasets.OptimizerDataset import OptimizerDataset
+from .datasets.SamplerDataset import SamplerDataset
 
-from opal.utilities.logger import opal_logger
+from .utilities.logger import opal_logger
+
+# make it easier to use,
+# avoids to do 'from opal.datasets.filetype import FileType'
+filetype = FileType
 
 def load_dataset(directory, **kwargs):
     """

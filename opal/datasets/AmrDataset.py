@@ -1,7 +1,7 @@
 # Author: Matthias Frey
 # Date:   March 2019
 
-from opal.datasets.DatasetBase import DatasetBase
+from .DatasetBase import DatasetBase
 from opal.visualization.AmrPlotter import AmrPlotter
 from opal.utilities.logger import opal_logger
 

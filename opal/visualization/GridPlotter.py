@@ -1,7 +1,7 @@
 # Author: Matthias Frey
 # Date:   February 2018 - March 2019
 
-from opal.visualization.BasePlotter import *
+from .BasePlotter import *
 import numpy as np
 
 class GridPlotter(BasePlotter):

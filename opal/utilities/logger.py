@@ -5,21 +5,40 @@ import os
 
 
 def find_config_file():
-    # 22. March 2019
-    # https://stackoverflow.com/questions/1489599/how-do-i-find-out-my-python-path-using-python
-    paths = os.environ['PYTHONPATH'].split(os.pathsep)
-    
     test = ''
-    for path in paths:
-        test = os.path.join(path, 'opal', 'utilities', 'log.yaml')
-        if os.path.isfile(test):
-            break
+    try:
+        # 22. March 2019
+        # https://stackoverflow.com/questions/1489599/how-do-i-find-out-my-python-path-using-python
+        paths = os.environ['PYTHONPATH'].split(os.pathsep)
+        if paths:
+            for path in paths:
+                test = os.path.join(path, 'opal', 'utilities', 'log.yaml')
+                if os.path.isfile(test):
+                    break
+    except:
+        pass
     return test
 
-# 22. March 2019
-# https://realpython.com/python-logging/
-with open(find_config_file(), 'r') as f:
-    config = yaml.safe_load(f.read())
-    logging.config.dictConfig(config)
+
+path = find_config_file()
+
+if path:
+    # 22. March 2019
+    # https://realpython.com/python-logging/
+    with open(path, 'r') as f:
+        config = yaml.safe_load(f.read())
+        logging.config.dictConfig(config)
+else:
+    opal_logger = logging.getLogger('opal')
+    opal_logger.setLevel(logging.ERROR)
+    # 29. March 2019
+    # https://docs.python.org/3/howto/logging-cookbook.html
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.ERROR)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    opal_logger.addHandler(ch)
+
+    
 
 opal_logger = logging.getLogger('opal')

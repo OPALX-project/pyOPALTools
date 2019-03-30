@@ -1,7 +1,7 @@
 # Author:   Matthias Frey
 # Date:     April 2018
 
-from opal.datasets.DatasetBase import DatasetBase
+from .DatasetBase import DatasetBase
 from opal.visualization.StdOpalOutputPlotter import StdOpalOutputPlotter
 from opal.analysis.StdOpalOutputAnalysis import StdOpalOutputAnalysis
 import numpy as np

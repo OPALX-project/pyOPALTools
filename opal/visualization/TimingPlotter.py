@@ -1,7 +1,7 @@
 # Author:   Matthias Frey
 # Date:     March 2018 - 2019
 
-from opal.visualization.BasePlotter import *
+from .BasePlotter import *
 import numpy as np
 from operator import itemgetter
 
@@ -71,13 +71,15 @@ class TimingPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
+        from opal import filetype
+        
         if not isinstance(dsets, list):
             dsets = [dsets]
         
         dsets = [seld.ds] + dsets
         
         for ds in dsets:
-            if not ds.filetype == FileType.TIMING and not ds.filetype == FileType.OUTPUT:
+            if not ds.filetype == filetype.TIMING and not ds.filetype == filetype.OUTPUT:
                 raise TypeError("Dataset '" + ds.filename +
                                 "' is not a timing dataset.")
         
@@ -174,13 +176,15 @@ class TimingPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
+        from opal import filetype
+        
         if not isinstance(dsets, list):
             dsets = [dsets]
         
         dsets = [self.ds] + dsets
         
         for ds in dsets:
-            if not ds.filetype == FileType.TIMING and not ds.filetype == FileType.OUTPUT:
+            if not ds.filetype == filetype.TIMING and not ds.filetype == filetype.OUTPUT:
                 raise TypeError("Dataset '" + ds.filename +
                                 "' is not a timing dataset.")
         
@@ -286,13 +290,15 @@ class TimingPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
+        from opal import filetype
+        
         if not isinstance(dsets, list):
             dsets = [dsets]
         
         dsets = [seld.ds] + dsets
         
         for ds in dsets:
-            if not ds.filetype == FileType.TIMING and not ds.filetype == FileType.OUTPUT:
+            if not ds.filetype == filetype.TIMING and not ds.filetype == filetype.OUTPUT:
                 raise TypeError("Dataset '" + ds.filename +
                                 "' is not a timing dataset.")
         

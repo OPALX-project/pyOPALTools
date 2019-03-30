@@ -1,7 +1,7 @@
-from opal.visualization.BasePlotter import *
+from .BasePlotter import *
 import numpy as np
 
-from opal.visualization.formatter import FormatScalarFormatter
+from .formatter import FormatScalarFormatter
 import os
 
 class SamplerPlotter(BasePlotter):

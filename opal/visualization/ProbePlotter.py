@@ -1,4 +1,4 @@
-from opal.visualization.BasePlotter import *
+from .BasePlotter import *
 import numpy as np
 
 class ProbePlotter(BasePlotter):
@@ -27,11 +27,11 @@ class ProbePlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
-        from opal.datasets.filetype import FileType
+        from opal import filetype
         
         ylabel = self.ds.getLabel('bincount')
         
-        if self.ds.filetype == FileType.HIST:
+        if self.ds.filetype == filetype.HIST:
             bincount = self.ds.getData('bincount')
             rmin = self.ds.getData('min')
             rmax = self.ds.getData('max')
@@ -48,7 +48,7 @@ class ProbePlotter(BasePlotter):
 
             plt.plot(radius, bincount, **kwargs)
             plt.xlabel('radius [' + self.ds.getUnit('min') + ']')
-        elif self.ds.filetype == FileType.H5:
+        elif self.ds.filetype == filetype.H5:
             x2 = self.ds.getData('x')**2
             y2 = self.ds.getData('y')**2
 

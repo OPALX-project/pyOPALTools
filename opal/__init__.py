@@ -1,7 +1,9 @@
-from opal.opal import load_dataset
-import opal.datasets
-import opal.visualization
+from .opal import load_dataset
+from .opal import filetype
 import opal.analysis
-import opal.config
+import opal.datasets
+import opal.parser
 import opal.timing
-
+import opal.utilities
+import opal.visualization
+import opal.config

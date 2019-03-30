@@ -1,4 +1,4 @@
-from opal.visualization.BasePlotter import *
+from .BasePlotter import *
 import numpy as np
 from opal.analysis.cyclotron import \
     calcCenteringExtraction

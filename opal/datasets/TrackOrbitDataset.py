@@ -3,7 +3,7 @@
 
 import os
 from opal.parser.TrackOrbitParser import TrackOrbitParser
-from opal.datasets.DatasetBase import DatasetBase
+from .DatasetBase import DatasetBase
 from opal.visualization.TrackOrbitPlotter import TrackOrbitPlotter
 from opal.analysis.TrackOrbitAnalysis import TrackOrbitAnalysis
 import numpy as np

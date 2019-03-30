@@ -1,8 +1,8 @@
-from opal.visualization.BasePlotter import *
+from .BasePlotter import *
 import numpy as np
 import matplotlib.gridspec as gridspec
 import bisect
-import opal.config as config
+from opal import config as config
 import re
 
 class OptimizerPlotter(BasePlotter):

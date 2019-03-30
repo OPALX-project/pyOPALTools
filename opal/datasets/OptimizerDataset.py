@@ -3,7 +3,7 @@
 
 import os
 from opal.parser.OptimizerParser import OptimizerParser
-from opal.datasets.DatasetBase import DatasetBase
+from .DatasetBase import DatasetBase
 from opal.visualization.OptimizerPlotter import OptimizerPlotter
 from string import digits
 

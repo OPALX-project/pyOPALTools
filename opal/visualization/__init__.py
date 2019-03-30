@@ -1,15 +1,16 @@
-from opal.visualization.styles import *
-from opal.visualization.formatter import *
+from .formatter import *
+import opal.visualization.statistics
+import opal.visualization.styles
 
-from opal.visualization.AmrPlotter              import AmrPlotter
-from opal.visualization.GridPlotter             import GridPlotter
-from opal.visualization.H5Plotter               import H5Plotter
-from opal.visualization.ProfilingPlotter        import ProfilingPlotter
-from opal.visualization.OptimizerPlotter        import OptimizerPlotter
-from opal.visualization.PeakPlotter             import PeakPlotter
-from opal.visualization.SamplerPlotter          import SamplerPlotter
-from opal.visualization.SolverPlotter           import SolverPlotter
-from opal.visualization.StatPlotter             import StatPlotter
-from opal.visualization.TimingPlotter           import TimingPlotter
-from opal.visualization.StdOpalOutputPlotter    import StdOpalOutputPlotter
-from opal.visualization.TrackOrbitPlotter       import TrackOrbitPlotter
+from .AmrPlotter              import AmrPlotter
+from .GridPlotter             import GridPlotter
+from .H5Plotter               import H5Plotter
+from .ProfilingPlotter        import ProfilingPlotter
+from .OptimizerPlotter        import OptimizerPlotter
+from .PeakPlotter             import PeakPlotter
+from .SamplerPlotter          import SamplerPlotter
+from .SolverPlotter           import SolverPlotter
+from .StatPlotter             import StatPlotter
+from .TimingPlotter           import TimingPlotter
+from .StdOpalOutputPlotter    import StdOpalOutputPlotter
+from .TrackOrbitPlotter       import TrackOrbitPlotter

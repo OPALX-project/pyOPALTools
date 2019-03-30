@@ -1,4 +1,4 @@
-from opal.visualization.BasePlotter import *
+from .BasePlotter import *
 import numpy as np
 import os
 
@@ -32,8 +32,8 @@ class PeakPlotter(BasePlotter):
         dsets = [self.ds, dset]
         
         for ds in dsets:
-            from opal.datasets.filetype import FileType
-            if not ds.filetype == FileType.PEAK:
+            from opal import filetype
+            if not ds.filetype == filetype.PEAK:
                 raise TypeError(ds.filename +
                                 ' is not a peak (*.peaks) file.')
         
