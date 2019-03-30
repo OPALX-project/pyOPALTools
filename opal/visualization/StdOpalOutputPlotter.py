@@ -1,4 +1,4 @@
-from opal.visualization.TimingPlotter import *
+from .TimingPlotter import *
 import numpy as np
 
 class StdOpalOutputPlotter(TimingPlotter):

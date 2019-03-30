@@ -1,5 +1,5 @@
-from opal.visualization.ProbePlotter import *
-from opal.visualization.statistics import impl_plots
+from .ProbePlotter import *
+from .statistics import impl_plots
 import numpy as np
 
 class H5Plotter(ProbePlotter):

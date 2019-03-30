@@ -1,4 +1,4 @@
-from opal.visualization.BasePlotter import *
+from .BasePlotter import *
 from opal.parser.LatticeParser import LatticeParser
 import os
 

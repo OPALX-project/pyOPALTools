@@ -1,7 +1,7 @@
 # Author: Matthias Frey
 # Date:   March 2018 - 2019
 
-from opal.visualization.BasePlotter import *
+from .BasePlotter import *
 import numpy as np
 from opal.utilities.logger import opal_logger
 

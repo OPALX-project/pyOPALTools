@@ -3,7 +3,7 @@
 
 import os
 from opal.parser.sampler import SamplerParser
-from opal.datasets.DatasetBase import DatasetBase
+from .DatasetBase import DatasetBase
 from opal.visualization.SamplerPlotter import SamplerPlotter
 from string import digits
 

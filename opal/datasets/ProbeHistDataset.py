@@ -3,7 +3,7 @@
 
 import os
 from opal.parser.HistogramParser import HistogramParser
-from opal.datasets.DatasetBase import DatasetBase
+from .DatasetBase import DatasetBase
 from opal.visualization.ProbePlotter import ProbePlotter
 import numpy as np
 
