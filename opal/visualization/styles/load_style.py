@@ -10,5 +10,6 @@ def load_style(use='default'):
     ]
     
     if use in styles:
-        print ( use + '()' )
+        from opal.utilities.logger import opal_logger
+        opal_logger.info("Loading '" + use + "' plotting style")
         eval(use + '()')
