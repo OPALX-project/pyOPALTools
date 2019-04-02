@@ -1,2 +1,3 @@
-test:
-    - export PYTHONPATH=$PYTHONPATH:$PWD
+job:
+    script:
+        - export PYTHONPATH=$PYTHONPATH:$PWD
