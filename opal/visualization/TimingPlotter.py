@@ -512,8 +512,8 @@ class TimingPlotter(BasePlotter):
                                             radius=1.1,
                                             shadow=False)
         
-        for at in autotexts:
-            at.set_fontsize(10)
+        #for at in autotexts:
+            #at.set_fontsize(10)
         
         plt.legend(patches, labels_sorted, loc='best', bbox_to_anchor=(0.95, 0.98), borderaxespad=0.1)
         plt.axis('equal')
