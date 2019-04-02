@@ -20,6 +20,8 @@ class PeakPlotter(BasePlotter):
         ---------
         grid    (bool)          draw grid
         raxis   (bool)          do radius vs radius plot instead
+        begin   (int)           first peak
+        end     (int)           last peak
         
         Returns
         -------
@@ -46,8 +48,21 @@ class PeakPlotter(BasePlotter):
         peaks2 = dsets[1].getData('radius')
         
         npeaks = min(len(peaks1), len(peaks2))
-        p1 = peaks1[0:npeaks]
-        p2 = peaks2[0:npeaks]
+        begin = kwargs.pop('begin', 0)
+        end   = kwargs.pop('end', npeaks)
+        
+        if begin < 0:
+            from opal.utilities.logger import opal_logger
+            opal_logger.error("Invalid parameter value 'begin = " + str(begin) + "'")
+        
+        if end < begin or end > npeaks:
+            from opal.utilities.logger import opal_logger
+            opal_logger.error("Invalid parameter value 'end = " + str(end) + "'")
+        
+        p1 = peaks1[begin:end]
+        p2 = peaks2[begin:end]
+        
+        npeaks = len(p2)
         
         plt.grid(kwargs.pop('grid', False))
         radiusPlot = kwargs.pop('raxis', False)
@@ -69,13 +84,9 @@ class PeakPlotter(BasePlotter):
         else:
             diff = p1 - p2
         
-            xticks = range(1, npeaks + 1)
+            xticks = range(begin, end)
             
-            #ylim = [min(diff) - 0.001, max(diff) + 0.001]
-        
             plt.plot(xticks, diff, 'o', **kwargs)
-            plt.xticks(xticks)
-            #plt.ylim(ylim)
             
             plt.xlabel('peak number')
             
