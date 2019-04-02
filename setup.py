@@ -8,7 +8,6 @@ PACKAGES = [
     'opal.analysis',
     'opal.datasets',
     'opal.parser',
-    'opal.timing',
     'opal.utilities',
     'opal.visualization',
     'opal.visualization.statistics',
