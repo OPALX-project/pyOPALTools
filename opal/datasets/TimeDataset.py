@@ -1,7 +1,7 @@
 # Author:   Matthias Frey
 # Date:     March 2018
 
-from opal.timing.Timing import Timing
+from opal.parser.TimingParser import TimingParser
 from .DatasetBase import DatasetBase
 from opal.visualization.TimingPlotter import TimingPlotter
 import os
@@ -20,9 +20,9 @@ class TimeDataset(DatasetBase, TimingPlotter):
         
         Members
         -------
-        __parser            (Timing)    actual data holder
+        __parser            (TimingParser)    actual data holder
         """
-        self.__parser = Timing()
+        self.__parser = TimingParser()
         
         if ttype.lower() == 'output':
             self.__parser.read_output_file(os.path.join(directory, fname))

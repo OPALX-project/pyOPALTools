@@ -8,16 +8,16 @@ import pprint
 import re
 
 
-class Timing:
+class TimingParser:
 
     """
     Read and write an Ippl timing file.
     
     Example:
     
-    import Timing as timing
+    import TimingParser as timing
     
-    time = timing.Timing()
+    time = timing.TimingParser()
     
     time.read_ippl_timing("/path/to/IpplTiming.dat")
     

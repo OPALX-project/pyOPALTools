@@ -7,3 +7,4 @@ import opal.parser.HistogramParser
 import opal.parser.OptimizerParser
 import opal.parser.PeakParser
 import opal.parser.sampler
+import opal.parser.TimingParser
