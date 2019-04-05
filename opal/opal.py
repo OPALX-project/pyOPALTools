@@ -18,6 +18,7 @@ from .datasets.PeakDataset import PeakDataset
 from .datasets.ProbeHistDataset import ProbeHistDataset
 from .datasets.OptimizerDataset import OptimizerDataset
 from .datasets.SamplerDataset import SamplerDataset
+from .datasets.LossDataset import LossDataset
 
 from .utilities.logger import opal_logger
 
@@ -141,6 +142,9 @@ def load_dataset(directory, **kwargs):
                 datasets.append(AmrDataset(directory))
                 opal_logger.debug('    ' + directory + ' matches AMR file type.' )
                 break
+            elif ftype == FileType.LOSS:
+                datasets.append(LossDataset(directory, fname))
+                opal_logger.debug('    ' + directory + ' matches loss file type.' )
             elif ftype == FileType.NONE:
                 opal_logger.error('no appropriate file match.' )
         opal_logger.debug('\nDone.\n' )
