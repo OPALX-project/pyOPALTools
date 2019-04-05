@@ -15,7 +15,7 @@
 
 ### Removed
 * pyH5root directory and files (issue #25)
-* deprecated profiling directory and fiels (issue #26)
+* deprecated profiling directory and files (issue #26)
 * deprecated amrPlots directory and files (issue #27)
 
 ### Fixed
