@@ -25,7 +25,8 @@ class FileType(IntEnum):
     SAMPLER     = 12,
     SMB         = 13,
     AMR         = 14,
-    NONE        = 15
+    LOSS        = 15,
+    NONE        = 16
     
     @classmethod
     def extensionToFileType(cls, fname):
@@ -42,7 +43,8 @@ class FileType(IntEnum):
             '.solver':  cls.SOLVER,
             '.peaks':   cls.PEAK,
             '.hist':    cls.HIST,
-            '.json':    [cls.OPTIMIZER, cls.SAMPLER]
+            '.json':    [cls.OPTIMIZER, cls.SAMPLER],
+            '.loss':    cls.LOSS
         }
         
         file = {
