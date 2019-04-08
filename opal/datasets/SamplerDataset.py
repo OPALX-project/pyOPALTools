@@ -25,8 +25,6 @@ class SamplerDataset(DatasetBase, SamplerPlotter):
         """
         super(SamplerDataset, self).__init__(directory, fname)
         
-        base = str.split(fname, '_')[0]
-        
         self.__parser = SamplerParser()
         
         self.__nFiles = 0
@@ -88,9 +86,9 @@ class SamplerDataset(DatasetBase, SamplerPlotter):
         pattern = r'.*_(\d+).json'
         obj = re.match(pattern, base)
         num = obj.group(1)
+        base = base.replace(num + '.json', '')
         self.__parser.parse(os.path.join(dirname,
-                                         split[0] + '_' + \
-                                         split[1] + '_' + \
+                                         base + \
                                          num + '.json'))
     
     
