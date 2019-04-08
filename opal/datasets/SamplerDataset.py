@@ -81,14 +81,17 @@ class SamplerDataset(DatasetBase, SamplerPlotter):
     
     
     def __actual_file_load(self, i):
+        import re
         fname = self.filename
         base  = os.path.basename(fname)
         dirname = os.path.dirname(fname)
-        split = str.split(base, '_', 2)
+        pattern = r'.*_(\d+).json'
+        obj = re.match(pattern, base)
+        num = obj.group(1)
         self.__parser.parse(os.path.join(dirname,
                                          split[0] + '_' + \
                                          split[1] + '_' + \
-                                         str(i) + '.json'))
+                                         num + '.json'))
     
     
     def getData(self, var, **kwargs):
