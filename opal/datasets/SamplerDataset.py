@@ -6,6 +6,7 @@ from opal.parser.sampler import SamplerParser
 from .DatasetBase import DatasetBase
 from opal.visualization.SamplerPlotter import SamplerPlotter
 from string import digits
+from opal.utilities.logger import opal_logger
 
 class SamplerDataset(DatasetBase, SamplerPlotter):
     
@@ -36,8 +37,8 @@ class SamplerDataset(DatasetBase, SamplerPlotter):
                 if self.__parser.check_file(full_path):
                     self.__nFiles += 1
         
-        print ( 'Sampler dataset consisting of ' +
-                str(self.__nFiles) + ' files.' )
+        opal_logger.info( 'Sampler dataset consisting of ' +
+                          str(self.__nFiles) + ' files.' )
         
     
     
@@ -56,7 +57,7 @@ class SamplerDataset(DatasetBase, SamplerPlotter):
            ind >= self.__parser.begin and \
            ind <= self.__parser.end:
                # already loaded
-               print ( 'already loaded' )
+               opal_logger.debug( 'already loaded' )
                return
         
         # search appropriate file
@@ -69,7 +70,7 @@ class SamplerDataset(DatasetBase, SamplerPlotter):
             beg = self._loaded_file + 1
         
         for i in range(beg, end+1):
-            print ( 'load ' + str(i) )
+            opal_logger.debug( 'load ' + str(i) )
             self.__actual_file_load(i)
             self._loaded_file = i
             if self.__parser.num_samples > 0 and \
