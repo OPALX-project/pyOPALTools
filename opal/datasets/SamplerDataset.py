@@ -148,7 +148,7 @@ class SamplerDataset(DatasetBase, SamplerPlotter):
         appropriate name plotting ready
         """
         if self._loaded_file < 0:
-            raise RuntimeError('No dataset loaded yet.')
+            self.__load_file(0)
         
         if not var in self.__parser.design_variables:
             raise ValueError("The variable '" + var + "' is not in dataset.")
@@ -185,7 +185,7 @@ class SamplerDataset(DatasetBase, SamplerPlotter):
         Obtain design variable names
         """
         if self._loaded_file < 0:
-            raise RuntimeError('No dataset loaded yet.')
+            self.__load_file(0)
         
         return self.__parser.design_variables
     
@@ -196,7 +196,7 @@ class SamplerDataset(DatasetBase, SamplerPlotter):
         Obtain objectives names
         """
         if self._loaded_file < 0:
-            raise RuntimeError('No dataset loaded yet.')
+            self.__load_file(0)
         
         return self.__parser.objectives
     
@@ -207,7 +207,7 @@ class SamplerDataset(DatasetBase, SamplerPlotter):
         Obtain design variable upper and lower bounds
         """
         if self._loaded_file < 0:
-            raise RuntimeError('No dataset loaded yet.')
+            self.__load_file(0)
         
         return self.__parser.bounds
     

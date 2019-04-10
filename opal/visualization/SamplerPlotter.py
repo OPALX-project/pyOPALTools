@@ -90,3 +90,49 @@ class SamplerPlotter(BasePlotter):
         plt.tight_layout()
     
         return plt
+
+
+    def plot_sample_input_statistics(self, **kwargs):
+        """
+        Bar plot showing the number of samples per design variable.
+        This makes only sense for sampling with only a few states.
+        
+        Parameters
+        ----------
+        None
+        
+        Optional
+        --------
+        None
+    
+        Returns
+        -------
+        a matplotlib.pyplot handle
+        """
+        # 10. April 2019
+        # https://docs.python.org/2/library/collections.html
+        from collections import Counter
+        
+        dvars = self.ds.design_variables
+        
+        nvar = len(dvars)
+        
+        counters = [Counter()] * nvar
+        
+        for i in range(self.ds.size):
+            for j, dvar in enumerate(dvars):
+                counters[j][self.ds.getData(var=dvar, ind=i)] += 1
+        
+        for j, dvar in enumerate(dvars):
+            # 10. April 2019
+            # https://stackoverflow.com/questions/12282232/how-do-i-count-unique-values-inside-a-list
+            values = counters[j].values()
+            curr = 0
+            for val in values:
+                plt.bar(np.arange(nvar), val, bottom=curr, width=1.0 / nvar)
+                curr += val
+        
+        plt.xticks(np.arange(nvar), dvars)
+        plt.ylabel('#occurrences')
+        
+        return plt
