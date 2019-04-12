@@ -136,3 +136,109 @@ class SamplerPlotter(BasePlotter):
         plt.ylabel('#occurrences')
         
         return plt
+    
+    
+    def plot_training_vs_validation(self, train0, **kwargs):
+        """
+        Bar plot comparing training with validation set.
+        
+        Parameters
+        ----------
+        train0      (list)      indices of the training points.
+        
+        Optional
+        --------
+        train1, train2, ...     more lists with indices
+        nsamples    (bool)      show a horizontal line indicating
+                                the total number of samples
+        percent     (bool)      indicate the agreement in percent
+                                above each bar
+        
+        Returns
+        -------
+        a matplotlib.pyplot handle
+        """
+        import matplotlib as mpl
+        
+        nsamples = self.ds.size
+        
+        trains = [train0]
+        i = 1
+        while True:
+            train = kwargs.pop('train' + str(i), None)
+            if train == None:
+                break
+            
+            trains.append(train)
+            i += 1
+        
+        matches = []
+        ntrains = []
+        for train in trains:
+            ntrains.append( len(train) )
+            matches.append( self.ds.find_matches(train) )
+        
+        ind = np.arange(len(ntrains))
+        bars = plt.bar(ind, matches)
+        plt.xticks(ind, ntrains)
+        
+        isTex = mpl.rcParams['text.usetex']
+        
+        xlabel = '#training samples'
+        ylabel = '#identical samples with validation set'
+        llabel = '#samples'
+        blabel = '%'
+        
+        if isTex:
+            xlabel = '\\' + xlabel
+            ylabel = '\\' + ylabel
+            llabel = '\\' + llabel
+            blabel = '\\' + blabel
+        
+        plt.xlabel( xlabel )
+        plt.ylabel( ylabel )
+        
+        topline = kwargs.pop('nsamples', False)
+        
+        if topline:
+            plt.axhline(nsamples, linestyle='dashed', label=llabel)
+        
+        if kwargs.pop('percent', True):
+            # 12. April 2019
+            # https://matplotlib.org/gallery/lines_bars_and_markers/barchart.html#sphx-glr-gallery-lines-bars-and-markers-barchart-py
+            for rect in bars:
+                height = rect.get_height()
+                plt.gca().text(rect.get_x() + rect.get_width()*0.5, 1.01*height,
+                               '{}'.format(height * 100.0 / nsamples) + blabel, ha='center', va='bottom')
+        
+            #self._autolabel(plt.gca(), bars, 'center')
+        
+        if topline:
+            plt.legend(loc = 'upper center', ncol=1, labelspacing=0.,
+                       bbox_to_anchor=(0.5, 1.1, 0.0, 0.0))
+        
+        plt.tight_layout()
+        
+        return plt
+    
+    
+    # 12. April 2019
+    # https://matplotlib.org/gallery/lines_bars_and_markers/barchart.html#sphx-glr-gallery-lines-bars-and-markers-barchart-py
+    def _autolabel(self, ax, rects, xpos='center'):
+        """
+        Copied from matplotlib.org. It's slightly modified.
+        
+        Attach a text label above each bar in *rects*, displaying its height.
+    
+        *xpos* indicates which side to place the text w.r.t. the center of
+        the bar. It can be one of the following {'center', 'right', 'left'}.
+        """
+    
+        xpos = xpos.lower()  # normalize the case of the parameter
+        ha = {'center': 'center', 'right': 'left', 'left': 'right'}
+        offset = {'center': 0.5, 'right': 0.57, 'left': 0.43}  # x_txt = x + w*off
+    
+        for rect in rects:
+            height = rect.get_height()
+            ax.text(rect.get_x() + rect.get_width()*offset[xpos], 1.01*height,
+                    '{}'.format(height), ha=ha[xpos], va='bottom')

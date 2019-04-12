@@ -1,0 +1,4514 @@
+{
+    "name": "sampler",
+    "OPAL version": "2.1.0",
+    "git revision": "unknown",
+    "dvar-bounds": {
+        "GRID": "[24, 72]",
+        "maxlevel": "[0, 2]",
+        "regridfreq": "[30, 360]",
+        "tagging": "[0, 2]",
+        "mbeta": "[0.001, 0.01]"
+    },
+    "samples": {
+        "0": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "1": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00625"
+            }
+        },
+        "2": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "3": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "4": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "5": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "6": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "7": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "8": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "9": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00475"
+            }
+        },
+        "10": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.0085"
+            }
+        },
+        "11": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "12": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "13": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "14": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.0025"
+            }
+        },
+        "15": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "16": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0085"
+            }
+        },
+        "17": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "18": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "19": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "20": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "21": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "22": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.0085"
+            }
+        },
+        "23": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "24": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "25": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "26": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.007"
+            }
+        },
+        "27": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "28": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "29": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "30": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "31": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.007"
+            }
+        },
+        "32": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.007"
+            }
+        },
+        "33": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "34": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "35": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "36": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "37": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00625"
+            }
+        },
+        "38": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "39": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "40": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "41": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "42": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "43": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0025"
+            }
+        },
+        "44": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "45": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "46": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "47": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "48": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "49": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "50": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "51": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.001"
+            }
+        },
+        "52": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.0025"
+            }
+        },
+        "53": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "54": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "55": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "56": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "57": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0025"
+            }
+        },
+        "58": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00625"
+            }
+        },
+        "59": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "60": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "61": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.0025"
+            }
+        },
+        "62": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "63": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "64": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "65": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "66": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00325"
+            }
+        },
+        "67": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "68": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00475"
+            }
+        },
+        "69": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "70": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "71": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "72": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0085"
+            }
+        },
+        "73": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "74": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "75": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "76": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "77": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "78": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "79": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "80": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "81": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "82": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00325"
+            }
+        },
+        "83": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.001"
+            }
+        },
+        "84": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "85": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.001"
+            }
+        },
+        "86": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "87": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.01"
+            }
+        },
+        "88": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "89": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "90": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "91": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "92": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.007"
+            }
+        },
+        "93": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0085"
+            }
+        },
+        "94": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "95": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00625"
+            }
+        },
+        "96": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "97": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00625"
+            }
+        },
+        "98": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "99": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "100": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "101": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0055"
+            }
+        },
+        "102": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "103": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "104": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "105": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00475"
+            }
+        },
+        "106": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "107": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "108": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0085"
+            }
+        },
+        "109": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00325"
+            }
+        },
+        "110": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "111": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "112": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "113": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0025"
+            }
+        },
+        "114": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "115": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "116": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "117": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "118": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "119": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "120": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "121": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "122": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "123": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.0025"
+            }
+        },
+        "124": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00325"
+            }
+        },
+        "125": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "126": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "127": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "128": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "129": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "130": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "131": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "132": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "133": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0055"
+            }
+        },
+        "134": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "135": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.0085"
+            }
+        },
+        "136": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "137": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "138": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.007"
+            }
+        },
+        "139": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "140": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00475"
+            }
+        },
+        "141": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "142": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "143": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "144": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "145": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "146": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00325"
+            }
+        },
+        "147": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "148": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "149": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.001"
+            }
+        },
+        "150": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "151": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "152": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "153": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "154": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "155": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "156": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.0025"
+            }
+        },
+        "157": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00625"
+            }
+        },
+        "158": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00625"
+            }
+        },
+        "159": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "160": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "161": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "162": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "163": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00475"
+            }
+        },
+        "164": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00625"
+            }
+        },
+        "165": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "166": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "167": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.0055"
+            }
+        },
+        "168": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "169": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "170": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "171": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "172": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.007"
+            }
+        },
+        "173": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0085"
+            }
+        },
+        "174": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "175": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "176": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0055"
+            }
+        },
+        "177": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0085"
+            }
+        },
+        "178": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "179": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "180": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "181": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "182": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "183": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "184": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "185": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "186": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "187": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0025"
+            }
+        },
+        "188": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "189": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.0025"
+            }
+        },
+        "190": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "191": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.007"
+            }
+        },
+        "192": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "193": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "194": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "195": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00475"
+            }
+        },
+        "196": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00625"
+            }
+        },
+        "197": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00625"
+            }
+        },
+        "198": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00625"
+            }
+        },
+        "199": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "200": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "201": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "202": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "203": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "204": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.0085"
+            }
+        },
+        "205": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "206": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "207": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "208": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00475"
+            }
+        },
+        "209": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.01"
+            }
+        },
+        "210": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "211": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "212": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "213": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "214": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "215": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "216": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "217": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "218": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "219": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "220": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "221": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "222": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "223": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "224": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "225": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0055"
+            }
+        },
+        "226": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "227": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "228": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "229": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "230": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "231": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "232": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "233": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.0055"
+            }
+        },
+        "234": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "235": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "236": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.0085"
+            }
+        },
+        "237": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "238": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00475"
+            }
+        },
+        "239": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "240": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "241": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.01"
+            }
+        },
+        "242": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "243": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.001"
+            }
+        },
+        "244": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "245": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "246": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "247": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "248": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.0055"
+            }
+        },
+        "249": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "250": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "251": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "252": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00325"
+            }
+        },
+        "253": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.007"
+            }
+        },
+        "254": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "255": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "256": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.007"
+            }
+        },
+        "257": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "258": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "259": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "260": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "261": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "262": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "263": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "264": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "265": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "266": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "267": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "268": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.007"
+            }
+        },
+        "269": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "270": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "271": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "272": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "273": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "274": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "275": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "276": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "277": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00475"
+            }
+        },
+        "278": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.007"
+            }
+        },
+        "279": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.0085"
+            }
+        },
+        "280": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "281": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "282": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.0085"
+            }
+        },
+        "283": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "284": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "285": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "286": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "287": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "288": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.001"
+            }
+        },
+        "289": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "290": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "291": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "292": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "293": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00475"
+            }
+        },
+        "294": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "295": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.01"
+            }
+        },
+        "296": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "297": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "298": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "299": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "300": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.0055"
+            }
+        },
+        "301": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.001"
+            }
+        },
+        "302": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "303": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "304": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "305": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "306": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.0085"
+            }
+        },
+        "307": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "308": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "309": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.0055"
+            }
+        },
+        "310": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00625"
+            }
+        },
+        "311": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "312": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "313": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "314": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "315": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "316": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "317": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00475"
+            }
+        },
+        "318": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "319": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.007"
+            }
+        },
+        "320": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "321": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0025"
+            }
+        },
+        "322": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "323": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "324": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "325": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "326": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.01"
+            }
+        },
+        "327": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "328": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "329": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "330": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "331": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00625"
+            }
+        },
+        "332": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00475"
+            }
+        },
+        "333": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00325"
+            }
+        },
+        "334": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00475"
+            }
+        },
+        "335": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.0025"
+            }
+        },
+        "336": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "337": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "338": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "339": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.01"
+            }
+        },
+        "340": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "341": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "342": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "343": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "344": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "345": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "346": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "347": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.0055"
+            }
+        },
+        "348": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "349": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "350": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "351": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "352": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "353": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "354": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.007"
+            }
+        },
+        "355": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "356": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "357": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "358": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "359": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "360": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "361": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.007"
+            }
+        },
+        "362": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "363": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "364": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.0055"
+            }
+        },
+        "365": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "366": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.007"
+            }
+        },
+        "367": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "368": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "369": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "370": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "371": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "372": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "373": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "374": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "375": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "376": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "377": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00625"
+            }
+        },
+        "378": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "379": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00475"
+            }
+        },
+        "380": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.001"
+            }
+        },
+        "381": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "382": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "383": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "384": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "385": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "386": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "387": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "388": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "389": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "390": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0025"
+            }
+        },
+        "391": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "392": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0055"
+            }
+        },
+        "393": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "394": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00625"
+            }
+        },
+        "395": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "396": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "397": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00475"
+            }
+        },
+        "398": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "399": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00775"
+            }
+        },
+        "400": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "401": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "402": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0085"
+            }
+        },
+        "403": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00625"
+            }
+        },
+        "404": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "405": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "406": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00325"
+            }
+        },
+        "407": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "408": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "409": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "410": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0025"
+            }
+        },
+        "411": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00475"
+            }
+        },
+        "412": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "413": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "414": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0085"
+            }
+        },
+        "415": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.007"
+            }
+        },
+        "416": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00625"
+            }
+        },
+        "417": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "418": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "419": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "420": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "421": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.001"
+            }
+        },
+        "422": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "423": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "424": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "425": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "426": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "427": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "428": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00475"
+            }
+        },
+        "429": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.007"
+            }
+        },
+        "430": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "431": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0025"
+            }
+        },
+        "432": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "433": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "434": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.00475"
+            }
+        },
+        "435": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0025"
+            }
+        },
+        "436": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.0025"
+            }
+        },
+        "437": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00325"
+            }
+        },
+        "438": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "439": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.00175"
+            }
+        },
+        "440": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "441": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "442": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "443": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "444": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "445": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "446": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00925"
+            }
+        },
+        "447": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "448": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "449": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "450": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.004"
+            }
+        },
+        "451": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "452": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "453": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "454": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0085"
+            }
+        },
+        "455": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.0025"
+            }
+        },
+        "456": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00775"
+            }
+        },
+        "457": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.007"
+            }
+        },
+        "458": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00625"
+            }
+        },
+        "459": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "460": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        },
+        "461": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "2",
+                "mbeta": "0.0055"
+            }
+        },
+        "462": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "463": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.0085"
+            }
+        },
+        "464": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00475"
+            }
+        },
+        "465": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.007"
+            }
+        },
+        "466": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00625"
+            }
+        },
+        "467": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "468": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.001"
+            }
+        },
+        "469": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "470": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "36",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00175"
+            }
+        },
+        "471": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "472": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00925"
+            }
+        },
+        "473": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00625"
+            }
+        },
+        "474": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00175"
+            }
+        },
+        "475": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "476": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.0055"
+            }
+        },
+        "477": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "478": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "60",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "479": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "48",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00325"
+            }
+        },
+        "480": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.01"
+            }
+        },
+        "481": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "36",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "482": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "72",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.00325"
+            }
+        },
+        "483": {
+            "dvar": {
+                "regridfreq": "180",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.01"
+            }
+        },
+        "484": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.001"
+            }
+        },
+        "485": {
+            "dvar": {
+                "regridfreq": "300",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.01"
+            }
+        },
+        "486": {
+            "dvar": {
+                "regridfreq": "360",
+                "GRID": "24",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "487": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00475"
+            }
+        },
+        "488": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "1",
+                "mbeta": "0.00475"
+            }
+        },
+        "489": {
+            "dvar": {
+                "regridfreq": "120",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00775"
+            }
+        },
+        "490": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "72",
+                "maxlevel": "0",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "491": {
+            "dvar": {
+                "regridfreq": "240",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.00625"
+            }
+        },
+        "492": {
+            "dvar": {
+                "regridfreq": "270",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "493": {
+            "dvar": {
+                "regridfreq": "150",
+                "GRID": "60",
+                "maxlevel": "1",
+                "tagging": "0",
+                "mbeta": "0.01"
+            }
+        },
+        "494": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "60",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.00625"
+            }
+        },
+        "495": {
+            "dvar": {
+                "regridfreq": "90",
+                "GRID": "36",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "496": {
+            "dvar": {
+                "regridfreq": "30",
+                "GRID": "72",
+                "maxlevel": "2",
+                "tagging": "1",
+                "mbeta": "0.001"
+            }
+        },
+        "497": {
+            "dvar": {
+                "regridfreq": "210",
+                "GRID": "24",
+                "maxlevel": "1",
+                "tagging": "2",
+                "mbeta": "0.004"
+            }
+        },
+        "498": {
+            "dvar": {
+                "regridfreq": "330",
+                "GRID": "48",
+                "maxlevel": "0",
+                "tagging": "0",
+                "mbeta": "0.00925"
+            }
+        },
+        "499": {
+            "dvar": {
+                "regridfreq": "60",
+                "GRID": "48",
+                "maxlevel": "2",
+                "tagging": "0",
+                "mbeta": "0.004"
+            }
+        }
+    }
+}

@@ -5,10 +5,11 @@ import os
 from opal.parser.sampler import SamplerParser
 from .DatasetBase import DatasetBase
 from opal.visualization.SamplerPlotter import SamplerPlotter
+from opal.analysis.SamplerStatistics import SamplerStatistics
 from string import digits
 from opal.utilities.logger import opal_logger
 
-class SamplerDataset(DatasetBase, SamplerPlotter):
+class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
     
     def __init__(self, directory, fname):
         """
