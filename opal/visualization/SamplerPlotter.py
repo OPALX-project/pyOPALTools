@@ -1,8 +1,9 @@
 from .BasePlotter import *
 import numpy as np
-
+from opal.utilities.logger import opal_logger
 from .formatter import FormatScalarFormatter
 import os
+
 
 class SamplerPlotter(BasePlotter):
     
@@ -138,6 +139,74 @@ class SamplerPlotter(BasePlotter):
         return plt
     
     
+    def plot_auto_correlation(self, ind, **kwargs):
+        """
+        Compare a sample set with itself.
+        
+        Parameters
+        ----------
+        ind         (list)      indices of the sample set.
+        
+        Optional
+        --------
+        nsamples    (bool)      show a horizontal line indicating
+                                the total number of samples
+        percent     (bool)      indicate the agreement in percent
+                                above each bar
+        
+        Returns
+        -------
+        a matplotlib.pyplot handle
+        """
+        import matplotlib as mpl
+        
+        percent = kwargs.pop('percent', False)
+        
+        nsamples = len(ind)
+        matches = []
+        ntrain = 1
+        
+        scale = 1.0
+        if percent:
+            scale = float(nsamples) * 0.01
+        
+        while not ntrain == nsamples:
+            sample = ind[0:ntrain]
+            diff = ind[ntrain:]
+            matches.append( self.ds.find_matches(sample, diff) / scale )
+            ntrain += 1
+        
+        plt.plot(np.arange(nsamples - 1), matches)
+        
+        isTex = mpl.rcParams['text.usetex']
+        
+        xlabel = '#samples'
+        ylabel = '#identical samples'
+        llabel = '#samples'
+        blabel = '%'
+        
+        if isTex:
+            xlabel = '\\' + xlabel
+            ylabel = '\\' + ylabel
+            llabel = '\\' + llabel
+            blabel = '\\' + blabel
+        
+        if percent:
+            ylabel = ylabel + ' in ' + blabel
+        
+        plt.xlabel( xlabel )
+        plt.ylabel( ylabel )
+        
+        if kwargs.pop('nsamples', False) and not percent:
+            plt.axhline(nsamples, linestyle='dashed', label=llabel)
+            plt.legend(loc = 'upper center', ncol=1, labelspacing=0.,
+                       bbox_to_anchor=(0.5, 1.1, 0.0, 0.0))
+        
+        plt.tight_layout()
+        
+        return plt
+        
+    
     def plot_training_vs_validation(self, train0, **kwargs):
         """
         Bar plot comparing training with validation set.
@@ -175,8 +244,21 @@ class SamplerPlotter(BasePlotter):
         matches = []
         ntrains = []
         for train in trains:
-            ntrains.append( len(train) )
-            matches.append( self.ds.find_matches(train) )
+            ntrain = len(train)
+            ntrains.append( ntrain )
+            
+            if ntrain >= nsamples:
+                opal_logger.error('ntrain (' + str(ntrain) + ') >= ' +
+                                  'nsamples (' + str(nsamples) + ')')
+        
+            validation = np.arange(nsamples, dtype=int)
+            
+            # get all indices not in training sample set
+            # 12. April 2019
+            # https://stackoverflow.com/questions/3428536/python-list-subtraction-operation
+            validation = [int(i) for i in validation if int(i) not in train]
+            
+            matches.append( self.ds.find_matches(train, validation) )
         
         ind = np.arange(len(ntrains))
         bars = plt.bar(ind, matches)

@@ -1,16 +1,16 @@
-from opal.utilities.logger import opal_logger
 import numpy as np
 
 class SamplerStatistics:
-    
-    def find_matches(self, train, **kwargs):
+
+    def find_matches(self, ids1, ids2, **kwargs):
         """
-        Compare training and validation set in order to check
-        if they are independent (i.e. not many matches).
+        Compare two lists of indices ids1 and ids2
+        in order to check if they are independent (i.e. not many matches).
         
         Parameters
         ----------
-        train       (list)  the indices of the training points
+        ids1        (list)  indices of 1st sample set
+        ids2        (list)  indices of 2nd sample set
         
         Optional
         --------
@@ -21,31 +21,17 @@ class SamplerStatistics:
         -------
         number of matches
         """
-        nsamples = self.ds.size
-        ntrain = len(train)
-        
-        if ntrain >= nsamples:
-            opal_logger.error('ntrain (' + str(ntrain) + ') >= ' +
-                              'nsamples (' + str(nsamples) + ')')
-        
         ndvars = len(self.ds.design_variables)
-        
-        validation = np.arange(nsamples, dtype=int)
-        
-        # 12. April 2019
-        # https://stackoverflow.com/questions/3428536/python-list-subtraction-operation
-        validation = [int(i) for i in validation if int(i) not in train]
         
         nmatches = 0
         matches = []
-        # loop over validation points
-        for i in validation:
-            val_pt = list(self.ds.getData(var='', dvar=True, ind=i).values())
-            for j in train:
-                train_pt = list(self.ds.getData(var='', dvar=True, ind=j).values())
+        for i in ids1:
+            pt1 = list(self.ds.getData(var='', dvar=True, ind=i).values())
+            for j in ids2:
+                pt2 = list(self.ds.getData(var='', dvar=True, ind=j).values())
                 # 11. April 2019                                                                                              
                 # https://stackoverflow.com/questions/1388818/how-can-i-compare-two-lists-in-python-and-return-matches        
-                match = [k for k, l in zip(val_pt, train_pt) if k == l]
+                match = [k for k, l in zip(pt1, pt2) if k == l]
                 
                 if len(match) == ndvars:
                     nmatches += 1
