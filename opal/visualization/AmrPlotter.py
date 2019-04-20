@@ -139,7 +139,8 @@ class AmrPlotter(BasePlotter):
             slc.annotate_particles(1.0)
         
         if grids:
-            slc.annotate_grids(cmap=gridcmap)
+            import matplotlib as mpl
+            slc.annotate_grids(cmap=gridcmap, linewidth=mpl.rcParams['grid.linewidth'])
         
         if time:
             slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
