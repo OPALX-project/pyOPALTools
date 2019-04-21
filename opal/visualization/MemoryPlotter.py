@@ -52,6 +52,7 @@ class MemoryPlotter(BasePlotter):
         title    = kwargs.pop('title', None)
         yscale   = kwargs.pop('yscale', 'linear')
         xscale   = kwargs.pop('xscale', 'linear')
+        bars     = kwargs.pop('bars', False)
             
         nTotal = len(self.ds.getVariables())
         nCols = sum('processor' in var for var in self.ds.getVariables())
@@ -81,11 +82,19 @@ class MemoryPlotter(BasePlotter):
             mean.append(np.mean(stamp))
             maximum.append(max(stamp))
         
-        plt.plot(time, minimum, label='minimum')
-        plt.plot(time, maximum, label='maximum')
-        plt.plot(time, mean, label='mean')
+        if bars:
+            ind = np.arange(len(minimum))
+            plt.bar(ind, minimum, label='minimum')
+            plt.bar(ind, mean, bottom=minimum, label='mean')
+            plt.bar(ind, maximum, bottom=np.asarray(minimum)+np.asarray(mean),
+                    label='maximum')
+            plt.xlabel('iteration')
+        else:
+            plt.plot(time, minimum, label='minimum')
+            plt.plot(time, maximum, label='maximum')
+            plt.plot(time, mean, label='mean')
         
-        plt.xlabel('time [' + time_unit + ']')
+            plt.xlabel('time [' + time_unit + ']')
         plt.xscale(xscale)
             
         plt.ylabel('memory [' + memory_unit + ']')
