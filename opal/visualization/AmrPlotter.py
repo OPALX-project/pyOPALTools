@@ -19,30 +19,9 @@ class AmrPlotter(BasePlotter):
         """
         unit    = kwargs.pop("unit", None)
         
-        # 27. May 2018
-        # http://yt-project.org/doc/visualizing/manual_plotting.html
-        cut1 = 1
-        cut2 = 2
+        xvals, yvals = self.ds.get_ray_along(axis, field)
         
-        ax = 0
-        if axis == 'y':
-            ax = 1
-            cut1 = 0
-            cut2 = 2
-        elif axis == 'z':
-            ax = 2
-            cut1 = 0
-            cut2 = 1
-        elif not axis == 'x':
-            raise RuntimeError("AmrOpal.line_plot: Use either 'x', 'y' or 'z' axis")
-        
-        c = self.ds.real_ds.find_max(field)[1]
-        ray = self.ds.real_ds.ortho_ray(ax, (c[cut1], c[cut2]))
-        
-        srt = np.argsort(ray[axis])
-        
-        plt.plot(np.array(ray[axis][srt]),
-                 np.array(ray[field][srt]), **kwargs)
+        plt.plot(xvals, yvals, **kwargs)
         plt.ylabel(field + ' (' + unit + ')')
         plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
         plt.xlabel(axis)
