@@ -3,6 +3,7 @@ import sys
 import os
 from datetime import datetime
 from bisect   import bisect_left
+from opal import load_dataset, filetype
 
 if sys.version_info[0] < 3:
   # Python 2
@@ -175,6 +176,25 @@ class mldb:
 
         self.writeDB(filename_postfix)
 
+    def buildFromSampler(self, jsonFN, root, objectives, statBaseFn):
+        '''
+        Build training set from an OPAL sampler run
+        '''
+        ds = load_dataset(root, fname=jsonFN)
+        #print(ds)
+        #print(objectives)
+        
+        for ind in range(0,ds.size):
+            statData=load_dataset(root, fname=str(ind)+'/'+statBaseFn+'.stat')
+            print(str(ind) + '-', end ="")
+            for dvar in ds.design_variables:        
+                print(dvar, "=", ds.getData(dvar,ind=ind), end =" ")
+            print('|||-> s=', statData.getData('s')[-1], end =" ")
+            for obj in objectives:
+                print(obj, statData.getData(obj)[-1], end =" ")   
+            print()
+        
+        
     def buildFromSDDS(self,baseFN, root, yNames):
         '''
         Build training set from sdds (simulation) data obtained with for example OPAL
