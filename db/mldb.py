@@ -176,24 +176,69 @@ class mldb:
 
         self.writeDB(filename_postfix)
 
-    def buildFromSampler(self, jsonFN, root, objectives, statBaseFn):
+    def buildFromSampler(self, jsonFN, root, yNames, statBaseFn):
         '''
         Build training set from an OPAL sampler run
         '''
         ds = load_dataset(root, fname=jsonFN)
-        #print(ds)
-        #print(objectives)
         
+        self.trainingSet = []        
+        x = []
+        y = []
+        fns = []
+
         for ind in range(0,ds.size):
             statData=load_dataset(root, fname=str(ind)+'/'+statBaseFn+'.stat')
-            print(str(ind) + '-', end ="")
-            for dvar in ds.design_variables:        
-                print(dvar, "=", ds.getData(dvar,ind=ind), end =" ")
-            print('|||-> s=', statData.getData('s')[-1], end =" ")
-            for obj in objectives:
-                print(obj, statData.getData(obj)[-1], end =" ")   
-            print()
+            fns.append(str(ind)+'/'+statBaseFn+'.stat')
+            xstr = ""
+            ystr = ""
+            for dvar in ds.design_variables:
+                xstr += dvar+"="+ds.getData(dvar,ind=ind)+" "
+            x.append(xstr)
+            for obj in yNames:
+                ystr += str(statData.getData(obj)[-1])+" " 
+            y.append(ystr)
         
+        lDataSets = len(x)
+        xDim      = len(x[0].split())
+        yDim      = len(yNames)
+        
+        '''the following is a copy from buildFromSDDS '''
+               
+        xNames   = []
+        xValues  = []
+        xall = x[0].split()
+        for i in range(xDim):    
+            xNames.append(substring_before(xall[i], '='))
+            xValues.append(substring_after(xall[i], '='))
+        
+        # design variables
+        dvarsNames = xNames
+        # object variables
+        objsNames  = yNames
+
+        dvars = []
+        ovars = []
+        for i in range(lDataSets):
+            xall = x[i].split()
+            xi = []
+            for j in range(xDim):
+                xi.append(substring_after(xall[j], '='))
+            dvars.append(xi)
+            ovars.append(y[i])
+        
+        numGenerations = 1
+
+        self.trainingSet.append({'sampleSize':numGenerations,
+                                 'dvarNames' :dvarsNames,
+                                 'objNames'  :objsNames,
+                                 'dataFiles' :fns})
+
+        self.trainingSet.append({'dvarValues':dvars,
+                                 'objValues' :ovars})
+
+        dataFileName = 'test.huuuu'
+        self.writeDB(statBaseFn)
         
     def buildFromSDDS(self,baseFN, root, yNames):
         '''
