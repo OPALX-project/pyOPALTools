@@ -337,11 +337,16 @@ class TimingPlotter(BasePlotter):
                 times.append( dsets[0].getData(var=name, prop=prop + ' avg') )
         
         times, labels = self.__mostConsuming(kwargs.pop('first', 1e6), times, labels, prop + ' avg')
-        
-        times, labels = zip(*sorted(zip(times, labels),
-                                key=itemgetter(0),
-                                reverse=True))
-        
+
+        if kwargs.pop('alphabetic', True):
+            labels, times = zip(*sorted(zip(labels, times),
+                                        key=itemgetter(0),
+                                        reverse=True))
+        else:
+            times, labels = zip(*sorted(zip(times, labels),
+                                        key=itemgetter(0),
+                                        reverse=True))
+
         for label in labels:
             tmin = []
             tmax = []
