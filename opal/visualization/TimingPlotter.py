@@ -76,7 +76,7 @@ class TimingPlotter(BasePlotter):
         if not isinstance(dsets, list):
             dsets = [dsets]
         
-        dsets = [seld.ds] + dsets
+        dsets = [self.ds] + dsets
         
         for ds in dsets:
             if not ds.filetype == filetype.TIMING and not ds.filetype == filetype.OUTPUT:
@@ -295,7 +295,7 @@ class TimingPlotter(BasePlotter):
         if not isinstance(dsets, list):
             dsets = [dsets]
         
-        dsets = [seld.ds] + dsets
+        dsets = [self.ds] + dsets
         
         for ds in dsets:
             if not ds.filetype == filetype.TIMING and not ds.filetype == filetype.OUTPUT:
