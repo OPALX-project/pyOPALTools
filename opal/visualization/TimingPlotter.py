@@ -475,7 +475,18 @@ class TimingPlotter(BasePlotter):
         first = kwargs.pop('first', None)
         cmap_name = kwargs.pop('cmap', 'YlGn')
         
-        names = self.ds.getLabels()
+        excludeList = kwargs.pop('exclude', [])
+        tag         = kwargs.pop('tag', '')
+        names = []
+        for name in self.ds.getLabels():
+            skip = False
+            for ex in excludeList:
+                if ex in name:
+                    skip = True
+                    break
+            if not skip and not 'main' in name and tag in name:
+                names.append( name )
+        
         
         labels = []
         times  = []
