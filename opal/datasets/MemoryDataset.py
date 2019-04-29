@@ -30,7 +30,7 @@ class MemoryDataset(SDDSDatasetBase, MemoryPlotter):
             'VmSize-Min':   r'minimum VM size',
             'VmStk-Avg':    r'average VM stack size',
             'VmStk-Max':    r'maximum VM stack size',
-            'VmStk-Min':    r'minimum VM stack size',
+            'VmStk-Min':    r'minimum VM stack size'
         }
 
         super(MemoryDataset, self).__init__(directory, fname,
