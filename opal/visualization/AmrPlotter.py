@@ -124,7 +124,7 @@ class AmrPlotter(BasePlotter):
         if time:
             slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
         
-        slc.annotate_scale(corner='upper_right', size_bar_args={'color':color})
+        slc.annotate_scale(corner='lower_right', size_bar_args={'color':color})
         
         return slc
 
