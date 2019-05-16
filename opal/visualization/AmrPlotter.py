@@ -15,11 +15,17 @@ class AmrPlotter(BasePlotter):
         ----------
         axis    (str)           take a line cut along this axis
                                 ('x', 'y', 'z')
+
+        Optional
+        --------
         unit    (str)           of y-axis
+        center  (())            center of plot through which line
+                                should go
         """
         unit    = kwargs.pop("unit", None)
+        center  = kwargs.pop("center", (None, None))
         
-        xvals, yvals, _ = self.ds.get_ray_along(axis, field, **kwargs)
+        xvals, yvals, _ = self.ds.get_ray_along(axis, field, center=center)
         
         plt.plot(xvals, yvals, **kwargs)
         plt.ylabel(field + ' (' + unit + ')')
