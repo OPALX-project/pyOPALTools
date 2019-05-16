@@ -25,7 +25,7 @@ class AmrDataset(DatasetBase, AmrPlotter):
         return self._ds
 
     
-    def get_ray_along(self, axis, field):
+    def get_ray_along(self, axis, field, **kwargs):
         """
         Parameters
         ----------
@@ -35,7 +35,7 @@ class AmrDataset(DatasetBase, AmrPlotter):
         
         Returns
         -------
-        two rays
+        two rays and center tuple
         """
         import numpy as np
         
@@ -56,12 +56,17 @@ class AmrDataset(DatasetBase, AmrPlotter):
         elif not axis == 'x':
             opal_logger.error("AmrDataset: Use either 'x', 'y' or 'z' axis")
         
-        c = self.ds.real_ds.find_max(field)[1]
-        ray = self.ds.real_ds.ortho_ray(ax, (c[cut1], c[cut2]))
+        center = kwargs.pop('center', (None, None))
+
+        if center == (None, None):
+            c = self.ds.real_ds.find_max(field)[1]
+            center = (c[cut1], c[cut2])
+
+        ray = self.ds.real_ds.ortho_ray(ax, center)
         
         srt = np.argsort(ray[axis])
         
-        return np.array(ray[axis][srt]), np.array(ray[field][srt])
+        return np.array(ray[axis][srt]), np.array(ray[field][srt]), center
 
 
     def __str__(self):

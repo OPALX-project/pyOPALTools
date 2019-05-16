@@ -19,7 +19,7 @@ class AmrPlotter(BasePlotter):
         """
         unit    = kwargs.pop("unit", None)
         
-        xvals, yvals = self.ds.get_ray_along(axis, field)
+        xvals, yvals, _ = self.ds.get_ray_along(axis, field, **kwargs)
         
         plt.plot(xvals, yvals, **kwargs)
         plt.ylabel(field + ' (' + unit + ')')
