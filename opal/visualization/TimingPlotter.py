@@ -130,9 +130,10 @@ class TimingPlotter(BasePlotter):
         xscale = kwargs.pop('xscale', 'linear')
         yscale = kwargs.pop('yscale', 'linear')
         grid   = kwargs.pop('grid', False)
+        xlab   = kwargs.pop('xlabel', '#cores')
         
-        plt.plot(cores, efficiency)
-        plt.xlabel(kwargs.pop('xlabel', '#cores'))
+        plt.plot(cores, efficiency, **kwargs)
+        plt.xlabel(xlab)
         plt.ylabel(ylabel)
         plt.xscale(xscale)
         plt.yscale(yscale)
