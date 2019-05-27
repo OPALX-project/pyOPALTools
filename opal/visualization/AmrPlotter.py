@@ -59,6 +59,7 @@ class AmrPlotter(BasePlotter):
         time              = kwargs.pop("time", True)
         gridcmap          = kwargs.pop("gridcmap", 'B-W LINEAR_r')
         grids             = kwargs.pop("grids", True)
+        scale             = kwargs.pop("scale", True)
         
         slc = yt.SlicePlot(self.ds.real_ds, normal=normal,
                           fields=field, origin=origin)
@@ -70,8 +71,9 @@ class AmrPlotter(BasePlotter):
         
         if time:
             slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
-            
-        slc.annotate_scale(corner='upper_right', size_bar_args={'color':color})
+
+        if scale:
+            slc.annotate_scale(corner='upper_right', size_bar_args={'color':color})
         
         if overlay_particles:
             slc.annotate_particles(1.0)
@@ -130,7 +132,8 @@ class AmrPlotter(BasePlotter):
         if time:
             slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
         
-        slc.annotate_scale(corner='lower_right', size_bar_args={'color':color})
+        if scale:
+            slc.annotate_scale(corner='lower_right', size_bar_args={'color':color})
         
         return slc
 
