@@ -113,6 +113,7 @@ class AmrPlotter(BasePlotter):
         time    = kwargs.pop("time", True)
         gridcmap= kwargs.pop("gridcmap", 'B-W LINEAR_r')
         grids   = kwargs.pop("grids", True)
+        scale   = kwargs.pop("scale", True)
             
         slc = yt.ProjectionPlot(self.ds.real_ds, axis, fields=field,
                                 origin=origin, method=method)
