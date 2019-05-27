@@ -59,13 +59,13 @@ class TimeDataset(DatasetBase, TimingPlotter):
         
         # find timing dictionary of corresponding property 'prop'
         # 'idx' will be set accordingly
+        match = False
         idx = 0
         if isinstance(var, int):
             idx = var
             if idx > -1 and idx < len(dataset):
                 match = True
         else:
-            match = False
             available = []
             for data in dataset:
                 if var == data['what']:
