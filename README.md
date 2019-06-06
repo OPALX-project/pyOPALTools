@@ -13,6 +13,7 @@ numpy
 matplotlib  
 scipy
 jupyter [notebook]
+Optional: jupyterlab
 
 
 
@@ -55,12 +56,7 @@ deactivate
 Install Jupyter and additional software in the *activated* environment
 
 ```bash
-pip install numpy
-pip install scipy
-pip install jupyter\[notebook\] matplotlib
-pip install h5py
-pip install pyQt5
-pip install seaborn
+pip install -r requirements.txt
 ```
 
 #### Installation using conda

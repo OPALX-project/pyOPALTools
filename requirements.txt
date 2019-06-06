@@ -1,0 +1,8 @@
+numpy
+scipy
+jupyter
+jupyterlab	# this is the future
+matplotlib
+h5py
+pyQt5
+seaborn
