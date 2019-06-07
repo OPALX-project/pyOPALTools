@@ -17,7 +17,7 @@ import sys
 sys.path.insert(0, os.path.abspath('.'))
 # see:
 # https://stackoverflow.com/questions/2817264/how-to-get-the-parent-dir-location
-sys.path.append(os.path.abspath(__file__ + "/../../"))
+sys.path.append(os.path.abspath(__file__ + '/../../../'))
 
 
 # -- Project information -----------------------------------------------------
