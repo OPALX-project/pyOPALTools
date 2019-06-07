@@ -14,7 +14,7 @@ from collections import OrderedDict
 
 from optPilot.Annotate import AnnoteFinder
 
-import opal.parser.OptimizerParser import OptimizerParser as jsonreader
+from opal.parser.OptimizerParser import OptimizerParser as jsonreader
 
 # Data parsing
 ##############################################################################

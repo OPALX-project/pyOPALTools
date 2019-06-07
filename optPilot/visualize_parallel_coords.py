@@ -1,4 +1,4 @@
-from visualize_pf import readData, nameToColumnMap
+from .visualize_pf import readData, nameToColumnMap
 import argparse, os, sys, glob
 import re
 
