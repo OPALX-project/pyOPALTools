@@ -6,89 +6,96 @@ import os
 
 class SamplerParser:
     """
-    Parses *.json files of OPAL that are written by the SAMPLE command.
+    Parses ``*.json`` files of OPAL that are written by the SAMPLE command.
     
-    Notes
-    -----
+    **Notes**:
+    
     Supports following JSON formats:
-    {
-        "name": "sampler",
-        "dvar-bounds": {
-            "MX": "[ 16, 32 ]",
-            "nstep": "[ 10, 40 ]"
-        },
-        "samples": [
-            {
-                "ID": "0",
-                "dvar": {
-                    "MX": "20",
-                    "nstep": "33"
-                }
-            },
-            {
-                "ID": "1",
-                "dvar": {
-                    "MX": "21",
-                    "nstep": "29"
-                }
-            }
-        ]
-    }
     
-    {
-        "samples": {
-            "0": {
-                "dvar": {
-                    "MX": "16",
-                    "nstep": "10"
-                },
-                "obj": {
-                    "o1": 22.2,
-                    "o2": 22.1
-                }
+    .. code-block:: json
+    
+        {
+            "name": "sampler",
+            "dvar-bounds": {
+                "MX": "[ 16, 32 ]",
+                "nstep": "[ 10, 40 ]"
             },
-            "1": {
-                "dvar": {
-                    "MX": "19",
-                    "nstep": "11"
+            "samples": [
+                {
+                    "ID": "0",
+                    "dvar": {
+                        "MX": "20",
+                        "nstep": "33"
+                    }
                 },
-                "obj": {
-                    "o1": 21.2,
-                    "o2": 23.1
+                {
+                    "ID": "1",
+                    "dvar": {
+                        "MX": "21",
+                        "nstep": "29"
+                    }
                 }
-            },
-            "2": {
-                "dvar": {
-                    "MX": "22",
-                    "nstep": "12"
-                },
-                "obj": {
-                    "o1": 12.2,
-                    "o2": 32.1
-                }
-            }
-        },
-        "name": "sampler",
-        "OPAL version": "2.0.0",
-        "git revision": "1849b7e5130657e8be50d524de0f6c50134f330a",
-        "dvar-bounds": {
-            "MX": "[ 16, 32 ]",
-            "nstep": "[ 10, 40 ]"
+            ]
         }
-    }
+        
+        {
+            "samples": {
+                "0": {
+                    "dvar": {
+                        "MX": "16",
+                        "nstep": "10"
+                    },
+                    "obj": {
+                        "o1": 22.2,
+                        "o2": 22.1
+                    }
+                },
+                "1": {
+                    "dvar": {
+                        "MX": "19",
+                        "nstep": "11"
+                    },
+                    "obj": {
+                        "o1": 21.2,
+                        "o2": 23.1
+                    }
+                },
+                "2": {
+                    "dvar": {
+                        "MX": "22",
+                        "nstep": "12"
+                    },
+                    "obj": {
+                        "o1": 12.2,
+                        "o2": 32.1
+                    }
+                }
+            },
+            "name": "sampler",
+            "OPAL version": "2.0.0",
+            "git revision": "1849b7e5130657e8be50d524de0f6c50134f330a",
+            "dvar-bounds": {
+                "MX": "[ 16, 32 ]",
+                "nstep": "[ 10, 40 ]"
+            }
+        }
     
     
-    Members
-    -------
-    __id (= 'sampler')  (str)   used to identify the file to be
+    :ivar __id: (= 'sampler') used to identify the file to be
                                 a SAMPLE output
-    __tag (= 'name')    (str)   id tag for file identification
-    __begin             (int)   start individual id
-    __end               (int)   end individual id
-    __dvars             ([])    the design variables of each
-                                individual
-    __dvar_bounds       ({})    all design variable bounds
-    __objs              ([])    the objectives of each individual
+    :vartype __id: str
+    :ivar __tag: (= 'name') id tag for file identification
+    :vartype __tag: str
+    :ivar __begin: start individual id
+    :vartype __begin: int
+    :ivar __end: end individual id
+    :vartype __end: int
+    :ivar __dvars: the design variables of each individual
+    :vartype __dvars: []
+    :ivar __dvar_bounds: all design variable bounds
+    :vartype __dvar_bounds: {}
+    :ivar __objs: the objectives of each individual
+    :vartype __objs: []
     """
     
     def __init__(self):
@@ -154,13 +161,10 @@ class SamplerParser:
         """
         Check if a file is really a sampler output
         
-        Parameters
-        ----------
-        filename    (str)   JSON file to be loaded
+        :param filename: JSON file to be loaded
+        :type filename: str
         
-        Returns
-        -------
-        True if a sampler file, otherwise False
+        :returns: True if a sampler file, otherwise False
         """
         try:
             self.parse(filename)
@@ -175,13 +179,8 @@ class SamplerParser:
         """
         Load the JSON file.
         
-        Parameters
-        ----------
-        filename    (str)   JSON file to be loaded
-        
-        Returns
-        -------
-        None
+        :param filename: JSON file to be loaded
+        :type filename: str
         """
         if not os.path.exists(filename):
             raise IOError("File '" + filename + "' doesn't exist.")
@@ -213,14 +212,11 @@ class SamplerParser:
         """
         Obtain input values of an individual
         
-        Parameter
-        ---------
-        ind     (int)   individual number
+        :param ind: individual number
+        :type ind: int
         
-        Returns
-        -------
-        a dictionary with design variable names (keys)
-        and their input value.
+        :returns: a dictionary with design variable names (keys)
+            and their input value.
         """
         
         if not isinstance(ind, int):
@@ -260,9 +256,7 @@ class SamplerParser:
         """
         Obtain names of design variables.
         
-        Returns
-        -------
-        a list of strings
+        :returns: a list of strings
         """
         return list( self.bounds.keys() )
     
@@ -272,9 +266,7 @@ class SamplerParser:
         """
         Obtain design variable upper and lower bounds
         
-        Returns
-        -------
-        a dictionary of design variable names (key) and their bounds
+        :returns: a dictionary of design variable names (key) and their bounds
         """
         return self.__dvar_bounds
 
@@ -284,9 +276,7 @@ class SamplerParser:
         """
         Obtain names of objectives.
 
-        Returns
-        -------
-        a list of strings
+        :returns: a list of strings
         """
         if self.__objs:
             return list( self.__objs[0].keys() )
@@ -299,17 +289,13 @@ class SamplerParser:
     @property
     def begin(self):
         """
-        Returns
-        -------
-        lowest individual ID
+        :returns: lowest individual ID
         """
         return self.__begin
     
     @property
     def end(self):
         """
-        Returns
-        -------
-        highest individual ID
+        :returns: highest individual ID
         """
         return self.__end

@@ -15,15 +15,15 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         """
         Constructor.
         
-        Parameters
-        ----------
-        directory           (str)                   directory name
-        fname               (str)                   generation file name
+        :param directory: directory name
+        :type directory: str
+        :param fname: generation file name
+        :type fname: str
         
-        Members
-        -------
-        __parser            (SamplerParser)         actual data holder
-        __nFiles            (int)                   number of sampler output files found
+        :ivar __parser: actual data holder
+        :type __parser: SamplerParser
+        :ivar __nFiles: number of sampler output files found
+        :type __nFiles: int
         """
         super(SamplerDataset, self).__init__(directory, fname)
         
@@ -49,9 +49,8 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         This function first checks if new data needs to be loaded and
         then reads the data if necessary.
         
-        Parameters
-        ----------
-        ind     (int)   individual identity number
+        :param ind: individual identity number
+        :type ind: int
         """
         
         if self._loaded_file >= 0 and \
@@ -101,21 +100,18 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         individual set parameter 'ind' >= 0. If 'ind'
         is not given, the function takes the default value 0.
         
-        Parameters
-        ----------
-        var     (str)   a design variable or objective
-                        if var == '' the full dvar (dvar==True) or
+        :param var: a design variable or objective
+                        if ``var == ''`` the full dvar (``dvar==True``) or
                         objective data is returned
+        :type var: str
         
-        Optionals
-        ---------
-        ind     (int)   individual identity number
-        dvar    (bool)  return DVAR data in case of var==''
-                        (default: True)
+        :param ind: individual identity number (default: 0) (optional)
+        :type ind: int
+        :param dvar: return DVAR data in case of var==''
+                        (default: True) (optional)
+        :type dvar: bool
         
-        Returns
-        -------
-        design variable simulation input value.
+        :returns: design variable simulation input value.
         """
         ind   = kwargs.get('ind', 0)
         dvar  = kwargs.get('dvar', True)
@@ -140,13 +136,10 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         """
         Obtain label for plotting.
         
-        Parameters
-        ----------
-        var     (str)   variable name
+        :param var: variable name
+        :type var: str
         
-        Returns
-        -------
-        appropriate name plotting ready
+        :returns: appropriate name plotting ready
         """
         if self._loaded_file < 0:
             self.__load_file(0)
@@ -161,17 +154,15 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         """
         Obtain unit for plotting.
         
-        Note: The sampler does not yet write the units
-              of each variable to the files. This function
-              raises an error.
+        **Note:**
         
-        Parameters
-        ----------
-        var     (str)   variable name
+        The sampler does not yet write the units
+        of each variable to the files. This function
+        raises an error.
         
-        Returns
-        -------
-        None
+        :param var:   variable name
+        :type var: str
+        :returns: None
         """
         
         #FIXME

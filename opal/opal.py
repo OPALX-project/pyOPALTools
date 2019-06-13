@@ -30,19 +30,19 @@ def load_dataset(directory, **kwargs):
     """
     Load any file(s) produced by an OPAL simulation.
     If neither ftype nor fname is specified it tries to
-    read in a *.stat file.
+    read in a ``*.stat`` file.
 
-    Parameters
-    ----------
-    directory       (str)       root directory of the OPAL simulation
+    :param directory: root directory of the OPAL simulation
+    :type directory: str
     
-    Optionals
-    ---------
-    ftype           (FileType)  type of file to read in (optional)
-    fname           (str/tuple) file(s) to read in (optional)
-    astype          (FileType)  read a file according some dataset type
+    :param ftype: type of file to read in (optional)
+    :type ftype: FileType
+    :param fname: file(s) to read in (optional)
+    :type fname: str or tuple
+    :param astype: read a file according some dataset type
                                 E.g. OPAL standard output contains timings
                                 as well.
+    :type astype: FileType
     """
     try:
         if not os.path.exists(directory):
