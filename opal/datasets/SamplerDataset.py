@@ -10,6 +10,12 @@ from string import digits
 from opal.utilities.logger import opal_logger
 
 class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
+    '''
+    :ivar __parser: actual data holder
+    :vartype __parser: SamplerParser
+    :ivar __nFiles: number of sampler output files found
+    :vartype __nFiles: int
+    '''
     
     def __init__(self, directory, fname):
         """
@@ -19,11 +25,6 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         :type directory: str
         :param fname: generation file name
         :type fname: str
-        
-        :ivar __parser: actual data holder
-        :type __parser: SamplerParser
-        :ivar __nFiles: number of sampler output files found
-        :type __nFiles: int
         """
         super(SamplerDataset, self).__init__(directory, fname)
         
