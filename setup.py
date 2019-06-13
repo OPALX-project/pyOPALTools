@@ -7,6 +7,7 @@ PACKAGES = [
     'opal',
     'opal.analysis',
     'opal.datasets',
+    'db',
     'opal.parser',
     'opal.utilities',
     'opal.visualization',
