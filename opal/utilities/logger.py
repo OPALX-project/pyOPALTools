@@ -13,16 +13,16 @@ def find_config_file():
         if paths:
             for path in paths:
                 test = os.path.join(path, 'opal', 'utilities', 'log.yaml')
-                if os.path.isfile(test):
-                    break
+                if os.path.exists(test):
+                    return test, True
     except:
         pass
-    return test
+    return test, False
 
 
-path = find_config_file()
+path, found = find_config_file()
 
-if path:
+if found:
     # 22. March 2019
     # https://realpython.com/python-logging/
     with open(path, 'r') as f:
