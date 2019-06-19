@@ -40,7 +40,7 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
             'rms_px':       'RMSP',
             'rms_py':       'RMSP',
             'rms_pz':       'RMSP',
-            'time':         'TIME',
+            'time':         'time',
             'energy':       'ENERGY',
             's':            'SPOS',
             'flavour':      'OPAL_flavour'
@@ -113,6 +113,7 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
                     data.append(self.__parser.getStepAttribute(h5var, i)[dim])
             else:
                 for i in range(self.__parser.getNSteps()):
+                    
                     data.append(self.__parser.getStepAttribute(h5var, i))
                     
                     # get strings
