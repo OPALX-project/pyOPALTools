@@ -562,30 +562,27 @@ class mldb:
             print('Load data first')
             sys.exit()
 
-    def getQoIsPD(self,ind=0):
-        x = pd.DataFrame(columns=self.getYNames())
-        if type(self.getAllObj(0)[0]) is str:
-          for i in range(len(self.getAllObj(ind))):
-            x.loc[i]  = [float(j) for j in self.getAllObj(0)[i].split()]
-        else:
-          for i in range(len(self.getAllObj(ind))):
-            x.loc[i]  = [float(j) for j in self.getAllObj(0)[i]]
+    def getQoIsPD(self):
+        d=self.getAllObjData()
+        x = pd.DataFrame(data=d, columns=self.getYNames())
         return x
 
     def getDvarsPD(self,ind=0):
-      x = pd.DataFrame(columns=self.getXNames())
-      for i in range(len(self.getAllObj(ind))):
-          x.loc[i]  = [float(j) for j in self.getAllDvar(0)[i]]
-      return x
+        d=self.getAllDvarData()
+        x = pd.DataFrame(data=d, columns=self.getXNames())
+        return x
     
     def getQoiDvarPD(self, ind=0):
+      generations = self.getNumberOfSamples()
+      print (generations)
       data = pd.DataFrame(columns= self.getYNames() + self.getXNames())
-      for i in range(len(self.getAllObj(ind))):
-        if type(self.getAllObj(0)[0]) is str:
-          a = [float(j) for j in self.getAllObj(0)[i].split()]
-        else:
-          a = [float(j) for j in self.getAllObj(0)[i]]
-        b = [float(j) for j in self.getAllDvar(0)[i]]
+      for g in range(generations):
+        for i in range(len(self.getAllObj(g))):
+          if type(self.getAllObj(g)[0]) is str:
+            a = [float(j) for j in self.getAllObj(g)[i].split()]
+          else:
+            a = [float(j) for j in self.getAllObj(g)[i]]
+        b = [float(j) for j in self.getAllDvar(g)[i]]
         data.loc[i] = a + b
       return data
 
