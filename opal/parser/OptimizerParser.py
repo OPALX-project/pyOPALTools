@@ -31,6 +31,7 @@ class OptimizerParser:
                                     (order corresponds to __ids)
     __obj_names                     specifies columns in self.__obj_values
     __dvar_names                    specifies columns in self.__dvar_values
+    __pareto
     
     Returns
     -------
@@ -254,22 +255,30 @@ class OptimizerParser:
         None
         """
         
-        self.__nJsonFiles = 0;
+        self.__nJsonFiles = 0
         self.__directory = directory
         self.__basename = ""
         self.__nOptimizers = -1
+        self.__nParetoFiles = 0
+        self.__pareto = 'ParetoFront'
         
         self.__version_supported = {
             '2.1.0':    self.__readGeneration_version_2_1_0
         }
         
-        self.__loaded_generation = -1
-        self.__loaded_optimizer  = -1
+        self.__loaded_generation   = -1
+        self.__loaded_optimizer    = -1
+        self.__loaded_pareto_front = -1
         
         tbasename = ""
         testfile = ""
         for f in os.listdir(directory):
             if f.endswith(".json"):
+
+                if self.__pareto in f:
+                    self.__nParetoFiles += 1
+                    continue
+
                 self.__nJsonFiles += 1
                 
                 if self.__nJsonFiles == 1:
@@ -292,7 +301,8 @@ class OptimizerParser:
         
         self.__nOptimizers += 1
         print ( "Found " + str(self.__nJsonFiles) + " json files from " +
-                str(self.__nOptimizers) +  " optimizers." )
+                str(self.__nOptimizers) +  " optimizers and " + str(self.__nParetoFiles) +
+                " pareto front files")
 
 
     @property
@@ -305,13 +315,14 @@ class OptimizerParser:
         return int(self.__nJsonFiles / self.__nOptimizers)
     
     ##
-    def readGeneration(self, gen, opt=0):
+    def readGeneration(self, gen, opt=0, pareto=False):
         """ Parse a generation file
 
         Parameters
         ----------
         gen     : the generation number
         opt     : the optimizer number (default: 0)
+        pareto  : read a pareto file (default: False)
     
         Returns
         -------
@@ -326,19 +337,26 @@ class OptimizerParser:
         None
         """
         
-        if not self.__loaded_generation == gen or \
-            not self.__loaded_optimizer == opt:
-            self.__loaded_generation = gen
-            self.__loaded_optimizer == opt
+        if pareto:
+            filename = os.path.join(self.__directory,
+                                    self.__pareto + self.__basename + str(opt) + '.json')
+            self.__loaded_generation = -1
+            self.__loaded_optimizer = -1
+            self.__loaded_pareto_front = opt
         else:
-            return
+            if not self.__loaded_generation == gen or \
+                not self.__loaded_optimizer == opt:
+                self.__loaded_generation = gen
+                self.__loaded_optimizer == opt
+                self.__loaded_pareto_front = -1
+            else:
+                return
         
-        filename = os.path.join(self.__directory,
-                                str(gen) + self.__basename + str(opt) + '.json')
+            filename = os.path.join(self.__directory,
+                                    str(gen) + self.__basename + str(opt) + '.json')
         
         if not os.path.isfile(filename):
             raise IOError("File '" + filename + "' does not exist.")
-        
         
         # clear old data
         self.__ids         = []
@@ -384,9 +402,7 @@ class OptimizerParser:
         --------
         None
         """
-        
-        if self.__loaded_generation < 0:
-            raise RuntimeError("No generation file loaded.")
+        self.__hasLoaded()
         
         if ind > len(self.__ids) - 1 or ind < 0:
             raise IndexError("Individual number is out of bounds.")
@@ -431,8 +447,7 @@ class OptimizerParser:
         -------
         the index of the individual with certain ID
         """
-        if self.__loaded_generation < 0:
-            raise RuntimeError("No generation file loaded.")
+        self.__hasLoaded()
         
         if ID not in self.__ids:
             raise RuntimeError("An individual with ID " + str(ID) + " is not present.")
@@ -459,8 +474,7 @@ class OptimizerParser:
         --------
         None
         """
-        if self.__loaded_generation < 0:
-            raise RuntimeError("No generation file loaded.")
+        self.__hasLoaded()
         
         return self.__dvar_names
     
@@ -485,8 +499,7 @@ class OptimizerParser:
         --------
         None
         """
-        if self.__loaded_generation < 0:
-            raise RuntimeError("No generation file loaded.")
+        self.__hasLoaded()
         
         return self.__obj_names
     
@@ -513,8 +526,7 @@ class OptimizerParser:
         --------
         None
         """
-        if self.__loaded_generation < 0:
-            raise RuntimeError("No generation file loaded.")
+        self.__hasLoaded()
         
         if dvar == '':
             return self.__dvarBounds
@@ -545,8 +557,7 @@ class OptimizerParser:
         --------
         None
         """
-        if self.__loaded_generation < 0:
-            raise RuntimeError("No generation file loaded.")
+        self.__hasLoaded()
         
         return self.__constraints
     
@@ -572,8 +583,7 @@ class OptimizerParser:
         --------
         None
         """
-        if self.__loaded_generation < 0:
-            raise RuntimeError("No generation file loaded.")
+        self.__hasLoaded()
         
         return self.__dvar_values
     
@@ -599,8 +609,7 @@ class OptimizerParser:
         --------
         None
         """
-        if self.__loaded_generation < 0:
-            raise RuntimeError("No generation file loaded.")
+        self.__hasLoaded()
         
         return self.__obj_values
     
@@ -621,8 +630,7 @@ class OptimizerParser:
         --------
         None
         """
-        if self.__loaded_generation < 0:
-            raise RuntimeError("No generation file loaded.")
+        self.__hasLoaded()
         
         return self.__ids
     
@@ -728,3 +736,12 @@ class OptimizerParser:
                             self.__obj_names.append( obj )
                 elif key == 'ID':
                     self.__ids.append( int(entry[key]) )
+
+
+    def __hasLoaded(self):
+        """
+        Throw error if no generation or
+        pareto front file loaded.
+        """
+        if self.__loaded_generation < 0 and self.__loaded_pareto_front < 0:
+            raise RuntimeError("Neither generation nor pareto front file loaded.")
