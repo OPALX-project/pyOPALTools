@@ -425,6 +425,31 @@ class OptimizerPlotter(BasePlotter):
         return plt
 
 
+    def plot_pareto_front(self, xdvar, ydvar, opt=0, **kwargs):
+        """
+        Plot the Pareto front
+
+        Parameters
+        ----------
+        xdvar       (str)               design variable on x-axis
+        ydvar       (str)               design variable on y-axis
+        opt         (int)               optimizer number (default: 0)
+
+        Returns
+        -------
+        a matplotlib.pyplot handle
+        """
+        x = self.ds.getData(var=xdvar, opt=opt, pareto=True)
+        y = self.ds.getData(var=ydvar, opt=opt, pareto=True)
+
+        ind = np.argsort(x)
+        plt.scatter(x[ind], y[ind], **kwargs)
+        plt.xlabel(self.ds.getLabel(xdvar))
+        plt.ylabel(self.ds.getLabel(ydvar))
+
+        return plt
+
+
     def plot_individual_bounds(self, n, opt=0, **kwargs):
         """
         Plot all design variables and their bounds. This

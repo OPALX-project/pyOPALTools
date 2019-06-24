@@ -60,17 +60,19 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter):
         opt     (int)   optimizer, default: 0
         all     (bool)  get all info of an individual
                         (i.e. objectives, design variables)
-        
+        pareto  (bool)  load pareto file (default: False)        
+
         Returns
         -------
         an array of the data
         """
-        gen = kwargs.get('gen', 1)
-        opt = kwargs.get('opt', 0)
+        gen    = kwargs.get('gen', 1)
+        opt    = kwargs.get('opt', 0)
+        pareto = kwargs.get('pareto', False)
         
         al = kwargs.get('all', True)
         
-        self._loadGeneration(gen, opt)
+        self._loadGeneration(gen, opt, pareto)
         
         ind = kwargs.get('ind', -1)
         
@@ -207,7 +209,7 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter):
         return self.__parser.getBounds()
     
     
-    def individuals(self, gen, opt=0):
+    def individuals(self, gen, opt=0, pareto=False):
         """
         Obtain the ID of every individual of the
         currently loaded generation file
@@ -216,13 +218,14 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter):
         ----------
         gen         (int)   generation
         opt         (int)   optimizer (default: 0)
+        pareto      (bool)  load pareto file (default: False)
         """
-        self._loadGeneration(gen, opt)
+        self._loadGeneration(gen, opt, pareto)
         
         return self.__parser.getIDs()
     
     
-    def _loadGeneration(self, gen, opt=0):
+    def _loadGeneration(self, gen, opt=0, pareto=False):
         """
         Load data of generation into memory.
         
@@ -230,12 +233,15 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter):
         ----------
         gen         (int)   generation
         opt         (int)   optimizer (default: 0)
+        pareto      (bool)  load pareto file (default: False)
         
         Returns
         -------
         None
         """
-        if not gen == self._loaded_generation or \
+        if pareto:
+            self.__parser.readGeneration(-1, opt, pareto)
+        elif not gen == self._loaded_generation or \
             not opt == self._loaded_optimizer:
             self.__parser.readGeneration(gen, opt)
             self._loaded_generation = gen
