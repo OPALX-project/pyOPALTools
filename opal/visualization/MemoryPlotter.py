@@ -84,10 +84,10 @@ class MemoryPlotter(BasePlotter):
         
         if bars:
             ind = np.arange(len(minimum))
-            plt.bar(ind, minimum, label='minimum')
-            plt.bar(ind, mean, bottom=minimum, label='mean')
+            plt.bar(ind, minimum, label='minimum', width=len(ind))
+            plt.bar(ind, mean, bottom=minimum, label='mean', width=len(ind))
             plt.bar(ind, maximum, bottom=np.asarray(minimum)+np.asarray(mean),
-                    label='maximum')
+                    label='maximum', width=len(ind))
             plt.xlabel('iteration')
         else:
             plt.plot(time, minimum, label='minimum')
