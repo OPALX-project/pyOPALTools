@@ -9,6 +9,8 @@ from .DatasetBase import DatasetBase
 from opal.visualization.H5Plotter import H5Plotter
 from opal.analysis.H5Statistics import H5Statistics
 
+import pandas as pd 
+
 class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
     
     def __init__(self, directory, fname):
@@ -165,6 +167,23 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
         
         unit = r'$' + unit + '$'
         return unit
+
+    '''
+    Experimental retruns Pandas data frames
+    '''
+    def getMonitorDataFrame(monData):
+        cnames= ['id' ,'px', 'py', 'pz', 'time', 'turn', 'x', 'y', 'z']
+        x = pd.DataFrame(columns=cnames)
+        for v in cnames:
+            x[v] = monData.getData(v)
+        return x
+
+    def getH5DataFrame(h5Data,s=0):
+        cnames= ['id' ,'px', 'py', 'pz', 'ptype', 'x', 'y', 'z', 'q']
+        x = pd.DataFrame(columns=cnames)
+        for v in cnames:
+            x[v] = h5Data.getData(v,step=s)
+        return x
 
 
     @property
