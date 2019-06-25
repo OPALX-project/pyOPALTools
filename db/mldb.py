@@ -17,14 +17,16 @@ from opal.parser.OptimizerParser import OptimizerParser
 #
 #from utilities import SDDSParser
 
-
 def strToFloat(in_array):
   out_array=[]
   for in_row in in_array:
-    out_row = [float(i) for i in in_row]
+    if type(in_row) is str:
+      a = in_row.split()
+      out_row = [float(i) for i in a]
+    else:
+      out_row = [float(i) for i in in_row]
     out_array.append(out_row)
   return out_array
-
 
 
 # From https://stackoverflow.com/questions/12141150/from-list-of-integers-get-number-closest-to-a-given-value
