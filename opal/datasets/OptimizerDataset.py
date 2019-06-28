@@ -5,9 +5,10 @@ import os
 from opal.parser.OptimizerParser import OptimizerParser
 from .DatasetBase import DatasetBase
 from opal.visualization.OptimizerPlotter import OptimizerPlotter
+from opal.analysis.OptimizerAnalysis import OptimizerAnalysis
 from string import digits
 
-class OptimizerDataset(DatasetBase, OptimizerPlotter):
+class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
     
     def __init__(self, directory, fname):
         """
