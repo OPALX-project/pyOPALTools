@@ -67,7 +67,7 @@ class OptimizerAnalysis:
     def find(self, function, opt=0):
         """
         Find the individual according to the given function in
-        the Pareto file
+        the Pareto file.
 
         Parameters
         ----------
@@ -108,7 +108,7 @@ class OptimizerAnalysis:
         Print the values of the design variables and objectives of
         an individual.
         
-        It pareto = True, gen is not considered.
+        If pareto = True, gen is not considered.
         
         Parameters
         ----------
