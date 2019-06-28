@@ -45,21 +45,21 @@ class OptimizerAnalysis:
             data = np.asmatrix(data)
 
             for idx, ID in enumerate(ids):
-                s = 0.0
-                for j, obj in enumerate(in_objs):
-                    s += data[j, idx]
-
                 accept = True
                 if constraints:
-                    for j, obj in enumerate(in_objs):
-                        if obj in constraints:
-                            if data[j, idx] > constraints[obj]:
+                    for k, o in enumerate(in_objs):
+                        if o in constraints:
+                            if data[k, idx] > constraints[o]:
                                 accept = False
 
-                if accept and s < m:
-                    m = s
-                    gen = g
-                    ind = ID
+                if accept:
+                    s = 0.0
+                    for j, obj in enumerate(in_objs):
+                        s += data[j, idx]
+                    if s < m:
+                        m = s
+                        gen = g
+                        ind = ID
 
         return m, gen, ind
 
