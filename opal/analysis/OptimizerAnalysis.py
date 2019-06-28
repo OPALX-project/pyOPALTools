@@ -91,7 +91,6 @@ class OptimizerAnalysis:
                                          opt=opt, pareto=True) )
 
         for i in ids[1:]:
-            print ( i )
             ind2 = []
             for obj in objs:
                 ind2.append( self.ds.getData(obj, ind=i, all=False,
