@@ -187,6 +187,8 @@ class mldb:
         
         if not statBaseFn:
             # really ulgy fix
+            self.trainingSet = []
+
             numGenerations = 1
             dvarsNames = ds.design_variables
             objsNames  = ds.objectives
