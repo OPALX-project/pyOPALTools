@@ -199,13 +199,13 @@ class mldb:
                                      'bounds'    :bounds})
 
             nsamples = ds.size
-            dvars = np.zeros(nsamples, len(dvarNames))
+            dvars = np.zeros(nsamples, len(dvarsNames))
             ovars = np.zeros(nsamples, len(objsNames))
 
             # find a better solution
             for i in range(nsamples):
-                for j in range(len(dvarNames)):
-                    dvars[i, j] = float(ds.getData(var=dvarNames[j], ind=i))
+                for j in range(len(dvarsNames)):
+                    dvars[i, j] = float(ds.getData(var=dvarsNames[j], ind=i))
                 for j in range(len(objsNames)):
                     ovars[i, j] = float(ds.getData(var=objsNames[j], ind=i))
 
