@@ -179,12 +179,46 @@ class mldb:
 
         self.writeDB(filename_postfix)
 
-    def buildFromSampler(self, jsonFN, root, yNames, statBaseFn):
+    def buildFromSampler(self, jsonFN, root, yNames, statBaseFn='', dbname=''):
         '''
         Build training set from an OPAL sampler run
         '''
         ds = load_dataset(root, fname=jsonFN)
         
+        if not statBaseFn:
+            # really ulgy fix
+            self.trainingSet = []
+
+            numGenerations = 1
+            dvarsNames = ds.design_variables
+            objsNames  = ds.objectives
+            bounds     = ds.bounds
+            self.trainingSet.append({'sampleSize':numGenerations, 
+                                     'dvarNames' :dvarsNames, 
+                                     'objNames'  :objsNames,
+                                     'bounds'    :bounds})
+
+            nsamples = ds.size
+            dvars = np.zeros((nsamples, len(dvarsNames)))
+            ovars = np.zeros((nsamples, len(objsNames)))
+
+            # find a better solution
+            for i in range(nsamples):
+                for j in range(len(dvarsNames)):
+                    dvars[i, j] = float(ds.getData(var=dvarsNames[j], ind=i))
+                for j in range(len(objsNames)):
+                    ovars[i, j] = float(ds.getData(var=objsNames[j], ind=i))
+
+            self.trainingSet.append({'dvarValues':dvars,
+                                     'objValues' :ovars})
+
+            if not dbname:
+                dbname = 'sampler'
+            self.writeDB(dbname)
+            
+            # return here!
+            return
+
         self.trainingSet = []        
         x = []
         y = []
