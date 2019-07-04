@@ -4,7 +4,7 @@
 import os
 from opal.parser.H5Parser import H5Parser
 from opal.parser.H5Error import *
-import numpy as np
+import dask.array as da
 from .DatasetBase import DatasetBase
 from opal.visualization.H5Plotter import H5Plotter
 from opal.analysis.H5Statistics import H5Statistics
@@ -99,7 +99,7 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
                 h5var = self.__variable_mapper[var]
         
             if h5var in self.__parser.getStepDatasets(step):
-                return np.array(self.__parser.getStepDataset(h5var, step))
+                return self.__parser.getStepDataset(h5var, step)
             elif h5var in self.__parser.getStepAttributes(step):
                 data = []
             
@@ -116,13 +116,12 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
                         data.append(self.__parser.getStepAttribute(h5var, i)[dim])
                 else:
                     for i in range(self.__parser.getNSteps()):
-                        
                         data.append(self.__parser.getStepAttribute(h5var, i))
                         
                         # get strings
                         if isinstance(data[-1], bytes):
                             data[-1] = data[-1].decode('utf-8')
-                return np.asarray(data)
+                return da.from_array(data, chunks=('auto'))
             else:
                 raise H5Error("'" + var + "' is not part of this step")
         except Exception as ex:

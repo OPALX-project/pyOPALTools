@@ -2,7 +2,7 @@
 # Date:   March 2018
 
 import h5py
-import numpy as np
+import dask.array as da
 
 class H5Parser:
     
@@ -122,8 +122,7 @@ class H5Parser:
         
         data = []
         path = 'Step#' + str(step) + '/' + dsetName
-        data = self.__h5f.get(path)
-        return data[:]
+        return da.from_array(self.__h5f[path], chunks=('auto'))
     
     
     def getStepAttribute(self, attrName, step=0):
