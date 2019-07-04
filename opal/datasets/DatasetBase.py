@@ -3,6 +3,7 @@
 
 import os
 from opal.datasets.filetype import FileType
+from opal.utilities.logger import opal_logger
 
 class DatasetBase:
     """
@@ -20,13 +21,16 @@ class DatasetBase:
         _fname      (str)           name of file
         _ftype      (FileType)      type of file
         """
-        full_path = os.path.join(directory, fname)
-        if not os.path.exists(full_path):
-            raise RuntimeError("File '" + full_path + "' does not exist.")
-        
-        self._directory = directory
-        self._fname = fname
-        self._ftype = FileType.extensionToFileType(os.path.join(directory, fname))
+        try:
+            full_path = os.path.join(directory, fname)
+            if not os.path.exists(full_path):
+                raise RuntimeError("File '" + full_path + "' does not exist.")
+            
+            self._directory = directory
+            self._fname = fname
+            self._ftype = FileType.extensionToFileType(os.path.join(directory, fname))
+        except Exception as ex:
+            opal_logger.exception(ex)
     
     
     @property

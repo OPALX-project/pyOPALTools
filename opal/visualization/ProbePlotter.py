@@ -1,6 +1,7 @@
 from .BasePlotter import *
 import numpy as np
 
+
 class ProbePlotter(BasePlotter):
     
     def __init__(self):
@@ -27,37 +28,41 @@ class ProbePlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
-        from opal import filetype
-        
-        ylabel = self.ds.getLabel('bincount')
-        
-        if self.ds.filetype == filetype.HIST:
-            bincount = self.ds.getData('bincount')
-            rmin = self.ds.getData('min')
-            rmax = self.ds.getData('max')
-            nbins = self.ds.getData('nbins')
-            #dr = self.ds.getData('binsize')
+        try:
+            from opal import filetype
+            
+            ylabel = self.ds.getLabel('bincount')
+            
+            if self.ds.filetype == filetype.HIST:
+                bincount = self.ds.getData('bincount')
+                rmin = self.ds.getData('min')
+                rmax = self.ds.getData('max')
+                nbins = self.ds.getData('nbins')
+                #dr = self.ds.getData('binsize')
 
-            radius = np.linspace(float(rmin), float(rmax), nbins)
+                radius = np.linspace(float(rmin), float(rmax), nbins)
 
-            if kwargs.pop('scale', False):
-                bincount = np.asarray(bincount) / max(bincount )
-                ylabel += ' (normalized)'
+                if kwargs.pop('scale', False):
+                    bincount = np.asarray(bincount) / max(bincount )
+                    ylabel += ' (normalized)'
 
-            plt.grid(kwargs.pop('grid', False))
+                plt.grid(kwargs.pop('grid', False))
 
-            plt.plot(radius, bincount, **kwargs)
-            plt.xlabel('radius [' + self.ds.getUnit('min') + ']')
-        elif self.ds.filetype == filetype.H5:
-            x2 = self.ds.getData('x')**2
-            y2 = self.ds.getData('y')**2
+                plt.plot(radius, bincount, **kwargs)
+                plt.xlabel('radius [' + self.ds.getUnit('min') + ']')
+            elif self.ds.filetype == filetype.H5:
+                x2 = self.ds.getData('x')**2
+                y2 = self.ds.getData('y')**2
 
-            plt.hist(np.sqrt(x2 + y2), **kwargs)
-            plt.xlabel('radius [' + self.ds.getUnit('x') + ']')
+                plt.hist(np.sqrt(x2 + y2), **kwargs)
+                plt.xlabel('radius [' + self.ds.getUnit('x') + ']')
 
-            if kwargs.pop('density', False):
-                ylabel = 'density'
+                if kwargs.pop('density', False):
+                    ylabel = 'density'
 
-        plt.ylabel(ylabel)
+            plt.ylabel(ylabel)
 
-        return plt
+            return plt
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()

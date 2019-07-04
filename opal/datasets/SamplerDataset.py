@@ -114,23 +114,27 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         
         :returns: design variable simulation input value.
         """
-        ind   = kwargs.get('ind', 0)
-        dvar  = kwargs.get('dvar', True)
-        
-        self.__load_file(ind)
-        
-        if var == '':
-            if dvar:
-                return self.__parser.getIndividual(ind)
+        try:
+            ind   = kwargs.get('ind', 0)
+            dvar  = kwargs.get('dvar', True)
+            
+            self.__load_file(ind)
+            
+            if var == '':
+                if dvar:
+                    return self.__parser.getIndividual(ind)
+                else:
+                    return self.__parser.getObjectives(ind)
+            
+            if var in self.__parser.design_variables:
+                return self.__parser.getIndividual(ind)[var]
+            elif var in self.__parser.objectives:
+                return self.__parser.getObjectives(ind)[var]
             else:
-                return self.__parser.getObjectives(ind)
-        
-        if var in self.__parser.design_variables:
-            return self.__parser.getIndividual(ind)[var]
-        elif var in self.__parser.objectives:
-            return self.__parser.getObjectives(ind)[var]
-        else:
-            raise ValueError("The variable '" + var + "' is not in dataset.")
+                raise ValueError("The variable '" + var + "' is not in dataset.")
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return []
     
     
     def getLabel(self, var):
@@ -142,13 +146,17 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         
         :returns: appropriate name plotting ready
         """
-        if self._loaded_file < 0:
-            self.__load_file(0)
-        
-        if not var in self.__parser.design_variables:
-            raise ValueError("The variable '" + var + "' is not in dataset.")
-        
-        return var
+        try:
+            if self._loaded_file < 0:
+                self.__load_file(0)
+            
+            if not var in self.__parser.design_variables:
+                raise ValueError("The variable '" + var + "' is not in dataset.")
+            
+            return var
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
     
     
     def getUnit(self, var):
@@ -166,8 +174,12 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         :returns: None
         """
         
-        #FIXME
-        raise RuntimeError("The sampler does not yet provide units.")
+        try:
+            #FIXME
+            raise RuntimeError("The sampler does not yet provide units.")
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
         
         return
     
