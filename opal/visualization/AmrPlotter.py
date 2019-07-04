@@ -22,17 +22,21 @@ class AmrPlotter(BasePlotter):
         center  (())            center of plot through which line
                                 should go
         """
-        unit    = kwargs.pop("unit", None)
-        center  = kwargs.pop("center", (None, None))
-        
-        xvals, yvals, _ = self.ds.get_ray_along(axis, field, center=center)
-        
-        plt.plot(xvals, yvals, **kwargs)
-        plt.ylabel(field + ' (' + unit + ')')
-        plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
-        plt.xlabel(axis)
-        
-        return plt
+        try:
+            unit    = kwargs.pop("unit", None)
+            center  = kwargs.pop("center", (None, None))
+            
+            xvals, yvals, _ = self.ds.get_ray_along(axis, field, center=center)
+            
+            plt.plot(xvals, yvals, **kwargs)
+            plt.ylabel(field + ' (' + unit + ')')
+            plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+            plt.xlabel(axis)
+            
+            return plt
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()
 
 
     def slice_plot(self, normal, field, **kwargs):
@@ -49,39 +53,43 @@ class AmrPlotter(BasePlotter):
         color   (str)       is the color for the time stamp and scale annotation
         origin  (str)       location of the origin of the plot coordinate system
         """
-        import yt
-        
-        unit              = kwargs.pop("unit", None)
-        zoom              = kwargs.pop("zoom", 1.0)
-        color             = kwargs.pop("color", 'white')
-        origin            = kwargs.pop("origin", 'native')
-        overlay_particles = kwargs.pop("overlay_particles", False)
-        time              = kwargs.pop("time", True)
-        gridcmap          = kwargs.pop("gridcmap", 'B-W LINEAR_r')
-        grids             = kwargs.pop("grids", True)
-        scale             = kwargs.pop("scale", True)
-        
-        slc = yt.SlicePlot(self.ds.real_ds, normal=normal,
-                          fields=field, origin=origin)
-        
-        if unit is not None:
-            slc.set_unit(field, unit)
+        try:
+            import yt
             
-        slc.zoom(zoom)
-        
-        if time:
-            slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
+            unit              = kwargs.pop("unit", None)
+            zoom              = kwargs.pop("zoom", 1.0)
+            color             = kwargs.pop("color", 'white')
+            origin            = kwargs.pop("origin", 'native')
+            overlay_particles = kwargs.pop("overlay_particles", False)
+            time              = kwargs.pop("time", True)
+            gridcmap          = kwargs.pop("gridcmap", 'B-W LINEAR_r')
+            grids             = kwargs.pop("grids", True)
+            scale             = kwargs.pop("scale", True)
+            
+            slc = yt.SlicePlot(self.ds.real_ds, normal=normal,
+                            fields=field, origin=origin)
+            
+            if unit is not None:
+                slc.set_unit(field, unit)
+                
+            slc.zoom(zoom)
+            
+            if time:
+                slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
 
-        if scale:
-            slc.annotate_scale(corner='upper_right', size_bar_args={'color':color})
-        
-        if overlay_particles:
-            slc.annotate_particles(1.0)
-        
-        if grids:
-            slc.annotate_grids(cmap=gridcmap)
-        
-        return slc
+            if scale:
+                slc.annotate_scale(corner='upper_right', size_bar_args={'color':color})
+            
+            if overlay_particles:
+                slc.annotate_particles(1.0)
+            
+            if grids:
+                slc.annotate_grids(cmap=gridcmap)
+            
+            return slc
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()
 
 
     def projection_plot(self, axis, field, **kwargs):
@@ -102,41 +110,45 @@ class AmrPlotter(BasePlotter):
                             'sum':  summation of the field along the given axis
                             'integrate': integrate the requested field along the line of sight
         """
-        import yt
-        
-        unit    = kwargs.pop("unit", None)
-        zoom    = kwargs.pop("zoom", 1.0)
-        color   = kwargs.pop("color", 'white')
-        origin  = kwargs.pop("origin", 'native')
-        method  = kwargs.pop("method", 'sum')
-        overlay_particles = kwargs.pop("overlay_particles", False)
-        time    = kwargs.pop("time", True)
-        gridcmap= kwargs.pop("gridcmap", 'B-W LINEAR_r')
-        grids   = kwargs.pop("grids", True)
-        scale   = kwargs.pop("scale", True)
+        try:
+            import yt
             
-        slc = yt.ProjectionPlot(self.ds.real_ds, axis, fields=field,
-                                origin=origin, method=method)
+            unit    = kwargs.pop("unit", None)
+            zoom    = kwargs.pop("zoom", 1.0)
+            color   = kwargs.pop("color", 'white')
+            origin  = kwargs.pop("origin", 'native')
+            method  = kwargs.pop("method", 'sum')
+            overlay_particles = kwargs.pop("overlay_particles", False)
+            time    = kwargs.pop("time", True)
+            gridcmap= kwargs.pop("gridcmap", 'B-W LINEAR_r')
+            grids   = kwargs.pop("grids", True)
+            scale   = kwargs.pop("scale", True)
+                
+            slc = yt.ProjectionPlot(self.ds.real_ds, axis, fields=field,
+                                    origin=origin, method=method)
+            
+            if unit is not None:
+                slc.set_unit(field, unit)
         
-        if unit is not None:
-            slc.set_unit(field, unit)
-    
-        slc.zoom(zoom)
-        
-        if overlay_particles:
-            slc.annotate_particles(1.0)
-        
-        if grids:
-            import matplotlib as mpl
-            slc.annotate_grids(cmap=gridcmap, linewidth=mpl.rcParams['grid.linewidth'])
-        
-        if time:
-            slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
-        
-        if scale:
-            slc.annotate_scale(corner='lower_right', size_bar_args={'color':color})
-        
-        return slc
+            slc.zoom(zoom)
+            
+            if overlay_particles:
+                slc.annotate_particles(1.0)
+            
+            if grids:
+                import matplotlib as mpl
+                slc.annotate_grids(cmap=gridcmap, linewidth=mpl.rcParams['grid.linewidth'])
+            
+            if time:
+                slc.annotate_timestamp(corner='upper_left', redshift=False, draw_inset_box=True)
+            
+            if scale:
+                slc.annotate_scale(corner='lower_right', size_bar_args={'color':color})
+            
+            return slc
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()
 
 
     def particle_plot(self, x_field, y_field, z_field=None, **kwargs):
@@ -152,33 +164,37 @@ class AmrPlotter(BasePlotter):
         y_field       (str)         particle field plotted on y-axis
         z_field=None  (str)         field to be displayed on the colorbar
         """
-        import yt
+        try:
+            import yt
+            
+            x_unit   = kwargs.pop('x_unit', None)
+            y_unit   = kwargs.pop('y_unit', None)
+            z_unit   = kwargs.pop('z_unit', None)
+            z_log    = kwargs.pop('z_log', True)
+            color    = kwargs.pop('color', 'b')
+            #origin   = kwargs.pop('origin', 'native')
+            fontsize = kwargs.pop('fontsize', 16)
+            deposit  = kwargs.pop("deposition", 'ngp') # or 'cic'
+            
+            pp = yt.ParticlePlot(self.ds.real_ds, x_field, y_field, z_field,
+                                 fontsize=fontsize, deposition=deposit) #, origin=origin)
         
-        x_unit   = kwargs.pop('x_unit', None)
-        y_unit   = kwargs.pop('y_unit', None)
-        z_unit   = kwargs.pop('z_unit', None)
-        z_log    = kwargs.pop('z_log', True)
-        color    = kwargs.pop('color', 'b')
-        #origin   = kwargs.pop('origin', 'native')
-        fontsize = kwargs.pop('fontsize', 16)
-        deposit  = kwargs.pop("deposition", 'ngp') # or 'cic'
-        
-        pp = yt.ParticlePlot(self.ds.real_ds, x_field, y_field, z_field,
-                             fontsize=fontsize, deposition=deposit) #, origin=origin)
-        
-        if x_unit:
-            pp.set_unit(x_field, x_unit)
-        
-        if y_unit:
-            pp.set_unit(y_field, y_unit)    
-        
-        if z_unit:
-            #pp.set_cmap(z_field, 'RdBu')
-            pp.set_log(z_field, z_log)
-            #pp.set_zlim(z_field, zmin=-1e5, zmax=1e5)
-            pp.set_unit(z_field, z_unit)
-        
-        return pp
+            if x_unit:
+                pp.set_unit(x_field, x_unit)
+            
+            if y_unit:
+                pp.set_unit(y_field, y_unit)    
+            
+            if z_unit:
+                #pp.set_cmap(z_field, 'RdBu')
+                pp.set_log(z_field, z_log)
+                #pp.set_zlim(z_field, zmin=-1e5, zmax=1e5)
+                pp.set_unit(z_field, z_unit)
+            
+            return pp
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()
 
 
     def particle_phase_space_plot(self, axis, **kwargs):
@@ -192,31 +208,35 @@ class AmrPlotter(BasePlotter):
         ----------
         axis    (str)           'x', 'y' or 'z'
         """
-        import yt
+        try:
+            import yt
+            
+            coordinate_unit = kwargs.pop('coordinate_unit', None)
+            momentum_unit   = kwargs.pop('momentum_unit', None)
+            color           = kwargs.pop('color', 'b')
+            deposition      = kwargs.pop('deposition', 'ngp') # or 'cic'
+            fontsize        = kwargs.pop('fontsize', 16)
+            
+            coordinate = 'particle_position_'
+            momentum   = 'particle_momentum_'
+            
+            if axis not in ['x', 'y', 'z']:
+                raise RuntimeError("Phase space should be either 'x', 'y' or 'z'.")
+            
+            coordinate += axis
+            momentum += axis
+            
+            pp = yt.ParticlePlot(self.ds.real_ds, coordinate, momentum,
+                                 fontsize=fontsize,
+                                 deposition=deposition)
         
-        coordinate_unit = kwargs.pop('coordinate_unit', None)
-        momentum_unit   = kwargs.pop('momentum_unit', None)
-        color           = kwargs.pop('color', 'b')
-        deposition      = kwargs.pop('deposition', 'ngp') # or 'cic'
-        fontsize        = kwargs.pop('fontsize', 16)
-        
-        coordinate = 'particle_position_'
-        momentum   = 'particle_momentum_'
-        
-        if axis not in ['x', 'y', 'z']:
-            raise RuntimeError("Phase space should be either 'x', 'y' or 'z'.")
-        
-        coordinate += axis
-        momentum += axis
-        
-        pp = yt.ParticlePlot(self.ds.real_ds, coordinate, momentum,
-                             fontsize=fontsize,
-                             deposition=deposition)
-        
-        if coordinate_unit:
-            pp.set_unit(coordinate, coordinate_unit)
-        
-        if momentum_unit:
-            pp.set_unit(momentum, momentum_unit)
-        
-        return pp
+            if coordinate_unit:
+                pp.set_unit(coordinate, coordinate_unit)
+            
+            if momentum_unit:
+                pp.set_unit(momentum, momentum_unit)
+            
+            return pp
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()

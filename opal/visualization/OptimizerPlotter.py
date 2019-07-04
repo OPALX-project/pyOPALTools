@@ -5,6 +5,7 @@ import bisect
 from opal import config as config
 import re
 
+
 class OptimizerPlotter(BasePlotter):
     
     def __init__(self):
@@ -171,29 +172,33 @@ class OptimizerPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
-        gens = range(1, self.ds.num_generations + 1)
-        objs = self.ds.objectives
-        
-        
-        avg = kwargs.pop('avg', True)
-        result = []
-        for g in gens:
-            s = 0.0
-            for obj in objs:
-                if avg:
-                    s += np.mean(self.ds.getData(obj, gen=g, opt=opt))
-                else:
-                    s += sum(self.ds.getData(obj, gen=g, opt=opt))
-            result.append( s )
-        
-        plt.plot(gens, result)
-        plt.xscale(kwargs.pop('xscale', 'linear'))
-        plt.yscale(kwargs.pop('yscale', 'linear'))
-        plt.grid(kwargs.pop('grid', True), which='both')
-        plt.xlabel('generation')
-        plt.ylabel('sum of objectives (all individuals)')
-        
-        return plt
+        try:
+            gens = range(1, self.ds.num_generations + 1)
+            objs = self.ds.objectives
+            
+            
+            avg = kwargs.pop('avg', True)
+            result = []
+            for g in gens:
+                s = 0.0
+                for obj in objs:
+                    if avg:
+                        s += np.mean(self.ds.getData(obj, gen=g, opt=opt))
+                    else:
+                        s += sum(self.ds.getData(obj, gen=g, opt=opt))
+                result.append( s )
+            
+            plt.plot(gens, result)
+            plt.xscale(kwargs.pop('xscale', 'linear'))
+            plt.yscale(kwargs.pop('yscale', 'linear'))
+            plt.grid(kwargs.pop('grid', True), which='both')
+            plt.xlabel('generation')
+            plt.ylabel('sum of objectives (all individuals)')
+            
+            return plt
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()
 
 
     def plot_objective_evolution(self, opt=0, objs=[], op=min, **kwargs):
@@ -219,141 +224,145 @@ class OptimizerPlotter(BasePlotter):
         as_bar      (bool)
         colorlist   ([str])
         """
-        objectives = self.ds.objectives
-        ngen = self.ds.num_generations
-        
-        xscale      = kwargs.pop('xscale', 'linear')
-        yscale      = kwargs.pop('yscale', 'linear')
-        grid        = kwargs.pop('grid', True)
-        label_rep   = kwargs.pop('label_rep', {})
-        t           = kwargs.pop('total', False)
-        objmean     = kwargs.pop('objmean', False)
-        objmeandict = kwargs.pop('objmeandict', {
-            'linewidth': 2,
-            'linestyle': 'dashed',
-            'color':     'black',
-            'label':     'objective mean'
-        })
-        indmean = kwargs.pop('indmean', False)
-        indmeandict = kwargs.pop('indmeandict', {
-            'linewidth': 2,
-            'linestyle': 'dashed',
-            'color':     'black',
-            'label':     'individual mean'
-        })
-
-        totaldict  = kwargs.pop('totaldict', {
-            'linewidth': 2,
-            'linestyle': 'dashed',
-            'color':     'black',
-            'label':     'objective sum'
-        })
-
-        legenddict = kwargs.pop('legenddict', {
-            'fontsize':       18,
-            'ncol':           4,
-            'labelspacing':   0.5,
-            'bbox_to_anchor': (0.25,0.65 + (indmean) * 0.2, 0.5, 0.5)
-        })
-
-        as_bar    = kwargs.pop('asbar', False)
-        colorlist = kwargs.pop('colorlist', [])
-
-        if objs:
-            for obj in objs:
-                if not obj in objectives:
-                    raise ValueError(self.ds.filename + ' does only has following objectives: '
-                                    + str(objectives))
-        else:
-            objs = objectives
-
-        result = np.zeros((len(objs), ngen))
-        ind_mean = np.zeros(ngen)
-        
-        for j in range(0, ngen):
-            ids = self.ds.individuals(j+1, opt=opt)
+        try:
+            objectives = self.ds.objectives
+            ngen = self.ds.num_generations
             
-                # val, id
-            cur = [0, -1]
-            for idx in ids:
-                s = 0
-                for obj in objectives:
-                    val = self.ds.getData(var=obj, gen=j+1, ind=idx, all=False, opt=opt)
-                    s += val
-                    if indmean:
-                        ind_mean[j] += val
+            xscale      = kwargs.pop('xscale', 'linear')
+            yscale      = kwargs.pop('yscale', 'linear')
+            grid        = kwargs.pop('grid', True)
+            label_rep   = kwargs.pop('label_rep', {})
+            t           = kwargs.pop('total', False)
+            objmean     = kwargs.pop('objmean', False)
+            objmeandict = kwargs.pop('objmeandict', {
+                'linewidth': 2,
+                'linestyle': 'dashed',
+                'color':     'black',
+                'label':     'objective mean'
+            })
+            indmean = kwargs.pop('indmean', False)
+            indmeandict = kwargs.pop('indmeandict', {
+                'linewidth': 2,
+                'linestyle': 'dashed',
+                'color':     'black',
+                'label':     'individual mean'
+            })
+
+            totaldict  = kwargs.pop('totaldict', {
+                'linewidth': 2,
+                'linestyle': 'dashed',
+                'color':     'black',
+                'label':     'objective sum'
+            })
+
+            legenddict = kwargs.pop('legenddict', {
+                'fontsize':       18,
+                'ncol':           4,
+                'labelspacing':   0.5,
+                'bbox_to_anchor': (0.25,0.65 + (indmean) * 0.2, 0.5, 0.5)
+            })
+
+            as_bar    = kwargs.pop('asbar', False)
+            colorlist = kwargs.pop('colorlist', [])
+
+            if objs:
+                for obj in objs:
+                    if not obj in objectives:
+                        raise ValueError(self.ds.filename + ' does only has following objectives: '
+                                        + str(objectives))
+            else:
+                objs = objectives
+
+            result = np.zeros((len(objs), ngen))
+            ind_mean = np.zeros(ngen)
+            
+            for j in range(0, ngen):
+                ids = self.ds.individuals(j+1, opt=opt)
                 
-                if cur[1] < 0:
-                    cur = [s, idx]
-                else:
-                    cur = op([s, idx], cur)
-            
-            if indmean:
-                ind_mean[j] /= len(ids)
+                    # val, id
+                cur = [0, -1]
+                for idx in ids:
+                    s = 0
+                    for obj in objectives:
+                        val = self.ds.getData(var=obj, gen=j+1, ind=idx, all=False, opt=opt)
+                        s += val
+                        if indmean:
+                            ind_mean[j] += val
+                    
+                    if cur[1] < 0:
+                        cur = [s, idx]
+                    else:
+                        cur = op([s, idx], cur)
+                
+                if indmean:
+                    ind_mean[j] /= len(ids)
 
+                for i, obj in enumerate(objs):
+                    result[i, j] = self.ds.getData(obj, gen=j+1, ind=cur[1], all=False, opt=opt)
+
+            label = []
             for i, obj in enumerate(objs):
-                result[i, j] = self.ds.getData(obj, gen=j+1, ind=cur[1], all=False, opt=opt)
+                label.append( obj )
+                if obj in label_rep.keys():
+                    label[-1] = label_rep[obj]
 
-        label = []
-        for i, obj in enumerate(objs):
-            label.append( obj )
-            if obj in label_rep.keys():
-                label[-1] = label_rep[obj]
+            if indmean:
+                plt.subplot(2, 1, 1)
+                plt.semilogy(range(1, ngen + 1), ind_mean, **indmeandict)
+                plt.xscale(xscale)
+                plt.xlabel('generation')
+                plt.ylabel('individual mean')
+                plt.grid(grid, which='both')
+                
+                plt.subplot(2, 1, 2)
 
-        if indmean:
-            plt.subplot(2, 1, 1)
-            plt.semilogy(range(1, ngen + 1), ind_mean, **indmeandict)
-            plt.xscale(xscale)
+            if as_bar:
+                # bar plot
+                bottom = [0] * np.shape(result)[1]
+                for i, obj in enumerate(objs):
+                    if i < len(colorlist) - 1:
+                        kwargs['color'] = colorlist[i]
+                    else:
+                        kwargs.pop('color', 'black')
+                    plt.bar(range(1, ngen + 1), result[i, :], label=label[i],
+                            bottom=bottom, **kwargs)
+                    bottom += result[i, :]
+            else:
+                for i, obj in enumerate(objs):
+                    if i < len(colorlist) - 1:
+                        kwargs['color'] = colorlist[i]
+                    else:
+                        kwargs.pop('color', 'black')
+                    plt.plot(range(1, ngen + 1), result[i, :], label=label[i], **kwargs)
+            
+                if t:
+                    total = result.sum(axis=0)
+                    plt.plot(range(1, ngen + 1), total, **totaldict)
+
+            if objmean:
+                mean = result.mean(axis=0)
+                plt.plot(range(1, ngen + 1), mean, **objmeandict)
+            
             plt.xlabel('generation')
-            plt.ylabel('individual mean')
+            plt.xscale(xscale)
+            plt.yscale(yscale)
             plt.grid(grid, which='both')
             
-            plt.subplot(2, 1, 2)
+            if len(objs) > 1:
+                plt.ylabel(op.__name__)
+                plt.legend()
+            else:
+                plt.ylabel(obj)
+            
+            plt.legend(loc = 'upper center', **legenddict)
 
-        if as_bar:
-            # bar plot
-            bottom = [0] * np.shape(result)[1]
-            for i, obj in enumerate(objs):
-                if i < len(colorlist) - 1:
-                    kwargs['color'] = colorlist[i]
-                else:
-                    kwargs.pop('color', 'black')
-                plt.bar(range(1, ngen + 1), result[i, :], label=label[i],
-                        bottom=bottom, **kwargs)
-                bottom += result[i, :]
-        else:
-            for i, obj in enumerate(objs):
-                if i < len(colorlist) - 1:
-                    kwargs['color'] = colorlist[i]
-                else:
-                    kwargs.pop('color', 'black')
-                plt.plot(range(1, ngen + 1), result[i, :], label=label[i], **kwargs)
-        
-            if t:
-                total = result.sum(axis=0)
-                plt.plot(range(1, ngen + 1), total, **totaldict)
+            if indmean:
+                plt.subplots_adjust(hspace = 10)
 
-        if objmean:
-            mean = result.mean(axis=0)
-            plt.plot(range(1, ngen + 1), mean, **objmeandict)
-        
-        plt.xlabel('generation')
-        plt.xscale(xscale)
-        plt.yscale(yscale)
-        plt.grid(grid, which='both')
-        
-        if len(objs) > 1:
-            plt.ylabel(op.__name__)
-            plt.legend()
-        else:
-            plt.ylabel(obj)
-        
-        plt.legend(loc = 'upper center', **legenddict)
-
-        if indmean:
-            plt.subplots_adjust(hspace = 10)
-
-        return plt
+            return plt
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()
 
 
     def plot_dvar_evolution(self, opt=0, dvars=[], op=min, **kwargs):
@@ -376,53 +385,57 @@ class OptimizerPlotter(BasePlotter):
         yscale      (str)               'linear', 'log'
         grid        (bool)
         """
-        objs = self.ds.objectives
-        ngen = self.ds.num_generations
-        dvs  = self.ds.design_variables
-        
-        if dvars:
-            for dvar in dvars:
-                if not dvar in dvs:
-                    raise ValueError(self.ds.filename + ' does only has following design variables: '
-                                    + str(dvs))
-        else:
-            dvars = dvs
-        
-        result = np.zeros((len(dvars), ngen))
-        
-        for j in range(0, ngen):
-            ids = self.ds.individuals(j+1, opt=opt)
+        try:
+            objs = self.ds.objectives
+            ngen = self.ds.num_generations
+            dvs  = self.ds.design_variables
             
-                # val, id
-            cur = [0, -1]
-            for idx in ids:
-                s = 0
-                for obj in objs:
-                    s += self.ds.getData(var=obj, gen=j+1, ind=idx, all=False, opt=opt)
+            if dvars:
+                for dvar in dvars:
+                    if not dvar in dvs:
+                        raise ValueError(self.ds.filename + ' does only has following design variables: '
+                                        + str(dvs))
+            else:
+                dvars = dvs
+            
+            result = np.zeros((len(dvars), ngen))
+            
+            for j in range(0, ngen):
+                ids = self.ds.individuals(j+1, opt=opt)
                 
-                if cur[1] < 0:
-                    cur = [s, idx]
-                else:
-                    cur = op([s, idx], cur)
+                    # val, id
+                cur = [0, -1]
+                for idx in ids:
+                    s = 0
+                    for obj in objs:
+                        s += self.ds.getData(var=obj, gen=j+1, ind=idx, all=False, opt=opt)
+                    
+                    if cur[1] < 0:
+                        cur = [s, idx]
+                    else:
+                        cur = op([s, idx], cur)
+                
+                for i, dvar in enumerate(dvars):
+                    result[i, j] = self.ds.getData(dvar, gen=j+1, ind=cur[1], all=False, opt=opt)
             
             for i, dvar in enumerate(dvars):
-                result[i, j] = self.ds.getData(dvar, gen=j+1, ind=cur[1], all=False, opt=opt)
-        
-        for i, dvar in enumerate(dvars):
-            plt.plot(range(1, ngen + 1), result[i, :], label=dvar)
-        
-        plt.xlabel('generation')
-        plt.xscale(kwargs.pop('xscale', 'linear'))
-        plt.yscale(kwargs.pop('yscale', 'linear'))
-        plt.grid(kwargs.pop('grid', True), which='both')
-        
-        if len(dvars) > 1:
-            plt.ylabel(op.__name__)
-            plt.legend()
-        else:
-            plt.ylabel(dvar)
-        
-        return plt
+                plt.plot(range(1, ngen + 1), result[i, :], label=dvar)
+            
+            plt.xlabel('generation')
+            plt.xscale(kwargs.pop('xscale', 'linear'))
+            plt.yscale(kwargs.pop('yscale', 'linear'))
+            plt.grid(kwargs.pop('grid', True), which='both')
+            
+            if len(dvars) > 1:
+                plt.ylabel(op.__name__)
+                plt.legend()
+            else:
+                plt.ylabel(dvar)
+            
+            return plt
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()
 
 
     def plot_pareto_front(self, xdvar, ydvar, opt=0, **kwargs):
@@ -439,15 +452,19 @@ class OptimizerPlotter(BasePlotter):
         -------
         a matplotlib.pyplot handle
         """
-        x = self.ds.getData(var=xdvar, opt=opt, pareto=True)
-        y = self.ds.getData(var=ydvar, opt=opt, pareto=True)
+        try:
+            x = self.ds.getData(var=xdvar, opt=opt, pareto=True)
+            y = self.ds.getData(var=ydvar, opt=opt, pareto=True)
 
-        ind = np.argsort(x)
-        plt.scatter(x[ind], y[ind], **kwargs)
-        plt.xlabel(self.ds.getLabel(xdvar))
-        plt.ylabel(self.ds.getLabel(ydvar))
+            ind = np.argsort(x)
+            plt.scatter(x[ind], y[ind], **kwargs)
+            plt.xlabel(self.ds.getLabel(xdvar))
+            plt.ylabel(self.ds.getLabel(ydvar))
 
-        return plt
+            return plt
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()
 
 
     def plot_individual_bounds(self, n, opt=0, **kwargs):
@@ -467,86 +484,90 @@ class OptimizerPlotter(BasePlotter):
         """
         # 02. Nov. 2018
         # https://stackoverflow.com/questions/8024571/insert-an-item-into-sorted-list-in-python
-        
-        objs = self.ds.objectives
-        
-        ids = self.ds.individuals(1, opt=opt)
-        
-        # restrict
-        if n < 1:
-            n = 1
-        if n > len(ids):
-            n = len(ids)
-        
-        nbests = []
-        values = []
-        for gen in range(1, self.ds.num_generations + 1):
-            ids = self.ds.individuals(gen, opt=opt)
+        try:
+            objs = self.ds.objectives
             
-            for ind in ids:
-                s = 0.0
-                for obj in objs:
-                    s += self.ds.getData(var=obj, gen=gen, ind=ind, all=False, opt=opt)
-                # [sum, generation, individual id]
+            ids = self.ds.individuals(1, opt=opt)
+            
+            # restrict
+            if n < 1:
+                n = 1
+            if n > len(ids):
+                n = len(ids)
+            
+            nbests = []
+            values = []
+            for gen in range(1, self.ds.num_generations + 1):
+                ids = self.ds.individuals(gen, opt=opt)
                 
-                if s not in values:
-                    bisect.insort(nbests, [gen, ind])
-                    bisect.insort(values, s)
+                for ind in ids:
+                    s = 0.0
+                    for obj in objs:
+                        s += self.ds.getData(var=obj, gen=gen, ind=ind, all=False, opt=opt)
+                    # [sum, generation, individual id]
+                    
+                    if s not in values:
+                        bisect.insort(nbests, [gen, ind])
+                        bisect.insort(values, s)
+                    
+                    if len(nbests) > n:
+                        del nbests[-1]
+                        del values[-1]
+            
+            dvars = self.ds.design_variables
+            
+            if not dvars:
+                raise IndexError('No design variables found.')
+            
+            ncols = kwargs.pop('ncols', 4)
+            nrows = int(np.ceil(len(dvars) / ncols + 0.5))
+            
+            gs = gridspec.GridSpec(nrows, ncols)
+            
+            # each row is an individual
+            # each col is a design variable value
+            data = np.zeros([n, len(dvars)])
+            
+            for i, best in enumerate(nbests):
+                # each list index has a dictionary
+                # that contains just 1 entry, i.e. a list of 2 values (gen, ind)
+                gen, ind = best
                 
-                if len(nbests) > n:
-                    del nbests[-1]
-                    del values[-1]
-        
-        dvars = self.ds.design_variables
-        
-        if not dvars:
-            raise IndexError('No design variables found.')
-        
-        ncols = kwargs.pop('ncols', 4)
-        nrows = int(np.ceil(len(dvars) / ncols + 0.5))
-        
-        gs = gridspec.GridSpec(nrows, ncols)
-        
-        # each row is an individual
-        # each col is a design variable value
-        data = np.zeros([n, len(dvars)])
-        
-        for i, best in enumerate(nbests):
-            # each list index has a dictionary
-            # that contains just 1 entry, i.e. a list of 2 values (gen, ind)
-            gen, ind = best
+                for j, dvar in enumerate(dvars):
+                    data[i][j] = self.ds.getData(var=dvar, gen=gen, ind=ind, all=False, opt=opt)
             
-            for j, dvar in enumerate(dvars):
-                data[i][j] = self.ds.getData(var=dvar, gen=gen, ind=ind, all=False, opt=opt)
-        
-        bnds = self.ds.bounds
-        axes = []
-        
-        xticks = np.linspace(1, n, num=n)
-        xtickstep = kwargs.pop('xtickstep', 1)
-        for i, dvar in enumerate(dvars):
-            ax = plt.subplot(gs[i])
-            axes.append( ax )
+            bnds = self.ds.bounds
+            axes = []
             
-            sc = ax.scatter(xticks, data[:, i], c=values, marker='o')
-            ax.set_xlabel('n-th best individual')
-            ax.set_ylabel(dvar)
-            ax.set_xticks(np.arange(1, n+1, step=xtickstep))
+            xticks = np.linspace(1, n, num=n)
+            xtickstep = kwargs.pop('xtickstep', 1)
+            for i, dvar in enumerate(dvars):
+                ax = plt.subplot(gs[i])
+                axes.append( ax )
+                
+                sc = ax.scatter(xticks, data[:, i], c=values, marker='o')
+                ax.set_xlabel('n-th best individual')
+                ax.set_ylabel(dvar)
+                ax.set_xticks(np.arange(1, n+1, step=xtickstep))
+                
+                ax.axhline(y=bnds[dvar][0], linestyle='dashed', color='black')
+                ax.axhline(y=bnds[dvar][1], linestyle='dashed', color='black',
+                        label='design variable upper and lower bound')
+                
+                uplim = bnds[dvar][1] * 1.01
+                lowlim = bnds[dvar][0] * 0.99
+                if bnds[dvar][0] < 0:
+                    lowlim = bnds[dvar][0] * 1.01
+                if bnds[dvar][1] < 0:
+                    uplim = bnds[dvar][1] * 0.99
+                ax.set_ylim([lowlim, uplim])
             
-            ax.axhline(y=bnds[dvar][0], linestyle='dashed', color='black')
-            ax.axhline(y=bnds[dvar][1], linestyle='dashed', color='black',
-                    label='design variable upper and lower bound')
-            
-            uplim = bnds[dvar][1] * 1.01
-            lowlim = bnds[dvar][0] * 0.99
-            if bnds[dvar][0] < 0:
-                lowlim = bnds[dvar][0] * 1.01
-            if bnds[dvar][1] < 0:
-                uplim = bnds[dvar][1] * 0.99
-            ax.set_ylim([lowlim, uplim])
-        
-        cbar = plt.colorbar(sc, ax=axes)
-        cbar.set_label('sum of objective values')
-        # 3. Nov. 2018
-        # https://stackoverflow.com/questions/9834452/how-do-i-make-a-single-legend-for-many-subplots-with-matplotlib
-        plt.figlegend(loc = 'lower center', ncol=ncols, labelspacing=0. )
+            cbar = plt.colorbar(sc, ax=axes)
+            cbar.set_label('sum of objective values')
+            # 3. Nov. 2018
+            # https://stackoverflow.com/questions/9834452/how-do-i-make-a-single-legend-for-many-subplots-with-matplotlib
+            plt.figlegend(loc = 'lower center', ncol=ncols, labelspacing=0. )
+            return plt
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()

@@ -1,6 +1,7 @@
 from .TimingPlotter import *
 import numpy as np
 
+
 class StdOpalOutputPlotter(TimingPlotter):
     
     def __init__(self):
@@ -18,14 +19,18 @@ class StdOpalOutputPlotter(TimingPlotter):
         -------
         a matplotlib.pyplot handle
         """
-        data = self.calcRFphases(RFcavity)
-        
-        for i, cname in enumerate(RFcavity):
-            turns  = data[i][0]
-            phases = data[i][1]
-            plt.plot(turns, phases, linewidth=3, label=cname, **kwargs)
-        plt.xlabel("Turn number")
-        plt.ylabel("RF phase [deg]")
-        plt.legend(loc=0)
-        
-        return plt
+        try:
+            data = self.calcRFphases(RFcavity)
+            
+            for i, cname in enumerate(RFcavity):
+                turns  = data[i][0]
+                phases = data[i][1]
+                plt.plot(turns, phases, linewidth=3, label=cname, **kwargs)
+            plt.xlabel("Turn number")
+            plt.ylabel("RF phase [deg]")
+            plt.legend(loc=0)
+            
+            return plt
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return plt.figure()
