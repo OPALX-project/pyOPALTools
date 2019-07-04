@@ -5,6 +5,7 @@ from opal.parser.TimingParser import TimingParser
 from .DatasetBase import DatasetBase
 from opal.visualization.TimingPlotter import TimingPlotter
 import os
+from opal.utilities.logger import opal_logger
 
 class TimeDataset(DatasetBase, TimingPlotter):
     
@@ -22,17 +23,20 @@ class TimeDataset(DatasetBase, TimingPlotter):
         -------
         __parser            (TimingParser)    actual data holder
         """
-        self.__parser = TimingParser()
+        try:
+            self.__parser = TimingParser()
+            
+            if ttype.lower() == 'output':
+                self.__parser.read_output_file(os.path.join(directory, fname))
+            elif ttype.lower() == 'ippl':
+                self.__parser.read_ippl_timing(os.path.join(directory, fname))
+            else:
+                raise ValueError("Timing file type '" + ttpye + "' not supported." +
+                                 "Use either 'ippl' or 'output'")
         
-        if ttype.lower() == 'output':
-            self.__parser.read_output_file(os.path.join(directory, fname))
-        elif ttype.lower() == 'ippl':
-            self.__parser.read_ippl_timing(os.path.join(directory, fname))
-        else:
-            raise ValueError("Timing file type '" + ttpye + "' not supported." +
-                             "Use either 'ippl' or 'output'")
-        
-        super(TimeDataset, self).__init__(directory, fname)
+            super(TimeDataset, self).__init__(directory, fname)
+        except Exception as ex:
+            opal_logger.exception(ex)
     
     
     def getData(self, var, **kwargs):
@@ -50,40 +54,44 @@ class TimeDataset(DatasetBase, TimingPlotter):
         -------
         the timing data
         """
-        dataset = self.__parser.getTiming()
-        
-        prop = kwargs.get('prop', '')
-        
-        if not prop:
-            raise ValueError('You need to specify a property.')
-        
-        # find timing dictionary of corresponding property 'prop'
-        # 'idx' will be set accordingly
-        match = False
-        idx = 0
-        if isinstance(var, int):
-            idx = var
-            if idx > -1 and idx < len(dataset):
-                match = True
-        else:
-            available = []
-            for data in dataset:
-                if var == data['what']:
+        try:
+            dataset = self.__parser.getTiming()
+            
+            prop = kwargs.get('prop', '')
+            
+            if not prop:
+                raise ValueError('You need to specify a property.')
+            
+            # find timing dictionary of corresponding property 'prop'
+            # 'idx' will be set accordingly
+            match = False
+            idx = 0
+            if isinstance(var, int):
+                idx = var
+                if idx > -1 and idx < len(dataset):
                     match = True
-                    break
-                else:
-                    available.append( data['what'] )
-                    idx += 1
-    
-        if not match:
-            raise ValueError("No timing called '" + var + "'. Possible entries:"
-                             + str(available))
+            else:
+                available = []
+                for data in dataset:
+                    if var == data['what']:
+                        match = True
+                        break
+                    else:
+                        available.append( data['what'] )
+                        idx += 1
         
-        if not prop in dataset[idx]:
-            raise ValueError("Timing '" + var + "' has not property '"
-                             + prop + "'")
-        
-        return dataset[idx][prop]
+            if not match:
+                raise ValueError("No timing called '" + var + "'. Possible entries:"
+                                 + str(available))
+            
+            if not prop in dataset[idx]:
+                raise ValueError("Timing '" + var + "' has not property '"
+                                 + prop + "'")
+            
+            return dataset[idx][prop]
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return []
     
     
     def getLabel(self, var):
@@ -113,11 +121,15 @@ class TimeDataset(DatasetBase, TimingPlotter):
         -------
         a list of strings with names
         """
-        dataset = self.__parser.getTiming()
-        labels = []
-        for data in dataset:
-            labels.append( data['what'] )
-        return labels
+        try:
+            dataset = self.__parser.getTiming()
+            labels = []
+            for data in dataset:
+                labels.append( data['what'] )
+            return labels
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
     
     
     def getUnit(self, var):

@@ -7,6 +7,7 @@ from .DatasetBase import DatasetBase
 from opal.visualization.OptimizerPlotter import OptimizerPlotter
 from opal.analysis.OptimizerAnalysis import OptimizerAnalysis
 from string import digits
+from opal.utilities.logger import opal_logger
 
 class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
     
@@ -67,41 +68,45 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
         -------
         an array of the data
         """
-        gen    = kwargs.get('gen', 1)
-        opt    = kwargs.get('opt', 0)
-        pareto = kwargs.get('pareto', False)
+        try:
+            gen    = kwargs.get('gen', 1)
+            opt    = kwargs.get('opt', 0)
+            pareto = kwargs.get('pareto', False)
+            
+            al = kwargs.get('all', True)
+            
+            self._loadGeneration(gen, opt, pareto)
+            
+            ind = kwargs.get('ind', -1)
+            
+            if not ind == -1 and al:
+                return self.__parser.getIndividualWithID(ind)
         
-        al = kwargs.get('all', True)
-        
-        self._loadGeneration(gen, opt, pareto)
-        
-        ind = kwargs.get('ind', -1)
-        
-        if not ind == -1 and al:
-            return self.__parser.getIndividualWithID(ind)
-        
-        if not var in self.objectives and \
-            not var in self.design_variables:
-                raise ValueError("The variable '" + var + "' is not in dataset.")
-        
-        if ind == -1:
-            if var in self.objectives:
-                idx = self.objectives.index(var)
-                return self.__parser.getAllOutput()[:, idx]
+            if not var in self.objectives and \
+                not var in self.design_variables:
+                    raise ValueError("The variable '" + var + "' is not in dataset.")
+            
+            if ind == -1:
+                if var in self.objectives:
+                    idx = self.objectives.index(var)
+                    return self.__parser.getAllOutput()[:, idx]
+                else:
+                    idx = self.design_variables.index(var)
+                    return self.__parser.getAllInput()[:, idx]
             else:
-                idx = self.design_variables.index(var)
-                return self.__parser.getAllInput()[:, idx]
-        else:
-            if var in self.objectives:
-                idx = self.objectives.index(var)
-                iidx = self.__parser.getIndexOfID(ind)
-                return self.__parser.getAllOutput()[iidx, idx]
-            else:
-                idx = self.design_variables.index(var)
-                iidx = self.__parser.getIndexOfID(ind)
-                return self.__parser.getAllInput()[iidx, idx]
-    
-    
+                if var in self.objectives:
+                    idx = self.objectives.index(var)
+                    iidx = self.__parser.getIndexOfID(ind)
+                    return self.__parser.getAllOutput()[iidx, idx]
+                else:
+                    idx = self.design_variables.index(var)
+                    iidx = self.__parser.getIndexOfID(ind)
+                    return self.__parser.getAllInput()[iidx, idx]
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return []
+
+
     def getLabel(self, var):
         """
         Obtain label for plotting.
@@ -114,12 +119,16 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
         -------
         appropriate name plotting ready
         """
-        if not var in self.objectives and \
-            not var in self.design_variables:
-            raise ValueError("The variable '" + var + "' is not in dataset.")
-        
-        return var
-    
+        try:
+            if not var in self.objectives and \
+                not var in self.design_variables:
+                raise ValueError("The variable '" + var + "' is not in dataset.")
+            
+            return var
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
+
     
     def getUnit(self, var):
         """
@@ -139,9 +148,12 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
         """
         
         #FIXME
-        raise RuntimeError("The optimizer does not yet provide units.")
-        
-        return
+        try:
+            raise RuntimeError("The optimizer does not yet provide units.")
+        except Exception as ex:
+            opal_logger.exception(ex)
+
+        return ''
     
     
     def getGenerationBasename(self, gen, opt=0):
@@ -158,21 +170,23 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
         -------
         a basename of the selected generation
         """
+        try:
+            maxgen = self.__parser.getNumOfGenerations()
+            
+            if gen < 1 or gen > maxgen:
+                raise ValueError('Generation number negative or ' +
+                                 'greater than ' + str(maxgen) + '.')
         
-        maxgen = self.__parser.getNumOfGenerations()
+            genfile = str(gen) + self.__postfix + str(opt) + '.json'
+            filename = os.path.join(self._directory, genfile)
         
-        if gen < 1 or gen > maxgen:
-            raise ValueError('Generation number negative or ' +
-                             'greater than ' + str(maxgen) + '.')
+            if not os.path.isfile(filename):
+                raise IOError("File '" + filename + "' does not exist.")
         
-        
-        genfile = str(gen) + self.__postfix + str(opt) + '.json'
-        filename = os.path.join(self._directory, genfile)
-        
-        if not os.path.isfile(filename):
-            raise IOError("File '" + filename + "' does not exist.")
-        
-        return genfile
+            return genfile
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
 
 
     @property

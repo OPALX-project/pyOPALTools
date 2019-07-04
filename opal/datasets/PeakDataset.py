@@ -6,6 +6,7 @@ from opal.parser.PeakParser import PeakParser
 from .DatasetBase import DatasetBase
 from opal.visualization.PeakPlotter import PeakPlotter
 import numpy as np
+from opal.utilities.logger import opal_logger
 
 class PeakDataset(DatasetBase, PeakPlotter):
     
@@ -40,15 +41,19 @@ class PeakDataset(DatasetBase, PeakPlotter):
         -------
         an array of the data
         """
-        peakvar = var
-        
-        if var in self.__variable_mapper:
-            peakvar = self.__variable_mapper[var]
-        
-        if not self.__parser.isVariable(peakvar):
-            raise ValueError("The variable '" + var + "' is not in dataset.")
-        
-        return self.__parser.getDataOfVariable(peakvar)
+        try:
+            peakvar = var
+            
+            if var in self.__variable_mapper:
+                peakvar = self.__variable_mapper[var]
+            
+            if not self.__parser.isVariable(peakvar):
+                raise ValueError("The variable '" + var + "' is not in dataset.")
+            
+            return self.__parser.getDataOfVariable(peakvar)
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return []
     
     
     def getLabel(self, var):
@@ -63,15 +68,19 @@ class PeakDataset(DatasetBase, PeakPlotter):
         -------
         appropriate name plotting ready
         """
-        peakvar = var
-        
-        if var in self.__variable_mapper:
-            peakvar = self.__variable_mapper[var]
-        
-        if not self.__parser.isVariable(peakvar):
-            raise ValueError("The variable '" + var + "' is not in dataset.")
-        
-        return var
+        try:
+            peakvar = var
+            
+            if var in self.__variable_mapper:
+                peakvar = self.__variable_mapper[var]
+            
+            if not self.__parser.isVariable(peakvar):
+                raise ValueError("The variable '" + var + "' is not in dataset.")
+            
+            return var
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
     
     
     def getUnit(self, var):
@@ -86,17 +95,21 @@ class PeakDataset(DatasetBase, PeakPlotter):
         -------
         appropriate unit in math mode for plotting 
         """
-        peakvar = var
-        
-        if var in self.__variable_mapper:
-            peakvar = self.__variable_mapper[var]
-        
-        if not self.__parser.isVariable(peakvar):
-            raise ValueError("The variable '" + var + "' is not in dataset.")
-        
-        unit = self.__parser.getUnitOfVariable(peakvar)
-        
-        return unit
+        try:
+            peakvar = var
+            
+            if var in self.__variable_mapper:
+                peakvar = self.__variable_mapper[var]
+            
+            if not self.__parser.isVariable(peakvar):
+                raise ValueError("The variable '" + var + "' is not in dataset.")
+            
+            unit = self.__parser.getUnitOfVariable(peakvar)
+            
+            return unit
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
 
     @property
     def size(self):

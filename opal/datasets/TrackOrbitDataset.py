@@ -7,6 +7,7 @@ from .DatasetBase import DatasetBase
 from opal.visualization.TrackOrbitPlotter import TrackOrbitPlotter
 from opal.analysis.TrackOrbitAnalysis import TrackOrbitAnalysis
 import numpy as np
+from opal.utilities.logger import opal_logger
 
 class TrackOrbitDataset(DatasetBase, TrackOrbitPlotter, TrackOrbitAnalysis):
     
@@ -58,11 +59,15 @@ class TrackOrbitDataset(DatasetBase, TrackOrbitPlotter, TrackOrbitAnalysis):
         -------
         appropriate name plotting ready
         """
-        if self.__parser.isVariable(var):
-            return var
-        else:
-            raise RuntimeError("No variable '" + var + "' in dataset.")
-    
+        try:
+            if self.__parser.isVariable(var):
+                return var
+            else:
+                raise RuntimeError("No variable '" + var + "' in dataset.")
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
+
     
     def getUnit(self, var):
         """
@@ -76,17 +81,20 @@ class TrackOrbitDataset(DatasetBase, TrackOrbitPlotter, TrackOrbitAnalysis):
         -------
         appropriate unit in math mode for plotting 
         """
-        
-        if not self.__parser.isVariable(var):
-            raise RuntimeError("No variable '" + var + "' in dataset.")
-        
-        unit = self.__parser.getUnitOfVariable(var)
-        if var in self.__unit_label_mapper:
-            unit = r'\mathrm{' + unit + '}'
-        
-        return r'$' + unit + '$'
-    
-    
+        try:
+            if not self.__parser.isVariable(var):
+                raise RuntimeError("No variable '" + var + "' in dataset.")
+            
+            unit = self.__parser.getUnitOfVariable(var)
+            if var in self.__unit_label_mapper:
+                unit = r'\mathrm{' + unit + '}'
+            
+            return r'$' + unit + '$'
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
+
+
     @property
     def size(self):
         return self.__parser.size

@@ -5,6 +5,7 @@ import os
 from opal.parser.LossParser import LossParser
 from .DatasetBase import DatasetBase
 import numpy as np
+from opal.utilities.logger import opal_logger
 
 class LossDataset(DatasetBase):
     
@@ -57,10 +58,14 @@ class LossDataset(DatasetBase):
         -------
         appropriate name plotting ready
         """
-        if self.__parser.isVariable(var):
-            return var
-        else:
-            raise RuntimeError("No variable '" + var + "' in dataset.")
+        try:
+            if self.__parser.isVariable(var):
+                return var
+            else:
+                raise RuntimeError("No variable '" + var + "' in dataset.")
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
     
     
     def getUnit(self, var):
@@ -75,15 +80,18 @@ class LossDataset(DatasetBase):
         -------
         appropriate unit in math mode for plotting 
         """
-        
-        if not self.__parser.isVariable(var):
-            raise RuntimeError("No variable '" + var + "' in dataset.")
-        
-        unit = self.__parser.getUnitOfVariable(var)
-        if var in self.__unit_label_mapper:
-            unit = r'\mathrm{' + unit + '}'
-        
-        return r'$' + unit + '$'
+        try:
+            if not self.__parser.isVariable(var):
+                raise RuntimeError("No variable '" + var + "' in dataset.")
+            
+            unit = self.__parser.getUnitOfVariable(var)
+            if var in self.__unit_label_mapper:
+                unit = r'\mathrm{' + unit + '}'
+            
+            return r'$' + unit + '$'
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
     
     
     @property

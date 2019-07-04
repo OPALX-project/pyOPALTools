@@ -8,6 +8,7 @@ import numpy as np
 from .DatasetBase import DatasetBase
 from opal.visualization.H5Plotter import H5Plotter
 from opal.analysis.H5Statistics import H5Statistics
+from opal.utilities.logger import opal_logger
 
 import pandas as pd 
 
@@ -86,44 +87,47 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
         -------
         an array of the data (n, dim)
         """
+        try:
+            step = kwargs.get('step', 0)
         
-        step = kwargs.get('step', 0)
+            # take last step if negative
+            if step < 0:
+                step = self.__parser.getNSteps() - 1
         
-        # take last step if negative
-        if step < 0:
-            step = self.__parser.getNSteps() - 1
+            h5var = var
+            if var in self.__variable_mapper:
+                h5var = self.__variable_mapper[var]
         
-        h5var = var
-        if var in self.__variable_mapper:
-            h5var = self.__variable_mapper[var]
-        
-        if h5var in self.__parser.getStepDatasets(step):
-            return np.array(self.__parser.getStepDataset(h5var, step))
-        elif h5var in self.__parser.getStepAttributes(step):
-            data = []
+            if h5var in self.__parser.getStepDatasets(step):
+                return np.array(self.__parser.getStepDataset(h5var, step))
+            elif h5var in self.__parser.getStepAttributes(step):
+                data = []
             
-            # if vector type we need to get appropriate direction
-            if '_' in var:
-                dim = 0
-                for key in self.__direction:
-                    if '_' + key in var:
-                        dim = self.__direction[key]
-                    elif '_p' + key in var:
-                        dim = self.__direction[key]
-                
-                for i in range(self.__parser.getNSteps()):
-                    data.append(self.__parser.getStepAttribute(h5var, i)[dim])
+                # if vector type we need to get appropriate direction
+                if '_' in var:
+                    dim = 0
+                    for key in self.__direction:
+                        if '_' + key in var:
+                            dim = self.__direction[key]
+                        elif '_p' + key in var:
+                            dim = self.__direction[key]
+                    
+                    for i in range(self.__parser.getNSteps()):
+                        data.append(self.__parser.getStepAttribute(h5var, i)[dim])
+                else:
+                    for i in range(self.__parser.getNSteps()):
+                        
+                        data.append(self.__parser.getStepAttribute(h5var, i))
+                        
+                        # get strings
+                        if isinstance(data[-1], bytes):
+                            data[-1] = data[-1].decode('utf-8')
+                return np.asarray(data)
             else:
-                for i in range(self.__parser.getNSteps()):
-                    
-                    data.append(self.__parser.getStepAttribute(h5var, i))
-                    
-                    # get strings
-                    if isinstance(data[-1], bytes):
-                        data[-1] = data[-1].decode('utf-8')
-            return np.asarray(data)
-        else:
-            raise H5Error("'" + var + "' is not part of this step")
+                raise H5Error("'" + var + "' is not part of this step")
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return []
     
     
     def getLabel(self, var):
@@ -154,19 +158,23 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
         -------
         appropriate unit in math mode for plotting 
         """
-        h5var = var
-        
-        if var in self.__variable_mapper:
-            h5var = self.__variable_mapper[var]
-        
-        unit = self.__parser.getGlobalAttribute(h5var + 'Unit')
-        unit = unit.replace('#', '\\')
-        
-        if var in self.__unit_label_mapper:
-            unit = r'\mathrm{' + unit + '}'
-        
-        unit = r'$' + unit + '$'
-        return unit
+        try:
+            h5var = var
+            
+            if var in self.__variable_mapper:
+                h5var = self.__variable_mapper[var]
+            
+            unit = self.__parser.getGlobalAttribute(h5var + 'Unit')
+            unit = unit.replace('#', '\\')
+            
+            if var in self.__unit_label_mapper:
+                unit = r'\mathrm{' + unit + '}'
+            
+            unit = r'$' + unit + '$'
+            return unit
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
 
     '''
     Experimental retruns Pandas data frames
