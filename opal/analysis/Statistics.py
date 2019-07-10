@@ -38,7 +38,7 @@ class Statistics:
         if data.size < 1:
             raise ValueError('Empty data container.')
         
-        return data.mean(axis=0)
+        return np.mean(data, axis=0)
 
 
     def skew(self, data):
