@@ -3,6 +3,7 @@ import dask.array as da
 import dask
 from dask.array import stats
 import scipy as sc
+from opal.utilities.logger import opal_logger
 
 class H5Statistics(Statistics):
 
@@ -157,6 +158,8 @@ class H5Statistics(Statistics):
         step    (int)           of dataset
         bunch   (int)           for which bunch to compute
         """
+        opal_logger.error('dask.stats.kurtosis does not agree with scipy.stats.kurtosis')
+
         step  = kwargs.pop('step', 0)
         bunch = kwargs.pop('bunch', -1)
 
