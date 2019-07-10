@@ -5,6 +5,31 @@ from dask.array import stats
 
 class H5Statistics(Statistics):
 
+    def _select(self, data, bunch, step):
+        """
+        Take a slice from the array
+
+        Notes
+        -----
+        There is an open issue on chunking. After taking a slice
+        of the array, the shape is NaN causing errors. It needs
+        to be rechunked.
+
+        Open issue:
+        https://github.com/dask/dask/issues/3293
+        """
+        if bunch > -1:
+            bunchnum = self.ds.getData('bunchNumber', step=step)
+            data = da.compress(bunch == bunchnum, data)
+            data = data.compute()
+            data = da.from_array(data, chunks='auto')
+
+        if data.size < 1:
+            raise ValueError('Empty data container.')
+
+        return data
+
+
     def moment(self, var, k, **kwargs):
         """
         Calculate the k-th central moment.
@@ -23,16 +48,14 @@ class H5Statistics(Statistics):
         -----
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html#scipy.stats.moment
         """
-        step = kwargs.pop('step', 0)
-        
-        data = self.ds.getData(var, step=step)
-        
-        bunch = kwargs.pop('bunch', 0)
-        if bunch > -1:
-            bunchnum = self.ds.getData('bunchNumber', step=step)
-            da.compress(bunch == bunchnum, data)
+        step  = kwargs.pop('step', 0)
+        bunch = kwargs.pop('bunch', -1)
 
-        return stats.moment(data, axis=0, moment=k)
+        data = self.ds.getData(var, step=step)
+
+        data = self._select(data, bunch, step)
+
+        return stats.moment(data, axis=0, moment=k).compute().item(0)
 
 
     def mean(self, var, **kwargs):
@@ -48,16 +71,14 @@ class H5Statistics(Statistics):
         step    (int)           of dataset
         bunch   (int)           for which bunch to compute
         """
-        step = kwargs.pop('step', 0)
-        
+        step  = kwargs.pop('step', 0)
+        bunch = kwargs.pop('bunch', -1)
+
         data = self.ds.getData(var, step=step)
-        
-        bunch = kwargs.pop('bunch', 0)
-        if bunch > -1:
-            bunchnum = self.ds.getData('bunchNumber', step=step)
-            data = da.compress(bunch == bunchnum, data)
+
+        data = self._select(data, bunch, step)
             
-        return data.mean(axis=0)
+        return data.mean(axis=0).compute()
 
 
     def skew(self, var, **kwargs):
@@ -76,16 +97,14 @@ class H5Statistics(Statistics):
         step    (int)           of dataset
         bunch   (int)           for which bunch to compute
         """
-        step = kwargs.pop('step', 0)
-        
+        step  = kwargs.pop('step', 0)
+        bunch = kwargs.pop('bunch', -1)
+
         data = self.ds.getData(var, step=step)
+
+        data = self._select(data, bunch, step)
         
-        bunch = kwargs.pop('bunch', 0)
-        if bunch > -1:
-            bunchnum = self.ds.getData('bunchNumber', step=step)
-            data = da.compress(bunch == bunchnum, data)
-        
-        return stats.skew(data, axis=0)
+        return stats.skew(data, axis=0).compute().item(0)
 
 
     def kurtosis(self, var, **kwargs):
@@ -108,16 +127,14 @@ class H5Statistics(Statistics):
         step    (int)           of dataset
         bunch   (int)           for which bunch to compute
         """
-        step = kwargs.pop('step', 0)
-        
+        step  = kwargs.pop('step', 0)
+        bunch = kwargs.pop('bunch', -1)
+
         data = self.ds.getData(var, step=step)
+
+        data = self._select(data, bunch, step)
         
-        bunch = kwargs.pop('bunch', 0)
-        if bunch > -1:
-            bunchnum = self.ds.getData('bunchNumber', step=step)
-            data = da.compress(bunch == bunchnum, data)
-        
-        return stats.kurtosis(data, axis=0, fisher=True)
+        return stats.kurtosis(data, axis=0, fisher=True).compute().item(0)
 
 
     def gaussian_kde(self, var, **kwargs):
@@ -206,14 +223,15 @@ class H5Statistics(Statistics):
         XX International Linac Conference, Monterey, California
         """
         step    = kwargs.pop('step', 0)
-        data = self.ds.getData(var, step=step)
-        
-        bunch = kwargs.pop('bunch', 0)
-        if bunch > -1:
-            bunchnum = self.ds.getData('bunchNumber', step=step)
-            data = da.compress(bunch == bunchnum, data)
+        bunch = kwargs.pop('bunch', -1)
 
-        return impl_beam.halo_continuous_beam(data)
+        data = self.ds.getData(var, step=step)
+
+        data = self._select(data, bunch, step)
+
+        m4 = stats.moment(data, moment=4)
+        m2 = stats.moment(data, moment=2)
+        return (m4 / m2 ** 2 - 2.0).compute().item(0)
 
 
     def halo_ellipsoidal_beam(self, var, **kwargs):
@@ -240,14 +258,16 @@ class H5Statistics(Statistics):
         XX International Linac Conference, Monterey, California
         """
         step = kwargs.pop('step', 0)
-        
+        bunch = kwargs.pop('bunch', -1)
+
         data = self.ds.getData(var, step=step)
-        
-        bunch = kwargs.pop('bunch', 0)
-        if bunch > -1:
-            bunchnum = self.ds.getData('bunchNumber', step=step)
-            data = da.compress(bunch == bunchnum, data)
-        return impl_beam.halo_ellipsoidal_beam(data)
+
+        data = self._select(data, bunch, step)
+
+        m4 = stats.moment(data, moment=4)
+        m2 = stats.moment(data, moment=2)
+
+        return (m4 / m2 ** 2 - 15.0 / 7.0).compute().item(0)
 
 
     def projected_emittance(self, dim, **kwargs):
@@ -276,13 +296,20 @@ class H5Statistics(Statistics):
         coords = self.ds.getData(dim, step=step)
         momenta = self.ds.getData('p' + dim, step=step)
         
-        bunch = kwargs.pop('bunch', 0)
-        if bunch > -1:
-            bunchnum = self.ds.getData('bunchNumber', step=step)
-            coords = da.compress(bunch == bunchnum, coords)
-            momenta = da.compress(bunch == bunchnum, momenta)
+        bunch = kwargs.pop('bunch', -1)
 
-        return impl_beam.projected_emittance(coords, momenta)
+        coords  = self._select(coords, bunch, step)
+        momenta = self._select(momenta, bunch, step)
+
+        c2 = stats.moment(coords, moment=2)
+        m2 = stats.moment(momenta, moment=2)
+
+        # we need to shift coords to center the beam
+        coords -= coords.mean(axis=0)
+
+        cm = (coords * momenta).mean(axis=0)
+
+        return da.sqrt( m2 * c2 - cm ** 2 ).compute()
 
 
     def find_beams(self, var, **kwargs):
