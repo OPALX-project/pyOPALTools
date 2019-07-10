@@ -1,6 +1,4 @@
-import dask
-import dask.array as da
-import scipy as sc
+from scipy import stats
 import numpy as np
     
 class Statistics:
@@ -19,13 +17,13 @@ class Statistics:
         
         Parameters
         ----------
-        data    (dask.array)   is plain data
+        data    (list, array)   is plain data
         k       (int)           the moment, k = 1 is central mean
         """
         if data.size < 1:
             raise ValueError('Empty data container.')
         
-        return da.stats.moment(data, axis=0, moment=k)
+        return stats.moment(data, axis=0, moment=k)
 
 
     def mean(self, data):
@@ -35,7 +33,7 @@ class Statistics:
         
         Parameters
         ----------
-        data    (dask.array)   is plain data
+        data    (list, array)   is plain data
         """
         if data.size < 1:
             raise ValueError('Empty data container.')
@@ -50,12 +48,12 @@ class Statistics:
         
         Parameters
         ----------
-        data    (dask.array)   is plain data
+        data    (list, array)   is plain data
         """
         if data.size < 1:
             raise ValueError('Empty data container.')
         
-        return da.stats.skew(data, axis=0)
+        return stats.skew(data, axis=0)
 
 
     def kurtosis(self, data):
@@ -65,12 +63,12 @@ class Statistics:
         
         Parameters
         ----------
-        data    (dask.array)   is plain data
+        data    (list, array)   is plain data
         """
         if data.size < 1:
             raise ValueError('Empty data container.')
         
-        return da.stats.kurtosis(data, axis=0, fisher=True)
+        return stats.kurtosis(data, axis=0, fisher=True)
 
 
     def gaussian_kde(self, data):
@@ -80,7 +78,7 @@ class Statistics:
         
         Parameters
         ----------
-        data    (dask.array)   is plain data
+        data    (list, array)   is plain data
         
         Returns
         -------
@@ -89,21 +87,20 @@ class Statistics:
         if data.size < 1:
             raise ValueError('Empty data container.')
         
-        return dask.delayed(sc.stats.gaussian_kde)(data)
+        return stats.gaussian_kde(data)
 
 
-    def histogram(self, data, bins, range, **kwargs):
+    def histogram(self, data, **kwargs):
         """
         Compute a histogram of a dataset
         
         Parameters
         ----------
-        data    (dask.array)   is plain data
-        bins    (int)          #bins
-        range   ([])           range of histogram
+        data    (list, array)   is plain data
         
         Optionals
         ---------
+        bins    (int /str)      binning type or #bins
                                 (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
         density (bool)          normalize such that integral over
                                 range is 1.
@@ -113,5 +110,6 @@ class Statistics:
         a numpy.histogram with bin edges
         (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
         """
-        density = kwargs.get('density', True)
-        return da.histogram(data, bins=bins, range=range, density=density)
+        bins    = kwargs.pop('bins', 'sturges')
+        density = kwargs.pop('density', True)
+        return np.histogram(data, bins=bins, density=density)
