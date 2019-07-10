@@ -1,6 +1,7 @@
 from opal.analysis.Statistics import Statistics
 from opal.analysis import impl_beam
 import dask.array as da
+import dask
 from dask.array import stats
 
 class H5Statistics(Statistics):
@@ -332,100 +333,71 @@ class H5Statistics(Statistics):
         -------
         a list of minima locations and corresponding histogram
         """
-        step    = kwargs.pop('step', 0)
+        step = kwargs.pop('step', 0)
+        bins = kwargs.pop('bins', 20)
+        Wn   = kwargs.pop('Wn', 0.15)
+        bins = kwargs.pop('bins', 100)
         
         data = self.ds.getData(var, step=step)
-        
-        return impl_beam.find_beams(data, **kwargs)
+
+        if data.size < 1:
+            raise ValueError('Empty data container.')
+
+        dmin = da.min(data)
+        dmax = da.max(data)
+        data, bins = da.histogram(data, bins=bins, range=[dmin, dmax])
+
+        # smooth
+        from scipy import signal
+        b, a = signal.butter(1, Wn=Wn, btype='lowpass')
+        data = dask.delayed(signal.filtfilt)(b, a, data)
 
 
-    def get_beam(self, var, k, **kwargs):
+        from scipy.signal import find_peaks
+        ymax = dask.delayed(max)(data)
+
+        # we need to compute here otherwise find_peaks
+        # does not work
+        tmp = (-data + ymax).compute()
+
+        peak_indices, _ = find_peaks(tmp, height=0)
+        return peak_indices
+
+
+    def rotate(x, y, theta):
         """
-        Obtain the data of a variable of a beam in a
-        multi-bunch simulation.
-        
+        Rotate the coordinates (x, y) by theta (degree)
+
         Parameters
         ----------
-        var     (str)           the variable
-        k       (int)           select k-th bunch
-        
-        Optionals
-        ---------
-        step    (int)           of dataset
-        bins    (int)           number of bins for histogram
-        
-        Returns
-        -------
-        the data as an array / list + histogram to find bunch
-        """
-        
-        indices, hist = self.get_beam_indices(k, **kwargs)
-        
-        step    = kwargs.pop('step', 0)
-        
-        data = self.ds.getData(var, step=step)
-        
-        return da.compress(indices, data), hist
-        
+        x       (dask.array) is x-data
+        y       (dask.array) is y-data
+        theta   (float) is the angle in degree
 
-    def get_beam_indices(self, k, **kwargs):
-        """
-        Obtain the indices of the data that belongs to the
-        selected beam. Use in multi-bunch simulation data.
-        
-        Parameters
-        ----------
-        k       (int)           select k-th bunch
-        
-        Optionals
+
+        Note
+        ----
+
+        R(theta) = [ cos(theta), -sin(theta)
+                     sin(theta), cos(theta) ]
+
+        [rx, ry] = R(theta) * [x, y]
+
+        Reference
         ---------
-        step    (int)           of dataset
-        bins    (int)           number of bins for histogram
-        
+        https://en.wikipedia.org/wiki/Rotation_matrix
+
         Returns
         -------
-        an array containing booleans. An entry is
-        true if appropriate data belongs to **this** bunch.
-        The 'True' entries can be exracted from a data array
-        using numpy.extract.
-        It returns also the histogram.
-        
-        References
-        ----------
-        https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.extract.html
+        rotated coordinates (rx, ry)
         """
-        if k < 0:
-            raise ValueError("Bunch number has to be 'k >= 0'.")
-        
-        step    = kwargs.pop('step', 0)
-        
-        # opal-t vs. opal-cycl
-        opal_flavour = self.ds.getData('flavour')[step]
-        
-        if opal_flavour == 'opal-cycl':
-            xdata = self.ds.getData('x', step=step)
-            ydata = self.ds.getData('y', step=step)
-            
-            # rotate beam around (0, 0) such that it's horizontal
-            # --> we can do histogram independent of azimuth (dumping angle)
-            azimuth = self.ds.getData('AZIMUTH')[step]
-            
-            #if self.ds.getUnit('REFAZIMUTH') == 'rad':
-                #azimuth = np.rad2deg(azimuth)
-            
-            xdata, _ = impl_beam.rotate(xdata, ydata, -azimuth)
-            
-            minima, hist = impl_beam.find_beams(xdata, **kwargs)
-            
-        else:
-            raise ValueError("Only implemented for OPAL-CYCL.")
-        
-        if k > len(minima) - 1:
-            raise ValueError("Bunch number has to be 'k < " + str(len(minima)) + "'.")
-        
-        if k == len(minima):
-            # last bunch includes particles from upper part [k, k+1]
-            return da.compress((xdata >= minima[k]) & (xdata <= minima[k+1]), xdata), hist
-        else:
-            # do not include upper part [k, k+1[
-            return da.compress((xdata >= minima[k]) & (xdata < minima[k+1]), xdata), hist
+
+        theta = da.deg2rad(theta)
+
+        cos = da.cos(theta)
+        sin = da.sin(theta)
+
+        rx = x * cos - y * sin
+        ry = x * sin + y * cos
+
+        return rx, ry
