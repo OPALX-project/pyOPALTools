@@ -2,10 +2,45 @@ from opal.analysis.Statistics import Statistics
 import dask.array as da
 import dask
 from dask.array import stats
+import scipy as sc
 
 class H5Statistics(Statistics):
 
-    def _select(self, data, bunch, step):
+    def _select(self, data, attrval, val, step):
+        """
+        Take a slice from the array
+
+        Parameters
+        ----------
+        data    (dask.array)    container to extract data from
+        attrval (dask.array)    data compare with in extraction value
+        val     (int/float)     value for extraction comparison
+        step    (int)           step in H5 file
+
+        Notes
+        -----
+        There is an open issue on chunking. After taking a slice
+        of the array, the shape is NaN causing errors. It needs
+        to be rechunked.
+
+        Open issue:
+        https://github.com/dask/dask/issues/3293
+
+        Returns
+        -------
+        slice of data
+        """
+        data = da.compress(val == attrval, data)
+        data = data.compute()
+        data = da.from_array(data, chunks='auto')
+
+        if data.size < 1:
+            raise ValueError('Empty data container.')
+
+        return data
+
+
+    def _selectBunch(self, data, bunch, step):
         """
         Take a slice from the array
 
@@ -20,12 +55,7 @@ class H5Statistics(Statistics):
         """
         if bunch > -1:
             bunchnum = self.ds.getData('bunchNumber', step=step)
-            data = da.compress(bunch == bunchnum, data)
-            data = data.compute()
-            data = da.from_array(data, chunks='auto')
-
-        if data.size < 1:
-            raise ValueError('Empty data container.')
+            data = self._select(data, bunchnum, bunch, step)
 
         return data
 
@@ -53,7 +83,7 @@ class H5Statistics(Statistics):
 
         data = self.ds.getData(var, step=step)
 
-        data = self._select(data, bunch, step)
+        data = self._selectBunch(data, bunch, step)
 
         return stats.moment(data, axis=0, moment=k).compute().item(0)
 
@@ -76,7 +106,7 @@ class H5Statistics(Statistics):
 
         data = self.ds.getData(var, step=step)
 
-        data = self._select(data, bunch, step)
+        data = self._selectBunch(data, bunch, step)
             
         return data.mean(axis=0).compute()
 
@@ -102,7 +132,7 @@ class H5Statistics(Statistics):
 
         data = self.ds.getData(var, step=step)
 
-        data = self._select(data, bunch, step)
+        data = self._selectBunch(data, bunch, step)
         
         return stats.skew(data, axis=0).compute().item(0)
 
@@ -132,7 +162,7 @@ class H5Statistics(Statistics):
 
         data = self.ds.getData(var, step=step)
 
-        data = self._select(data, bunch, step)
+        data = self._selectBunch(data, bunch, step)
         
         return stats.kurtosis(data, axis=0, fisher=True).compute().item(0)
 
@@ -161,11 +191,8 @@ class H5Statistics(Statistics):
         kernel density estimator of scipy.
         """
         step    = kwargs.pop('step', 0)
-        bins    = kwargs.pop('bins', 'sturges')
-        density = kwargs.pop('density', True)
-        
         data = self.ds.getData(var, step=step)
-        
+
         return dask.delayed(sc.stats.gaussian_kde)(data)
 
 
@@ -227,7 +254,7 @@ class H5Statistics(Statistics):
 
         data = self.ds.getData(var, step=step)
 
-        data = self._select(data, bunch, step)
+        data = self._selectBunch(data, bunch, step)
 
         m4 = stats.moment(data, moment=4)
         m2 = stats.moment(data, moment=2)
@@ -262,7 +289,7 @@ class H5Statistics(Statistics):
 
         data = self.ds.getData(var, step=step)
 
-        data = self._select(data, bunch, step)
+        data = self._selectBunch(data, bunch, step)
 
         m4 = stats.moment(data, moment=4)
         m2 = stats.moment(data, moment=2)
@@ -298,8 +325,8 @@ class H5Statistics(Statistics):
         
         bunch = kwargs.pop('bunch', -1)
 
-        coords  = self._select(coords, bunch, step)
-        momenta = self._select(momenta, bunch, step)
+        coords  = self._selectBunch(coords, bunch, step)
+        momenta = self._selectBunch(momenta, bunch, step)
 
         c2 = stats.moment(coords, moment=2)
         m2 = stats.moment(momenta, moment=2)
@@ -344,23 +371,23 @@ class H5Statistics(Statistics):
 
         dmin = da.min(data)
         dmax = da.max(data)
-        data, bins = da.histogram(data, bins=bins, range=[dmin, dmax])
+        data, bin_edges = da.histogram(data, bins=bins, range=[dmin, dmax])
 
         # smooth
         from scipy import signal
         b, a = signal.butter(1, Wn=Wn, btype='lowpass')
-        data = dask.delayed(signal.filtfilt)(b, a, data)
+        data_smoothed = dask.delayed(signal.filtfilt)(b, a, data)
 
 
         from scipy.signal import find_peaks
-        ymax = dask.delayed(max)(data)
+        ymax = dask.delayed(max)(data_smoothed)
 
         # we need to compute here otherwise find_peaks
         # does not work
-        tmp = (-data + ymax).compute()
+        tmp = (-data_smoothed + ymax).compute()
 
         peak_indices, _ = find_peaks(tmp, height=0)
-        return peak_indices
+        return peak_indices, data, bin_edges
 
 
     def rotate(x, y, theta):
