@@ -1,6 +1,7 @@
 from opal.analysis.Statistics import Statistics
 from opal.analysis import impl_beam
-import numpy as np
+import dask.array as da
+from dask.array import stats
 
 class H5Statistics(Statistics):
 
@@ -16,22 +17,22 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch   (int)           for which bunch to compute
         
         Notes
         -----
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html#scipy.stats.moment
         """
-        step = kwargs.get('step', 0)
+        step = kwargs.pop('step', 0)
         
         data = self.ds.getData(var, step=step)
         
-        energy_bin = kwargs.get('bin', -1)
-        if energy_bin > 0:
-            bins = self.ds.getData('bin', step=step)
-            data = data[np.where(bins == energy_bin)]
-        
-        return super(H5Statistics, self).moment(data, k)
+        bunch = kwargs.pop('bunch', 0)
+        if bunch > 0:
+            bunchnum = self.ds.getData('bunchNumber', step=step)
+            da.compress(bunch == bunchnum, data)
+
+        return stats.moment(data, axis=0, moment=k)
 
 
     def mean(self, var, **kwargs):
@@ -45,18 +46,18 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch   (int)           for which bunch to compute
         """
-        step = kwargs.get('step', 0)
+        step = kwargs.pop('step', 0)
         
         data = self.ds.getData(var, step=step)
         
-        energy_bin = kwargs.get('bin', -1)
-        if energy_bin > 0:
-            bins = self.ds.getData('bin', step=step)
-            data = data[np.where(bins == energy_bin)]
+        bunch = kwargs.pop('bunch', 0)
+        if bunch > 0:
+            bunchnum = self.ds.getData('bunchNumber', step=step)
+            data = da.compress(bunch == bunchnum, data)
             
-        return super(H5Statistics, self).mean(data)
+        return data.mean(axis=0)
 
 
     def skew(self, var, **kwargs):
@@ -73,18 +74,18 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch   (int)           for which bunch to compute
         """
-        step = kwargs.get('step', 0)
+        step = kwargs.pop('step', 0)
         
         data = self.ds.getData(var, step=step)
         
-        energy_bin = kwargs.get('bin', -1)
-        if energy_bin > 0:
-            bins = self.ds.getData('bin', step=step)
-            data = data[np.where(bins == energy_bin)]
+        bunch = kwargs.pop('bunch', 0)
+        if bunch > 0:
+            bunchnum = self.ds.getData('bunchNumber', step=step)
+            data = da.compress(bunch == bunchnum, data)
         
-        return super(H5Statistics, self).skew(data)
+        return stats.skew(data, axis=0)
 
 
     def kurtosis(self, var, **kwargs):
@@ -105,18 +106,18 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch   (int)           for which bunch to compute
         """
-        step = kwargs.get('step', 0)
+        step = kwargs.pop('step', 0)
         
         data = self.ds.getData(var, step=step)
         
-        energy_bin = kwargs.get('bin', -1)
-        if energy_bin > 0:
-            bins = self.ds.getData('bin', step=step)
-            data = data[np.where(bins == energy_bin)]
+        bunch = kwargs.pop('bunch', 0)
+        if bunch > 0:
+            bunchnum = self.ds.getData('bunchNumber', step=step)
+            data = da.compress(bunch == bunchnum, data)
         
-        return super(H5Statistics, self).skew(data)
+        return stats.kurtosis(data, axis=0, fisher=True)
 
 
     def gaussian_kde(self, var, **kwargs):
@@ -142,27 +143,28 @@ class H5Statistics(Statistics):
         -------
         kernel density estimator of scipy.
         """
-        step    = kwargs.get('step', 0)
-        bins    = kwargs.get('bins', 'sturges')
-        density = kwargs.get('density', True)
+        step    = kwargs.pop('step', 0)
+        bins    = kwargs.pop('bins', 'sturges')
+        density = kwargs.pop('density', True)
         
         data = self.ds.getData(var, step=step)
         
-        return super(H5Statistics, self).gaussian_kde(data)
+        return dask.delayed(sc.stats.gaussian_kde)(data)
 
 
-    def histogram(self, var, **kwargs):
+    def histogram(self, var, bins, range, **kwargs):
         """
         Compute a histogram of a dataset
         
         Parameters
         ----------
         var     (str)           the variable
-        
+        bins    (int)           number of bins
+        range   ([])            range of histogram
+
         Optionals
         ---------
         step    (int)           of dataset
-        bins    (int /str)      binning type or #bins
                                 (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
         density (bool)          normalize such that integral over
                                 range is 1.
@@ -172,11 +174,12 @@ class H5Statistics(Statistics):
         a numpy.histogram with bin edges
         (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
         """
-        step    = kwargs.get('step', 0)
+        step    = kwargs.pop('step', 0)
         
         data = self.ds.getData(var, step=step)
-        
-        return super(H5Statistics, self).histogram(data, **kwargs)
+        density = kwargs.pop('density', True)
+
+        return da.histogram(data, bins=bins, range=range, density=density)
 
 
     def halo_continuous_beam(self, var, **kwargs):
@@ -193,7 +196,7 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch   (int)           for which bunch to compute
         
         Reference
         ---------
@@ -201,14 +204,15 @@ class H5Statistics(Statistics):
         K. R. Crandall, TechSource, Santa Fe, NM 87594-1057,
         BEAM HALO IN PROTON LINAC BEAMS,
         XX International Linac Conference, Monterey, California
-        """    
+        """
+        step    = kwargs.pop('step', 0)
         data = self.ds.getData(var, step=step)
         
-        energy_bin = kwargs.get('bin', -1)
-        if energy_bin > 0:
-            bins = self.ds.getData('bin', step=step)
-            data = data[np.where(bins == energy_bin)]
-        
+        bunch = kwargs.pop('bunch', 0)
+        if bunch > 0:
+            bunchnum = self.ds.getData('bunchNumber', step=step)
+            data = da.compress(bunch == bunchnum, data)
+
         return impl_beam.halo_continuous_beam(data)
 
 
@@ -226,7 +230,7 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch   (int)           for which bunch to compute
         
         Reference
         ---------
@@ -235,14 +239,14 @@ class H5Statistics(Statistics):
         BEAM HALO IN PROTON LINAC BEAMS,
         XX International Linac Conference, Monterey, California
         """
-        step = kwargs.get('step', 0)
+        step = kwargs.pop('step', 0)
         
         data = self.ds.getData(var, step=step)
         
-        energy_bin = kwargs.get('bin', -1)
-        if energy_bin > 0:
-            bins = self.ds.getData('bin', step=step)
-            data = data[np.where(bins == energy_bin)]
+        bunch = kwargs.pop('bunch', 0)
+        if bunch > 0:
+            bunchnum = self.ds.getData('bunchNumber', step=step)
+            data = da.compress(bunch == bunchnum, data)
         return impl_beam.halo_ellipsoidal_beam(data)
 
 
@@ -261,23 +265,23 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch   (int)           for which bunch to compute
         
         Returns
         -------
         the projected emittance
         """
-        step = kwargs.get('step', 0)
+        step = kwargs.pop('step', 0)
         
         coords = self.ds.getData(dim, step=step)
         momenta = self.ds.getData('p' + dim, step=step)
         
-        energy_bin = kwargs.get('bin', -1)
-        if energy_bin > 0:
-            bins = self.ds.getData('bin', step=step)
-            coords = coords[np.where(bins == energy_bin)]
-            momenta = momenta[np.where(bins == energy_bin)]
-        
+        bunch = kwargs.pop('bunch', 0)
+        if bunch > 0:
+            bunchnum = self.ds.getData('bunchNumber', step=step)
+            coords = da.compress(bunch == bunchnum, coords)
+            momenta = da.compress(bunch == bunchnum, momenta)
+
         return impl_beam.projected_emittance(coords, momenta)
 
 
@@ -301,7 +305,7 @@ class H5Statistics(Statistics):
         -------
         a list of minima locations and corresponding histogram
         """
-        step    = kwargs.get('step', 0)
+        step    = kwargs.pop('step', 0)
         
         data = self.ds.getData(var, step=step)
         
@@ -330,11 +334,11 @@ class H5Statistics(Statistics):
         
         indices, hist = self.get_beam_indices(k, **kwargs)
         
-        step    = kwargs.get('step', 0)
+        step    = kwargs.pop('step', 0)
         
         data = self.ds.getData(var, step=step)
         
-        return data[indices], hist
+        return da.compress(indices, data), hist
         
 
     def get_beam_indices(self, k, **kwargs):
@@ -366,7 +370,7 @@ class H5Statistics(Statistics):
         if k < 0:
             raise ValueError("Bunch number has to be 'k >= 0'.")
         
-        step    = kwargs.get('step', 0)
+        step    = kwargs.pop('step', 0)
         
         # opal-t vs. opal-cycl
         opal_flavour = self.ds.getData('flavour')[step]
@@ -392,11 +396,9 @@ class H5Statistics(Statistics):
         if k > len(minima) - 1:
             raise ValueError("Bunch number has to be 'k < " + str(len(minima)) + "'.")
         
-        xdata = np.asarray(xdata)
-        
         if k == len(minima):
             # last bunch includes particles from upper part [k, k+1]
-            return ((xdata >= minima[k]) & (xdata <= minima[k+1])), hist
+            return da.compress((xdata >= minima[k]) & (xdata <= minima[k+1]), xdata), hist
         else:
             # do not include upper part [k, k+1[
-            return ((xdata >= minima[k]) & (xdata < minima[k+1])), hist
+            return da.compress((xdata >= minima[k]) & (xdata < minima[k+1]), xdata), hist
