@@ -57,9 +57,7 @@ class SDDSDatasetBase(DatasetBase):
             if var in self._variable_mapper:
                 sddsvar = self._variable_mapper[var]
             
-            if not sddsvar in self._parser.getVariables():
-                raise RuntimeError("The variable '" + var + "' is not in dataset.")
-            return np.asarray(self._parser.getDataOfVariable(sddsvar))
+            return self._parser.getDataOfVariable(sddsvar)
         except Exception as ex:
             opal_logger.exception(ex)
             return []
@@ -85,7 +83,7 @@ class SDDSDatasetBase(DatasetBase):
             
             if not sddsvar in self._parser.getVariables():
                 raise RuntimeError("The variable '" + var + "' is not in dataset.")
-            
+
             if var in self._label_mapper:
                 var = self._label_mapper[var]
             
@@ -112,10 +110,7 @@ class SDDSDatasetBase(DatasetBase):
             
             if var in self._variable_mapper:
                 sddsvar = self._variable_mapper[var]
-                
-            if not sddsvar in self._parser.getVariables():
-                raise RuntimeError("The variable '" + var + "' is not in dataset.")
-            
+
             unit = self._parser.getUnitOfVariable(sddsvar)
             
             if var in self._unit_label_mapper:
