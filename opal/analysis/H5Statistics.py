@@ -1,5 +1,4 @@
 from opal.analysis.Statistics import Statistics
-from opal.analysis import impl_beam
 import dask.array as da
 import dask
 from dask.array import stats
