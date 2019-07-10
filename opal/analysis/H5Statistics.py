@@ -28,7 +28,7 @@ class H5Statistics(Statistics):
         data = self.ds.getData(var, step=step)
         
         bunch = kwargs.pop('bunch', 0)
-        if bunch > 0:
+        if bunch > -1:
             bunchnum = self.ds.getData('bunchNumber', step=step)
             da.compress(bunch == bunchnum, data)
 
@@ -53,7 +53,7 @@ class H5Statistics(Statistics):
         data = self.ds.getData(var, step=step)
         
         bunch = kwargs.pop('bunch', 0)
-        if bunch > 0:
+        if bunch > -1:
             bunchnum = self.ds.getData('bunchNumber', step=step)
             data = da.compress(bunch == bunchnum, data)
             
@@ -81,7 +81,7 @@ class H5Statistics(Statistics):
         data = self.ds.getData(var, step=step)
         
         bunch = kwargs.pop('bunch', 0)
-        if bunch > 0:
+        if bunch > -1:
             bunchnum = self.ds.getData('bunchNumber', step=step)
             data = da.compress(bunch == bunchnum, data)
         
@@ -113,7 +113,7 @@ class H5Statistics(Statistics):
         data = self.ds.getData(var, step=step)
         
         bunch = kwargs.pop('bunch', 0)
-        if bunch > 0:
+        if bunch > -1:
             bunchnum = self.ds.getData('bunchNumber', step=step)
             data = da.compress(bunch == bunchnum, data)
         
@@ -209,7 +209,7 @@ class H5Statistics(Statistics):
         data = self.ds.getData(var, step=step)
         
         bunch = kwargs.pop('bunch', 0)
-        if bunch > 0:
+        if bunch > -1:
             bunchnum = self.ds.getData('bunchNumber', step=step)
             data = da.compress(bunch == bunchnum, data)
 
@@ -244,7 +244,7 @@ class H5Statistics(Statistics):
         data = self.ds.getData(var, step=step)
         
         bunch = kwargs.pop('bunch', 0)
-        if bunch > 0:
+        if bunch > -1:
             bunchnum = self.ds.getData('bunchNumber', step=step)
             data = da.compress(bunch == bunchnum, data)
         return impl_beam.halo_ellipsoidal_beam(data)
@@ -277,7 +277,7 @@ class H5Statistics(Statistics):
         momenta = self.ds.getData('p' + dim, step=step)
         
         bunch = kwargs.pop('bunch', 0)
-        if bunch > 0:
+        if bunch > -1:
             bunchnum = self.ds.getData('bunchNumber', step=step)
             coords = da.compress(bunch == bunchnum, coords)
             momenta = da.compress(bunch == bunchnum, momenta)
