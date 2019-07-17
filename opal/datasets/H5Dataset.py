@@ -130,7 +130,7 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
             return []
 
 
-    def isStepDataset(self, var, step=0)
+    def isStepDataset(self, var, step=0):
         """
         Check if a variable is contained as a dataset
         """
