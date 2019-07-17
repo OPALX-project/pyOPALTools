@@ -381,13 +381,12 @@ class H5Statistics(Statistics):
 
     def radial_halo_2d_ellipsoidal_beam(self, azimuth, **kwargs):
         """
-        Compute the 2D halo in horizontal, vertical
-        or longitudinal direction according to
+        Compute the 2D radial halo according to
 
         H_i = sqrt(3) / 2  * sqrt(A) / B - 15 / 7
 
-        A = <q^4><p^4> + 3 * <q^2p^2>^2 - 4 * <qp^3> * <q^3p>
-        B = <q^2><p^2> - <qp>^2
+        A = <r^4><p^4> + 3 * <r^2p^2>^2 - 4 * <rp^3> * <r^3p>
+        B = <r^2><p^2> - <rp>^2
 
         with radius r and radial momentum p.
 
