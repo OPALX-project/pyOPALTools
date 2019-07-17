@@ -2,7 +2,6 @@ from .ProbePlotter import *
 from .statistics import impl_plots
 import numpy as np
 import scipy as sc
-import seaborn as sns
 
 
 class H5Plotter(ProbePlotter):
