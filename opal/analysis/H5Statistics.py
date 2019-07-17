@@ -33,7 +33,7 @@ class H5Statistics(Statistics):
         """
         Take a slice from the array
         """
-        if bunch > -1 and 'bunchNumber' in self.ds.isStepDataset('bunchNumber'):
+        if bunch > -1 and self.ds.isStepDataset('bunchNumber'):
             bunchnum = self.ds.getData('bunchNumber', step=step)
             data = self._select(data, bunchnum, bunch, step)
 
