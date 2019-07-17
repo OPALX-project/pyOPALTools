@@ -122,8 +122,7 @@ class H5Parser:
         
         data = []
         path = 'Step#' + str(step) + '/' + dsetName
-        data = self.__h5f.get(path)
-        return data[:]
+        return np.asarray(self.__h5f[path])
     
     
     def getStepAttribute(self, attrName, step=0):
