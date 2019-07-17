@@ -226,7 +226,10 @@ class H5Statistics(Statistics):
         K. R. Crandall, TechSource, Santa Fe, NM 87594-1057,
         BEAM HALO IN PROTON LINAC BEAMS,
         XX International Linac Conference, Monterey, California
-        """    
+        """
+        step = kwargs.get('step', 0)
+        bunch = kwargs.pop('bunch', -1)
+
         data = self.ds.getData(var, step=step)
 
         data = self._selectBunch(data, bunch, step)
@@ -260,6 +263,7 @@ class H5Statistics(Statistics):
         XX International Linac Conference, Monterey, California
         """
         step = kwargs.get('step', 0)
+        bunch = kwargs.pop('bunch', -1)
         
         data = self.ds.getData(var, step=step)
 
@@ -293,11 +297,10 @@ class H5Statistics(Statistics):
         the projected emittance
         """
         step = kwargs.get('step', 0)
-        
+        bunch = kwargs.pop('bunch', -1)
+
         coords = self.ds.getData(dim, step=step)
         momenta = self.ds.getData('p' + dim, step=step)
-        
-        bunch = kwargs.pop('bunch', -1)
 
         coords  = self._selectBunch(coords, bunch, step)
         momenta = self._selectBunch(momenta, bunch, step)
