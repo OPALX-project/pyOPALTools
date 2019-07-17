@@ -468,7 +468,6 @@ class H5Statistics(Statistics):
         q2 = np.mean(q ** 2)
         q4 = np.mean(q ** 4)
 
-
         p2 = np.mean(p ** 2)
         p4 = np.mean(p ** 4)
 
