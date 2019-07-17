@@ -128,8 +128,15 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
         except Exception as ex:
             opal_logger.exception(ex)
             return []
+
+
+    def isStepDataset(self, var, step=0)
+        """
+        Check if a variable is contained as a dataset
+        """
+        return (var in self.__parser.getStepDatasets(step))
     
-    
+
     def getLabel(self, var):
         """
         Obtain label for plotting.

@@ -2,6 +2,7 @@ from opal.analysis.Statistics import Statistics
 import numpy as np
 import scipy as sc
 from opal.utilities.logger import opal_logger
+from opal.analysis.cyclotron import eval_radius, eval_radial_momentum
 
 class H5Statistics(Statistics):
 
@@ -32,7 +33,7 @@ class H5Statistics(Statistics):
         """
         Take a slice from the array
         """
-        if bunch > -1:
+        if bunch > -1 and 'bunchNumber' in self.ds.isStepDataset('bunchNumber'):
             bunchnum = self.ds.getData('bunchNumber', step=step)
             data = self._select(data, bunchnum, bunch, step)
 
@@ -230,7 +231,7 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch   (int)           for which to compute
         
         Reference
         ---------
@@ -285,6 +286,201 @@ class H5Statistics(Statistics):
         m2 = sc.stats.moment(data, moment=2)
 
         return m4 / m2 ** 2 - 15.0 / 7.0
+
+
+    def radial_halo_ellipsoidal_beam(self, **kwargs):
+        """
+        Compute the halo in radial direction
+        according to
+
+        h_r = <r^4> / <r^2>^2 - 15 / 17
+
+        Parameters
+        ----------
+        None
+
+        Optionals
+        ---------
+        step    (int)           of dataset
+        bunch   (int)           for which to compute
+
+        Reference
+        ---------
+        T. P. Wangler, Los Alamos National Laboratory, Los Alamos, NM 87545,
+        K. R. Crandall, TechSource, Santa Fe, NM 87594-1057,
+        BEAM HALO IN PROTON LINAC BEAMS,
+        XX International Linac Conference, Monterey, California
+        """
+        step = kwargs.get('step', 0)
+        bunch = kwargs.pop('bunch', -1)
+
+        x = self.ds.getData('x', step=step)
+        x = self._selectBunch(x, bunch, step)
+
+        y = self.ds.getData('y', step=step)
+        y = self._selectBunch(y, bunch, step)
+
+        r  = eval_radius(x, y)
+
+        m4 = sc.stats.moment(r, moment=4)
+        m2 = sc.stats.moment(r, moment=2)
+
+        return m4 / m2 ** 2 - 15.0 / 7.0
+
+
+    def halo_2d_ellipsoidal_beam(self, var, **kwargs):
+        """
+        Compute the 2D halo in horizontal, vertical
+        or longitudinal direction according to
+
+        H_i = sqrt(3) / 2  * sqrt(A) / B - 15 / 7
+
+        A = <q^4><p^4> + 3 * <q^2p^2>^2 - 4 * <qp^3> * <q^3p>
+        B = <q^2><p^2> - <qp>^2
+
+        with coordinate q and momentum p. Specify either the
+        'step' or 'turn' (probes only).
+
+        Parameters
+        ----------
+        var   (str)     the direction 'x', 'y' or 'z'
+
+        Optionals
+        ---------
+        step    (int)           of dataset
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
+
+        Reference
+        ---------
+        https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
+        """
+        step    = kwargs.pop('step', 0)
+        bunch   = kwargs.pop('bunch', -1)
+        turn    = kwargs.pop('turn', None)
+
+        if turn:
+            # probe *.h5 have turn in dataset (step always 0)
+            turns = self.ds.getData('turn')
+            q = ds.getData(var)
+            q = q[turn == turns]
+
+            p = ds.getData('p' + var)
+            p = p[turn == turns]
+
+        else:
+            q = ds.getData(var, step=step)
+            q = self._selectBunch(q, bunch, step)
+
+            p = ds.getData('p' + var, step=step)
+            p = self._selectBunch(p, bunch, step)
+
+        return self._halo_2d_ellipsoidal_beam(q, p)
+
+
+    def radial_halo_2d_ellipsoidal_beam(self, azimuth, **kwargs):
+        """
+        Compute the 2D halo in horizontal, vertical
+        or longitudinal direction according to
+
+        H_i = sqrt(3) / 2  * sqrt(A) / B - 15 / 7
+
+        A = <q^4><p^4> + 3 * <q^2p^2>^2 - 4 * <qp^3> * <q^3p>
+        B = <q^2><p^2> - <qp>^2
+
+        with radius r and radial momentum p.
+
+        Parameters
+        ----------
+        azimuth (float)         for radial halo only (in degree)
+
+        Optionals
+        ---------
+        step    (int)           of dataset
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
+
+        Reference
+        ---------
+        https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
+        """
+        step    = kwargs.pop('step', 0)
+        bunch   = kwargs.pop('bunch', -1)
+        turn    = kwargs.pop('turn', None)
+
+        if turn:
+            # probe *.h5 have turn in dataset (step always 0)
+            turns = self.ds.getData('turn')
+            x = ds.getData('x')
+            x = x[turn == turns]
+
+            y = ds.getData('y')
+            y = y[turn == turns]
+
+            px = ds.getData('px')
+            px = px[turn == turns]
+
+            py = ds.getData('py')
+            py = py[turn == turns]
+        else:
+            x = ds.getData('x', step=step)
+            y = ds.getData('y', step=step)
+            px = ds.getData('px', step=step)
+            py = ds.getData('py', step=step)
+
+        r  = eval_radius(x, y)
+
+        azimuth = np.deg2rad(azimuth)
+
+        pr = eval_radial_momentum(px, py, azimuth)
+
+        return self._halo_2d_ellipsoidal_beam(r, pr)
+
+
+    def _halo_2d_ellipsoidal_beam(self, q, p):
+        """
+        Compute the 2D halo in horizontal, vertical
+        or longitudinal direction according to
+
+        H_i = sqrt(3) / 2  * sqrt(A) / B - 15 / 7
+
+        A = <q^4><p^4> + 3 * <q^2p^2>^2 - 4 * <qp^3> * <q^3p>
+        B = <q^2><p^2> - <qp>^2
+
+        with coordinate q and momentum p.
+
+        Parameters
+        ----------
+        q     (array)   coordinate data
+        p     (array)   momentum data
+
+        Reference
+        ---------
+        https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
+        """
+
+        # make centered
+        q = q - np.mean(q)
+        p = p - np.mean(p)
+
+        q2 = np.mean(q ** 2)
+        q4 = np.mean(q ** 4)
+
+
+        p2 = np.mean(p ** 2)
+        p4 = np.mean(p ** 4)
+
+        q1p1 = np.mean(q*p)
+        q2p2 = np.mean(q**2 * p**2)
+        q1p3 = np.mean(q * p**3)
+        q3p1 = np.mean(q**3 * p)
+
+        A = q2 * p2 - q1p1 ** 2
+        B = q4 * p4 + 3.0 * q2p2 ** 2 - 4.0 * q1p3 * q3p1
+
+        return 0.5 * np.sqrt(3.0 * A) / B - 15.0 / 7.0
 
 
     def projected_emittance(self, dim, **kwargs):
