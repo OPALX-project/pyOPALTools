@@ -51,13 +51,14 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch     (int)         for which to compute
         
         Notes
         -----
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html#scipy.stats.moment
         """
         step = kwargs.get('step', 0)
+        bunch = kwargs.pop('bunch', -1)
         
         data = self.ds.getData(var, step=step)
 
@@ -77,16 +78,14 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch     (int)         for which to compute
         """
         step = kwargs.get('step', 0)
+        bunch = kwargs.pop('bunch', -1)
         
         data = self.ds.getData(var, step=step)
         
-        energy_bin = kwargs.get('bin', -1)
-        if energy_bin > 0:
-            bins = self.ds.getData('bin', step=step)
-            data = data[np.where(bins == energy_bin)]
+        data = self._selectBunch(data, bunch, step)
             
         return np.mean(data, axis=0)
 
@@ -105,11 +104,14 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch     (int)         for which to compute
         """
         step = kwargs.get('step', 0)
+        bunch = kwargs.pop('bunch', -1)
         
         data = self.ds.getData(var, step=step)
+
+        data = self._selectBunch(data, bunch, step)
         
         return sc.stats.skew(data, axis=0)
 
@@ -132,12 +134,14 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch     (int)         for which to compute
         """
         step  = kwargs.pop('step', 0)
         bunch = kwargs.pop('bunch', -1)
 
         data = self.ds.getData(var, step=step)
+
+        data = self._selectBunch(data, bunch, step)
         
         return sc.stats.kurtosis(data, axis=0, fisher=True)
 
@@ -156,6 +160,7 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
+        bunch   (int)         for which to compute
         bins    (int /str)      binning type or #bins
                                 (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
         density (bool)          normalize such that integral over
@@ -166,10 +171,13 @@ class H5Statistics(Statistics):
         kernel density estimator of scipy.
         """
         step    = kwargs.get('step', 0)
+        bunch = kwargs.pop('bunch', -1)
         bins    = kwargs.get('bins', 'sturges')
         density = kwargs.get('density', True)
         
         data = self.ds.getData(var, step=step)
+
+        data = self._selectBunch(data, bunch, step)
 
         return sc.stats.gaussian_kde(data)
 
@@ -186,6 +194,7 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
+        bunch   (int)           for which to compute
         bins    (int /str)      binning type or #bins
                                 (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
         density (bool)          normalize such that integral over
@@ -197,9 +206,12 @@ class H5Statistics(Statistics):
         (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
         """
         step    = kwargs.get('step', 0)
-        
-        data = self.ds.getData(var, step=step)
+        bunch = kwargs.pop('bunch', -1)
         density = kwargs.pop('density', True)
+
+        data = self.ds.getData(var, step=step)
+
+        data = self._selectBunch(data, bunch, step)
 
         return np.histogram(data, bins=bins, density=density)
 
@@ -253,7 +265,7 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch   (int)           for which to compute
         
         Reference
         ---------
@@ -290,7 +302,7 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bin     (int)           energy bin for which to compute
+        bunch   (int)           for which to compute
         
         Returns
         -------
@@ -322,22 +334,24 @@ class H5Statistics(Statistics):
         a histogram.
         The purpose of this script is to distinguish bunches
         of a multi-bunch simulation.
-        
+
         Parameters
         ----------
         var     (str)           the variable
-        
+
         Optionals
         ---------
         step    (int)           of dataset
         bins    (int)           number of bins for histogram
-        
+
         Returns
         -------
         a list of minima locations and corresponding histogram
         """
-        step    = kwargs.get('step', 0)
-        
+        step = kwargs.pop('step', 0)
+        Wn   = kwargs.pop('Wn', 0.15)
+        bins = kwargs.pop('bins', 100)
+
         data = self.ds.getData(var, step=step)
 
         if data.size < 1:
@@ -345,7 +359,7 @@ class H5Statistics(Statistics):
 
         dmin = np.min(data)
         dmax = np.max(data)
-        data, bin_edges = np.histogram(data, bins=bins, range=[dmin, dmax])
+        data, bin_edges = np.histogram(data, bins=bins)
 
         # smooth
         from scipy import signal
@@ -354,25 +368,22 @@ class H5Statistics(Statistics):
 
 
         from scipy.signal import find_peaks
-        ymax = max(data_smoothed)
-
-        # we need to compute here otherwise find_peaks
-        # does not work
-        tmp = (-data_smoothed + ymax)
+        ymax = np.max(data_smoothed)
+        tmp = -data_smoothed + ymax
 
         peak_indices, _ = find_peaks(tmp, height=0)
         return peak_indices, data, bin_edges
 
 
-    def get_beam(self, var, k, **kwargs):
+
+    def rotate(x, y, theta):
         """
-        Obtain the data of a variable of a beam in a
-        multi-bunch simulation.
-        
+        Rotate the coordinates (x, y) by theta (degree)
+
         Parameters
         ----------
-        x       (array) is x-data
-        y       (array) is y-data
+        x       (dask.array) is x-data
+        y       (dask.array) is y-data
         theta   (float) is the angle in degree
 
 
@@ -386,27 +397,17 @@ class H5Statistics(Statistics):
 
         Reference
         ---------
-        step    (int)           of dataset
-        bins    (int)           number of bins for histogram
-        
+        https://en.wikipedia.org/wiki/Rotation_matrix
+
         Returns
         -------
-        the data as an array / list + histogram to find bunch
+        rotated coordinates (rx, ry)
         """
-        
-        indices, hist = self.get_beam_indices(k, **kwargs)
-        
-        step    = kwargs.get('step', 0)
-        
-        data = self.ds.getData(var, step=step)
-        
-        return data[indices], hist
-        
 
-        theta = np.deg2rad(theta)
+        theta = da.deg2rad(theta)
 
-        cos = np.cos(theta)
-        sin = np.sin(theta)
+        cos = da.cos(theta)
+        sin = da.sin(theta)
 
         rx = x * cos - y * sin
         ry = x * sin + y * cos
