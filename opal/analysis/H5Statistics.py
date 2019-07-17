@@ -363,17 +363,17 @@ class H5Statistics(Statistics):
         if turn:
             # probe *.h5 have turn in dataset (step always 0)
             turns = self.ds.getData('turn')
-            q = ds.getData(var)
+            q = self.ds.getData(var)
             q = q[turn == turns]
 
-            p = ds.getData('p' + var)
+            p = self.ds.getData('p' + var)
             p = p[turn == turns]
 
         else:
-            q = ds.getData(var, step=step)
+            q = self.ds.getData(var, step=step)
             q = self._selectBunch(q, bunch, step)
 
-            p = ds.getData('p' + var, step=step)
+            p = self.ds.getData('p' + var, step=step)
             p = self._selectBunch(p, bunch, step)
 
         return self._halo_2d_ellipsoidal_beam(q, p)
@@ -413,22 +413,22 @@ class H5Statistics(Statistics):
         if turn:
             # probe *.h5 have turn in dataset (step always 0)
             turns = self.ds.getData('turn')
-            x = ds.getData('x')
+            x = self.ds.getData('x')
             x = x[turn == turns]
 
-            y = ds.getData('y')
+            y = self.ds.getData('y')
             y = y[turn == turns]
 
-            px = ds.getData('px')
+            px = self.ds.getData('px')
             px = px[turn == turns]
 
-            py = ds.getData('py')
+            py = self.ds.getData('py')
             py = py[turn == turns]
         else:
-            x = ds.getData('x', step=step)
-            y = ds.getData('y', step=step)
-            px = ds.getData('px', step=step)
-            py = ds.getData('py', step=step)
+            x  = self.ds.getData('x', step=step)
+            y  = self.ds.getData('y', step=step)
+            px = self.ds.getData('px', step=step)
+            py = self.ds.getData('py', step=step)
 
         r  = eval_radius(x, y)
 
