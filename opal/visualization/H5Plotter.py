@@ -1,6 +1,7 @@
 from .ProbePlotter import *
 from .statistics import impl_plots
 import numpy as np
+import scipy as sc
 
 
 class H5Plotter(ProbePlotter):
@@ -52,8 +53,8 @@ class H5Plotter(ProbePlotter):
                 bdata = self.ds.getData('bin', step=step)
                 
                 # get all bins not in plotted
-                bmin = min(bdata)
-                bmax = max(bdata)
+                bmin = np.min(bdata)
+                bmax = np.max(bdata)
                 # 27. March 2018
                 # https://stackoverflow.com/questions/6486450/python-compute-list-difference
                 skipped = set(range(bmin, bmax+1)) - set(bins)
@@ -73,8 +74,8 @@ class H5Plotter(ProbePlotter):
             elif bunches:
                 bdata = self.ds.getData('bunchNumber', step=step)
                 # get all bunches
-                bmin = min(bdata)
-                bmax = max(bdata)
+                bmin = np.min(bdata)
+                bmax = np.max(bdata)
                 # 27. March 2018
                 # https://stackoverflow.com/questions/6486450/python-compute-list-difference
                 skipped = set(range(bmin, bmax+1)) - set(bunches)
@@ -247,10 +248,23 @@ class H5Plotter(ProbePlotter):
             
             yunit  = self.ds.getUnit(yvar)
             ylabel = self.ds.getLabel(yvar)
-            
-            plt = impl_plots.plot_classification(xdata, xlabel,
-                                                ydata, ylabel,
-                                                value)
+
+            if xdata.size < 1 or ydata.size < 1:
+                raise ValueError('Empty data container.')
+
+            values = np.vstack([xdata, ydata])
+
+            kde = sc.stats.gaussian_kde(values)
+            pdf = kde.evaluate(values)
+
+            lidx = np.where(pdf < value)
+            gidx = np.where(pdf >= value)
+
+            l = plt.scatter(xdata[lidx], ydata[lidx], c='r', s=20, edgecolor='', marker='.')
+            g = plt.scatter(xdata[gidx], ydata[gidx], c='k', s=20, edgecolor='', marker='.')
+
+            label = r'$pdf\left(' + xlabel + ', ' + xlabel + r'\right)$'
+            plt.legend([l, g], [label + r'$ < $' + str(value), label + r'$ \geq $' + str(value)])
             
             plt.xlabel(xlabel + ' [' + xunit + ']')
             plt.ylabel(ylabel + ' [' + yunit + ']')
@@ -316,7 +330,20 @@ class H5Plotter(ProbePlotter):
         Optional parameters
         -------------------
         step        (int)           of dataset
-        see also                    help(impl_plots.plot_density)
+        nxbin       (int)           number of bins for x-axis
+        nybin       (int)           number of bins for y-axis
+        cmap        (str)           colormap
+        doShading   (bool)          if true, it uses 'gouraud' shading,
+                                    else 'flat' shading
+        xlim        (tuple)         if not specified use data to compute
+                                    limits
+        ylim        (tuple)         if not specified use data to compute
+                                    limits
+        clabel    (str)             label of colorbar
+
+        Reference
+        ---------
+        https://matplotlib.org/examples/pylab_examples/pcolor_demo.html
         
         Returns
         -------
@@ -332,13 +359,54 @@ class H5Plotter(ProbePlotter):
             xlabel = self.ds.getLabel(xvar)
             
             yunit  = self.ds.getUnit(yvar)
-            ylabel = self.ds.getLabel(yvar)
-            clab   = ''
-            
-            plt = impl_plots.plot_density(xdata, xlabel + ' [' + xunit + ']',
-                                        ydata, ylabel + ' [' + yunit + ']',
-                                        clab, **kwargs)
-            
+            ylabel = "[" + self.ds.getLabel(yvar) + "]"
+
+
+            if xdata.size < 1 or ydata.size < 1:
+                raise ValueError('Empty data container.')
+
+
+            nxbin     = kwargs.pop('nxbin', 300)
+            nybin     = kwargs.pop('nybin', 300)
+            cmap      = kwargs.pop('cmap', 'viridis')
+            doShading = kwargs.pop('shading', False)
+            xlim      = kwargs.pop('xlim', [])
+            ylim      = kwargs.pop('ylim', [])
+            clabel    = kwargs.pop('clabel', '')
+
+            shading = 'flat'
+            if doShading:
+                shading = 'gouraud'
+
+            # 19. March 2018
+            # https://python-graph-gallery.com/85-density-plot-with-matplotlib/
+            pdf = sc.stats.gaussian_kde([xdata, ydata])
+
+            xmin = min(xdata)
+            xmax = max(xdata)
+            if xlim:
+                xmin = xlim[0]
+                xmax = xlim[1]
+
+            ymin = min(ydata)
+            ymax = max(ydata)
+            if ylim:
+                ymin = ylim[0]
+                ymax = ylim[1]
+
+            xi, yi = np.mgrid[xmin:xmax:nxbin*1j,
+                              ymin:ymax:nybin*1j]
+            zi = pdf(np.vstack([xi.flatten(), yi.flatten()]))
+
+            pc = plt.pcolormesh(xi, yi, zi.reshape(xi.shape),
+                                cmap=cmap, shading=shading)
+
+            plt.axis([xmin, xmax, ymin, ymax])
+            cb = plt.colorbar(pc)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            cb.set_label(clabel)
+
             return plt
         except Exception as ex:
             opal_logger.exception(ex)

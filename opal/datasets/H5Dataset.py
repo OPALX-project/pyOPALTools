@@ -4,11 +4,11 @@
 import os
 from opal.parser.H5Parser import H5Parser
 from opal.parser.H5Error import *
-import numpy as np
 from .DatasetBase import DatasetBase
 from opal.visualization.H5Plotter import H5Plotter
 from opal.analysis.H5Statistics import H5Statistics
 from opal.utilities.logger import opal_logger
+import numpy as np
 
 import pandas as pd 
 
