@@ -477,8 +477,8 @@ class H5Statistics(Statistics):
         q1p3 = np.mean(q * p**3)
         q3p1 = np.mean(q**3 * p)
 
-        A = q2 * p2 - q1p1 ** 2
-        B = q4 * p4 + 3.0 * q2p2 ** 2 - 4.0 * q1p3 * q3p1
+        A = q4 * p4 + 3.0 * q2p2 ** 2 - 4.0 * q1p3 * q3p1
+        B = q2 * p2 - q1p1 ** 2
 
         return 0.5 * np.sqrt(3.0 * A) / B - 15.0 / 7.0
 
