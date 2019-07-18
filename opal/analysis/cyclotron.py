@@ -218,3 +218,62 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
         _plot(x, mph, mpd, threshold, edge, valley, ax, ind)
 
     return ind
+
+
+def eval_radius(x, y):
+    """
+    Evaluate the radius
+
+    r = sqrt(x^2 + y^2)
+
+    Parameters
+    ----------
+    x   (float / array)     data of x-direction
+    y   (float / array)     data of y-direction
+
+    Returns
+    -------
+    the radius
+    """
+    r = np.sqrt(x ** 2 + y ** 2)
+    return r
+
+
+def eval_radial_momentum(px, py, theta):
+    """
+    Evaluate the radial momentum
+
+    pr = px * cos(theta) + py * sin(theta)
+
+    Parameters
+    ----------
+    px      (float / array)     data of momentum in x
+    py      (float / array)     data of momentum in y
+    theta   (float)             azimuthal angle (in radian)
+
+    Notes:
+    ------
+    r     : radius
+    theta : azimuth
+
+    x = r*cos(theta)
+    y = r*cos(theta)
+
+    r = sqrt(x**2 + y**2)
+
+    dr/dt = dr/dx * dx/dt + dr/dy * dy/dt
+
+    dr/dt approx. radial momentum p_r
+    dx/dt approx. horzizontal momentum p_x
+    dy/dt approx. longitudinal momentum p_y
+
+    dr/dx = 1 / (2 * r) * 2 * x = x / r = cos(theta)
+    dr/dy = 1 / (2 * r) * 2 * y = y / r = sin(theta)
+
+    --> p_r = p_x * cos(theta) + p_y * sin(theta)
+
+    Returns
+    -------
+    the radial momentum
+    """
+    return px * np.cos(theta) + py * np.sin(theta)
