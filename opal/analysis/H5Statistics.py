@@ -6,7 +6,7 @@ from opal.analysis.cyclotron import eval_radius, eval_radial_momentum
 
 class H5Statistics(Statistics):
 
-    def _select(self, data, attrval, val, step):
+    def _select(self, data, attrval, val):
         """
         Take a slice from the array
 
@@ -15,7 +15,6 @@ class H5Statistics(Statistics):
         data    (array)         container to extract data from
         attrval (array)         data compare with in extraction value
         val     (int/float)     value for extraction comparison
-        step    (int)           step in H5 file
 
         Returns
         -------
@@ -32,10 +31,32 @@ class H5Statistics(Statistics):
     def _selectBunch(self, data, bunch, step):
         """
         Take a slice from the array
+
+        Parameters
+        -----------
+        data    (array)         the data where to extract
+        bunch   (int)           to select
+        step    (int)           step in H5 file
         """
         if bunch > -1 and self.ds.isStepDataset('bunchNumber'):
             bunchnum = self.ds.getData('bunchNumber', step=step)
-            data = self._select(data, bunchnum, bunch, step)
+            data = self._select(data, bunchnum, bunch)
+
+        return data
+
+    def _selectData(self, var, **kwargs):
+        step    = kwargs.get('step', 0)
+        turn    = kwargs.get('turn', None)
+        bunch   = kwargs.get('bunch', -1)
+
+        if turn:
+            # probe *.h5 have turn in dataset (step always 0)
+            turns = self.ds.getData('turn')
+            data = self.ds.getData(var)
+            data = data[turn == turns]
+        else:
+            data = self.ds.getData(var, step=step)
+            data = self._selectBunch(data, bunch, step)
 
         return data
 
@@ -52,19 +73,16 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch     (int)         for which to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         
         Notes
         -----
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html#scipy.stats.moment
         """
-        step = kwargs.get('step', 0)
-        bunch = kwargs.pop('bunch', -1)
+        data = self._selectData(var, **kwargs)
         
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
-
         return sc.stats.moment(data, axis=0, moment=k)
 
 
@@ -79,14 +97,11 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch     (int)         for which to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         """
-        step = kwargs.get('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-        
-        data = self.ds.getData(var, step=step)
-        
-        data = self._selectBunch(data, bunch, step)
+        data = self._selectData(var, **kwargs)
             
         return np.mean(data, axis=0)
 
@@ -105,14 +120,11 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch     (int)         for which to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         """
-        step = kwargs.get('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-        
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
+        data = self._selectData(var, **kwargs)
         
         return sc.stats.skew(data, axis=0)
 
@@ -135,14 +147,11 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch     (int)         for which to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         """
-        step  = kwargs.pop('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
+        data = self._selectData(var, **kwargs)
         
         return sc.stats.kurtosis(data, axis=0, fisher=True)
 
@@ -161,24 +170,15 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)         for which to compute
-        bins    (int /str)      binning type or #bins
-                                (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
-        density (bool)          normalize such that integral over
-                                range is 1.
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         
         Returns
         -------
         kernel density estimator of scipy.
         """
-        step    = kwargs.get('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-        bins    = kwargs.get('bins', 'sturges')
-        density = kwargs.get('density', True)
-        
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
+        data = self._selectData(var, **kwargs)
 
         return sc.stats.gaussian_kde(data)
 
@@ -190,14 +190,15 @@ class H5Statistics(Statistics):
         Parameters
         ----------
         var     (str)           the variable
-        bins    (int)           number of bins
+        bins    (int /str)      binning type or #bins
+                                (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
 
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which to compute
-        bins    (int /str)      binning type or #bins
-                                (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         density (bool)          normalize such that integral over
                                 range is 1.
                                 
@@ -206,13 +207,9 @@ class H5Statistics(Statistics):
         a numpy.histogram with bin edges
         (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
         """
-        step    = kwargs.get('step', 0)
-        bunch = kwargs.pop('bunch', -1)
         density = kwargs.pop('density', True)
 
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
+        data = self._selectData(var, **kwargs)
 
         return np.histogram(data, bins=bins, density=density)
 
@@ -231,7 +228,9 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         
         Reference
         ---------
@@ -240,12 +239,7 @@ class H5Statistics(Statistics):
         BEAM HALO IN PROTON LINAC BEAMS,
         XX International Linac Conference, Monterey, California
         """
-        step = kwargs.get('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
+        data = self._selectData(var, **kwargs)
 
         m4 = sc.stats.moment(data, moment=4)
         m2 = sc.stats.moment(data, moment=2)
@@ -266,7 +260,9 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         
         Reference
         ---------
@@ -275,12 +271,7 @@ class H5Statistics(Statistics):
         BEAM HALO IN PROTON LINAC BEAMS,
         XX International Linac Conference, Monterey, California
         """
-        step = kwargs.get('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-        
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
+        data = self._selectData(var, **kwargs)
 
         m4 = sc.stats.moment(data, moment=4)
         m2 = sc.stats.moment(data, moment=2)
@@ -302,7 +293,9 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
 
         Reference
         ---------
@@ -311,14 +304,8 @@ class H5Statistics(Statistics):
         BEAM HALO IN PROTON LINAC BEAMS,
         XX International Linac Conference, Monterey, California
         """
-        step = kwargs.get('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-
-        x = self.ds.getData('x', step=step)
-        x = self._selectBunch(x, bunch, step)
-
-        y = self.ds.getData('y', step=step)
-        y = self._selectBunch(y, bunch, step)
+        x = self._selectData('x', **kwargs)
+        y = self._selectData('y', **kwargs)
 
         r  = eval_radius(x, y)
 
@@ -356,25 +343,8 @@ class H5Statistics(Statistics):
         ---------
         https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
         """
-        step    = kwargs.pop('step', 0)
-        bunch   = kwargs.pop('bunch', -1)
-        turn    = kwargs.pop('turn', None)
-
-        if turn:
-            # probe *.h5 have turn in dataset (step always 0)
-            turns = self.ds.getData('turn')
-            q = self.ds.getData(var)
-            q = q[turn == turns]
-
-            p = self.ds.getData('p' + var)
-            p = p[turn == turns]
-
-        else:
-            q = self.ds.getData(var, step=step)
-            q = self._selectBunch(q, bunch, step)
-
-            p = self.ds.getData('p' + var, step=step)
-            p = self._selectBunch(p, bunch, step)
+        q = self._selectData(var, **kwargs)
+        p = self._selectData('p' + var, **kwargs)
 
         return self._halo_2d_ellipsoidal_beam(q, p)
 
@@ -405,29 +375,11 @@ class H5Statistics(Statistics):
         ---------
         https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
         """
-        step    = kwargs.pop('step', 0)
-        bunch   = kwargs.pop('bunch', -1)
-        turn    = kwargs.pop('turn', None)
+        x = self._selectData('x', **kwargs)
+        px = self._selectData('px', **kwargs)
 
-        if turn:
-            # probe *.h5 have turn in dataset (step always 0)
-            turns = self.ds.getData('turn')
-            x = self.ds.getData('x')
-            x = x[turn == turns]
-
-            y = self.ds.getData('y')
-            y = y[turn == turns]
-
-            px = self.ds.getData('px')
-            px = px[turn == turns]
-
-            py = self.ds.getData('py')
-            py = py[turn == turns]
-        else:
-            x  = self.ds.getData('x', step=step)
-            y  = self.ds.getData('y', step=step)
-            px = self.ds.getData('px', step=step)
-            py = self.ds.getData('py', step=step)
+        y = self._selectData('y', **kwargs)
+        py = self._selectData('py', **kwargs)
 
         r  = eval_radius(x, y)
 
@@ -496,20 +448,16 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         
         Returns
         -------
         the projected emittance
         """
-        step = kwargs.get('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-
-        coords = self.ds.getData(dim, step=step)
-        momenta = self.ds.getData('p' + dim, step=step)
-
-        coords  = self._selectBunch(coords, bunch, step)
-        momenta = self._selectBunch(momenta, bunch, step)
+        coords  = self._selectData(dim, **kwargs)
+        momenta = self._selectData('p' + dim, **kwargs)
 
         c2 = sc.stats.moment(coords, moment=2)
         m2 = sc.stats.moment(momenta, moment=2)
