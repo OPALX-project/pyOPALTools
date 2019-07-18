@@ -221,12 +221,36 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
 
 
 def eval_radius(x, y):
+    """
+    Evaluate the radius
+
+    r = sqrt(x^2 + y^2)
+
+    Parameters
+    ----------
+    x   (float / array)     data of x-direction
+    y   (float / array)     data of y-direction
+
+    Returns
+    -------
+    the radius
+    """
     r = np.sqrt(x ** 2 + y ** 2)
     return r
 
 
 def eval_radial_momentum(px, py, theta):
     """
+    Evaluate the radial momentum
+
+    pr = px * cos(theta) + py * sin(theta)
+
+    Parameters
+    ----------
+    px      (float / array)     data of momentum in x
+    py      (float / array)     data of momentum in y
+    theta   (float)             azimuthal angle (in radian)
+
     Notes:
     ------
     r     : radius
@@ -247,5 +271,9 @@ def eval_radial_momentum(px, py, theta):
     dr/dy = 1 / (2 * r) * 2 * y = y / r = sin(theta)
 
     --> p_r = p_x * cos(theta) + p_y * sin(theta)
+
+    Returns
+    -------
+    the radial momentum
     """
     return px * np.cos(theta) + py * np.sin(theta)
