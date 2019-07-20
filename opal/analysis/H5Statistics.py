@@ -4,10 +4,11 @@ import dask
 from dask.array import stats
 import scipy as sc
 from opal.utilities.logger import opal_logger
+from opal.analysis.cyclotron import eval_radius, eval_radial_momentum
 
 class H5Statistics(Statistics):
 
-    def _select(self, data, attrval, val, step):
+    def _select(self, data, attrval, val):
         """
         Take a slice from the array
 
@@ -16,7 +17,6 @@ class H5Statistics(Statistics):
         data    (dask.array)    container to extract data from
         attrval (dask.array)    data compare with in extraction value
         val     (int/float)     value for extraction comparison
-        step    (int)           step in H5 file
 
         Notes
         -----
@@ -45,6 +45,12 @@ class H5Statistics(Statistics):
         """
         Take a slice from the array
 
+        Parameters
+        -----------
+        data    (array)         the data where to extract
+        bunch   (int)           to select
+        step    (int)           step in H5 file
+
         Notes
         -----
         There is an open issue on chunking. After taking a slice
@@ -54,9 +60,25 @@ class H5Statistics(Statistics):
         Open issue:
         https://github.com/dask/dask/issues/3293
         """
-        if bunch > -1:
+        if bunch > -1 and self.ds.isStepDataset('bunchNumber'):
             bunchnum = self.ds.getData('bunchNumber', step=step)
-            data = self._select(data, bunchnum, bunch, step)
+            data = self._select(data, bunchnum, bunch)
+
+        return data
+
+    def _selectData(self, var, **kwargs):
+        step    = kwargs.get('step', 0)
+        turn    = kwargs.get('turn', None)
+        bunch   = kwargs.get('bunch', -1)
+
+        if turn:
+            # probe *.h5 have turn in dataset (step always 0)
+            turns = self.ds.getData('turn')
+            data = self.ds.getData(var)
+            data = self._select(data, turns, turn)
+        else:
+            data = self.ds.getData(var, step=step)
+            data = self._selectBunch(data, bunch, step)
 
         return data
 
@@ -73,18 +95,15 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which bunch to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         
         Notes
         -----
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html#scipy.stats.moment
         """
-        step  = kwargs.pop('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
+        data = self._selectData(var, **kwargs)
 
         return stats.moment(data, axis=0, moment=k).compute().item(0)
 
@@ -100,15 +119,12 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which bunch to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         """
-        step  = kwargs.pop('step', 0)
-        bunch = kwargs.pop('bunch', -1)
+        data = self._selectData(var, **kwargs)
 
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
-            
         return data.mean(axis=0).compute()
 
 
@@ -126,15 +142,12 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which bunch to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         """
-        step  = kwargs.pop('step', 0)
-        bunch = kwargs.pop('bunch', -1)
+        data = self._selectData(var, **kwargs)
 
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
-        
         return stats.skew(data, axis=0).compute().item(0)
 
 
@@ -156,17 +169,13 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which bunch to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         """
         opal_logger.error('dask.stats.kurtosis does not agree with scipy.stats.kurtosis')
+        data = self._selectData(var, **kwargs)
 
-        step  = kwargs.pop('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
-        
         return stats.kurtosis(data, axis=0, fisher=True).compute().item(0)
 
 
@@ -184,17 +193,15 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bins    (int /str)      binning type or #bins
-                                (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
-        density (bool)          normalize such that integral over
-                                range is 1.
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         
         Returns
         -------
         kernel density estimator of scipy.
         """
-        step    = kwargs.pop('step', 0)
-        data = self.ds.getData(var, step=step)
+        data = self._selectData(var, **kwargs)
 
         return dask.delayed(sc.stats.gaussian_kde)(data)
 
@@ -212,7 +219,9 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-                                (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         density (bool)          normalize such that integral over
                                 range is 1.
                                 
@@ -221,10 +230,9 @@ class H5Statistics(Statistics):
         a numpy.histogram with bin edges
         (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
         """
-        step    = kwargs.pop('step', 0)
-        
-        data = self.ds.getData(var, step=step)
         density = kwargs.pop('density', True)
+
+        data = self._selectData(var, **kwargs)
 
         return da.histogram(data, bins=bins, range=range, density=density)
 
@@ -243,7 +251,9 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which bunch to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         
         Reference
         ---------
@@ -252,12 +262,7 @@ class H5Statistics(Statistics):
         BEAM HALO IN PROTON LINAC BEAMS,
         XX International Linac Conference, Monterey, California
         """
-        step    = kwargs.pop('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
+        data = self._selectData(var, **kwargs)
 
         m4 = stats.moment(data, moment=4)
         m2 = stats.moment(data, moment=2)
@@ -278,7 +283,9 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which bunch to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         
         Reference
         ---------
@@ -287,17 +294,165 @@ class H5Statistics(Statistics):
         BEAM HALO IN PROTON LINAC BEAMS,
         XX International Linac Conference, Monterey, California
         """
-        step = kwargs.pop('step', 0)
-        bunch = kwargs.pop('bunch', -1)
-
-        data = self.ds.getData(var, step=step)
-
-        data = self._selectBunch(data, bunch, step)
+        data = self._selectData(var, **kwargs)
 
         m4 = stats.moment(data, moment=4)
         m2 = stats.moment(data, moment=2)
 
         return (m4 / m2 ** 2 - 15.0 / 7.0).compute().item(0)
+
+
+    def radial_halo_ellipsoidal_beam(self, **kwargs):
+        """
+        Compute the halo in radial direction
+        according to
+
+        h_r = <r^4> / <r^2>^2 - 15 / 17
+
+        Parameters
+        ----------
+        None
+
+        Optionals
+        ---------
+        step    (int)           of dataset
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
+
+        Reference
+        ---------
+        T. P. Wangler, Los Alamos National Laboratory, Los Alamos, NM 87545,
+        K. R. Crandall, TechSource, Santa Fe, NM 87594-1057,
+        BEAM HALO IN PROTON LINAC BEAMS,
+        XX International Linac Conference, Monterey, California
+        """
+        x = self._selectData('x', **kwargs)
+        y = self._selectData('y', **kwargs)
+
+        r  = eval_radius(x, y)
+
+        m4 = stats.moment(r, moment=4)
+        m2 = stats.moment(r, moment=2)
+
+        return (m4 / m2 ** 2 - 15.0 / 7.0).compute()
+
+
+    def halo_2d_ellipsoidal_beam(self, var, **kwargs):
+        """
+        Compute the 2D halo in horizontal, vertical
+        or longitudinal direction according to
+
+        H_i = sqrt(3) / 2  * sqrt(A) / B - 15 / 7
+
+        A = <q^4><p^4> + 3 * <q^2p^2>^2 - 4 * <qp^3> * <q^3p>
+        B = <q^2><p^2> - <qp>^2
+
+        with coordinate q and momentum p. Specify either the
+        'step' or 'turn' (probes only).
+
+        Parameters
+        ----------
+        var   (str)     the direction 'x', 'y' or 'z'
+
+        Optionals
+        ---------
+        step    (int)           of dataset
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
+
+        Reference
+        ---------
+        https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
+        """
+        q = self._selectData(var, **kwargs)
+        p = self._selectData('p' + var, **kwargs)
+        return self._halo_2d_ellipsoidal_beam(q, p)
+
+
+    def radial_halo_2d_ellipsoidal_beam(self, azimuth, **kwargs):
+        """
+        Compute the 2D radial halo according to
+
+        H_i = sqrt(3) / 2  * sqrt(A) / B - 15 / 7
+
+        A = <r^4><p^4> + 3 * <r^2p^2>^2 - 4 * <rp^3> * <r^3p>
+        B = <r^2><p^2> - <rp>^2
+
+        with radius r and radial momentum p.
+
+        Parameters
+        ----------
+        azimuth (float)         for radial halo only (in degree)
+
+        Optionals
+        ---------
+        step    (int)           of dataset
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
+
+        Reference
+        ---------
+        https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
+        """
+        x = self._selectData('x', **kwargs)
+        px = self._selectData('px', **kwargs)
+
+        y = self._selectData('y', **kwargs)
+        py = self._selectData('py', **kwargs)
+
+        r  = eval_radius(x, y)
+
+        azimuth = da.deg2rad(azimuth)
+
+        pr = eval_radial_momentum(px, py, azimuth)
+
+        return self._halo_2d_ellipsoidal_beam(r, pr)
+
+
+    def _halo_2d_ellipsoidal_beam(self, q, p):
+        """
+        Compute the 2D halo in horizontal, vertical
+        or longitudinal direction according to
+
+        H_i = sqrt(3) / 2  * sqrt(A) / B - 15 / 7
+
+        A = <q^4><p^4> + 3 * <q^2p^2>^2 - 4 * <qp^3> * <q^3p>
+        B = <q^2><p^2> - <qp>^2
+
+        with coordinate q and momentum p.
+
+        Parameters
+        ----------
+        q     (array)   coordinate data
+        p     (array)   momentum data
+
+        Reference
+        ---------
+        https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
+        """
+
+        # make centered
+        q = q - da.mean(q)
+        p = p - da.mean(p)
+
+        q2 = da.mean(q ** 2)
+        q4 = da.mean(q ** 4)
+
+        p2 = da.mean(p ** 2)
+        p4 = da.mean(p ** 4)
+
+        q1p1 = da.mean(q*p)
+        q2p2 = da.mean(q**2 * p**2)
+        q1p3 = da.mean(q * p**3)
+        q3p1 = da.mean(q**3 * p)
+
+        A = q4 * p4 + 3.0 * q2p2 ** 2 - 4.0 * q1p3 * q3p1
+        B = q2 * p2 - q1p1 ** 2
+
+        return (0.5 * da.sqrt(3.0 * A) / B - 15.0 / 7.0).compute()
 
 
     def projected_emittance(self, dim, **kwargs):
@@ -315,21 +470,16 @@ class H5Statistics(Statistics):
         Optionals
         ---------
         step    (int)           of dataset
-        bunch   (int)           for which bunch to compute
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
         
         Returns
         -------
         the projected emittance
         """
-        step = kwargs.pop('step', 0)
-        
-        coords = self.ds.getData(dim, step=step)
-        momenta = self.ds.getData('p' + dim, step=step)
-        
-        bunch = kwargs.pop('bunch', -1)
-
-        coords  = self._selectBunch(coords, bunch, step)
-        momenta = self._selectBunch(momenta, bunch, step)
+        coords  = self._selectData(dim, **kwargs)
+        momenta = self._selectData('p' + dim, **kwargs)
 
         c2 = stats.moment(coords, moment=2)
         m2 = stats.moment(momenta, moment=2)
@@ -348,25 +498,24 @@ class H5Statistics(Statistics):
         a histogram.
         The purpose of this script is to distinguish bunches
         of a multi-bunch simulation.
-        
+
         Parameters
         ----------
         var     (str)           the variable
-        
+
         Optionals
         ---------
         step    (int)           of dataset
         bins    (int)           number of bins for histogram
-        
+
         Returns
         -------
         a list of minima locations and corresponding histogram
         """
         step = kwargs.pop('step', 0)
-        bins = kwargs.pop('bins', 20)
         Wn   = kwargs.pop('Wn', 0.15)
         bins = kwargs.pop('bins', 100)
-        
+
         data = self.ds.getData(var, step=step)
 
         if data.size < 1:

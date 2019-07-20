@@ -5,7 +5,6 @@ import dask
 import scipy as sc
 import seaborn as sns
 
-
 class H5Plotter(ProbePlotter):
     
     def __init__(self):
