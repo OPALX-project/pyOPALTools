@@ -1,5 +1,4 @@
 from .formatter import *
-import opal.visualization.statistics
 import opal.visualization.styles
 
 from .AmrPlotter              import AmrPlotter
