@@ -53,7 +53,7 @@ class H5Statistics(Statistics):
             # probe *.h5 have turn in dataset (step always 0)
             turns = self.ds.getData('turn')
             data = self.ds.getData(var)
-            data = data[turn == turns]
+            data = self._select(data, turns, turn)
         else:
             data = self.ds.getData(var, step=step)
             data = self._selectBunch(data, bunch, step)
