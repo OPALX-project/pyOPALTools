@@ -7,27 +7,34 @@ from bootstrap import Bootstrap
 class UQ(BaseEstimator):
 
     def __init__(self, order = 2):
+        """
+        Parameters
+        ----------
+        order           PCE order
+        """
         self._order = order
 
 
-    def fit(self, X, y):
+    def fit(self, x, y):
         """
-        X       shape NxD with dimension D and number of samples N
+        Parameters
+        ----------
+        x       shape NxD with dimension D and number of samples N
         y       shape NxQ with quantities of interest Q and number of samples N
 
         Notes
         -----
         See https://chaospy.readthedocs.io/en/development/tutorial.html
         """
-        self._X = np.asmatrix(X)
+        self._x = np.asmatrix(x)
         self._y = np.asarray(y)
         self._is_fitted = True
 
         # figure out the range
         dists = []
-        for i in range(np.shape(X)[1]):
-            dists.append( cp.Uniform(np.min(X[:, i]),
-                                     np.max(X[:, i])) )
+        for i in range(np.shape(x)[1]):
+            dists.append( cp.Uniform(np.min(x[:, i]),
+                                     np.max(x[:, i])) )
 
         self._distribution = cp.J(*dists)
 
@@ -35,7 +42,7 @@ class UQ(BaseEstimator):
 
         self.model_ = cp.fit_regression(polynomials=self._pce,          # Polynomial expansion with
                                                                         # polynomials.shape=(M,) and polynomials.dim=D
-                                        abscissas=np.transpose(X),      # Collocation nodes with abscissas.shape=(D,K)
+                                        abscissas=np.transpose(x),      # Collocation nodes with abscissas.shape=(D,K)
                                         evals=y,                        # Model evaluations with len(evals)=K
                                         rule='LS',
                                         retall=False,                   # If True return Fourier coefficients in addition to R
@@ -47,10 +54,10 @@ class UQ(BaseEstimator):
         return self
 
 
-    def predict(self, X):
+    def predict(self, x):
         check_is_fitted(self, '_is_fitted')
-        X = np.asarray(X).T
-        return self.model_(*X)
+        x = np.asarray(x).T
+        return self.model_(*x)
 
     def main_sensitivity(self):
         check_is_fitted(self, '_is_fitted')
@@ -70,6 +77,19 @@ class UQ(BaseEstimator):
 
 
     def confidence_interval(self, x, y, alpha, **kwargs):
+        """
+        Compute confidence intervals using the bootstrap method
+
+        Parameters
+        ----------
+        x       shape NxD with dimension D and number of samples N
+        y       shape Nx1 with quantities of interest Q and number of samples N
+        alpha   CI
+
+        Returns
+        -------
+        sorted y_train, y_pred, lower and upper bound for CI
+        """
         bs = Bootstrap(self)
         bs.boot(x, y, **kwargs)
 
@@ -95,14 +115,3 @@ class UQ(BaseEstimator):
         y_lo    = y_lo[permute]
         y_up    = y_up[permute]
         return y, y_pred, y_lo, y_up
-
-
-
-    #def get_params(self, deep=True):
-        ## suppose this estimator has parameters "alpha" and "recursive"
-        #return {"order": self._order}
-
-    #def set_params(self, **parameters):
-        #for parameter, value in parameters.items():
-            #setattr(self, parameter, value)
-        #return self

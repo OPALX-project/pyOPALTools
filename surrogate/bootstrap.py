@@ -14,6 +14,11 @@ def plot_confidence(y, y_pred, y_lo, y_up, alpha):
 
 class Bootstrap:
     def __init__(self, estimator):
+        """
+        Parameters
+        ----------
+        estimator       a sklearn estimator
+        """
         self._estimator = estimator
 
         self._sample = {
@@ -25,6 +30,19 @@ class Bootstrap:
         self._computed = False
 
     def boot(self, x, y, sample='random', **kwargs):
+        """
+        Parameters
+        ----------
+        x       shape NxD with dimension D and number of samples N
+        y       shape Nx1 with number of samples N
+        sample  how to sample, i.e.
+                    'random':       sampling with or without replacement;
+                                    n_boot:     number of boostrap iterations
+                                    replace:    True -- sample with replacement
+                                    n_samples:  None -- dim(y) = N
+                    'loo':          leave-one-out sampling
+                    'lpo'           leave-p-out; p as argument
+        """
         if not sample in self._sample.keys():
             raise RuntimeError("No sampling method '" + sample + "'.")
 
@@ -44,8 +62,7 @@ class Bootstrap:
 
     def confidence_interval(self, alpha):
         """
-        X:  NxD
-        y:  Nx1
+        alpha   CI
 
         https://stat.ethz.ch/education/semesters/ss2016/CompStat/sk.pdf
         """
