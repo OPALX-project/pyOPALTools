@@ -38,7 +38,7 @@ class H5Statistics(Statistics):
         bunch   (int)           to select
         step    (int)           step in H5 file
         """
-        if bunch > -1 and self.ds.isStepDataset('bunchNumber'):
+        if bunch > -1 and self.ds.isStepDataset('bunchNumber', step):
             bunchnum = self.ds.getData('bunchNumber', step=step)
             data = self._select(data, bunchnum, bunch)
 
@@ -49,14 +49,14 @@ class H5Statistics(Statistics):
         turn    = kwargs.get('turn', None)
         bunch   = kwargs.get('bunch', -1)
 
-        if turn:
+        data = self.ds.getData(var, step=step)
+        data = self._selectBunch(data, bunch, step)
+
+        if turn and self.ds.isStepDataset('turn', step):
             # probe *.h5 have turn in dataset (step always 0)
             turns = self.ds.getData('turn')
             data = self.ds.getData(var)
             data = self._select(data, turns, turn)
-        else:
-            data = self.ds.getData(var, step=step)
-            data = self._selectBunch(data, bunch, step)
 
         return data
 
