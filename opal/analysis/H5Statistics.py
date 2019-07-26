@@ -86,6 +86,29 @@ class H5Statistics(Statistics):
         return sc.stats.moment(data, axis=0, moment=k)
 
 
+    def radial_moment(self, k, **kwargs):
+        """
+        Calculate the k-th central radial moment.
+
+        Parameters
+        ----------
+        k       (int)           the moment, k = 1 is central mean
+
+        Optionals
+        ---------
+        step    (int)           of dataset
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
+        """
+        x = self._selectData('x', **kwargs)
+        y = self._selectData('y', **kwargs)
+
+        r  = eval_radius(x, y)
+
+        return sc.stats.moment(r, axis=0, moment=k)
+
+
     def mean(self, var, **kwargs):
         """
         Calculate the arithmetic mean.
@@ -462,12 +485,60 @@ class H5Statistics(Statistics):
         c2 = sc.stats.moment(coords, moment=2)
         m2 = sc.stats.moment(momenta, moment=2)
 
-        # we need to shift coords to center the beam
-        coords -= np.mean(coords, axis=0)
+        # we need to center the beam
+        coords  -= np.mean(coords,  axis=0)
+        momenta -= np.mean(momenta, axis=0)
 
         cm = np.mean(coords * momenta, axis=0)
 
         return np.sqrt( m2 * c2 - cm ** 2 )
+
+
+    def radial_projected_emittance(self, azimuth, **kwargs):
+        """
+        Compute the radial projected emittance. It shifts the
+        coordinates by their mean value such that the bunch
+        is centered around zero.
+
+        \varepsilon = \sqrt{ <r^2><p_r^2> - <r*p_r>^2 }
+
+        Parameters
+        ----------
+        azimuth (float)         azimuthal angle (in degree)
+
+        Optionals
+        ---------
+        step    (int)           of dataset
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
+
+        Returns
+        -------
+        the projected emittance
+        """
+        x = self._selectData('x', **kwargs)
+        px = self._selectData('px', **kwargs)
+
+        y = self._selectData('y', **kwargs)
+        py = self._selectData('py', **kwargs)
+
+        r  = eval_radius(x, y)
+
+        azimuth = np.deg2rad(azimuth)
+
+        pr = eval_radial_momentum(px, py, azimuth)
+
+        r2  = sc.stats.moment(r, moment=2)
+        pr2 = sc.stats.moment(pr, moment=2)
+
+        # we need to center the beam
+        r  -= np.mean(r,  axis=0)
+        pr -= np.mean(pr, axis=0)
+
+        rpr = np.mean(r * pr, axis=0)
+
+        return np.sqrt( r2 * pr2 - rpr ** 2 )
 
 
     def find_beams(self, var, **kwargs):
