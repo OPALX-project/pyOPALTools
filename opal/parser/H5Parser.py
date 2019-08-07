@@ -33,6 +33,8 @@ class H5Parser:
         """
         self.__filename = fname
         self.__h5f = h5py.File(fname, 'r')
+        self.__step_prefix = 'Step#'
+        
         if self.__h5f:
             self.__nsteps = len(self.__h5f.keys())
 
@@ -69,7 +71,9 @@ class H5Parser:
         -------
         a list of strings of all attribute names of a step
         """
-        path = 'Step#' + str(step)
+        self._check_step(step)
+
+        path = self.__step_prefix + str(step)
         return list(self.__h5f[path].attrs.keys())
     
     
@@ -85,7 +89,9 @@ class H5Parser:
         -------
         a list of strings of all step datasets
         """
-        path = 'Step#' + str(step)
+        self._check_step(step)
+
+        path = self.__step_prefix + str(step)
         return list(self.__h5f[path].keys())
     
     
@@ -102,16 +108,13 @@ class H5Parser:
         -------
         a list of a dataset of a step (check with getStepDatasets())
         """
-        if step > self.__nsteps - 1:
-            raise H5OverflowError('Only ' + str(self.__nsteps - 1) + ' steps.')
-        elif step < 0:
-            raise H5OverflowError("Negative step number: '" + str(step) + "'")
+        self._check_step(step)
         
         if not dsetName in self.getStepDatasets(step):
             raise H5DatasetError("'" + dsetName + "' is not a dataset of this step")
         
         data = []
-        path = 'Step#' + str(step) + '/' + dsetName
+        path = self.__step_prefix + str(step) + '/' + dsetName
         return da.from_array(self.__h5f[path], chunks=('auto'))
     
     
@@ -128,16 +131,10 @@ class H5Parser:
         -------
         
         """
-        if step > self.__nsteps - 1:
-            raise H5OverflowError('Only ' + str(self.__nsteps - 1) + ' steps.')
-        elif step < 0:
-            raise H5OverflowError("Negative step number: '" + str(step) + "'")
-        
-        if not attrName in self.getStepAttributes(step):
-            raise H5AttributeError("'" + attrName + "' is not a attribute of this step")
+        self._check_step(step)
         
         data = []
-        path = 'Step#' + str(step)
+        path = self.__step_prefix + str(step)
         data = self.__h5f[path].attrs[attrName]
         return data[:]
     
@@ -174,7 +171,14 @@ class H5Parser:
         # https://stackoverflow.com/questions/37016946/remove-b-character-do-in-front-of-a-string-literal-in-python-3
         return value.decode("utf-8")
     
+
+    def _check_step(self, step):
+        if step > self.__nsteps - 1:
+            raise H5OverflowError('Only ' + str(self.__nsteps - 1) + ' steps.')
+        elif step < 0:
+            raise H5OverflowError("Negative step number: '" + str(step) + "'")
     
+
     def __str__(self):
         """
         Print file summary.
