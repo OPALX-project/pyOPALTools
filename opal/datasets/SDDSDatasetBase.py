@@ -147,6 +147,11 @@ class SDDSDatasetBase(DatasetBase):
         return self._parser.size
 
 
+    @property
+    def dataframe(self):
+        return self._parser.dataframe
+
+
     def __str__(self):
         variables = sorted(self._parser.getVariables())
         nvar = len(variables)
