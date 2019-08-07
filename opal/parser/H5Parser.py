@@ -3,6 +3,7 @@
 
 import h5py
 import numpy as np
+from .H5Error import H5ParseError, H5DatasetError, H5OverflowError
 
 class H5Parser:
     
