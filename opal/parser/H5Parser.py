@@ -16,9 +16,6 @@ class H5Parser:
         """
         self.__filename = ''
         self.__h5f = ''
-        self.__all_h5_objs = []
-        self.__all_groups = []
-        self.__all_datasets = []
         self.__nsteps = 0
     
     def parse(self, fname, info = False):
@@ -38,14 +35,6 @@ class H5Parser:
         self.__h5f = h5py.File(fname, 'r')
         
         if self.__h5f:
-            self.__all_h5_objs = []
-            self.__h5f.visit(self.__all_h5_objs.append)
-            self.__all_groups   = [
-                obj for obj in self.__all_h5_objs # Attachment is in probes and should be neglected
-                    if isinstance(self.__h5f[obj],h5py.Group) and not obj == 'Attachment'
-            ]
-            self.__all_datasets = [ obj for obj in self.__all_h5_objs if isinstance(self.__h5f[obj],h5py.Dataset) ]
-            
             self.__nsteps = len(self.__h5f.keys())
 
             if info:                
@@ -81,7 +70,8 @@ class H5Parser:
         -------
         a list of strings of all attribute names of a step
         """
-        return list(self.__h5f[self.__all_groups[step]].attrs.keys())
+        path = 'Step#' + str(step)
+        return list(self.__h5f[path].attrs.keys())
     
     
     def getStepDatasets(self, step = 0):
@@ -96,7 +86,8 @@ class H5Parser:
         -------
         a list of strings of all step datasets
         """
-        return list(self.__h5f[self.__all_groups[step]].keys())
+        path = 'Step#' + str(step)
+        return list(self.__h5f[path].keys())
     
     
     def getStepDataset(self, dsetName, step=0):
