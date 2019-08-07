@@ -3,18 +3,17 @@
 
 import numpy as np
 import re,os,sys
+import pandas as pd
+from collections import OrderedDict
 
 class SDDSParser:
     
     def parse(self, filename):
         self._nParameters = 0
-        self._nColumns = 0
         self._nRows = 0
-        self._i = 0
         
-        self.variables = {}
-        self._units = {}
-        self.__description = {}
+        self._units = OrderedDict()
+        self._desc = {}
         
         # check file version
         version = self._checkVersion(filename)
@@ -24,10 +23,12 @@ class SDDSParser:
             self._parseHeader1_9(filename)
         else:
             self._parseHeader1_6(filename)
-        
+
         # read data
-        self._dataset = np.genfromtxt(filename, skip_header = self._nRows, dtype=np.float64)
-    
+        self._dataset = pd.read_csv(filename, skiprows=self._nRows, sep='\t', delimiter=None,
+                                    dtype=float, names=self._units.keys(), index_col=False)
+
+
     def _checkVersion(self, filename):
         
         pattern = 'OPAL (.*) git'
@@ -65,10 +66,9 @@ class SDDSParser:
                 elif 'column' in line:
                     self._nRows += 1
                     obj = re.match(column_pattern, line)
-                    self.variables[obj.group(1)] = self._nColumns
-                    self._units[self._nColumns] = obj.group(3)
-                    self.__description[self._nColumns] = self.__removeNumber(obj.group(4))
-                    self._nColumns += 1
+                    variable = obj.group(1)
+                    self._units[variable] = obj.group(3)
+                    self._desc[variable] = self.__removeNumber(obj.group(4))
                 elif 'parameter' in line:
                     self._nRows += 1
                     self._nParameters += 1
@@ -94,7 +94,6 @@ class SDDSParser:
                     self._nParameters += 1
                 elif '&column' in line:
                     self._column(f)
-                    self._nColumns += 1
                 elif '&data' in line:
                     self._data(f)
                 else:
@@ -103,18 +102,26 @@ class SDDSParser:
     
     # returns a column
     def getDataOfVariable(self, varname):
-        return list(self._dataset[:, self.variables[varname]])
+        if not self._hasVariable(varname):
+            raise ValueError("Variable '" + varname + "' not in dataset.")
+        return self._dataset[varname]
     
     
     def getUnitOfVariable(self, varname):
-        return self._units[self.variables[varname]]
+        if not self._hasVariable(varname):
+            raise ValueError("Variable '" + varname + "' not in dataset.")
+        return self._units[varname]
     
     
     def getVariables(self):
-        return list(self.variables.keys())
-    
+        return list(self._dataset.columns)
+
+
     def getDescriptionOfVariable(self, varname):
-        return self.__description[self.variables[varname]]
+        if not self._hasVariable(varname):
+            raise ValueError("Variable '" + varname + "' not in dataset.")
+        return self._desc[varname]
+
     
     def _description(self, f):
         for line in f:
@@ -141,21 +148,24 @@ class SDDSParser:
     
     
     def _column(self, f):
+        variable = ''
+        unit = ''
+        desc = ''
         for line in f:
             self._nRows += 1
             if 'name' in line:
-                self.variables[line[line.find('=')+1:-2]] = self._nColumns
-                pass
+                variable = line[line.find('=')+1:-2]
             elif 'type' in line:
                 pass
             elif 'units' in line:
-                self._units[self._nColumns] = line[line.find('=')+1:-2]
+                unit = line[line.find('=')+1:-2]
             elif 'description' in line:
-                self.__description[self._nColumns] = self.__removeNumber(line[line.find('=')+2:-2])
+                desc = self.__removeNumber(line[line.find('=')+2:-2])
             elif '&end' in line:
                 break
-    
-    
+        self._units[variable] = unit
+        self._desc[variable] = desc
+
     def _data(self, f):
         for line in f:
             self._nRows += 1
@@ -172,8 +182,9 @@ class SDDSParser:
         return ''.join([i for i in s if not i.isdigit()])
 
     def collectStatFileData(self, baseFN, root, yNames):
+        '''
+        FIXME: This function shouldn't be part of the parser.
 
-        ''' 
         Assumes runOPAL structure: optLinac_40nC_IBF=485.9269768907996_IM ...
         where baseFN == optLinac_40nC in the example above.
 
@@ -214,8 +225,16 @@ class SDDSParser:
             else:
                 print ('file '+fn+' does not exists')
         return (x,y,fns)
-    
-    
+
+
     @property
     def size(self):
-        return np.shape(self._dataset)[0]
+        return self._dataset.shape[0]
+
+
+    def _hasVariable(self, varname):
+        return (varname in self._dataset.columns)
+
+    @property
+    def dataframe(self):
+        return self._dataset
