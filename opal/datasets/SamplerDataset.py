@@ -215,8 +215,13 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
             self.__load_file(0)
         
         return self.__parser.bounds
-    
-    
+
+
+    @property
+    def loaded_file(self):
+        return self._loaded_file
+
+
     @property
     def size(self):
         """
