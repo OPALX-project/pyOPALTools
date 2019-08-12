@@ -17,10 +17,10 @@ class JobSubmitter:
         sim_dirs    (list)  all simulation directories
         template    (str)   batch script template file, entries
                             to be replaced start and end with an
-                            underscore '_'
+                            at sign '@'
         pair        (dict)  keys are strings that are replaced
                             in the template file (keys do not have
-                            '_') with corresponding value.
+                            '@') with corresponding value.
         cmd         (str)   batch submit command, e.g. sbatch for SLURM
         additions   ([str]) additional commands like 'source', export
                             that should be added to the file. These will be
@@ -32,7 +32,10 @@ class JobSubmitter:
         1. Submit jobs with JobSubmitter.submit() function
         """
         self._sim_dirs = []
-        
+
+        if not isinstance(sim_dirs, list):
+            sim_dirs = [sim_dirs]
+
         for sdir in sim_dirs:
             tmp = os.path.abspath(sdir)
             if not os.path.isdir(tmp):
@@ -71,7 +74,7 @@ class JobSubmitter:
         """
         Create a 'run_job.sh' file for each simulation.
         """
-        pattern = r'_(.*?)_'
+        pattern = r'@(.*?)@'
         
         if additions:
             for i, add in enumerate(additions):
@@ -106,5 +109,5 @@ class JobSubmitter:
                         for key in obj:
                             if key in self._pair:
                                 val = self._pair[key]
-                                line = line.replace('_' + key + '_', str(val))
+                                line = line.replace('@' + key + '@', str(val))
                     print(line, end='')
