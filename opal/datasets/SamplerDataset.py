@@ -29,7 +29,8 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         super(SamplerDataset, self).__init__(directory, fname)
         
         self.__parser = SamplerParser()
-        
+
+        self._nsamples = -1
         self.__nFiles = 0
         self._loaded_file = -1
         
@@ -53,7 +54,6 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         :param ind: individual identity number
         :type ind: int
         """
-        
         if self._loaded_file >= 0 and \
            ind >= self.__parser.begin and \
            ind <= self.__parser.end:
@@ -63,12 +63,12 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         
         # search appropriate file
         end = self.__nFiles - 1
-        if ind < self.__parser.begin:
-            end = self._loaded_file - 1
-        
         beg = 0
         if ind > self.__parser.end:
             beg = self._loaded_file + 1
+
+        if ind < self.__parser.begin and self._loaded_file > 0:
+            end = self._loaded_file - 1
         
         for i in range(beg, end+1):
             opal_logger.debug( 'load ' + str(i) )
@@ -91,7 +91,7 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         base = base.replace(num + '.json', '')
         self.__parser.parse(os.path.join(dirname,
                                          base + \
-                                         num + '.json'))
+                                         str(i) + '.json'))
     
     
     def getData(self, var, **kwargs):
@@ -225,17 +225,20 @@ class SamplerDataset(DatasetBase, SamplerPlotter, SamplerStatistics):
         if self.__nFiles == 0:
             return 0
         
-        n = 0
-        for i in range(self.__nFiles):
-            self.__actual_file_load(i)
-            n += self.__parser.num_samples
-        return n
+        if self._nsamples < 0:
+            n = 0
+            for i in range(self.__nFiles):
+                self.__actual_file_load(i)
+                n += self.__parser.num_samples
+            self._nsamples = n
+            self.__actual_file_load(0)
+        return self._nsamples
 
 
     def __str__(self):
         self.__load_file(0)
         s  = '\n\tSampler dataset.\n\n'
-        s += '\tNumber of optimizers:  ' + str(self.__nFiles) + '\n\n'
+        s += '\tNumber of samplers:  ' + str(self.__nFiles) + '\n\n'
         s += '\tNumber of samples: ' + str(self.size) + ' per generation \n\n'
         s += '\tAvailable design variables (' + str(len(self.design_variables)) + ') :\n\n'
         for v in sorted(self.design_variables):
