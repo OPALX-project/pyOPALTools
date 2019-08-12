@@ -198,12 +198,13 @@ def default():
     # When True, format tick labels
     # according to the user's locale.
     # For example, use ',' as a decimal
-    # separator in the fr_FR locale.                                   
+    # separator in the fr_FR locale.
     mpl.rcParams['axes.formatter.use_locale'] = False
 
     # When True, use mathtext for scientific notation.
     mpl.rcParams['axes.formatter.use_mathtext'] = False
-    mpl.rcParams['axes.formatter.min_exponent'] = 0       # minimum exponent to format in scientific notation
+    if mpl.__version__ >= '2.1':
+        mpl.rcParams['axes.formatter.min_exponent'] = 0       # minimum exponent to format in scientific notation
 
     # If True, the tick label formatter
     # will default to labeling ticks relative
