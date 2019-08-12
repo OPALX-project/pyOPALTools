@@ -1,12 +1,12 @@
 #!/bin/bash -l
-#SBATCH --job-name=_SIM_
-#SBATCH --error=_SIM_.error
-#SBATCH --output=_SIM_.output
+#SBATCH --job-name=@SIM@
+#SBATCH --error=@SIM@.error
+#SBATCH --output=@SIM@.output
 #SBATCH --partition=merlin
-#SBATCH --time=_TIME_
-#SBATCH --nodes=_NODES_
-#SBATCH --ntasks=_CORES_
-#SBATCH --ntasks-per-node=_CORES-PER-NODE_
-#SBATCH --mem=_RAM-PER-NODE_
+#SBATCH --time=@TIME@
+#SBATCH --nodes=@NODES@
+#SBATCH --ntasks=@CORES@
+#SBATCH --ntasks-per-node=@CORES-PER-NODE@
+#SBATCH --mem=@RAM-PER-NODE@
 
-mpirun _EXEC_ _ARGS_
+mpirun @EXEC@ @ARGS@
