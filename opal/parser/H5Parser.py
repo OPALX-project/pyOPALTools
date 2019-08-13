@@ -38,8 +38,10 @@ class H5Parser:
         
         if self.__h5f:
             self.__nsteps = len(self.__h5f.keys())
+            if 'Attachment' in self.__h5f.keys():
+                self.__nsteps -= 1
 
-            if info:                
+            if info:
                 print ( self.__str__() )
         else:
             raise H5ParseError("Cannot read '" + fname + "'")
