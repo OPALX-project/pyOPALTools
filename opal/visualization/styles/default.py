@@ -122,7 +122,8 @@ def default():
 
     # use "ucs" and "inputenc" LaTeX packages for handling
     # unicode strings.
-    mpl.rcParams['text.latex.unicode'] = False
+    if mpl.__version__ < '2.2':
+        mpl.rcParams['text.latex.unicode'] = False
 
     # May be one of the following:
     #   'none': Perform no hinting
