@@ -234,3 +234,7 @@ class SDDSParser:
 
     def _hasVariable(self, varname):
         return (varname in self._dataset.columns)
+
+    @property
+    def dataframe(self):
+        return self._dataset

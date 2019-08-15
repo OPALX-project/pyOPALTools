@@ -60,7 +60,7 @@ class H5Statistics(Statistics):
         Open issue:
         https://github.com/dask/dask/issues/3293
         """
-        if bunch > -1 and self.ds.isStepDataset('bunchNumber'):
+        if bunch > -1 and self.ds.isStepDataset('bunchNumber', step):
             bunchnum = self.ds.getData('bunchNumber', step=step)
             data = self._select(data, bunchnum, bunch)
 
@@ -71,14 +71,14 @@ class H5Statistics(Statistics):
         turn    = kwargs.get('turn', None)
         bunch   = kwargs.get('bunch', -1)
 
-        if turn:
+        data = self.ds.getData(var, step=step)
+        data = self._selectBunch(data, bunch, step)
+
+        if turn and self.ds.isStepDataset('turn', step):
             # probe *.h5 have turn in dataset (step always 0)
             turns = self.ds.getData('turn')
             data = self.ds.getData(var)
             data = self._select(data, turns, turn)
-        else:
-            data = self.ds.getData(var, step=step)
-            data = self._selectBunch(data, bunch, step)
 
         return data
 
@@ -106,6 +106,29 @@ class H5Statistics(Statistics):
         data = self._selectData(var, **kwargs)
 
         return stats.moment(data, axis=0, moment=k).compute().item(0)
+
+
+    def radial_moment(self, k, **kwargs):
+        """
+        Calculate the k-th central radial moment.
+
+        Parameters
+        ----------
+        k       (int)           the moment, k = 1 is central mean
+
+        Optionals
+        ---------
+        step    (int)           of dataset
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
+        """
+        x = self._selectData('x', **kwargs)
+        y = self._selectData('y', **kwargs)
+
+        r  = eval_radius(x, y)
+
+        return sc.stats.moment(r, axis=0, moment=k)
 
 
     def mean(self, var, **kwargs):
@@ -485,11 +508,59 @@ class H5Statistics(Statistics):
         m2 = stats.moment(momenta, moment=2)
 
         # we need to shift coords to center the beam
-        coords -= coords.mean(axis=0)
+        coords  -= coords.mean(axis=0)
+        momenta -= momenta.mean(, axis=0)
 
         cm = (coords * momenta).mean(axis=0)
 
         return da.sqrt( m2 * c2 - cm ** 2 ).compute()
+
+
+    def radial_projected_emittance(self, azimuth, **kwargs):
+        """
+        Compute the radial projected emittance. It shifts the
+        coordinates by their mean value such that the bunch
+        is centered around zero.
+
+        \varepsilon = \sqrt{ <r^2><p_r^2> - <r*p_r>^2 }
+
+        Parameters
+        ----------
+        azimuth (float)         azimuthal angle (in degree)
+
+        Optionals
+        ---------
+        step    (int)           of dataset
+        turn    (int)           of dataset
+        bunch   (int)           for which to compute (only if 'turn'
+                                not given (default: -1 --> all particles)
+
+        Returns
+        -------
+        the projected emittance
+        """
+        x = self._selectData('x', **kwargs)
+        px = self._selectData('px', **kwargs)
+
+        y = self._selectData('y', **kwargs)
+        py = self._selectData('py', **kwargs)
+
+        r  = eval_radius(x, y)
+
+        azimuth = np.deg2rad(azimuth)
+
+        pr = eval_radial_momentum(px, py, azimuth)
+
+        r2  = sc.stats.moment(r, moment=2)
+        pr2 = sc.stats.moment(pr, moment=2)
+
+        # we need to center the beam
+        r  -= np.mean(r,  axis=0)
+        pr -= np.mean(pr, axis=0)
+
+        rpr = np.mean(r * pr, axis=0)
+
+        return np.sqrt( r2 * pr2 - rpr ** 2 )
 
 
     def find_beams(self, var, **kwargs):

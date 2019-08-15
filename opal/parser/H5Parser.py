@@ -3,6 +3,7 @@
 
 import h5py
 import dask.array as da
+from .H5Error import H5ParseError, H5DatasetError, H5OverflowError
 
 class H5Parser:
     
@@ -37,8 +38,10 @@ class H5Parser:
         
         if self.__h5f:
             self.__nsteps = len(self.__h5f.keys())
+            if 'Attachment' in self.__h5f.keys():
+                self.__nsteps -= 1
 
-            if info:                
+            if info:
                 print ( self.__str__() )
         else:
             raise H5ParseError("Cannot read '" + fname + "'")

@@ -122,7 +122,8 @@ def default():
 
     # use "ucs" and "inputenc" LaTeX packages for handling
     # unicode strings.
-    mpl.rcParams['text.latex.unicode'] = False
+    if mpl.__version__ < '2.2':
+        mpl.rcParams['text.latex.unicode'] = False
 
     # May be one of the following:
     #   'none': Perform no hinting
@@ -198,12 +199,13 @@ def default():
     # When True, format tick labels
     # according to the user's locale.
     # For example, use ',' as a decimal
-    # separator in the fr_FR locale.                                   
+    # separator in the fr_FR locale.
     mpl.rcParams['axes.formatter.use_locale'] = False
 
     # When True, use mathtext for scientific notation.
     mpl.rcParams['axes.formatter.use_mathtext'] = False
-    mpl.rcParams['axes.formatter.min_exponent'] = 0       # minimum exponent to format in scientific notation
+    if mpl.__version__ >= '2.1':
+        mpl.rcParams['axes.formatter.min_exponent'] = 0       # minimum exponent to format in scientific notation
 
     # If True, the tick label formatter
     # will default to labeling ticks relative

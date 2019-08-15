@@ -186,6 +186,8 @@ class SamplerParser:
             raise IOError("File '" + filename + "' doesn't exist.")
         
         try:
+            self.__reset_attributes()
+
             parsed = json.load( open(filename) )
             
             if not self.__tag in parsed.keys():
@@ -225,7 +227,7 @@ class SamplerParser:
         if ind < self.__begin or ind > self.__end:
             raise ValueError('No individual with ID > ' + str(ind) + '.')
         
-        return self.__dvars[ind]
+        return self.__dvars[ind - self.__begin]
     
     
     def getObjectives(self, ind):
