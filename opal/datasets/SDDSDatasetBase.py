@@ -172,11 +172,11 @@ class SDDSDatasetBase(DatasetBase):
 
             df = self._parser.dataframe
             if isinstance(val, str):
-                return df[df[var] == val].values[0]
+                return df[df[sddsvar] == val].values[0]
             else:
                 # 31. August 2019
                 # https://stackoverflow.com/questions/52587436/find-row-closest-value-to-input
-                idx = df[var].sub(val).abs().idxmin()
+                idx = df[sddsvar].sub(val).abs().idxmin()
                 return np.asarray(df.loc[[idx]].values)
 
         except Exception as ex:
