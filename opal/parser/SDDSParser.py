@@ -26,7 +26,12 @@ class SDDSParser:
 
         # read data
         self._dataset = pd.read_csv(filename, skiprows=self._nRows, sep='\t', delimiter=None,
-                                    dtype=float, names=self._units.keys(), index_col=False)
+                                    names=self._units.keys(), index_col=False)
+
+        # 31. August 2019
+        # https://stackoverflow.com/questions/40950310/strip-trim-all-strings-of-a-dataframe
+        df = self._dataset.select_dtypes(['object'])
+        self._dataset[df.columns] = df.apply(lambda x: x.str.strip())
 
 
     def _checkVersion(self, filename):
@@ -153,7 +158,7 @@ class SDDSParser:
         desc = ''
         for line in f:
             self._nRows += 1
-            if 'name' in line:
+            if 'name=' in line:
                 variable = line[line.find('=')+1:-2]
             elif 'type' in line:
                 pass
