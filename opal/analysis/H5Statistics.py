@@ -54,7 +54,7 @@ class H5Statistics(Statistics):
 
         if turn and self.ds.isStepDataset('turn', step):
             # probe *.h5 have turn in dataset
-            turns = self.ds.getData('turn', step)
+            turns = self.ds.getData('turn', step=step)
             turns = self._selectBunch(turns, bunch, step)
             data = self._select(data, turns, turn)
 
