@@ -205,11 +205,32 @@ class SamplerParser:
                 self.__version_support[version](parsed)
             else:
                 self.__parse_version_2_0_0(parsed)
-            
+
+            # FIXME Sampler returns a string instead of array for DVAR bounds
+            # if it is fixed in the sampler this call can be removed
+            self.__fix_bound_type()
+
         except Exception as e:
             raise e
-    
-    
+
+
+    def __fix_bound_type(self):
+        """
+        Fixes type of DVAR bounds. In the JSON file the bounds are in a strin, e.g. '[0, 1]'.
+        We need to change to list of floats.
+        """
+        import re
+        for key in self.__dvar_bounds.keys():
+            values = self.__dvar_bounds[key]
+            if isinstance(values, str):
+                obj = re.match('\[(.*), (.*)\]', values)
+                if not obj:
+                    raise IOError("Error in parsing DVAR bounds.")
+                if not len(obj.groups()) == 2:
+                    raise IOError("Error in parsing DVAR bounds.")
+                self.__dvar_bounds[key] = [float(obj.group(1)), float(obj.group(2))]
+
+
     def getIndividual(self, ind):
         """
         Obtain input values of an individual
