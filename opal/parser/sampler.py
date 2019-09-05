@@ -216,7 +216,7 @@ class SamplerParser:
 
     def __fix_bound_type(self):
         """
-        Fixes type of DVAR bounds. In the JSON file the bounds are in a strin, e.g. '[0, 1]'.
+        Fixes type of DVAR bounds. In the JSON file the bounds are in a string, e.g. '[0, 1]'.
         We need to change to list of floats.
         """
         import re
