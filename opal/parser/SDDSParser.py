@@ -27,7 +27,7 @@ class SDDSParser:
 
         # read data
         self._dataset = pd.read_csv(filename, skiprows=self._nRows, sep='\s+',
-                                    dtypes=self._dtypes, names=self._units.keys(), index_col=False)
+                                    dtype=self._dtypes, names=self._units.keys(), index_col=False)
 
         # 31. August 2019
         # https://stackoverflow.com/questions/40950310/strip-trim-all-strings-of-a-dataframe
