@@ -18,7 +18,7 @@ class SDDSParser:
         
         # check file version
         version = self._checkVersion(filename)
-        
+
         # parse header
         if version >= 10900:
             self._parseHeader1_9(filename)
@@ -27,7 +27,17 @@ class SDDSParser:
 
         # read data
         self._dataset = pd.read_csv(filename, skiprows=self._nRows, sep='\t',
-                                    dtype=self._dtypes, names=self._units.keys(), index_col=False)
+                                    names=self._units.keys(), index_col=False)
+
+        
+        # Fix due to possible NaN values.
+        # pd.read_csv fails when we have NaNs in columns and we specify the types of the
+        # columns. --> Iterate through columns and fix type --> if NaN in a row, then column
+        # is parsed as string
+        # we need to find a better solution for this issue
+        for i, dtype in enumerate(self._dataset.dtypes):
+            var = list(self._units.keys())[i]
+            self._dataset[var] = self._dataset[var].astype(dtype)
 
         # 31. August 2019
         # https://stackoverflow.com/questions/40950310/strip-trim-all-strings-of-a-dataframe
@@ -62,7 +72,7 @@ class SDDSParser:
     def _parseHeader1_6(self, filename):
         column_pattern = '&columnname=(.*),type=(.*),units=(.*),description=\"(.*)\"&end'
         #parameter_pattern = '&parametername=(.*),type=(.*),description=\"(.*)\"&end'
-        
+
         with open(filename) as f:
             for line in f:
                 self._nRows += 1
@@ -174,6 +184,7 @@ class SDDSParser:
         self._desc[variable] = desc
         self._dtypes[variable] = self._get_type(dtype)
 
+
     def _get_type(self, dtype):
         if dtype == 'string':
             return str
@@ -181,7 +192,7 @@ class SDDSParser:
             return np.float64
         elif dtype == 'float':
             return float
-        elif dtype == 'int'
+        elif dtype == 'int':
             return int
         elif dtype == 'long':
             return np.int64
