@@ -181,7 +181,7 @@ class SDDSParser:
             return np.float64
         elif dtype == 'float':
             return float
-        elif dtype == 'int'
+        elif dtype == 'int':
             return int
         elif dtype == 'long':
             return np.int64
