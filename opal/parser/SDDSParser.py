@@ -26,7 +26,7 @@ class SDDSParser:
             self._parseHeader1_6(filename)
 
         # read data
-        self._dataset = pd.read_csv(filename, skiprows=self._nRows, sep='\t',
+        self._dataset = pd.read_csv(filename, skiprows=self._nRows, sep='\s+',
                                     names=self._units.keys(), index_col=False)
 
         
