@@ -29,16 +29,6 @@ class SDDSParser:
         self._dataset = pd.read_csv(filename, skiprows=self._nRows, sep='\s+',
                                     names=self._units.keys(), index_col=False)
 
-        
-        # Fix due to possible NaN values.
-        # pd.read_csv fails when we have NaNs in columns and we specify the types of the
-        # columns. --> Iterate through columns and fix type --> if NaN in a row, then column
-        # is parsed as string
-        # we need to find a better solution for this issue
-        for i, dtype in enumerate(self._dataset.dtypes):
-            var = list(self._units.keys())[i]
-            self._dataset[var] = self._dataset[var].astype(dtype)
-
         # 31. August 2019
         # https://stackoverflow.com/questions/40950310/strip-trim-all-strings-of-a-dataframe
         df = self._dataset.select_dtypes(['object'])
