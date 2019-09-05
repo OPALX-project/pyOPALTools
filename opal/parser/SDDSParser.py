@@ -178,9 +178,15 @@ class SDDSParser:
         if dtype == 'string':
             return str
         elif dtype == 'double':
-            return float
-        elif dtype == 'int' or dtype == 'long':
+            return np.float64
+        elif dtype == 'float':
+            return np.float
+        elif dtype == 'int'
             return int
+        elif dtype == 'long':
+            return np.int64
+        else:
+            return str
 
     def _data(self, f):
         for line in f:
