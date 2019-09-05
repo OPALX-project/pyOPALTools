@@ -180,7 +180,7 @@ class SDDSParser:
         elif dtype == 'double':
             return np.float64
         elif dtype == 'float':
-            return np.float
+            return float
         elif dtype == 'int'
             return int
         elif dtype == 'long':
