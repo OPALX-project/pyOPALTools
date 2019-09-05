@@ -14,6 +14,7 @@ class SDDSParser:
         
         self._units = OrderedDict()
         self._desc = {}
+        self._dtypes = {}
         
         # check file version
         version = self._checkVersion(filename)
@@ -26,7 +27,7 @@ class SDDSParser:
 
         # read data
         self._dataset = pd.read_csv(filename, skiprows=self._nRows, sep='\t', delimiter=None,
-                                    names=self._units.keys(), index_col=False)
+                                    dtype=self._dtypes, names=self._units.keys(), index_col=False)
 
         # 31. August 2019
         # https://stackoverflow.com/questions/40950310/strip-trim-all-strings-of-a-dataframe
@@ -156,12 +157,13 @@ class SDDSParser:
         variable = ''
         unit = ''
         desc = ''
+        dtype = ''
         for line in f:
             self._nRows += 1
             if 'name=' in line:
                 variable = line[line.find('=')+1:-2]
             elif 'type' in line:
-                pass
+                dtype = line[line.find('=')+1:-2]
             elif 'units' in line:
                 unit = line[line.find('=')+1:-2]
             elif 'description' in line:
@@ -170,6 +172,15 @@ class SDDSParser:
                 break
         self._units[variable] = unit
         self._desc[variable] = desc
+        self._dtypes[variable] = self._get_type(dtype)
+
+    def _get_type(self, dtype):
+        if dtype == 'string':
+            return str
+        elif dtype == 'double':
+            return float
+        elif dtype == 'int' or dtype == 'long':
+            return int
 
     def _data(self, f):
         for line in f:
