@@ -27,15 +27,17 @@ class H5Plotter(ProbePlotter):
         yscale  (str)               'linear', 'log'
         xsci    (bool)              x-ticks in scientific notation
         ysci    (bool)              y-ticks in scientific notation
+        markersize                  size of markers in scatter plot
     
         Returns
         -------
         a matplotlib.pyplot handle
         """
         try:
-            step    = kwargs.pop('step', 0)
-            bins    = kwargs.pop('bins', [])
-            bunches = kwargs.pop('bunches', [])
+            step       = kwargs.pop('step', 0)
+            bins       = kwargs.pop('bins', False)
+            bunches    = kwargs.pop('bunches', [])
+            markersize = kwargs.pop('markersize', 1)
             
             plt.xscale(kwargs.pop('yscale', 'linear'))
             plt.yscale(kwargs.pop('xscale', 'linear'))
@@ -51,26 +53,13 @@ class H5Plotter(ProbePlotter):
             
             if bins:
                 bdata = self.ds.getData('bin', step=step)
-                
-                # get all bins not in plotted
-                bmin = np.min(bdata)
                 bmax = np.max(bdata)
-                # 27. March 2018
-                # https://stackoverflow.com/questions/6486450/python-compute-list-difference
-                skipped = set(range(bmin, bmax+1)) - set(bins)
+                nBins = bmax + 1
                 
-                nBins = bmax - bmin + 1
-                colors = np.linspace(0, 1, nBins + 1)
-                
-                for i, b in enumerate(bins):
-                    xbin = xdata[np.where(bdata == b)]
-                    ybin = ydata[np.where(bdata == b)]
-                    plt.scatter(xbin, ybin, marker='.', s=1, color=plt.cm.tab20(colors[i]))
-                # plot all skipped bins with same color
-                for s in skipped:
-                    xbin = xdata[np.where(bdata == s)]
-                    ybin = ydata[np.where(bdata == s)]
-                    plt.scatter(xbin, ybin, marker='.', s=1, color=plt.cm.tab20(colors[nBins]))
+                for b in range(nBins):
+                    xbin = xdata[bdata == b]
+                    ybin = ydata[bdata == b]
+                    plt.scatter(xbin, ybin, marker='.', s=markersize, **kwargs)
             elif bunches:
                 bdata = self.ds.getData('bunchNumber', step=step)
                 # get all bunches
@@ -85,25 +74,25 @@ class H5Plotter(ProbePlotter):
                 
                 # plot all skipped bunches with same color
                 for i, s in enumerate(skipped):
-                    xbin = xdata[np.where(bdata == s)]
-                    ybin = ydata[np.where(bdata == s)]
+                    xbin = xdata[bdata == s]
+                    ybin = ydata[bdata == s]
                     lab = None
                     if i == 0:
                         lab = 'others'
-                    plt.scatter(xbin, ybin, marker='.', s=1,
+                    plt.scatter(xbin, ybin, marker='.', s=markersize,
                                 color=plt.cm.tab20(colors[nBunches]),
-                                label=lab)
+                                label=lab, **kwargs)
                 for i, b in enumerate(bunches):
-                    xbin = xdata[np.where(bdata == b)]
-                    ybin = ydata[np.where(bdata == b)]
+                    xbin = xdata[bdata == b]
+                    ybin = ydata[bdata == b]
                     plt.scatter(xbin, ybin, marker='.',
-                                s=1, color=plt.cm.tab20(colors[i]),
-                                label='bunch ' + str(i))
+                                s=markersize, color=plt.cm.tab20(colors[i]),
+                                label='bunch ' + str(i), **kwargs)
                 plt.legend(loc = 'upper center',
                         ncol=4, labelspacing=0.5,
                         bbox_to_anchor=(0.5, 1.1, 0.0, 0.0))
             else:
-                plt.scatter(xdata, ydata, marker='.', s=1)
+                plt.scatter(xdata, ydata, marker='.', s=markersize, **kwargs)
         
             xunit  = self.ds.getUnit(xvar)
             yunit  = self.ds.getUnit(yvar)
