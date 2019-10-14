@@ -28,15 +28,17 @@ class H5Plotter(ProbePlotter):
         yscale  (str)               'linear', 'log'
         xsci    (bool)              x-ticks in scientific notation
         ysci    (bool)              y-ticks in scientific notation
+        markersize                  size of markers in scatter plot
     
         Returns
         -------
         a matplotlib.pyplot handle
         """
         try:
-            step    = kwargs.pop('step', 0)
-            bins    = kwargs.pop('bins', [])
-            bunches = kwargs.pop('bunches', [])
+            step       = kwargs.pop('step', 0)
+            bins       = kwargs.pop('bins', False)
+            bunches    = kwargs.pop('bunches', [])
+            markersize = kwargs.pop('markersize', 1)
             
             plt.xscale(kwargs.pop('yscale', 'linear'))
             plt.yscale(kwargs.pop('xscale', 'linear'))
@@ -63,15 +65,10 @@ class H5Plotter(ProbePlotter):
                 nBins = bmax - bmin + 1
                 colors = np.linspace(0, 1, nBins + 1)
                 
-                for i, b in enumerate(bins):
+                for b in range(nBins):
                     xbin = self._select(xdata, bdata, b, step)
                     ybin = self._select(ydata, bdata, b, step)
-                    plt.scatter(xbin, ybin, marker='.', s=1, color=plt.cm.tab20(colors[i]))
-                # plot all skipped bins with same color
-                for s in skipped:
-                    xbin = self._select(xdata, bdata, s, step)
-                    ybin = self._select(ydata, bdata, s, step)
-                    plt.scatter(xbin, ybin, marker='.', s=1, color=plt.cm.tab20(colors[nBins]))
+                    plt.scatter(xbin, ybin, marker='.', s=markersize, **kwargs)
             elif bunches:
                 bdata = self.ds.getData('bunchNumber', step=step)
                 # get all bunches
@@ -91,20 +88,20 @@ class H5Plotter(ProbePlotter):
                     lab = None
                     if i == 0:
                         lab = 'others'
-                    plt.scatter(xbin, ybin, marker='.', s=1,
+                    plt.scatter(xbin, ybin, marker='.', s=markersize,
                                 color=plt.cm.tab20(colors[nBunches]),
-                                label=lab)
+                                label=lab, **kwargs)
                 for i, b in enumerate(bunches):
                     xbin = self._select(xdata, bdata, b, step)
                     ybin = self._select(ydata, bdata, b, step)
                     plt.scatter(xbin, ybin, marker='.',
-                                s=1, color=plt.cm.tab20(colors[i]),
-                                label='bunch ' + str(i))
+                                s=markersize, color=plt.cm.tab20(colors[i]),
+                                label='bunch ' + str(i), **kwargs)
                 plt.legend(loc = 'upper center',
                         ncol=4, labelspacing=0.5,
                         bbox_to_anchor=(0.5, 1.1, 0.0, 0.0))
             else:
-                plt.scatter(xdata, ydata, marker='.', s=1)
+                plt.scatter(xdata, ydata, marker='.', s=markersize, **kwargs)
         
             xunit  = self.ds.getUnit(xvar)
             yunit  = self.ds.getUnit(yvar)

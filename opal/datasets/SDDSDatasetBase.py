@@ -147,6 +147,38 @@ class SDDSDatasetBase(DatasetBase):
         return self._parser.dataframe
 
 
+    def getRow(self, var, val):
+        """
+        Obtain a row of a dataset
+
+        Parameters
+        ----------
+        var         variable name
+        val         value of given variable
+        """
+        try:
+            sddsvar = var
+
+            if var in self._variable_mapper:
+                sddsvar = self._variable_mapper[var]
+
+            if not sddsvar in self._parser.getVariables():
+                raise RuntimeError("The variable '" + var + "' is not in dataset.")
+
+            df = self._parser.dataframe
+            if isinstance(val, str):
+                return df[df[sddsvar] == val]
+            else:
+                # 31. August 2019
+                # https://stackoverflow.com/questions/52587436/find-row-closest-value-to-input
+                idx = df[sddsvar].sub(val).abs().idxmin()
+                return df.loc[[idx]]
+
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return []
+
+
     def __str__(self):
         variables = sorted(self._parser.getVariables())
         nvar = len(variables)

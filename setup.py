@@ -40,6 +40,6 @@ if __name__ == "__main__":
         #dependency_links=['https://gitlab.psi.ch/OPAL/pyOPALTools/tags/test-1.0.0'],
         zip_safe=False,
         python_requires='>=3.0',
-        
+        package_data={'opal.utilities': ['log.yaml']},
         url="https://gitlab.psi.ch/OPAL/pyOPALTools",
     )
