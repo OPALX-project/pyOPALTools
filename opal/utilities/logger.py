@@ -1,6 +1,12 @@
 import logging
 import logging.config
-import yaml
+
+has_yaml = True
+try:
+    import yaml
+except:
+    has_yaml = False
+
 import os
 
 
@@ -22,7 +28,7 @@ def find_config_file():
 
 path, found = find_config_file()
 
-if found:
+if found and has_yaml:
     # 22. March 2019
     # https://realpython.com/python-logging/
     with open(path, 'r') as f:
