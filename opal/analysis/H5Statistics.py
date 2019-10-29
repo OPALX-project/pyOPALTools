@@ -49,6 +49,9 @@ class H5Statistics(Statistics):
         turn    = kwargs.get('turn', None)
         bunch   = kwargs.get('bunch', -1)
 
+        if step < 0:
+            step = self.ds.size - 1
+
         data = self.ds.getData(var, step=step)
         data = self._selectBunch(data, bunch, step)
 
