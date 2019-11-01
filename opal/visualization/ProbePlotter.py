@@ -51,8 +51,11 @@ class ProbePlotter(BasePlotter):
                 plt.plot(radius, bincount, **kwargs)
                 plt.xlabel('radius [' + self.ds.getUnit('min') + ']')
             elif self.ds.filetype == filetype.H5:
-                x2 = self.ds.getData('x')**2
-                y2 = self.ds.getData('y')**2
+                x2 = np.array([])
+                y2 = np.array([])
+                for s in range(ds.size):
+                    x2 = np.append(x2, self.ds.getData('x', step=s)**2
+                    y2 = np.append(y2, self.ds.getData('y', step=s)**2
 
                 plt.hist(np.sqrt(x2 + y2), **kwargs)
                 plt.xlabel('radius [' + self.ds.getUnit('x') + ']')
