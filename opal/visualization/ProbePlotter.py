@@ -53,7 +53,7 @@ class ProbePlotter(BasePlotter):
             elif self.ds.filetype == filetype.H5:
                 x2 = np.array([])
                 y2 = np.array([])
-                for s in range(ds.size):
+                for s in range(self.ds.size):
                     x2 = np.append(x2, self.ds.getData('x', step=s))**2
                     y2 = np.append(y2, self.ds.getData('y', step=s))**2
 
