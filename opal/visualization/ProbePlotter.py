@@ -51,13 +51,13 @@ class ProbePlotter(BasePlotter):
                 plt.plot(radius, bincount, **kwargs)
                 plt.xlabel('radius [' + self.ds.getUnit('min') + ']')
             elif self.ds.filetype == filetype.H5:
-                x2 = np.array([])
-                y2 = np.array([])
+                x = np.array([])
+                y = np.array([])
                 for s in range(self.ds.size):
-                    x2 = np.append(x2, self.ds.getData('x', step=s))**2
-                    y2 = np.append(y2, self.ds.getData('y', step=s))**2
+                    x = np.append(x, self.ds.getData('x', step=s))
+                    y = np.append(y, self.ds.getData('y', step=s))
 
-                plt.hist(np.sqrt(x2 + y2), **kwargs)
+                plt.hist(np.sqrt(x**2 + y**2), **kwargs)
                 plt.xlabel('radius [' + self.ds.getUnit('x') + ']')
 
                 if kwargs.pop('density', False):
