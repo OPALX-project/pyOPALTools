@@ -57,7 +57,7 @@ class ProbePlotter(BasePlotter):
                     x = np.append(x, self.ds.getData('x', step=s))
                     y = np.append(y, self.ds.getData('y', step=s))
 
-                plt.hist(np.sqrt(x**2 + y**2), **kwargs)
+                plt.hist(np.hypot(x, y), **kwargs)
                 plt.xlabel('radius [' + self.ds.getUnit('x') + ']')
 
                 if kwargs.pop('density', False):
