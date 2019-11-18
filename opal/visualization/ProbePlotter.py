@@ -54,8 +54,8 @@ class ProbePlotter(BasePlotter):
                 x = []
                 y = []
                 for s in range(self.ds.size):
-                    x.append(self.ds.getData('x', step=s))
-                    y.append(self.ds.getData('y', step=s))
+                    x.extend(self.ds.getData('x', step=s))
+                    y.extend(self.ds.getData('y', step=s))
 
                 plt.hist(np.hypot(x, y), **kwargs)
                 plt.xlabel('radius [' + self.ds.getUnit('x') + ']')
