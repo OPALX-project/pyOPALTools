@@ -22,12 +22,19 @@ class SDDSParser:
         # parse header
         if version >= 10900:
             self._parseHeader1_9(filename)
+            self._separator = '\s+'
         else:
             self._parseHeader1_6(filename)
+            # prevents a bug(?) pd.read_csv
+            # \s+\t should be equivalent but force the python engine
+            # it seems the 'c' engine has problems with trailing whitespace in the header strings
+            # and returns an empty dataset
+            self._separator = '\s+\t'
 
         # read data
-        self._dataset = pd.read_csv(filename, skiprows=self._nRows, sep='\s+',
-                                    names=self._units.keys(), index_col=False)
+        self._dataset = pd.read_csv(filename, skiprows=self._nRows,
+                                    sep=self._separator,
+                                    names=list(self._units.keys()), index_col=False)
 
     def _checkVersion(self, filename):
         
