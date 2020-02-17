@@ -71,22 +71,20 @@ class SDDSParser:
                 if 'SDDS' in line:
                     continue
                 elif 'column' in line:
-                    self._nRows += 1
                     obj = re.match(column_pattern, line)
                     variable = obj.group(1)
                     self._units[variable] = obj.group(3)
                     self._desc[variable] = self.__removeNumber(obj.group(4))
                 elif 'parameter' in line:
-                    self._nRows += 1
                     self._nParameters += 1
                 elif 'description' in line:
-                    self._nRows += 1
+                    continue
                 elif 'data' in line:
-                    self._nRows += 1
+                    continue
                 else:
-                    self._nRows += self._nParameters - 1
+                    self._nRows += 1 # there is one more line (with git revision)
                     break
-    
+
     
     def _parseHeader1_9(self, filename):
         with open(filename) as f:
