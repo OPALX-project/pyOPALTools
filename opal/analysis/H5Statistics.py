@@ -44,7 +44,7 @@ class H5Statistics(Statistics):
 
         return data
 
-    def _selectData(self, var, **kwargs):
+    def selectData(self, var, **kwargs):
         step    = kwargs.get('step', 0)
         turn    = kwargs.get('turn', None)
         bunch   = kwargs.get('bunch', -1)
@@ -84,7 +84,7 @@ class H5Statistics(Statistics):
         -----
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html#scipy.stats.moment
         """
-        data = self._selectData(var, **kwargs)
+        data = self.selectData(var, **kwargs)
         
         return sc.stats.moment(data, axis=0, moment=k)
 
@@ -104,8 +104,8 @@ class H5Statistics(Statistics):
         bunch   (int)           for which to compute (only if 'turn'
                                 not given (default: -1 --> all particles)
         """
-        x = self._selectData('x', **kwargs)
-        y = self._selectData('y', **kwargs)
+        x = self.selectData('x', **kwargs)
+        y = self.selectData('y', **kwargs)
 
         r  = eval_radius(x, y)
 
@@ -127,7 +127,7 @@ class H5Statistics(Statistics):
         bunch   (int)           for which to compute (only if 'turn'
                                 not given (default: -1 --> all particles)
         """
-        data = self._selectData(var, **kwargs)
+        data = self.selectData(var, **kwargs)
             
         return np.mean(data, axis=0)
 
@@ -150,7 +150,7 @@ class H5Statistics(Statistics):
         bunch   (int)           for which to compute (only if 'turn'
                                 not given (default: -1 --> all particles)
         """
-        data = self._selectData(var, **kwargs)
+        data = self.selectData(var, **kwargs)
         
         return sc.stats.skew(data, axis=0)
 
@@ -177,7 +177,7 @@ class H5Statistics(Statistics):
         bunch   (int)           for which to compute (only if 'turn'
                                 not given (default: -1 --> all particles)
         """
-        data = self._selectData(var, **kwargs)
+        data = self.selectData(var, **kwargs)
         
         return sc.stats.kurtosis(data, axis=0, fisher=True)
 
@@ -204,7 +204,7 @@ class H5Statistics(Statistics):
         -------
         kernel density estimator of scipy.
         """
-        data = self._selectData(var, **kwargs)
+        data = self.selectData(var, **kwargs)
 
         return sc.stats.gaussian_kde(data)
 
@@ -235,7 +235,7 @@ class H5Statistics(Statistics):
         """
         density = kwargs.pop('density', True)
 
-        data = self._selectData(var, **kwargs)
+        data = self.selectData(var, **kwargs)
 
         return np.histogram(data, bins=bins, density=density)
 
@@ -265,7 +265,7 @@ class H5Statistics(Statistics):
         BEAM HALO IN PROTON LINAC BEAMS,
         XX International Linac Conference, Monterey, California
         """
-        data = self._selectData(var, **kwargs)
+        data = self.selectData(var, **kwargs)
 
         m4 = sc.stats.moment(data, moment=4)
         m2 = sc.stats.moment(data, moment=2)
@@ -297,7 +297,7 @@ class H5Statistics(Statistics):
         BEAM HALO IN PROTON LINAC BEAMS,
         XX International Linac Conference, Monterey, California
         """
-        data = self._selectData(var, **kwargs)
+        data = self.selectData(var, **kwargs)
 
         m4 = sc.stats.moment(data, moment=4)
         m2 = sc.stats.moment(data, moment=2)
@@ -330,8 +330,8 @@ class H5Statistics(Statistics):
         BEAM HALO IN PROTON LINAC BEAMS,
         XX International Linac Conference, Monterey, California
         """
-        x = self._selectData('x', **kwargs)
-        y = self._selectData('y', **kwargs)
+        x = self.selectData('x', **kwargs)
+        y = self.selectData('y', **kwargs)
 
         r  = eval_radius(x, y)
 
@@ -369,8 +369,8 @@ class H5Statistics(Statistics):
         ---------
         https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
         """
-        q = self._selectData(var, **kwargs)
-        p = self._selectData('p' + var, **kwargs)
+        q = self.selectData(var, **kwargs)
+        p = self.selectData('p' + var, **kwargs)
 
         return self._halo_2d_ellipsoidal_beam(q, p)
 
@@ -401,11 +401,11 @@ class H5Statistics(Statistics):
         ---------
         https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
         """
-        x = self._selectData('x', **kwargs)
-        px = self._selectData('px', **kwargs)
+        x = self.selectData('x', **kwargs)
+        px = self.selectData('px', **kwargs)
 
-        y = self._selectData('y', **kwargs)
-        py = self._selectData('py', **kwargs)
+        y = self.selectData('y', **kwargs)
+        py = self.selectData('py', **kwargs)
 
         r  = eval_radius(x, y)
 
@@ -482,8 +482,8 @@ class H5Statistics(Statistics):
         -------
         the projected emittance
         """
-        coords  = self._selectData(dim, **kwargs)
-        momenta = self._selectData('p' + dim, **kwargs)
+        coords  = self.selectData(dim, **kwargs)
+        momenta = self.selectData('p' + dim, **kwargs)
 
         c2 = sc.stats.moment(coords, moment=2)
         m2 = sc.stats.moment(momenta, moment=2)
@@ -520,11 +520,11 @@ class H5Statistics(Statistics):
         -------
         the projected emittance
         """
-        x = self._selectData('x', **kwargs)
-        px = self._selectData('px', **kwargs)
+        x = self.selectData('x', **kwargs)
+        px = self.selectData('px', **kwargs)
 
-        y = self._selectData('y', **kwargs)
-        py = self._selectData('py', **kwargs)
+        y = self.selectData('y', **kwargs)
+        py = self.selectData('py', **kwargs)
 
         r  = eval_radius(x, y)
 

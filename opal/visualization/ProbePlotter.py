@@ -1,5 +1,6 @@
 from .BasePlotter import *
 import numpy as np
+from opal.analysis.H5Statistics import H5Statistics
 
 
 class ProbePlotter(BasePlotter):
@@ -53,8 +54,9 @@ class ProbePlotter(BasePlotter):
             elif self.ds.filetype == filetype.H5:
                 x = []
                 y = []
+                bunch = kwargs.pop('bunch', -1)
                 for s in range(self.ds.size):
-                    x.extend(self.ds.getData('x', step=s))
+                    x.extend(H5Statistics.selectData('x', step=s, bunch=bunch))
                     y.extend(self.ds.getData('y', step=s))
 
                 plt.hist(np.hypot(x, y), **kwargs)
