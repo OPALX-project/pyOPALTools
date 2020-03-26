@@ -168,7 +168,7 @@ class TimingParser:
         main_count = 0
         
         for line in reversed(open(f).readlines()):
-            if "Timings{" in line:
+            if "Timings" in line:
                 lines.insert(0, line)
         
         core_pattern = '.*> Timing results for (.*) nodes:'
