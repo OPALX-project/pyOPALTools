@@ -1,7 +1,6 @@
 from .BasePlotter import *
 import numpy as np
 
-
 class ProbePlotter(BasePlotter):
     
     def __init__(self):
@@ -53,9 +52,10 @@ class ProbePlotter(BasePlotter):
             elif self.ds.filetype == filetype.H5:
                 x = []
                 y = []
+                bunch = kwargs.pop('bunch', -1)
                 for s in range(self.ds.size):
-                    x.extend(self.ds.getData('x', step=s))
-                    y.extend(self.ds.getData('y', step=s))
+                    x.extend(self.ds.selectData(var='x', step=s, bunch=bunch))
+                    y.extend(self.ds.selectData(var='y', step=s, bunch=bunch))
 
                 plt.hist(np.hypot(x, y), **kwargs)
                 plt.xlabel('radius [' + self.ds.getUnit('x') + ']')
