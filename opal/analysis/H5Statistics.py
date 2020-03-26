@@ -45,6 +45,21 @@ class H5Statistics(Statistics):
         return data
 
     def selectData(self, var, **kwargs):
+        """
+        Given a H5 dataset, select a subset using
+        the the attributes step (or turn) and bunch.
+
+        Parameters
+        -----------
+        data    (array)         the data where to extract
+        bunch   (int)           to select
+        step    (int)           step in H5 file
+        turn    (int)           of dataset (probe H5 files only)
+
+        Returns
+        -------
+        data array
+        """
         step    = kwargs.get('step', 0)
         turn    = kwargs.get('turn', None)
         bunch   = kwargs.get('bunch', -1)
