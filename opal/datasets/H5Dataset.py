@@ -10,14 +10,14 @@ from opal.analysis.H5Statistics import H5Statistics
 from opal.utilities.logger import opal_logger
 import numpy as np
 
-import pandas as pd 
+import pandas as pd
 
 class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
-    
+
     def __init__(self, directory, fname):
         """
         Constructor.
-        
+
         Members
         -------
         __parser            (H5Parser)      actual data holder
@@ -32,10 +32,10 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
                                             vector type data
         """
         super(H5Dataset, self).__init__(directory, fname)
-        
+
         self.__parser = H5Parser()
         self.__parser.parse(self.filename)
-        
+
         self.__variable_mapper = {
             'rms_x':        'RMSX',
             'rms_y':        'RMSX',
@@ -48,7 +48,7 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
             's':            'SPOS',
             'flavour':      'OPAL_flavour'
         }
-        
+
         self.__label_mapper  = {
             'rms_x':    r'$\sigma_x$',
             'rms_y':    r'$\sigma_y$',
@@ -57,7 +57,7 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
             'rms_py':   r'$\sigma_{py}$',
             'rms_pz':   r'$\sigma_{pz}$'
         }
-        
+
         self.__unit_label_mapper = [
             'rms_x',
             'rms_y',
@@ -67,42 +67,49 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
             'z',
             'time'
         ]
-        
+
         self.__direction = {
             'x':    0,
             'y':    1,
             'z':    2
         }
-    
-    
+
+
+    def __del__(self):
+        """
+        Destructor. Closes open file.
+        """
+        self.__parser.close()
+
+
     def getData(self, var, **kwargs):
         """
         Obtain data of a variable
-        
+
         Parameters
         ----------
         var     (str)   variable name
-        
+
         Returns
         -------
         an array of the data (n, dim)
         """
         try:
             step = kwargs.get('step', 0)
-        
+
             # take last step if negative
             if step < 0:
                 step = self.__parser.getNSteps() - 1
-        
+
             h5var = var
             if var in self.__variable_mapper:
                 h5var = self.__variable_mapper[var]
-        
+
             if h5var in self.__parser.getStepDatasets(step):
                 return np.array(self.__parser.getStepDataset(h5var, step))
             elif h5var in self.__parser.getStepAttributes(step):
                 data = []
-            
+
                 # if vector type we need to get appropriate direction
                 if '_' in var:
                     dim = 0
@@ -111,14 +118,14 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
                             dim = self.__direction[key]
                         elif '_p' + key in var:
                             dim = self.__direction[key]
-                    
+
                     for i in range(self.__parser.getNSteps()):
                         data.append(self.__parser.getStepAttribute(h5var, i)[dim])
                 else:
                     for i in range(self.__parser.getNSteps()):
-                        
+
                         data.append(self.__parser.getStepAttribute(h5var, i))
-                        
+
                         # get strings
                         if isinstance(data[-1], bytes):
                             data[-1] = data[-1].decode('utf-8')
@@ -135,16 +142,16 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
         Check if a variable is contained as a dataset
         """
         return (var in self.__parser.getStepDatasets(step))
-    
+
 
     def getLabel(self, var):
         """
         Obtain label for plotting.
-        
+
         Parameters
         ----------
         var     (str)   variable name
-        
+
         Returns
         -------
         appropriate name plotting ready
@@ -152,31 +159,31 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
         if var in self.__label_mapper:
             var = self.__label_mapper[var]
         return var
-    
+
     def getUnit(self, var):
         """
         Obtain unit for plotting.
-        
+
         Parameters
         ----------
         var     (str)   variable name
-        
+
         Returns
         -------
-        appropriate unit in math mode for plotting 
+        appropriate unit in math mode for plotting
         """
         try:
             h5var = var
-            
+
             if var in self.__variable_mapper:
                 h5var = self.__variable_mapper[var]
-            
+
             unit = self.__parser.getGlobalAttribute(h5var + 'Unit')
             unit = unit.replace('#', '\\')
-            
+
             if var in self.__unit_label_mapper:
                 unit = r'\mathrm{' + unit + '}'
-            
+
             unit = r'$' + unit + '$'
             return unit
         except Exception as ex:
