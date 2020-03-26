@@ -55,8 +55,9 @@ class ProbePlotter(BasePlotter):
                 x = []
                 y = []
                 bunch = kwargs.pop('bunch', -1)
+                h5stat = H5Statistics()
                 for s in range(self.ds.size):
-                    x.extend(H5Statistics.selectData('x', step=s, bunch=bunch))
+                    x.extend(h5stat.selectData(var='x', step=s, bunch=bunch))
                     y.extend(self.ds.getData('y', step=s))
 
                 plt.hist(np.hypot(x, y), **kwargs)
