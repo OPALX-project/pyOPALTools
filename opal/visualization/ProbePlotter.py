@@ -1,7 +1,6 @@
 from .BasePlotter import *
 import numpy as np
 
-
 class ProbePlotter(BasePlotter):
     
     def __init__(self):
@@ -51,10 +50,14 @@ class ProbePlotter(BasePlotter):
                 plt.plot(radius, bincount, **kwargs)
                 plt.xlabel('radius [' + self.ds.getUnit('min') + ']')
             elif self.ds.filetype == filetype.H5:
-                x2 = self.ds.getData('x')**2
-                y2 = self.ds.getData('y')**2
+                x = []
+                y = []
+                bunch = kwargs.pop('bunch', -1)
+                for s in range(self.ds.size):
+                    x.extend(self.ds.selectData(var='x', step=s, bunch=bunch))
+                    y.extend(self.ds.selectData(var='y', step=s, bunch=bunch))
 
-                plt.hist(np.sqrt(x2 + y2), **kwargs)
+                plt.hist(np.hypot(x, y), **kwargs)
                 plt.xlabel('radius [' + self.ds.getUnit('x') + ']')
 
                 if kwargs.pop('density', False):
