@@ -22,6 +22,9 @@ class ProbePlotter(BasePlotter):
                                 (default: False)
         kwargs                  in case of H5: all arguments
                                 of matplotlib.pyplot.hist
+        bunch   (int)           bunch number (default: 0)
+        begin   (int)           start step (default: 0)
+        end     (int)           end step (default: ds.size)
         
         Returns
         -------
@@ -53,7 +56,9 @@ class ProbePlotter(BasePlotter):
                 x = []
                 y = []
                 bunch = kwargs.pop('bunch', -1)
-                for s in range(self.ds.size):
+                begin = kwargs.pop('begin', 0)
+                end   = kwargs.pop('end', self.ds.size)
+                for s in range(begin, end):
                     x.extend(self.ds.selectData(var='x', step=s, bunch=bunch))
                     y.extend(self.ds.selectData(var='y', step=s, bunch=bunch))
 
