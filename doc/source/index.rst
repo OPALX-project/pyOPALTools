@@ -1,4 +1,4 @@
-pyOpalTools Documentation
+pyOPALTools Documentation
 =========================
 
 .. include:: modules.rst

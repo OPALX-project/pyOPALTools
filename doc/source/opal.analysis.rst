@@ -52,14 +52,6 @@ opal.analysis.cyclotron module
     :undoc-members:
     :show-inheritance:
 
-opal.analysis.impl\_beam module
--------------------------------
-
-.. automodule:: opal.analysis.impl_beam
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 opal.analysis.pareto\_fronts module
 -----------------------------------
 
