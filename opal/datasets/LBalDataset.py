@@ -5,16 +5,18 @@ from opal.datasets.SDDSDatasetBase import *
 from opal.visualization.ProfilingPlotter import ProfilingPlotter
 
 class LBalDataset(SDDSDatasetBase, ProfilingPlotter):
-    
+
     def __init__(self, directory, fname):
+        """
+        """
         vmapper = {
             'time':         't'
         }
-        
+
         umapper = [
             'time'
         ]
-        
+
         super(LBalDataset, self).__init__(directory, fname,
                                           variable_mapper=vmapper,
                                           unit_label_mapper=umapper,

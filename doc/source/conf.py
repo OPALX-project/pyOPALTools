@@ -17,7 +17,8 @@ import sys
 sys.path.insert(0, os.path.abspath('../..'))
 
 # Mock dependencies
-MOCK_MODULES = ['h5py',
+MOCK_MODULES = ['chaospy',
+                'h5py',
                 'matplotlib',
                 'matplotlib.cm',
                 'matplotlib.gridspec',
@@ -27,10 +28,17 @@ MOCK_MODULES = ['h5py',
                 'numpy',
                 'pandas',
                 'pylab',
-                'seaborn',
                 'scipy',
                 'scipy.interpolate',
+                'scipy.sparse',
+                'seaborn',
+                'sklearn',
+                'sklearn.base',
+                'sklearn.model_selection',
+                'sklearn.utils',
+                'sklearn.utils.validation',
                 'yt']
+
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = unittest.mock.Mock()
 
@@ -51,7 +59,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
-#    'sphinx.ext.napoleon' # For conversion from non-rst documentation
+    'sphinx.ext.napoleon' # For conversion from non-rst documentation
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -82,8 +90,15 @@ pygments_style = 'sphinx'
 autodoc_default_options = {
     'members': True,
     'undoc-members': True,
-    'show-inheritance': True
-#    'private-members': True,
-#    'special-members': True
-
+    'show-inheritance': True,
+    'private-members': True
 }
+
+# Don't skip __init__
+def skip(app, what, name, obj, would_skip, options):
+    if name == "__init__":
+        return False
+    return would_skip
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip)

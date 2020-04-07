@@ -9,112 +9,118 @@ import numpy as np
 from opal.utilities.logger import opal_logger
 
 class ProbeHistDataset(DatasetBase, ProbePlotter):
-    
+    """
+    Attributes
+    -------
+    __parser : HistogramParser
+        Actual data holder
+    __variable_mapper : dict
+        Map user input variable
+    __label_mapper : dict
+        Map user input variable
+    """
     def __init__(self, directory, fname):
-        """
-        Constructor.
-        
-        Members
-        -------
-        __parser            (HistogramParser)    actual data holder
-        __variable_mapper   (dict)          map user input variable
-        __label_mapper      (dict)          map user input variable
+        """Constructor.
         """
         super(ProbeHistDataset, self).__init__(directory, fname)
 
         self.__parser = HistogramParser()
         self.__parser.parse(self.filename)
-                
+
         self.__variable_mapper = {
             #'bincount':     'dataset',
             'radius':       'radii'
         }
-        
+
         self.__label_mapper  = {
             'bincount':     'bin count'
         }
-    
-    
+
+
     def getData(self, var, **kwargs):
-        """
-        Obtain the data of a variable
-        
+        """Obtain the data of a variable
+
         Parameters
         ----------
-        var     (str)   variable name
-        
+        var : str
+            Variable name
+
         Returns
         -------
-        an array of the data
+        array
+            Array of the data
         """
         try:
             peakvar = var
-        
+
             if var in self.__variable_mapper:
                 peakvar = self.__variable_mapper[var]
-        
+
             if not self.__parser.isVariable(peakvar):
                 raise ValueError("The variable '" + var + "' is not in dataset.")
-            
+
             return self.__parser.getDataOfVariable(peakvar)
         except Exception as ex:
             opal_logger.exception(ex)
             return []
-    
-    
+
+
     def getLabel(self, var):
         """
         Obtain label for plotting.
-        
+
         Parameters
         ----------
-        var     (str)   variable name
-        
+        var : str
+            Variable name
+
         Returns
         -------
-        appropriate name plotting ready
+        str
+            Appropriate name plotting ready
         """
         try:
             peakvar = var
-        
+
             if var in self.__variable_mapper:
                 peakvar = self.__variable_mapper[var]
-            
+
             if not self.__parser.isVariable(peakvar):
                 raise ValueError("The variable '" + var + "' is not in dataset.")
-            
+
             if var in self.__label_mapper:
                 var = self.__label_mapper[var]
-            
+
             return var
         except Exception as ex:
             opal_logger.exception(ex)
             return ''
-    
-    
+
+
     def getUnit(self, var):
-        """
-        Obtain unit for plotting.
-        
+        """Obtain unit for plotting.
+
         Parameters
         ----------
-        var     (str)   variable name
-        
+        var : str
+            Variable name
+
         Returns
         -------
-        appropriate unit in math mode for plotting 
+        str
+            Appropriate unit in math mode for plotting
         """
         try:
             peakvar = var
-            
+
             if var in self.__variable_mapper:
                 peakvar = self.__variable_mapper[var]
-            
+
             if not self.__parser.isVariable(peakvar):
                 raise ValueError("The variable '" + var + "' is not in dataset.")
-            
+
             unit = self.__parser.getUnitOfVariable(peakvar)
-            
+
             return unit
         except Exception as ex:
             opal_logger.exception(ex)

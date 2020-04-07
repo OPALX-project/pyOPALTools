@@ -1,37 +1,43 @@
 import numpy as np
 
 class OptimizerAnalysis:
-    
+
     def find_minimum(self, exclude = [], constraints = {}):
-        """
-        Find the invidual with minimum sum of all objectives
+        """Find the invidual with minimum sum of all objectives
         over all generations.
-        
+
         It is possible to exclude some objectives with
-        the list 'exclude'.
-        
+        the list `exclude`.
+
         It is possible to give constraints on objectives as
         a dictionary, e.g. { "DPEAK_1_16": 4.0 } means only
         individuals that have a "DPEAK_1_16" objective with
         a value <= 4.
-        
+
         Parameters
         ----------
-        exclude     ([])    objectives that should be excluded
-        constraints ({})    constraints on objectives
+        exclude : list, optional
+            Objectives that should be excluded
+        constraints: dict, optional
+            Constraints on objectives
 
         Returns
         -------
-        sum, generation, individual ID
+        float
+            Sum of objectives
+        int
+            Generation
+        int
+            Individual ID
         """
         gens = range(1, self.ds.num_generations + 1)
         objs = self.ds.objectives
-    
+
         in_objs = []
         for obj in objs:
             if not obj in exclude:
                 in_objs.append(obj)
-    
+
         m = 1e15
         ind = -1
         gen = -1
@@ -65,21 +71,23 @@ class OptimizerAnalysis:
 
 
     def find(self, function, opt=0):
-        """
-        Find the individual according to the given function in
+        """Find the individual according to the given function in
         the Pareto file.
 
         Parameters
         ----------
-        function        a function that takes all objectives
-                        of 2 individuals as values of 2 lists as argument and
-                        returns the better individual.
-                        The objectives are considered alphabetically ordered
-        opt             number of Pareto file
+        function : callable
+            A function that takes all objectives
+            of 2 individuals as values of 2 lists as argument and
+            returns the better individual.
+            The objectives are considered alphabetically ordered
+        opt : int, optional
+            Number of Pareto file
 
         Returns
         -------
-        the ID of best individual that fulfills the custom function.
+        int
+            The ID of best individual that fulfills the custom function.
         """
         ids = self.ds.individuals(gen=-1, opt=opt, pareto=True)
         objs = self.ds.objectives
@@ -103,18 +111,21 @@ class OptimizerAnalysis:
 
 
     def print_individual(self, ind, gen=1, opt=0, pareto=False):
-        """
-        Print the values of the design variables and objectives of
+        """Print the values of the design variables and objectives of
         an individual.
-        
+
         If pareto = True, gen is not considered.
-        
+
         Parameters
         ----------
-        ind     (int)   individual identity number
-        gen     (int)   generation, default: 1
-        opt     (int)   optimizer, default: 0
-        pareto  (bool)  load pareto file (default: False)
+        ind : int
+            Individual identity number
+        gen : int, optional
+            Generation, default: 1
+        opt : int, optional
+            Optimizer, default: 0
+        pareto : bool, optional
+            Load pareto file (default: False)
         """
         print ( "Design variables:" )
         dvars = self.ds.design_variables

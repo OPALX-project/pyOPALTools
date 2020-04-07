@@ -10,82 +10,92 @@ from string import digits
 from opal.utilities.logger import opal_logger
 
 class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
-    
+    """
+    Attributes
+    ----------
+    __parser : OptimizerParser
+        Actual data holder
+    __postfix : str
+        Substring of generation
+        filenames that is
+        identical to all files
+    _loaded_generation : int
+        Currently loaded generation
+    _loaded_optimizer : int
+        Currently loaded optimizer
+    _loadedGeneration : function
+        Load a generation file
+
+    """
     def __init__(self, directory, fname):
-        """
-        Constructor.
-        
+        """Constructor.
+
         Parameters
         ----------
-        directory           (str)                   directory name
-        fname               (str)                   generation file name
-        
-        Members
-        -------
-        __parser            (OptimizerParser)       actual data holder
-        __postfix           (str)                   substring of generation
-                                                    filenames that is
-                                                    identical to all files
-        _loaded_generation  (int)                   currently loaded generation
-        _loaded_optimizer   (int)                   currently loaded optimizer
-        _loadedGeneration   (function)              load a generation file
+        directory : str
+            Directory name
+        fname : str
+            Generation file name
         """
         super(OptimizerDataset, self).__init__(directory, fname)
-        
+
         self.__parser = OptimizerParser(directory)
 
         self.__postfix = '_' + str.split(fname, "_", 2)[1] + '_'
-        
+
         self._loaded_generation = -1
         self._loaded_optimizer = -1
-        
+
         self._loadGeneration( int( str.split(fname, "_", 1)[0] ) )
-        
-    
-    
+
+
+
     def getData(self, var, **kwargs):
-        """
-        Obtain the data of a variable or all data
-        of an individual. An individual is returned
+        """Obtain the data of a variable or all data of an individual.
+
+        An individual is returned
         when setting 'ind' > 0. In that case the
         'var' parameter is not considered.
-        
+
         Parameters
         ----------
-        var     (str)   a design variable
-                        or objective
-        
-        Optionals
-        ---------
-        ind     (int)   individual identity number
-        gen     (int)   generation, default: 1
-        opt     (int)   optimizer, default: 0
-        all     (bool)  get all info of an individual
-                        (i.e. objectives, design variables)
-        pareto  (bool)  load pareto file (default: False)        
+        var : str
+            A design variable or objective
+        ind : int, optional
+            Individual identity number, default: -1, which means all
+        gen: int, optional
+            Generation, default: 1
+        opt : int, optional
+            Optimizer, default: 0
+        all : bool, optional
+            Get all info of an individual
+            (i.e. objectives, design variables) default : True
+        pareto :bool, optional
+            Load pareto file (default: False)
 
         Returns
         -------
-        an array of the data
+        array
+            Array of the data
         """
         try:
             gen    = kwargs.get('gen', 1)
             opt    = kwargs.get('opt', 0)
             pareto = kwargs.get('pareto', False)
-            
+
             al = kwargs.get('all', True)
-            
+
             self._loadGeneration(gen, opt, pareto)
-            
+
             ind = kwargs.get('ind', -1)
-            
+
             if not ind == -1 and al:
                 return self.__parser.getIndividualWithID(ind)
-        
+
             if not var in self.objectives and \
                 not var in self.design_variables:
                     raise ValueError("The variable '" + var + "' is not in dataset.")
-            
+
             if ind == -1:
                 if var in self.objectives:
                     idx = self.objectives.index(var)
@@ -108,45 +118,44 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
 
 
     def getLabel(self, var):
-        """
-        Obtain label for plotting.
-        
+        """Obtain label for plotting.
+
         Parameters
         ----------
-        var     (str)   variable name
-        
+        var : str
+            Variable name
+
         Returns
         -------
-        appropriate name plotting ready
+        str
+            Appropriate name plotting ready
         """
         try:
             if not var in self.objectives and \
                 not var in self.design_variables:
                 raise ValueError("The variable '" + var + "' is not in dataset.")
-            
+
             return var
         except Exception as ex:
             opal_logger.exception(ex)
             return ''
 
-    
+
     def getUnit(self, var):
-        """
-        Obtain unit for plotting.
-        
-        Note: The optimizer does not yet write the units
-              of each variable to the files. This function
-              raises an error.
-        
+        """Obtain unit for plotting.
+
         Parameters
         ----------
-        var     (str)   variable name
-        
-        Returns
-        -------
-        None
+        var : str
+            Variable name
+
+        Notes
+        -----
+        The optimizer does not yet write the units
+        of each variable to the files. This function
+        raises an error.
         """
-        
+
         #FIXME
         try:
             raise RuntimeError("The optimizer does not yet provide units.")
@@ -154,35 +163,36 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
             opal_logger.exception(ex)
 
         return ''
-    
-    
+
+
     def getGenerationBasename(self, gen, opt=0):
-        """
-        Obtain the basename of a specific
-        generation.
-        
+        """Obtain the basename of a specific generation.
+
         Parameters
         ----------
-        gen         (int)   generation
-        opt         (int)   optimizer number (default: 0)
-        
+        gen : int
+            Generation
+        opt : int, optional
+            Optimizer number (default: 0)
+
         Returns
         -------
-        a basename of the selected generation
+        str
+            A basename of the selected generation
         """
         try:
             maxgen = self.__parser.getNumOfGenerations()
-            
+
             if gen < 1 or gen > maxgen:
                 raise ValueError('Generation number negative or ' +
                                  'greater than ' + str(maxgen) + '.')
-        
+
             genfile = str(gen) + self.__postfix + str(opt) + '.json'
             filename = os.path.join(self._directory, genfile)
-        
+
             if not os.path.isfile(filename):
                 raise IOError("File '" + filename + "' does not exist.")
-        
+
             return genfile
         except Exception as ex:
             opal_logger.exception(ex)
@@ -192,67 +202,63 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
     @property
     def num_optimizers(self):
         return self.__parser.num_optimizers
-    
+
     @property
     def objectives(self):
         """
         Obtain objective names
         """
         return self.__parser.getObjectives()
-    
+
     @property
     def design_variables(self):
-        """
-        Obtain design variable names
+        """Obtain design variable names
         """
         return self.__parser.getDesignVariables()
-    
-    
+
+
     @property
     def num_generations(self):
-        """
-        Obtain the number of generations
+        """Obtain the number of generations
         """
         return self.__parser.getNumOfGenerations()
-    
-    
+
+
     @property
     def bounds(self):
-        """
-        Obtain design variable upper and lower bounds
+        """Obtain design variable upper and lower bounds
         """
         return self.__parser.getBounds()
-    
-    
+
+
     def individuals(self, gen, opt=0, pareto=False):
-        """
-        Obtain the ID of every individual of the
-        currently loaded generation file
-        
+        """Obtain the ID of every individual of the currently loaded generation file
+
         Parameters
         ----------
-        gen         (int)   generation
-        opt         (int)   optimizer (default: 0)
-        pareto      (bool)  load pareto file (default: False)
+        gen : int
+            Generation
+        opt : int, optional
+            Optimizer (default: 0)
+        pareto : bool, optional
+            Load pareto file (default: False)
         """
         self._loadGeneration(gen, opt, pareto)
-        
+
         return self.__parser.getIDs()
-    
-    
+
+
     def _loadGeneration(self, gen, opt=0, pareto=False):
-        """
-        Load data of generation into memory.
-        
+        """Load data of generation into memory.
+
         Parameters
         ----------
-        gen         (int)   generation
-        opt         (int)   optimizer (default: 0)
-        pareto      (bool)  load pareto file (default: False)
-        
-        Returns
-        -------
-        None
+        gen : int
+            Generation
+        opt : int, optional
+            Optimizer (default: 0)
+        pareto : bool, optional
+            Load pareto file (default: False)
         """
         if pareto:
             self.__parser.readGeneration(-1, opt, pareto)
@@ -261,11 +267,10 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
             self.__parser.readGeneration(gen, opt)
             self._loaded_generation = gen
             self._loaded_optimizer = opt
-    
+
     @property
     def size(self):
-        """
-        Returns the number of individuals
+        """Returns the number of individuals
         """
         return len(self.individuals(1))
 

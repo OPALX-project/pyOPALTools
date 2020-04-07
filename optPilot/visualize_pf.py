@@ -27,39 +27,39 @@ nameToColumnMap = {}
 def readJSONData(filename):
     dirname = os.path.dirname(filename)
     optjson = jsonreader(dirname + '/')
-    
+
     # get the generation from the filename
-    basename = os.path.basename(filename)    
+    basename = os.path.basename(filename)
     generation = int( str.split(basename, "_", 1)[0] )
     optjson.readGeneration(generation)
-    
+
     #
     # make plain format
     #
-    
+
     # build name to column map
     dvars = optjson.getDesignVariables()
     objs  = optjson.getObjectives()
     idname   = "ID"
-    
+
     idx = 0
     for name in dvars:
         nameToColumnMap[name] = idx
         idx += 1
-    
+
     for name in objs:
         nameToColumnMap[name] = idx
         idx += 1
-    
+
     nameToColumnMap[idname] = idx
-    
+
     # build data matrix by stacking columns [dvars objsval ids]
     dvarval = optjson.getAllInput()
     objsval = optjson.getAllOutput()
     ids     = optjson.getIDs()
-    
+
     data = np.column_stack((dvarval, objsval, ids))
-    
+
     return data
 
 
@@ -74,9 +74,9 @@ def readDAT_0(filename):
         col_name = improveName(col_name)
         nameToColumnMap[col_name] = col_idx
         col_idx += 1
-    
+
     data = np.loadtxt(filename, skiprows=1)
-    
+
     return data
 
 
@@ -192,7 +192,7 @@ def plot(data, xlim, ylim, num, prefix, selected_obj, show_single, plotAll):
     cbar.set_ticks([clow, cmiddle, chigh])
     cbarlabel_text = selected_obj[2]
     cbar.set_label(cbarlabel_text, labelpad=10)
-    
+
 
     if show_single:
         fig.canvas.mpl_connect('pick_event', onpick)
@@ -271,11 +271,11 @@ def main(argv):
     filename_postfix = "results.json"
     generation = -1
     plotAll = False
-    
+
     try:
         ## Parse input arguments
         parser = argparse.ArgumentParser()
-        
+
         parser.add_argument("-o",
                             "--objectives",
                             dest="objectives",
@@ -283,35 +283,35 @@ def main(argv):
                             default='',
                             help="specify 3 objectives you want to visualize (check header of "
                             "result file for available objectives), e.g. --objectives=%OBJ1,%OBJ2,%OBJ3")
-        
+
         parser.add_argument("-d",
                             "--dvars",
                             dest="dvars",
                             type=str,
                             default='',
                             help="Design variables")
-            
+
         parser.add_argument("-p",
                             "--path",
                             dest="path",
                             type=str,
                             default=path,
                             help="specify the path of the result files")
-    
+
         parser.add_argument("-f",
                             "--filename-postfix",
                             dest="filename_postfix",
                             type=str,
                             default=filename_postfix,
                             help="(default: 'results.json'): specify a custom file postfix of result files")
-        
+
         parser.add_argument("-u",
                             "--outpath",
                             dest="outpath",
                             type=str,
                             default=outpath,
                             help="path for storing resulting pngs")
-        
+
         parser.add_argument("-a",
                             "--plotall",
                             dest="plotall",
@@ -319,51 +319,51 @@ def main(argv):
                             default=plotAll,
                             help="display additional histogram distributions for the design variables "
                             "and objectives (for a specific generation only)")
-        
+
         parser.add_argument("-g",
                             "--generation",
                             dest="generation",
                             type=int,
                             default=generation,
                             help="only displays the 'n'-th generation")
-        
+
         parser.add_argument("-v",
                             "--video",
                             dest="video",
                             type=str,
                             default=videoname,
                             help="(untested): name of the video")
-        
+
         args = parser.parse_args()
-        
-        
+
+
         if args.objectives:
             for obj in str.split(args.objectives, ","):
                 obj = improveName(obj)
                 selected_ids.append(obj)
-        
+
         if args.dvars:
             for obj in str.split(args.dvars, ","):
                 obj = improveName(obj)
                 selected_ids.append(obj)
-        
+
         path             = args.path
         filename_postfix = args.filename_postfix
         outpath          = args.outpath
         videoname        = args.video
         generation       = args.generation
         plotAll          = args.plotall
-        
+
         if path == "":
             raise SyntaxError('No path for input data specified')
-    
+
         if len(selected_ids) != 3:
             raise SyntaxError('Please select exactly 3 things to visualize')
             return
-        
+
         if generation != -1:
             print("Show generation " + generation)
-    
+
         if not os.path.isdir(outpath):
             os.mkdir(outpath)
         data = {}
@@ -374,7 +374,7 @@ def main(argv):
                 num       = str.rsplit(infile, "/", 1)[1]
                 num       = str.split (num,    "_", 1)[0]
                 data[num] = readData(infile)
-    
+
             setupPlot()
             (xlim, ylim) = computeLimits(data, selected_ids)
             for i, _ in data.items():
@@ -389,10 +389,10 @@ def main(argv):
             plot(data[str(generation)], xlim, ylim,
                 str(generation), outpath, selected_ids,
                 show_single=True, plotAll=plotAll)
-    
+
         #if videoname:
         saveVideo(outpath, videoname)
-    
+
     except:
         print ( '\n\t\033[01;31mError: ' + str(sys.exc_info()[1]) + '\n' )
 

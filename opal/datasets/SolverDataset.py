@@ -5,8 +5,10 @@ from opal.datasets.SDDSDatasetBase import *
 from opal.visualization.SolverPlotter import SolverPlotter
 
 class SolverDataset(SDDSDatasetBase, SolverPlotter):
-    
+
     def __init__(self, directory, fname):
+        """
+        """
         vmapper = {
             'time':         't',
             'bottom':       'bottom_iter',
@@ -15,7 +17,7 @@ class SolverDataset(SDDSDatasetBase, SolverPlotter):
             'l1':           'L1',
             'l2':           'L2'
         }
-        
+
         lmapper  = {
             'linf':     r'max. $l_\infty$ residual error',
             'l1':       r'max. $l_1$ residual error',
@@ -23,11 +25,11 @@ class SolverDataset(SDDSDatasetBase, SolverPlotter):
             'bottom':   r'#iterations of bottom solver',
             'mg':       r'#iterations of MG'
         }
-        
+
         umapper = [
             'time'
         ]
-        
+
         super(SolverDataset, self).__init__(directory, fname,
                                             variable_mapper=vmapper,
                                             label_mapper=lmapper,

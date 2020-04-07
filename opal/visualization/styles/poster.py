@@ -1,7 +1,8 @@
 def poster():
     """
-    Reference (8. April 2018)
-    ---------
+    References
+    ----------
+    (8. April 2018)
     https://matplotlib.org/users/customizing.html
     """
     import matplotlib as mpl

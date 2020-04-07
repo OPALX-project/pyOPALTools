@@ -2,7 +2,7 @@ import chaospy as cp
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
-from bootstrap import Bootstrap
+from surrogate.bootstrap import Bootstrap
 
 class UQ(BaseEstimator):
 
@@ -10,7 +10,8 @@ class UQ(BaseEstimator):
         """
         Parameters
         ----------
-        order           PCE order
+        order : int, optional
+            PCE order
         """
         self._order = order
 
@@ -19,8 +20,10 @@ class UQ(BaseEstimator):
         """
         Parameters
         ----------
-        x       shape NxD with dimension D and number of samples N
-        y       shape NxQ with quantities of interest Q and number of samples N
+        x : array_like (N,D,)
+            Shape NxD with dimension D and number of samples N
+        y : array_like (N,Q,)
+            Shape NxQ with quantities of interest Q and number of samples N
 
         Notes
         -----
@@ -77,18 +80,27 @@ class UQ(BaseEstimator):
 
 
     def confidence_interval(self, x, y, alpha, **kwargs):
-        """
-        Compute confidence intervals using the bootstrap method
+        """Compute confidence intervals using the bootstrap method
 
         Parameters
         ----------
-        x       shape NxD with dimension D and number of samples N
-        y       shape Nx1 with quantities of interest Q and number of samples N
-        alpha   CI
+        x : array_like (N,D,)
+            Shape NxD with dimension D and number of samples N
+        y  : array_like (N,)
+            Shape Nx1 with quantities of interest Q and number of samples N
+        alpha : float
+            CI
 
         Returns
         -------
-        sorted y_train, y_pred, lower and upper bound for CI
+        numpy.ndarray
+            Sorted y_train
+        numpy.ndarray
+            y_pred
+        numpy.ndarray
+            Lower bound for CI
+        numpy.ndarray
+            Upper bound for CI
         """
         bs = Bootstrap(self)
         bs.boot(x, y, **kwargs)

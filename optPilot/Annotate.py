@@ -6,21 +6,20 @@ def distance(x1, x2, y1, y2):
     return math.hypot(x1 - x2, y1 - y2)
 
 
-"""
-Callback for matplotlib to display an annotation when points are clicked on.
-The point which is closest to the click and within xtol and ytol is identified.
-
-@See http://www.scipy.org/Cookbook/Matplotlib/Interactive_Plotting for
-details.
-
-Register this function like this:
-
-scatter(xdata, ydata)
-af = AnnoteFinder(xdata, ydata, annotes)
-connect('button_press_event', af)
-"""
-
 class AnnoteFinder:
+    """Callback for matplotlib to display an annotation when points are clicked on.
+
+    The point which is closest to the click and within xtol and ytol is identified.
+
+    @See http://www.scipy.org/Cookbook/Matplotlib/Interactive_Plotting for
+    details.
+
+    Register this function like this::
+
+    >>> scatter(xdata, ydata)
+    >>> af = AnnoteFinder(xdata, ydata, annotes)
+    >>> connect('button_press_event', af)
+    """
 
     def __init__(self, rdata, obj1_idx, obj2_idx, annotes_idx,
                  name_to_column_map,

@@ -13,23 +13,27 @@ import numpy as np
 import pandas as pd
 
 class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
-
+    """
+    Attributes
+    ----------
+    __parser : H5Parser
+        Actual data holder
+    __variable_mapper : dict
+        Map user input variable
+        name to file variable name
+    __label_mapper : dict
+        Map user input variable
+    __unit_label_mapper : list
+        Units of variables
+        to plotting style
+        name to plot label name
+    __direction : dict
+        Used to find out the
+        direction in case of
+        vector type data
+    """
     def __init__(self, directory, fname):
-        """
-        Constructor.
-
-        Members
-        -------
-        __parser            (H5Parser)      actual data holder
-        __variable_mapper   (dict)          map user input variable
-                                            name to file variable name
-        __label_mapper      (dict)          map user input variable
-        __unit_label_mapper ([])            map units of variables
-                                            to plotting style
-                                            name to plot label name
-        __direction         (dict)          used to find out the
-                                            direction in case of
-                                            vector type data
+        """Constructor.
         """
         super(H5Dataset, self).__init__(directory, fname)
 
@@ -76,23 +80,23 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
 
 
     def __del__(self):
-        """
-        Destructor. Closes open file.
+        """Destructor. Closes open file.
         """
         self.__parser.close()
 
 
     def getData(self, var, **kwargs):
-        """
-        Obtain data of a variable
+        """Obtain data of a variable
 
         Parameters
         ----------
-        var     (str)   variable name
+        var : str
+            Variable name
 
         Returns
         -------
-        an array of the data (n, dim)
+        array
+            Data (n, dim)
         """
         try:
             step = kwargs.get('step', 0)
@@ -138,39 +142,40 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
 
 
     def isStepDataset(self, var, step=0):
-        """
-        Check if a variable is contained as a dataset
+        """Check if a variable is contained as a dataset
         """
         return (var in self.__parser.getStepDatasets(step))
 
 
     def getLabel(self, var):
-        """
-        Obtain label for plotting.
+        """Obtain label for plotting.
 
         Parameters
         ----------
-        var     (str)   variable name
+        var : str
+            Variable name
 
         Returns
         -------
-        appropriate name plotting ready
+        str
+            Appropriate name plotting ready
         """
         if var in self.__label_mapper:
             var = self.__label_mapper[var]
         return var
 
     def getUnit(self, var):
-        """
-        Obtain unit for plotting.
+        """Obtain unit for plotting.
 
         Parameters
         ----------
-        var     (str)   variable name
+        var : str
+            Variable name
 
         Returns
         -------
-        appropriate unit in math mode for plotting
+        str
+            Appropriate unit in math mode for plotting
         """
         try:
             h5var = var
@@ -191,7 +196,7 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
             return ''
 
     '''
-    Experimental retruns Pandas data frames
+    Experimental returns Pandas data frames
     '''
     def getMonitorDataFrame(monData):
         cnames= ['id' ,'px', 'py', 'pz', 'time', 'turn', 'x', 'y', 'z']

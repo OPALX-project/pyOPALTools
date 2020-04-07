@@ -27,7 +27,7 @@ class FileType(IntEnum):
     AMR         = 14,
     LOSS        = 15,
     NONE        = 16
-    
+
     @classmethod
     def extensionToFileType(cls, fname):
         opal_logger.debug('FileType.extensionToFileType: Check file type')
@@ -46,14 +46,14 @@ class FileType(IntEnum):
             '.json':    [cls.OPTIMIZER, cls.SAMPLER],
             '.loss':    cls.LOSS
         }
-        
+
         file = {
             'timing.dat':       cls.TIMING,
             '-trackOrbit.dat':  cls.TRACK_ORBIT
         }
-        
+
         _ , ext = os.path.splitext(fname)
-        
+
         if ext in extension:
             # FIXME not nice file handling
             # currently only JSON could be for
