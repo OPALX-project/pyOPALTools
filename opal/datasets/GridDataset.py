@@ -5,12 +5,14 @@ from opal.datasets.SDDSDatasetBase import *
 from opal.visualization.GridPlotter import GridPlotter
 
 class GridDataset(SDDSDatasetBase, GridPlotter):
-    
+
     def __init__(self, directory, fname):
+        """
+        """
         vmapper = {
-            'time':         't'
+            'time': 't'
         }
-        
+
         umapper = [
             'time'
         ]
@@ -19,35 +21,25 @@ class GridDataset(SDDSDatasetBase, GridPlotter):
                                           unit_label_mapper=umapper,
                                           dataset_type='Grid',
                                           print_limit=11)
-    
-    
+
+
     def getNumLevels(self):
-        """
-        Obtain the number of levels.
-        
-        Parameters
-        ----------
-        None
-        
+        """Obtain the number of levels.
+
         Returns
         -------
-        an integer
+        int
         """
         variables = super(GridDataset, self).getVariables()
         return sum('level-' in var for var in variables)
-    
-    
+
+
     def getNumCores(self):
-        """
-        Obtain the number of cores.
-        
-        Parameters
-        ----------
-        None
-        
+        """Obtain the number of cores.
+
         Returns
         -------
-        an integer
+        int
         """
         variables = super(GridDataset, self).getVariables()
         return sum('processor-' in var for var in variables)

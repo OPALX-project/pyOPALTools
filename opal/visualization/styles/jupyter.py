@@ -1,7 +1,8 @@
 def jupyter():
     """
-    Reference (8. April 2018)
-    ---------
+    References
+    ----------
+    (8. April 2018)
     https://matplotlib.org/users/customizing.html
     """
     import matplotlib as mpl
@@ -17,7 +18,7 @@ def jupyter():
         opal_logger.error('jupyter style not available for matplotlib version ' + mpl.__version__)
 
     config.opal['style'] = 'jupyter'
-        
+
     mpl.rcParams['axes.autolimit_mode']             = 'data'
     mpl.rcParams['axes.axisbelow']                  = 'line'
     mpl.rcParams['axes.edgecolor']                  = 'k'
@@ -70,7 +71,7 @@ def jupyter():
     mpl.rcParams['figure.autolayout']       = False             # When True, automatically adjust subplot
                                                                 # parameters to make the plot fit the figure
     mpl.rcParams['figure.edgecolor']        = (1, 1, 1, 0)
-    mpl.rcParams['figure.facecolor']        = (1, 1, 1, 0)      
+    mpl.rcParams['figure.facecolor']        = (1, 1, 1, 0)
     mpl.rcParams['figure.figsize']          = [12.0, 7.0]       # figure size in inches
     mpl.rcParams['figure.dpi']              = 300               # figure dots per inch
     mpl.rcParams['figure.frameon']          = True
@@ -164,6 +165,6 @@ def jupyter():
 
     try:
         from plotly import offline
-        offline.init_notebook_mode(connected=True)        
+        offline.init_notebook_mode(connected=True)
     except:
         opal_logger.error('Install plotly: pip install plotly')

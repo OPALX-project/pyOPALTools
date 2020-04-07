@@ -8,119 +8,125 @@ import numpy as np
 from opal.utilities.logger import opal_logger
 
 class SDDSDatasetBase(DatasetBase):
-    
+    """
+    Attributes
+    ----------
+    _parser : SDDSParser
+        Actual data holder
+    _variable_mapper : dict
+        Map user input variable
+        name to file variable name
+    _label_mapper : dict
+        Map user input variable
+        name to plot label name
+    _unit_label_mapper : list
+        Units of variables
+        to plotting style
+    """
     def __init__(self, directory, fname, **kwargs):
-        """
-        Constructor.
-        
-        Members
-        ----------
-        _parser            (SDDSParser)    actual data holder
-        _variable_mapper   (dict)          map user input variable
-                                           name to file variable name
-        _label_mapper      (dict)          map user input variable
-                                           name to plot label name
-        _unit_label_mapper ([])            map units of variables
-                                           to plotting style
+        """Constructor.
         """
         super(SDDSDatasetBase, self).__init__(directory, fname)
-        
+
         self._parser = SDDSParser()
         self._parser.parse(self.filename)
-        
+
         self._variable_mapper = kwargs.pop('variable_mapper', {})
-        
+
         self._label_mapper  = kwargs.pop('label_mapper', {})
-        
+
         self._unit_label_mapper = kwargs.pop('unit_label_mapper', [])
-        
+
         self._dataset_type = kwargs.pop('dataset_type', 'No')
-        
+
         self._print_limit = kwargs.pop('print_limit', -1)
-        
-    
+
+
     def getData(self, var, **kwargs):
-        """
-        Obtain data of a variable
-        
+        """Obtain data of a variable
+
         Parameters
         ----------
-        var     (str)   variable name
-        
+        var : str
+            Variable name
+
         Returns
         -------
-        a list of the data
+        list
+            List of the data
         """
         try:
             sddsvar = var
-            
+
             if var in self._variable_mapper:
                 sddsvar = self._variable_mapper[var]
-            
+
             if not sddsvar in self._parser.getVariables():
                 raise RuntimeError("The variable '" + var + "' is not in dataset.")
             return np.asarray(self._parser.getDataOfVariable(sddsvar))
         except Exception as ex:
             opal_logger.exception(ex)
             return []
-    
-    
+
+
     def getLabel(self, var):
-        """
-        Obtain label for plotting.
-        
+        """Obtain label for plotting.
+
         Parameters
         ----------
-        var     (str)   variable name
-        
+        var : str
+            Variable name
+
         Returns
         -------
-        appropriate name plotting ready
+        str
+            Appropriate name plotting ready
         """
         try:
             sddsvar = var
-            
+
             if var in self._variable_mapper:
                 sddsvar = self._variable_mapper[var]
-            
+
             if not sddsvar in self._parser.getVariables():
                 raise RuntimeError("The variable '" + var + "' is not in dataset.")
-            
+
             if var in self._label_mapper:
                 var = self._label_mapper[var]
-            
+
             return var
         except Exception as ex:
             opal_logger.exception(ex)
             return ''
-    
-    
+
+
     def getUnit(self, var):
-        """
-        Obtain unit for plotting.
-        
+        """Obtain unit for plotting.
+
         Parameters
         ----------
-        var     (str)   variable name
-        
+        var : str
+            Variable name
+
         Returns
         -------
-        appropriate unit in math mode for plotting 
+        str
+            Appropriate unit in math mode for plotting
         """
         try:
             sddsvar = var
-            
+
             if var in self._variable_mapper:
                 sddsvar = self._variable_mapper[var]
-                
+
             if not sddsvar in self._parser.getVariables():
                 raise RuntimeError("The variable '" + var + "' is not in dataset.")
-            
+
             unit = self._parser.getUnitOfVariable(sddsvar)
-            
+
             if var in self._unit_label_mapper:
                 unit = r'\mathrm{' + unit + '}'
-            
+
             return r'$' + unit + '$'
         except Exception as ex:
             opal_logger.exception(ex)
@@ -128,16 +134,12 @@ class SDDSDatasetBase(DatasetBase):
 
 
     def getVariables(self):
-        """
-        Obtain all variables within file.
-        
-        Parameters
-        ----------
-        None
-        
+        """Obtain all variables within file.
+
         Returns
         -------
-        list of strings
+        list
+            List of strings
         """
         return self._parser.getVariables()
 
@@ -153,13 +155,14 @@ class SDDSDatasetBase(DatasetBase):
 
 
     def getRow(self, var, val):
-        """
-        Obtain a row of a dataset
+        """Obtain a row of a dataset
 
         Parameters
         ----------
-        var         variable name
-        val         value of given variable
+        var : str
+            Variable name
+        val : float
+            Value of given variable
         """
         try:
             sddsvar = var

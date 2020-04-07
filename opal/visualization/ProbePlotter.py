@@ -2,39 +2,42 @@ from .BasePlotter import *
 import numpy as np
 
 class ProbePlotter(BasePlotter):
-    
+
     def __init__(self):
         pass
-    
-    
+
+
     def plot_probe_histogram(self, **kwargs):
-        """
-        Plot a histogram of the probe histogram
+        """Plot a histogram of the probe histogram
         bin count vs. radius.
-        
+
         Parameters
         ----------
-        
-        Optionals
-        ---------
-        grid    (bool)          draw grid
-        scale   (bool)          scales to 1.0
-                                (default: False)
-        kwargs                  in case of H5: all arguments
-                                of matplotlib.pyplot.hist
-        bunch   (int)           bunch number (default: 0)
-        begin   (int)           start step (default: 0)
-        end     (int)           end step (default: ds.size)
-        
+        grid : bool, optional
+            Draw grid
+        scale : bool, optional
+            Scales to 1.0
+            (default: False)
+        **kwargs
+            In case of H5: additional arguments
+            passed to matplotlib.pyplot.hist
+        bunch : int, optional
+            Bunch number (default: 0)
+        begin : int
+            Start step (default: 0)
+        end : int
+            End step (default: ds.size)
+
         Returns
         -------
-        a matplotlib.pyplot handle
+        matplotlib.pyplot
+            Plot handle
         """
         try:
             from opal import filetype
-            
+
             ylabel = self.ds.getLabel('bincount')
-            
+
             if self.ds.filetype == filetype.HIST:
                 bincount = self.ds.getData('bincount')
                 rmin = self.ds.getData('min')

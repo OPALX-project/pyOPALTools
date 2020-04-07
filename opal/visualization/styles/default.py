@@ -1,7 +1,8 @@
 def default():
     """
-    Reference (8. April 2018)
-    ---------
+    References
+    ----------
+    (8. April 2018)
     https://matplotlib.org/users/customizing.html
     """
     # https://matplotlib.org/users/dflt_style_changes.html

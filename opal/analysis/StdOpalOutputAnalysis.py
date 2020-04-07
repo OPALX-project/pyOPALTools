@@ -1,30 +1,26 @@
 class StdOpalOutputAnalysis:
-    
+
     def calcRFphases(self, RFcavity):
-        """
-        Calculate the phases of individual cavities in the simulation
-        
+        """Calculate the phases of individual cavities in the simulation
 
         Parameters
         ----------
-        RFcavity    ([str])         name of the RFcavity as specifed in the input file
-        
+        RFcavity : str
+            Name of the RFcavity as specifed in the input file
+
         Returns
         -------
-        phases
-        
-        References
-        ----------
-        none
+        list
+            Phases
 
         Examples
         --------
         Check Cyclotron.ipynb in the opal/test directory
         """
         import re
-        
+
         out_phases = []
-        
+
         for i, cname in enumerate(RFcavity):
             turnNumber = 1
             file = open(self.ds.filename, "r")
@@ -39,5 +35,5 @@ class StdOpalOutputAnalysis:
                     phases.append(phase)
             out_phases.append([turns,phases])
             file.close()
-        
+
         return out_phases

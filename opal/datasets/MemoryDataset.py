@@ -5,8 +5,10 @@ from opal.datasets.SDDSDatasetBase import *
 from opal.visualization.MemoryPlotter import MemoryPlotter
 
 class MemoryDataset(SDDSDatasetBase, MemoryPlotter):
-    
+
     def __init__(self, directory, fname):
+        """
+        """
         vmapper = {
             'time':         't'
         }

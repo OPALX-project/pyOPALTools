@@ -17,7 +17,8 @@ class Bootstrap:
         """
         Parameters
         ----------
-        estimator       a sklearn estimator
+        estimator : sklearn.estimator
+            A sklearn estimator
         """
         self._estimator = estimator
 
@@ -33,15 +34,18 @@ class Bootstrap:
         """
         Parameters
         ----------
-        x       shape NxD with dimension D and number of samples N
-        y       shape Nx1 with number of samples N
-        sample  how to sample, i.e.
-                    'random':       sampling with or without replacement;
-                                    n_boot:     number of boostrap iterations
-                                    replace:    True -- sample with replacement
-                                    n_samples:  None -- dim(y) = N
-                    'loo':          leave-one-out sampling
-                    'lpo'           leave-p-out; p as argument
+        x : array_like (N, D,)
+            Shape NxD with dimension D and number of samples N
+        y : array_like (N,)
+            Shape Nx1 with number of samples N
+        sample : str, optional
+            How to sample, i.e.
+                - 'random': sampling with or without replacement
+                    - n_boot: number of bootstrap iterations
+                    - replace: True -- sample with replacement
+                    - n_samples: None -- dim(y) = N
+                - 'loo': leave-one-out sampling
+                - 'lpo': leave-p-out; p as argument
         """
         if not sample in self._sample.keys():
             raise RuntimeError("No sampling method '" + sample + "'.")
@@ -62,8 +66,13 @@ class Bootstrap:
 
     def confidence_interval(self, alpha):
         """
-        alpha   CI
+        Parameters
+        ----------
+        alpha : float
+            CI
 
+        References
+        ----------
         https://stat.ethz.ch/education/semesters/ss2016/CompStat/sk.pdf
         """
         if not self._computed:
