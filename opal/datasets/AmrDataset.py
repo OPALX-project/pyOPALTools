@@ -1,11 +1,27 @@
-# Author: Matthias Frey
-# Date:   March 2019
+# Copyright (c) 2019, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# Implemented as part of the PhD thesis
+# "Precise Simulations of Multibunches in High Intensity Cyclotrons"
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 from .DatasetBase import DatasetBase
 from opal.visualization.AmrPlotter import AmrPlotter
 from opal.utilities.logger import opal_logger
 
 class AmrDataset(DatasetBase, AmrPlotter):
+    """Dataset of AMR output. It uses (https://yt-project.org/) to parse the data.
+    An OPAL-AMR fork is found in https://gitlab.psi.ch/frey_m/yt.
+    """
 
     def __init__(self, directory):
         """
