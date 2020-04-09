@@ -104,7 +104,7 @@ class Bootstrap:
 
         fitted = self._estimator.fitted_
 
-        return 2.0 * fitted - qlo, 2.0 * fitted - qhi
+        return 2.0 * np.asarray(fitted) - qlo, 2.0 * np.asarray(fitted) - qhi
 
 
 class Sample(object):
