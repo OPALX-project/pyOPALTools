@@ -128,8 +128,8 @@ class UQ(BaseEstimator):
         poly = cp.basis(start=0, stop=self._order, dim=dim, sort='G')
 
         lo, up = bs.confidence_interval(alpha=alpha)
-        lo_pce = cp.dot(poly, np.asarray(lo))
-        up_pce = cp.dot(poly, np.asarray(up))
+        lo_pce = cp.inner(poly, np.asarray(lo))
+        up_pce = cp.inner(poly, np.asarray(up))
 
         # evaluate predicte lower and upper bounds
         x = np.asarray(x).T
