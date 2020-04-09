@@ -1,9 +1,16 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 22 09:13:43 2018
+# Copyright (c) 2018, Andreas Adelmann, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 
-@author: adelmann
-"""
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
+# -*- coding: utf-8 -*-
 
 import os, sys
 #sys.path.insert(0, '/Users/adelmann/git/')
