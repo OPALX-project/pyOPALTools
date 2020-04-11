@@ -1,8 +1,12 @@
 opal.parser package
 ===================
 
-Submodules
-----------
+Notebooks
+---------
+
+.. toctree::
+
+   OptimizerParser<testParallelPlot>
 
 opal.parser.H5Error module
 --------------------------

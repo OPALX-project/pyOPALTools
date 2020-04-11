@@ -1,8 +1,12 @@
 opal.utilities package
 ======================
 
-Submodules
-----------
+Notebooks
+---------
+
+.. toctree::
+
+   Logger<Logger>
 
 opal.utilities.logger module
 ----------------------------

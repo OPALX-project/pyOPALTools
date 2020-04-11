@@ -1,9 +1,6 @@
 amr package
 ===========
 
-Submodules
-----------
-
 amr.AmrOpal module
 ------------------
 

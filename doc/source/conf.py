@@ -59,7 +59,8 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.autosummary',
-    'sphinx.ext.napoleon' # For conversion from non-rst documentation
+    'sphinx.ext.napoleon', # For conversion from non-rst documentation
+    'nbsphinx' # For Jupyter notebooks
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -68,7 +69,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
+exclude_patterns = ['_build', '**.ipynb_checkpoints']
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -93,6 +94,20 @@ autodoc_default_options = {
     'show-inheritance': True,
     'private-members': True
 }
+
+autosummary_generate = True
+
+# nbsphinx notebook settings
+## Allow notebook errors
+nbsphinx_allow_errors = True
+## Always execute notebooks
+nbsphinx_execute = 'always'
+## Recommended setting for matplotlib
+## https://nbsphinx.readthedocs.io/en/0.6.0/usage.html#nbsphinx_execute
+nbsphinx_execute_arguments = [
+    "--InlineBackend.figure_formats={'svg', 'pdf'}",
+    "--InlineBackend.rc={'figure.dpi': 96}",
+]
 
 # Don't skip __init__
 def skip(app, what, name, obj, would_skip, options):

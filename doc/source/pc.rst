@@ -1,9 +1,6 @@
 pc package
 ==========
 
-Submodules
-----------
-
 pc.pce module
 ------------------
 

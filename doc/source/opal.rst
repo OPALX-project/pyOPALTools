@@ -12,9 +12,6 @@ Subpackages
     opal.utilities
     opal.visualization
 
-Submodules
-----------
-
 opal.config module
 ------------------
 

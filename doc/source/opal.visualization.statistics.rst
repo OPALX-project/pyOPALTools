@@ -1,9 +1,6 @@
 opal.visualization.statistics package
 =====================================
 
-Submodules
-----------
-
 opal.visualization.statistics.impl\_plots module
 ------------------------------------------------
 
