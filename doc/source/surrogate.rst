@@ -1,8 +1,12 @@
 surrogate package
 =================
 
-Submodules
-----------
+Notebooks
+---------
+
+.. toctree::
+
+   confidence_interval<confidence_interval>
 
 surrogate.bootstrap module
 --------------------------

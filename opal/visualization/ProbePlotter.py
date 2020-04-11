@@ -34,15 +34,15 @@ class ProbePlotter(BasePlotter):
         scale : bool, optional
             Scales to 1.0
             (default: False)
+        bunch : int, optional
+            Bunch number (default: 0)
+        begin : int, optional
+            Start step (default: 0)
+        end : int, optional
+            End step (default: ds.size)
         **kwargs
             In case of H5: additional arguments
             passed to matplotlib.pyplot.hist
-        bunch : int, optional
-            Bunch number (default: 0)
-        begin : int
-            Start step (default: 0)
-        end : int
-            End step (default: ds.size)
 
         Returns
         -------

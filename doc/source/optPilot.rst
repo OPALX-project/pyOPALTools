@@ -1,9 +1,6 @@
 optPilot package
 ================
 
-Submodules
-----------
-
 optPilot.Annotate module
 ------------------------
 

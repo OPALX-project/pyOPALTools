@@ -9,8 +9,20 @@ Subpackages
    opal.visualization.statistics
    opal.visualization.styles
 
-Submodules
-----------
+Notebooks
+---------
+
+.. toctree::
+
+   AmrPlotter<testAmrOpal-1.py>
+   H5Plotter_RingMultiBunch<RingMultiBunch>
+   ProbePlotter<Probe>
+   ProbePlotter_PeakFile<ProbePeak>
+   OptimizerPlotter<Optimizer>
+   SamplerPlotter<Sampler>
+   StatPlotter_FODO<FODO>
+   StatPlotter_Gantry<Gantry2>
+   StatPlotter_RingCyclotron<RingCyclotron>
 
 opal.visualization.AmrPlotter module
 ------------------------------------

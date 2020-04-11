@@ -1,8 +1,12 @@
 opal.visualization.styles package
 =================================
 
-Submodules
-----------
+Notebooks
+---------
+
+.. toctree::
+
+   Styles<Styles>
 
 opal.visualization.styles.default module
 ----------------------------------------

@@ -1,8 +1,11 @@
 opal.analysis package
 =====================
 
-Submodules
-----------
+Notebooks
+---------
+
+.. toctree::
+   cyclotron<Cyclotron>
 
 opal.analysis.H5Statistics module
 ---------------------------------

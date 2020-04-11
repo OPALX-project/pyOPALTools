@@ -1,8 +1,12 @@
 opal.datasets package
 =====================
 
-Submodules
-----------
+Notebooks
+---------
+
+.. toctree::
+
+   StatDataSet_Wrapper<StatWrapper>
 
 opal.datasets.AmrDataset module
 -------------------------------

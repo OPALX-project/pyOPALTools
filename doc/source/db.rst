@@ -1,9 +1,6 @@
 db package
 ==========
 
-Submodules
-----------
-
 db.mldb module
 --------------
 

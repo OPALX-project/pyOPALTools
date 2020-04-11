@@ -1,9 +1,6 @@
 jobhandler package
 ==================
 
-Submodules
-----------
-
 jobhandler.submit module
 ------------------------
 
