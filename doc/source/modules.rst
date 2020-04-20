@@ -9,4 +9,6 @@ pyOPALTools
    jobhandler
    opal
    optPilot
+   pc
    setup
+   surrogate

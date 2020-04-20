@@ -1,3 +1,19 @@
+# Copyright (c) 2019, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# Implemented as part of the PhD thesis
+# "Precise Simulations of Multibunches in High Intensity Cyclotrons"
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
+
 from sklearn.model_selection import LeavePOut
 from sklearn.utils import resample
 import numpy as np
@@ -17,7 +33,8 @@ class Bootstrap:
         """
         Parameters
         ----------
-        estimator       a sklearn estimator
+        estimator : sklearn.estimator
+            A sklearn estimator
         """
         self._estimator = estimator
 
@@ -33,15 +50,18 @@ class Bootstrap:
         """
         Parameters
         ----------
-        x       shape NxD with dimension D and number of samples N
-        y       shape Nx1 with number of samples N
-        sample  how to sample, i.e.
-                    'random':       sampling with or without replacement;
-                                    n_boot:     number of boostrap iterations
-                                    replace:    True -- sample with replacement
-                                    n_samples:  None -- dim(y) = N
-                    'loo':          leave-one-out sampling
-                    'lpo'           leave-p-out; p as argument
+        x : array_like (N, D,)
+            Shape NxD with dimension D and number of samples N
+        y : array_like (N,)
+            Shape Nx1 with number of samples N
+        sample : str, optional
+            How to sample, i.e.
+                - 'random': sampling with or without replacement
+                    - n_boot: number of bootstrap iterations
+                    - replace: True -- sample with replacement
+                    - n_samples: None -- dim(y) = N
+                - 'loo': leave-one-out sampling
+                - 'lpo': leave-p-out; p as argument
         """
         if not sample in self._sample.keys():
             raise RuntimeError("No sampling method '" + sample + "'.")
@@ -62,8 +82,13 @@ class Bootstrap:
 
     def confidence_interval(self, alpha):
         """
-        alpha   CI
+        Parameters
+        ----------
+        alpha : float
+            CI
 
+        References
+        ----------
         https://stat.ethz.ch/education/semesters/ss2016/CompStat/sk.pdf
         """
         if not self._computed:
@@ -79,7 +104,7 @@ class Bootstrap:
 
         fitted = self._estimator.fitted_
 
-        return 2.0 * fitted - qlo, 2.0 * fitted - qhi
+        return 2.0 * np.asarray(fitted) - qlo, 2.0 * np.asarray(fitted) - qhi
 
 
 class Sample(object):

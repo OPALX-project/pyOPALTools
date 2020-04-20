@@ -1,8 +1,24 @@
+# Copyright (c) 2019, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# Implemented as part of the PhD thesis
+# "Precise Simulations of Multibunches in High Intensity Cyclotrons"
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
+
 import chaospy as cp
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
-from bootstrap import Bootstrap
+from surrogate.bootstrap import Bootstrap
 
 class UQ(BaseEstimator):
 
@@ -10,7 +26,8 @@ class UQ(BaseEstimator):
         """
         Parameters
         ----------
-        order           PCE order
+        order : int, optional
+            PCE order
         """
         self._order = order
 
@@ -19,8 +36,10 @@ class UQ(BaseEstimator):
         """
         Parameters
         ----------
-        x       shape NxD with dimension D and number of samples N
-        y       shape NxQ with quantities of interest Q and number of samples N
+        x : array_like (N,D,)
+            Shape NxD with dimension D and number of samples N
+        y : array_like (N,Q,)
+            Shape NxQ with quantities of interest Q and number of samples N
 
         Notes
         -----
@@ -77,18 +96,27 @@ class UQ(BaseEstimator):
 
 
     def confidence_interval(self, x, y, alpha, **kwargs):
-        """
-        Compute confidence intervals using the bootstrap method
+        """Compute confidence intervals using the bootstrap method
 
         Parameters
         ----------
-        x       shape NxD with dimension D and number of samples N
-        y       shape Nx1 with quantities of interest Q and number of samples N
-        alpha   CI
+        x : array_like (N,D,)
+            Shape NxD with dimension D and number of samples N
+        y  : array_like (N,)
+            Shape Nx1 with quantities of interest Q and number of samples N
+        alpha : float
+            CI
 
         Returns
         -------
-        sorted y_train, y_pred, lower and upper bound for CI
+        numpy.ndarray
+            Sorted y_train
+        numpy.ndarray
+            y_pred
+        numpy.ndarray
+            Lower bound for CI
+        numpy.ndarray
+            Upper bound for CI
         """
         bs = Bootstrap(self)
         bs.boot(x, y, **kwargs)
@@ -100,8 +128,8 @@ class UQ(BaseEstimator):
         poly = cp.basis(start=0, stop=self._order, dim=dim, sort='G')
 
         lo, up = bs.confidence_interval(alpha=alpha)
-        lo_pce = cp.dot(poly, np.asarray(lo))
-        up_pce = cp.dot(poly, np.asarray(up))
+        lo_pce = cp.inner(poly, np.asarray(lo))
+        up_pce = cp.inner(poly, np.asarray(up))
 
         # evaluate predicte lower and upper bounds
         x = np.asarray(x).T

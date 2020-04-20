@@ -1,3 +1,19 @@
+# Copyright (c) 2019, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# Implemented as part of the PhD thesis
+# "Precise Simulations of Multibunches in High Intensity Cyclotrons"
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
+
 from .ProbePlotter import *
 import numpy as np
 import dask.array as da
@@ -6,65 +22,63 @@ import scipy as sc
 import seaborn as sns
 
 class H5Plotter(ProbePlotter):
-    
+
     def __init__(self):
         pass
-    
-    
+
+
     def plot_phase_space(self, xvar, yvar, **kwargs):
-        """
-        Plot a 2D phase space plot.
-        
+        """Plot a 2D phase space plot.
+
         Parameters
         ----------
-        xvar    (str)               variable for x-axis
-        yvar    (str)               variable for y-axis
-        
-        Optional parameters
-        -------------------
-        step    (int)               of dataset
-        bins    (list or integer)   color energy bins
-        xscale  (str)               'linear', 'log'
-        yscale  (str)               'linear', 'log'
-        xsci    (bool)              x-ticks in scientific notation
-        ysci    (bool)              y-ticks in scientific notation
-        markersize                  size of markers in scatter plot
-    
+        xvar : str
+            Variable for x-axis
+        yvar : str
+            Variable for y-axis
+        step : int, optional
+            Step of dataset
+        bins  : list or integer, optional
+            Color energy bins
+        xscale : str, optional
+            'linear', 'log'
+        yscale  : str, optional
+            'linear', 'log'
+        xsci : bool, optional
+            x-ticks in scientific notation
+        ysci : bool, optional
+            y-ticks in scientific notation
+        markersize: int
+            Size of markers in scatter plot
+
         Returns
         -------
-        a matplotlib.pyplot handle
+        matplotlib.pyplot
+            Plot handle
         """
         try:
             step       = kwargs.pop('step', 0)
             bins       = kwargs.pop('bins', False)
             bunches    = kwargs.pop('bunches', [])
             markersize = kwargs.pop('markersize', 1)
-            
+
             plt.xscale(kwargs.pop('yscale', 'linear'))
             plt.yscale(kwargs.pop('xscale', 'linear'))
-        
+
             if kwargs.pop('xsci', False):
                 plt.ticklabel_format(style='sci', axis='x', scilimits=(0,3))
-            
+
             if kwargs.pop('ysci', False):
                 plt.ticklabel_format(style='sci', axis='y', scilimits=(0,3))
-            
+
             xdata = self.ds.getData(xvar, step=step)
             ydata = self.ds.getData(yvar, step=step)
-            
+
             if bins:
                 bdata = self.ds.getData('bin', step=step)
-                
-                # get all bins not in plotted
-                bmin = (da.min(bdata)).compute()
                 bmax = (da.max(bdata)).compute()
-                # 27. March 2018
-                # https://stackoverflow.com/questions/6486450/python-compute-list-difference
-                skipped = set(range(bmin, bmax+1)) - set(bins)
-                
-                nBins = bmax - bmin + 1
-                colors = np.linspace(0, 1, nBins + 1)
-                
+                nBins = bmax + 1
+
                 for b in range(nBins):
                     xbin = self._select(xdata, bdata, b, step)
                     ybin = self._select(ydata, bdata, b, step)
@@ -77,10 +91,10 @@ class H5Plotter(ProbePlotter):
                 # 27. March 2018
                 # https://stackoverflow.com/questions/6486450/python-compute-list-difference
                 skipped = set(range(bmin, bmax+1)) - set(bunches)
-                
+
                 nBunches = bmax - bmin + 1
                 colors = np.linspace(0, 1, nBunches + 1)
-                
+
                 # plot all skipped bunches with same color
                 for i, s in enumerate(skipped):
                     xbin = self._select(xdata, bdata, s, step)
@@ -102,17 +116,17 @@ class H5Plotter(ProbePlotter):
                         bbox_to_anchor=(0.5, 1.1, 0.0, 0.0))
             else:
                 plt.scatter(xdata, ydata, marker='.', s=markersize, **kwargs)
-        
+
             xunit  = self.ds.getUnit(xvar)
             yunit  = self.ds.getUnit(yvar)
             xlabel = self.ds.getLabel(xvar)
             ylabel = self.ds.getLabel(yvar)
-            
+
             plt.xlabel(xlabel + ' [' + xunit + ']')
             plt.ylabel(ylabel + ' [' + yunit + ']')
-            
+
             plt.tight_layout()
-            
+
             return plt
         except Exception as ex:
             opal_logger.exception(ex)
@@ -122,45 +136,49 @@ class H5Plotter(ProbePlotter):
     def plot_density(self, xvar, yvar, **kwargs):
         """
         Do a density plot.
-        
+
         Parameters
         ----------
-        xvar    (str)               x-axis variable to consider
-        yvar    (str)               y-axis variable to consider
-        
-        Optional parameters
-        -------------------
-        step    (int)           of dataset
-        bins    (list, array or integer) number of bins
-        cmap    (Colormap, string)  color map
-        
-        Reference (22. March 2018)
-        ---------
+        xvar : str
+            x-axis variable to consider
+        yvar : str
+            y-axis variable to consider
+        step : int, optional
+            Step of dataset
+        bins : array_like or int, optional
+            Number of bins
+        cmap : (matplotlib.pyplot.Colormap, str), optional
+            Color map
+
+        References
+        ----------
+        (22. March 2018)
         https://stackoverflow.com/questions/20105364/how-can-i-make-a-scatter-plot-colored-by-density-in-matplotlib
-        
+
         Returns
         -------
-        a matplotlib.pyplot handle
+        matplotlib.pyplot
+            Plot handle
         """
         try:
             step = kwargs.pop('step', 0)
             bins = kwargs.pop('bins', (50,50))
             cmap = kwargs.pop('cmap', plt.cm.jet)
-            
+
             xdata = self.ds.getData(xvar, step=step)
             ydata = self.ds.getData(yvar, step=step)
             
             xy = da.vstack([xdata, ydata])
             plt.hist2d(xdata, ydata, bins = bins, cmap=cmap)
-        
+
             xunit  = self.ds.getUnit(xvar)
             yunit  = self.ds.getUnit(yvar)
             xlabel = self.ds.getLabel(xvar)
             ylabel = self.ds.getLabel(yvar)
-            
+
             plt.xlabel(xlabel + ' [' + xunit + ']')
             plt.ylabel(ylabel + ' [' + yunit + ']')
-            
+
             return plt
         except Exception as ex:
             opal_logger.exception(ex)
@@ -168,46 +186,46 @@ class H5Plotter(ProbePlotter):
 
 
     def plot_histogram(self, var, **kwargs):
-        """
-        Plot a 1D histogram.
-        
+        """Plot a 1D histogram.
+
         Parameters
         ----------
-        ds      (DatasetBase)       dataset
-        var     (str)               variable to consider
-        
-        Optional parameters
-        -------------------
-        step    (int)           of dataset
-        bins    (int /str)      binning type or #bins
-                                (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
-        density (bool)          normalize such that integral over
+        var : str
+            Variable to consider
+        step : int, optional
+            Step of dataset
+        bins : int or str, optional
+            Binning type or number of bins
+            (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
+        density : bool, optional
+            Normalize such that integral over
                                 range is 1.
-        
+
         Returns
         -------
-        a matplotlib.pyplot handle
+        matplotlib.pyplot
+            Plot handle
         """
         try:
             step    = kwargs.pop('step', 0)
             bins    = kwargs.pop('bins', 'sturges')
             density = kwargs.pop('density', True)
-            
+
             data = self.ds.getData(var, step=step)
-            
+
             plt.hist(data, bins=bins, density=density)
-            
+
             xunit  = self.ds.getUnit(var)
             xlabel = self.ds.getLabel(var)
-            
+
             plt.xlabel(xlabel + ' [' + xunit + ']')
-            
+
             ylabel = '#entries'
-            
+
             if density:
                 ylabel += ' (normalized)'
             plt.ylabel(ylabel)
-            
+
             return plt
         except Exception as ex:
             opal_logger.exception(ex)
@@ -215,35 +233,37 @@ class H5Plotter(ProbePlotter):
 
 
     def plot_classification(self, xvar, yvar, value, **kwargs):
-        """
+        """Classification Plot
+
         Scatter plot where the points are colored according
         the value of the probability density function
         pdf(x, y) computed through kernel density estimation.
-        
+
         Parameters
         ----------
-        ds      (DatasetBase)       dataset
-        xvar    (str)               x-axis variable to consider
-        yvar    (str)               y-axis variable to consider
-        value   (float)             boundary value of classification
-        
-        Optional parameters
-        -------------------
-        step    (int)           of dataset
-        
+        xvar : str
+            x-axis variable to consider
+        yvar : str
+            y-axis variable to consider
+        value : float
+            Boundary value of classification
+        step : int, optional
+            Step of dataset
+
         Returns
         -------
-        a matplotlib.pyplot handle
+        matplotlib.pyplot
+            Plot handle
         """
         try:
             step    = kwargs.pop('step', 0)
-            
+
             xdata = self.ds.getData(xvar, step=step)
             ydata = self.ds.getData(yvar, step=step)
-            
+
             xunit  = self.ds.getUnit(xvar)
             xlabel = self.ds.getLabel(xvar)
-            
+
             yunit  = self.ds.getUnit(yvar)
             ylabel = self.ds.getLabel(yvar)
 
@@ -263,10 +283,10 @@ class H5Plotter(ProbePlotter):
 
             label = r'$pdf\left(' + xlabel + ', ' + xlabel + r'\right)$'
             plt.legend([l, g], [label + r'$ < $' + str(value), label + r'$ \geq $' + str(value)])
-            
+
             plt.xlabel(xlabel + ' [' + xunit + ']')
             plt.ylabel(ylabel + ' [' + yunit + ']')
-            
+
             return plt
         except Exception as ex:
             opal_logger.exception(ex)
@@ -274,38 +294,41 @@ class H5Plotter(ProbePlotter):
 
 
     def plot_joint(self, xvar, yvar, join, **kwargs):
-        """
-        Do a joint plot (marginals + contour / scatter)
-        
+        """Do a joint plot (marginals + contour / scatter)
+
         Parameters
         ----------
-        ds      (DatasetBase)       dataset
-        xvar    (str)               x-axis variable to consider
-        yvar    (str)               y-axis variable to consider
-        join    (str)               'all', 'contour' or 'scatter'
-        
-        Optional parameters
-        -------------------
-        step        (int)           of dataset
-        marginals   (str)           'hist', 'kde', 'rug' or combination
-                                    separated by '+', eg. 'hist+kde'
-        height      (int)           height of plot
-        cmap        (str)           colormap
-        
-        Reference
-        ---------
+        xvar : str
+            x-axis variable to consider
+        yvar : str
+            y-axis variable to consider
+        join : str
+            'all', 'contour' or 'scatter'
+        step : int, optional
+            Step of dataset
+        marginals : str, optional
+            'hist', 'kde', 'rug' or combination
+            separated by '+', eg. 'hist+kde'
+        size : int, optional
+            Size of plot
+        cmap : str, optional
+            Colormap
+
+        References
+        ----------
         https://seaborn.pydata.org/generated/seaborn.JointGrid.html
 
         Returns
         -------
-        a matplotlib.pyplot handle
+        matplotlib.pyplot
+            Plot handle
         """
         try:
             step    = kwargs.pop('step', 0)
-            
+
             xdata = self.ds.getData(xvar, step=step)
             ydata = self.ds.getData(yvar, step=step)
-            
+
             xunit  = self.ds.getUnit(xvar)
             xlabel = "[" + self.ds.getLabel(xvar) + "]"
             
@@ -316,10 +339,10 @@ class H5Plotter(ProbePlotter):
                 raise ValueError('Empty data container.')
 
             marginals    = kwargs.pop('marginals', 'hist')
-            height       = kwargs.pop('height', 8)
+            size       = kwargs.pop('size', 8)
             cmap         = kwargs.pop('cmap', 'Blues_d')
 
-            g = sns.JointGrid(x=xdata, y=ydata, height=height)
+            g = sns.JointGrid(x=xdata, y=ydata, size=size)
 
             hasJoin = False
 
@@ -365,44 +388,44 @@ class H5Plotter(ProbePlotter):
 
 
     def plot_density_scipy(self, xvar, yvar, **kwargs):
-        """
-        Do a joint plot (marginals + contour / scatter).
-        
+        """Do a density plot
+
         Parameters
         ----------
-        ds      (DatasetBase)       dataset
-        xvar    (str)               x-axis variable to consider
-        yvar    (str)               y-axis variable to consider
-
-        Optional parameters
-        -------------------
-        step        (int)           of dataset
-        nxbin       (int)           number of bins for x-axis
-        nybin       (int)           number of bins for y-axis
-        cmap        (str)           colormap
-        doShading   (bool)          if true, it uses 'gouraud' shading,
-                                    else 'flat' shading
-        xlim        (tuple)         if not specified use data to compute
-                                    limits
-        ylim        (tuple)         if not specified use data to compute
-                                    limits
-        clabel    (str)             label of colorbar
+        xvar : str
+            x-axis variable to consider
+        yvar : str
+            y-axis variable to consider
+        step : int, optional
+            Step of dataset
+        nxbin : int, optional
+            Number of bins for x-axis
+        nybin : int, optional
+            Number of bins for y-axis
+        cmap : str, optional
+            Colormap
+        doShading : bool, optional
+            If true, it uses 'gouraud' shading,
+            else 'flat' shading
+        xlim : tuple, optional
+            If not specified use data to compute limits
+        ylim : tuple, optional
+            If not specified use data to compute limits
+        clabel : str, optional
+            Label of colorbar
 
         Notes
         -----
+        https://matplotlib.org/examples/pylab_examples/pcolor_demo.html
         Open issue: https://github.com/dask/dask/issues/2939
 
-        Reference
-        ---------
-        https://matplotlib.org/examples/pylab_examples/pcolor_demo.html
-        
         Returns
         -------
-        a matplotlib.pyplot handle
+        matplotlib.pyplot
+            Plot handle
         """
         try:
             step    = kwargs.pop('step', 0)
-            
             xdata = self.ds.getData(xvar, step=step).compute()
             ydata = self.ds.getData(yvar, step=step).compute()
             

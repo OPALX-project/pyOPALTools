@@ -1,37 +1,59 @@
+# Copyright (c) 2019 - 2020, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# Implemented as part of the PhD thesis
+# "Precise Simulations of Multibunches in High Intensity Cyclotrons"
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
+
 from .BasePlotter import *
 import numpy as np
 
 class ProbePlotter(BasePlotter):
-    
+
     def __init__(self):
         pass
-    
-    
+
+
     def plot_probe_histogram(self, **kwargs):
-        """
-        Plot a histogram of the probe histogram
+        """Plot a histogram of the probe histogram
         bin count vs. radius.
-        
+
         Parameters
         ----------
-        
-        Optionals
-        ---------
-        grid    (bool)          draw grid
-        scale   (bool)          scales to 1.0
-                                (default: False)
-        kwargs                  in case of H5: all arguments
-                                of matplotlib.pyplot.hist
-        
+        grid : bool, optional
+            Draw grid
+        scale : bool, optional
+            Scales to 1.0
+            (default: False)
+        bunch : int, optional
+            Bunch number (default: 0)
+        begin : int, optional
+            Start step (default: 0)
+        end : int, optional
+            End step (default: ds.size)
+        **kwargs
+            In case of H5: additional arguments
+            passed to matplotlib.pyplot.hist
+
         Returns
         -------
-        a matplotlib.pyplot handle
+        matplotlib.pyplot
+            Plot handle
         """
         try:
             from opal import filetype
-            
+
             ylabel = self.ds.getLabel('bincount')
-            
+
             if self.ds.filetype == filetype.HIST:
                 bincount = self.ds.getData('bincount')
                 rmin = self.ds.getData('min')
@@ -53,7 +75,9 @@ class ProbePlotter(BasePlotter):
                 x = []
                 y = []
                 bunch = kwargs.pop('bunch', -1)
-                for s in range(self.ds.size):
+                begin = kwargs.pop('begin', 0)
+                end   = kwargs.pop('end', self.ds.size)
+                for s in range(begin, end):
                     x.extend(self.ds.selectData(var='x', step=s, bunch=bunch))
                     y.extend(self.ds.selectData(var='y', step=s, bunch=bunch))
 

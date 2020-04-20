@@ -1,5 +1,18 @@
-# Author:   Matthias Frey
-# Date:     March 2018 - 2019
+# Copyright (c) 2018 - 2019, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# Implemented as part of the PhD thesis
+# "Precise Simulations of Multibunches in High Intensity Cyclotrons"
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 import os
 
@@ -27,49 +40,50 @@ from .utilities.logger import opal_logger
 filetype = FileType
 
 def load_dataset(directory, **kwargs):
-    """
-    Load any file(s) produced by an OPAL simulation.
+    """Load any file(s) produced by an OPAL simulation.
+
     If neither ftype nor fname is specified it tries to
     read in a ``*.stat`` file.
 
-    :param directory: root directory of the OPAL simulation
-    :type directory: str
-    
-    :param ftype: type of file to read in (optional)
-    :type ftype: FileType
-    :param fname: file(s) to read in (optional)
-    :type fname: str or tuple
-    :param astype: read a file according some dataset type
-                                E.g. OPAL standard output contains timings
-                                as well.
-    :type astype: FileType
+    Parameters
+    ----------
+    directory : str
+        Root directory of the OPAL simulation
+    ftype : FileType, optional
+        Type of file to read in
+    fname : str or tuple, optional
+        File(s) to read in
+    astype : FileType, optional
+        Read a file according some dataset type
+        E.g. OPAL standard output contains timings
+        as well.
     """
     try:
         if not os.path.exists(directory):
             raise RuntimeError("No such directory: '" + directory + "'.")
-        
+
         ftype  = kwargs.get('ftype', FileType.NONE)
         fname  = kwargs.get('fname', '')
         astype = kwargs.get('astype', FileType.NONE)
-        
+
         if not ftype == FileType.NONE and fname:
             raise RuntimeError('Specify either file type or file name but not both.')
-        
+
         fnames = []
-        
+
         if isinstance(fname, str) and not fname == '':
             opal_logger.debug('Loading single file')
             full_path = os.path.join(directory, fname)
             if not os.path.exists(full_path):
-                raise RuntimeError("File '" + full_path + "' does not exist.")        
+                raise RuntimeError("File '" + full_path + "' does not exist.")
             fnames.append(fname)
-    
+
         elif isinstance(fname, list) or isinstance(fname, tuple):
             opal_logger.debug('Loading list/tuple of files')
             for file in fname:
                 full_path = os.path.join(directory, file)
                 if not os.path.exists(full_path):
-                    raise RuntimeError("File '" + full_path + "' does not exist.")        
+                    raise RuntimeError("File '" + full_path + "' does not exist.")
                 fnames.append(file)
         elif not ftype == FileType.NONE:
             opal_logger.debug('Loading files of given file type')
@@ -77,18 +91,18 @@ def load_dataset(directory, **kwargs):
                 full_path = os.path.join(directory, fname)
                 if FileType.extensionToFileType(full_path) == ftype:
                     fnames.append(fname)
-            
+
             if not fnames:
                 raise RuntimeError('Could not find any files of this type.')
         else:
             opal_logger.error( "Neither file type 'ftype' nor file name 'fname' specified." )
-        
+
         opal_logger.debug('Start loading files ...')
         datasets = []
         for fname in fnames:
             full_path = os.path.join(directory, fname)
             ftype = FileType.extensionToFileType(full_path)
-            
+
             if  ftype == FileType.H5:
                 datasets.append(H5Dataset(directory, fname))
                 opal_logger.debug('    ' + fname + ' matches H5 file type.')
@@ -148,7 +162,7 @@ def load_dataset(directory, **kwargs):
             elif ftype == FileType.NONE:
                 opal_logger.error('no appropriate file match.' )
         opal_logger.debug('\nDone.\n' )
-        
+
         if not datasets:
             raise RuntimeError('No dataset loaded.')
         elif len(datasets) == 1:

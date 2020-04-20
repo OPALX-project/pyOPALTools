@@ -1,5 +1,18 @@
-# Author:   Matthias Frey
-# Date:     March 2018
+# Copyright (c) 2018, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# Implemented as part of the PhD thesis
+# "Precise Simulations of Multibunches in High Intensity Cyclotrons"
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 from opal.parser.TimingParser import TimingParser
 from .DatasetBase import DatasetBase
@@ -8,24 +21,27 @@ import os
 from opal.utilities.logger import opal_logger
 
 class TimeDataset(DatasetBase, TimingPlotter):
-    
+    """
+    Attributes
+    ----------
+    __parser : TimingParser
+        Actual data holder
+    """
     def __init__(self, directory, fname, ttype='ippl'):
-        """
-        Constructor.
-        
+        """Constructor.
+
         Parameters
         ----------
-        directory   (str)   of file
-        fname       (str)   basename
-        ttype       (str)   time file type ('ippl' timing or OPAL 'output')
-        
-        Members
-        -------
-        __parser            (TimingParser)    actual data holder
+        directory : str
+            Directory of file
+        fname : str
+            Basename
+        ttype : str
+            Time file type ('ippl' timing or OPAL 'output')
         """
         try:
             self.__parser = TimingParser()
-            
+
             if ttype.lower() == 'output':
                 self.__parser.read_output_file(os.path.join(directory, fname))
             elif ttype.lower() == 'ippl':
@@ -33,35 +49,37 @@ class TimeDataset(DatasetBase, TimingPlotter):
             else:
                 raise ValueError("Timing file type '" + ttpye + "' not supported." +
                                  "Use either 'ippl' or 'output'")
-        
+
             super(TimeDataset, self).__init__(directory, fname)
         except Exception as ex:
             opal_logger.exception(ex)
-    
-    
+
+
     def getData(self, var, **kwargs):
-        """
-        Obtain the timing data
-        
+        """Obtain the timing data
+
         Parameters
         ----------
-        var     (str/int)   timing name or index of timing
-        prop    (str)       property, i.e. 'cpu avg', 'cpu max', 'cpu min',
-                            'wall avg', 'wall max', 'wall min' or
-                            'cpu tot' and 'wall tot' (only for main timing)
-        
+        var : str or int
+            Timing name or index of timing
+        prop : str, optional
+            Property, i.e. 'cpu avg', 'cpu max', 'cpu min',
+            'wall avg', 'wall max', 'wall min' or
+            'cpu tot' and 'wall tot' (only for main timing)
+
         Returns
         -------
-        the timing data
+        float
+            The timing data
         """
         try:
             dataset = self.__parser.getTiming()
-            
+
             prop = kwargs.get('prop', '')
-            
+
             if not prop:
                 raise ValueError('You need to specify a property.')
-            
+
             # find timing dictionary of corresponding property 'prop'
             # 'idx' will be set accordingly
             match = False
@@ -79,47 +97,45 @@ class TimeDataset(DatasetBase, TimingPlotter):
                     else:
                         available.append( data['what'] )
                         idx += 1
-        
+
             if not match:
                 raise ValueError("No timing called '" + var + "'. Possible entries:"
                                  + str(available))
-            
+
             if not prop in dataset[idx]:
                 raise ValueError("Timing '" + var + "' has not property '"
                                  + prop + "'")
-            
+
             return dataset[idx][prop]
         except Exception as ex:
             opal_logger.exception(ex)
             return []
-    
-    
+
+
     def getLabel(self, var):
-        """
-        Obtain label for plotting.
-        
+        """Obtain label for plotting.
+
         Parameters
         ----------
-        var     (str)   is returned
-        
+        var : str
+            String that is returned
+
         Returns
         -------
-        var
+        var : str
+            Input variable `var`
         """
         return var
-    
-    
+
+
     def getLabels(self):
         """
         Obtain all timing names
-        
-        Parameters
-        ----------
-        None
-        
+
         Returns
         -------
-        a list of strings with names
+        list
+            Strings with names
         """
         try:
             dataset = self.__parser.getTiming()
@@ -130,19 +146,20 @@ class TimeDataset(DatasetBase, TimingPlotter):
         except Exception as ex:
             opal_logger.exception(ex)
             return ''
-    
-    
+
+
     def getUnit(self, var):
-        """
-        Obtain unit for plotting.
-        
+        """Obtain unit for plotting.
+
         Parameters
         ----------
-        var     (str)   unused
-        
+        var : str
+            Unused
+
         Returns
         -------
-        the string 's' for seconds
+        str
+            The string 's' for seconds
         """
         return r'$s$'
 

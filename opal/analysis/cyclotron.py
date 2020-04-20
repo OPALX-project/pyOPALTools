@@ -1,35 +1,56 @@
+# Copyright (c) 2018 - 2019, Jochem Snuverink, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# Implemented as part of the PhD thesis
+# "Precise Simulations of Multibunches in High Intensity Cyclotrons"
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
+
 import numpy as np
 import dask.array as da
 import scipy as sp
 
-def calcCenteringExtraction(radius, turnCorrection=1.35,phaseCorrection=0.0,amplitudeCorrection=1):
-    """
-    Calculate betatron tune values and zentrierung
+def calcCenteringExtraction(radius, turnCorrection=1.35, phaseCorrection=0.0, amplitudeCorrection=1):
+    """Calculate betatron tune values and zentrierung
 
     Based on Fortran routine from Martin Humbel
     "Bestimmung der horizontalen Betatronschwingungsgroessen R0, DR, A und B mit der Methode der Normalengleichung"
 
     Parameters
     ----------
-    radius
-    turnCorrection      : Betatron oscillations per turn (tune), default value based on PSI Ring
-    phaseCorrection     : Phase correction for betatron calculation in grad (radial angle between measurement and extraction)
-    amplitudeCorrection : Amplitude correction for betatron calculation
+    radius : array_like
+        Radii of turns
+    turnCorrection : float, optional
+        Betatron oscillations per turn (tune), default value (1.35) based on PSI Ring
+    phaseCorrection : float, optional
+        Phase correction for betatron calculation in grad
+        (radial angle between measurement and extraction, default: 0)
+    amplitudeCorrection : float, optional
+        Amplitude correction for betatron calculation (default: 1)
 
-    
+    Returns
+    -----
+    array
+        The centering values
+
     Examples
     --------
     Check Cyclotron.ipynb in the opal/test directory
-    
-    Returns
-    -----
-    the centering
+
     """
-    
+
     # Use last 7 turns
     totalTurns = len(radius)
     turnsToAnalyse = min(7,totalTurns)
-     
+
     centering = np.zeros(4) # R0, DR, sine (aka E), cosine (aka F)
     if (turnsToAnalyse < 2):
         return
@@ -63,17 +84,17 @@ def calcCenteringExtraction(radius, turnCorrection=1.35,phaseCorrection=0.0,ampl
     for i in range(0,dim):
         for j in range(i+1,dim):
             A[j][i] = A[i][j]
-    
+
     # No solution for 3 and 4 turns
     if (turnsToAnalyse == 3 or turnsToAnalyse == 4):
         centering[0] = radius[turnsToAnalyse-1]
         centering[1] = radius[turnsToAnalyse-1] - radius[turnsToAnalyse-2]
         return
-    
+
     # Solve linear equations Ax = B
     (lu,piv)  = sp.linalg.lu_factor(A)
     centering = sp.linalg.lu_solve((lu,piv),B)
-    
+
     # Correction factors
     phaseCorrInRad = phaseCorrection * np.pi / 180.;
     centering[0] = centering[0]
@@ -91,38 +112,39 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
 
     Parameters
     ----------
-    x : 1D array_like
-        data.
-    mph : {None, number}, optional (default = None)
-        detect peaks that are greater than minimum peak height.
-    mpd : positive integer, optional (default = 1)
+    x : array_like
+        1D data.
+    mph : None or number, optional
+        Detect peaks that are greater than minimum peak height (default: None).
+    mpd : int, optional
         detect peaks that are at least separated by minimum peak distance (in
-        number of data).
-    threshold : positive number, optional (default = 0)
-        detect peaks (valleys) that are greater (smaller) than `threshold`
-        in relation to their immediate neighbors.
-    edge : {None, 'rising', 'falling', 'both'}, optional (default = 'rising')
+        number of data, default = 1).
+    threshold : int, optional
+        Detect peaks (valleys) that are greater (smaller) than `threshold`
+        in relation to their immediate neighbors (default = 0).
+    edge : None or str
+        {None, 'rising', 'falling', 'both'}, optional (default = 'rising')
         for a flat peak, keep only the rising edge ('rising'), only the
         falling edge ('falling'), both edges ('both'), or don't detect a
         flat peak (None).
-    kpsh : bool, optional (default = False)
-        keep peaks with same height even if they are closer than `mpd`.
-    valley : bool, optional (default = False)
-        if True (1), detect valleys (local minima) instead of peaks.
-    show : bool, optional (default = False)
-        if True (1), plot data in matplotlib figure.
-    ax : a matplotlib.axes.Axes instance, optional (default = None).
+    kpsh : bool, optional
+        keep peaks with same height even if they are closer than `mpd` (default = False).
+    valley : bool, optional
+        If True, detect valleys (local minima) instead of peaks.
+    show : bool, optional
+        If True, plot data in matplotlib figure.
+    ax : matplotlib.axes.Axes instance, optional
 
     Returns
     -------
-    ind : 1D array_like
-        indeces of the peaks in `x`.
+    ind : array_like
+        indices of the peaks in `x`.
 
     Notes
     -----
     The detection of valleys instead of peaks is performed internally by simply
     negating the data: `ind_valleys = detect_peaks(-x)`
-    
+
     The function can handle NaN's
 
     See this IPython Notebook [1]_.
@@ -222,59 +244,59 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
 
 
 def eval_radius(x, y):
-    """
-    Evaluate the radius
+    r"""Evaluate the radius
 
-    r = sqrt(x^2 + y^2)
+    .. math:: r = \sqrt{x^2 + y^2}
 
     Parameters
     ----------
-    x   (float / array)     data of x-direction
-    y   (float / array)     data of y-direction
+    x : float or array
+        Data of `x`-direction
+    y  : float or array
+        Data of `y`-direction
 
     Returns
     -------
-    the radius
+    float
+        Radius
     """
     r = da.sqrt(x ** 2 + y ** 2)
     return r
 
 
 def eval_radial_momentum(px, py, theta):
-    """
-    Evaluate the radial momentum
+    r"""Evaluate the radial momentum
 
-    pr = px * cos(theta) + py * sin(theta)
+    .. math: pr = px \cos(\theta) + py \sin(\theta)
 
     Parameters
     ----------
-    px      (float / array)     data of momentum in x
-    py      (float / array)     data of momentum in y
-    theta   (float)             azimuthal angle (in radian)
-
-    Notes:
-    ------
-    r     : radius
-    theta : azimuth
-
-    x = r*cos(theta)
-    y = r*cos(theta)
-
-    r = sqrt(x**2 + y**2)
-
-    dr/dt = dr/dx * dx/dt + dr/dy * dy/dt
-
-    dr/dt approx. radial momentum p_r
-    dx/dt approx. horzizontal momentum p_x
-    dy/dt approx. longitudinal momentum p_y
-
-    dr/dx = 1 / (2 * r) * 2 * x = x / r = cos(theta)
-    dr/dy = 1 / (2 * r) * 2 * y = y / r = sin(theta)
-
-    --> p_r = p_x * cos(theta) + p_y * sin(theta)
+    px : float or array
+        Data of momentum in `x`
+    py : float or array
+        Data of momentum in `y`
+    theta : float
+        Azimuthal angle (in radian)
 
     Returns
     -------
-    the radial momentum
+    float
+        Radial momentum
+
+    Notes
+    -----
+    .. math::
+        \begin{align}
+        x & = r \sin(\theta) \\
+        y & = r \cos(\theta) \\
+        r & = \sqrt(x^2 + y^2) \\
+        \frac{dr}{dt} & = \frac{dr}{dx} \frac{dx}{dt} + \frac{dr}{dy} \frac{dy}{dt} \\
+        \frac{dr}{dt} & \sim \textrm{radial momentum}~p_r \\
+        \frac{dx}{dt} & \sim \textrm{horizontal momentum}~p_x \\
+        \frac{dy}{dt} & \sim \textrm{longitudinal momentum}~p_y \\
+        \frac{dr}{dx} & = \frac{1}{2 r} * 2 * x = \frac{x}{r} = \cos(\theta) \\
+        \frac{dr}{dy} & = \frac{1}{2 r} * 2 * y = \frac{y}{r} = \sin(\theta) \\
+        \rightarrow p_r & = p_x \cos(\theta) + p_y \sin(\theta)
+        \end{align}
     """
     return px * da.cos(theta) + py * da.sin(theta)

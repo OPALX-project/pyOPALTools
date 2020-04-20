@@ -1,7 +1,21 @@
+# Copyright (c) 2018 - 2019, Andreas Adelmann, Paul Scherrer Institut, Villigen PSI, Switzerland
+#                            Nicole Neveu, SLAC National Accelerator Laboratory
+# All rights reserved
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
+
 import numpy as np
 import sys
 import os
-import pandas as pd 
+import pandas as pd
 from datetime import datetime
 from bisect   import bisect_left
 from opal import load_dataset, filetype
@@ -31,9 +45,9 @@ def strToFloat(in_array):
 
 # From https://stackoverflow.com/questions/12141150/from-list-of-integers-get-number-closest-to-a-given-value
 def findClosestIndex(myList, myNumber):
-  """
-  Assumes myList is sorted. Returns closest index to myNumber.
-  
+  """Returns closest index to myNumber.
+
+  Assumes myList is sorted.
   If two numbers are equally close, return the smallest number.
   """
   pos = bisect_left(myList, myNumber)
@@ -57,7 +71,7 @@ def substring_before(s, delim):
 def checkBounds(data, keys):
     #nxs = number of x variables
     nxs  = len(keys)
-    #Print bounds 
+    #Print bounds
     for j in range(0, nxs):
         print('Now printing bounds of bad points:')
         print("max of "+ keys[j] + '= '+ str(max(data[0]['dvarValues'][:,j])))
@@ -69,21 +83,21 @@ def buildBounded(pickle, baseFN):
     dbr = mldb()
     dbr.load(pickle)
     ulb = dbr.getBounds()
-    
-    keys = dbr.getXNames()   
-    n    = len(keys) 
+
+    keys = dbr.getXNames()
+    n    = len(keys)
     lb   = np.zeros((1, n))
     ub   = np.zeros((1, n))
-    #Make array with upper bounds (ub) 
-    #and lower bounds (lb)    
+    #Make array with upper bounds (ub)
+    #and lower bounds (lb)
     for i, key in enumerate(keys):
-        lb[0, i] = ulb[key][0]         
+        lb[0, i] = ulb[key][0]
         ub[0, i] = ulb[key][1]
     print(lb)
-    print(ub) 
-    totalgen  = dbr.getNumberOfSamples()  
+    print(ub)
+    totalgen  = dbr.getNumberOfSamples()
     bounded   = []
-    unbounded = [] 
+    unbounded = []
     xvec  = np.zeros((1, n))
     bxvec = np.zeros((1, n))
     objsNames  = dbr.getYNames()
@@ -96,21 +110,21 @@ def buildBounded(pickle, baseFN):
         nsims  = dbr.getSampleSize(i=gen)
         gxvec  = np.zeros((1, n))
         gyvec  = np.zeros((1, len(objsNames)))
-        #Save extra info            
+        #Save extra info
         if (gen == 0):
             bounded.append({'sampleSize':totalgen,
                 'dvarNames' :keys,
                 'objNames'  :objsNames,
                 'bounds'    :ulb})
 
-        #Loop through each simulation in gen 
+        #Loop through each simulation in gen
         for x in range(0, nsims):
             xvals  = (dbr.getDVarVec(gen,x)).reshape((1,n))
             ovals  = (dbr.getObjVec(gen,x)).reshape((1,nobjs))
             testlb = np.less_equal(xvals, lb)
             testub = np.greater_equal(xvals, ub)
             #Check if xvals <= lb or xvlas >= ub
-            if (any(testlb[0]) == True) or (any(testub[0]) == True):  
+            if (any(testlb[0]) == True) or (any(testub[0]) == True):
                 bxvec = np.append(bxvec, xvals, axis=0)
                 byvec = np.append(byvec, ovals, axis=0)
             #Check if xvlas within all bounds
@@ -126,7 +140,7 @@ def buildBounded(pickle, baseFN):
             else:
                 print('Mistake, xvals not in boundaries expected.')
                 print('Don\'t trust the database.')
-        
+
         gxvec = gxvec[1:,:]
         gyvec = gyvec[1:,:]
         #Saving good pts per generation
@@ -151,14 +165,14 @@ def buildBounded(pickle, baseFN):
     pick.dump(bounded,open(filename,'wb'),-1)
 
 class mldb:
- 
+
     def __init__(self, descr=''):
         print('OPAL ML Database Generator \x1b[6;30;42m' + descr + '\x1b[0m')
 
     def build(self,filename_postfix, path):
         self.trainingSet = []
         optjson = OptimizerParser(path + '/')
-        
+
         numGenerations = optjson.getNumOfGenerations()
 
         for i in range(numGenerations):
@@ -167,8 +181,8 @@ class mldb:
                 dvarsNames = optjson.getDesignVariables()
                 objsNames  = optjson.getObjectives()
                 bounds     = optjson.getBounds()
-                self.trainingSet.append({'sampleSize':numGenerations, 
-                                         'dvarNames' :dvarsNames, 
+                self.trainingSet.append({'sampleSize':numGenerations,
+                                         'dvarNames' :dvarsNames,
                                          'objNames'  :objsNames,
                                          'bounds'    :bounds})
             dvars      = optjson.getAllInput()
@@ -180,11 +194,10 @@ class mldb:
         self.writeDB(filename_postfix)
 
     def buildFromSampler(self, jsonFN, root, yNames, statBaseFn='', dbname=''):
-        '''
-        Build training set from an OPAL sampler run
-        '''
+        """Build training set from an OPAL sampler run
+        """
         ds = load_dataset(root, fname=jsonFN)
-        
+
         if not statBaseFn:
             # really ulgy fix
             self.trainingSet = []
@@ -193,8 +206,8 @@ class mldb:
             dvarsNames = ds.design_variables
             objsNames  = ds.objectives
             bounds     = ds.bounds
-            self.trainingSet.append({'sampleSize':numGenerations, 
-                                     'dvarNames' :dvarsNames, 
+            self.trainingSet.append({'sampleSize':numGenerations,
+                                     'dvarNames' :dvarsNames,
                                      'objNames'  :objsNames,
                                      'bounds'    :bounds})
 
@@ -215,11 +228,11 @@ class mldb:
             if not dbname:
                 dbname = 'sampler'
             self.writeDB(dbname)
-            
+
             # return here!
             return
 
-        self.trainingSet = []        
+        self.trainingSet = []
         x = []
         y = []
         fns = []
@@ -233,22 +246,22 @@ class mldb:
                 xstr += dvar+"="+ds.getData(dvar,ind=ind)+" "
             x.append(xstr)
             for obj in yNames:
-                ystr += str(statData.getData(obj)[-1])+" " 
+                ystr += str(statData.getData(obj)[-1])+" "
             y.append(ystr)
-        
+
         lDataSets = len(x)
         xDim      = len(x[0].split())
         yDim      = len(yNames)
-        
+
         '''the following is a copy from buildFromSDDS '''
-               
+
         xNames   = []
         xValues  = []
         xall = x[0].split()
-        for i in range(xDim):    
+        for i in range(xDim):
             xNames.append(substring_before(xall[i], '='))
             xValues.append(substring_after(xall[i], '='))
-        
+
         # design variables
         dvarsNames = xNames
         # object variables
@@ -263,7 +276,7 @@ class mldb:
                 xi.append(substring_after(xall[j], '='))
             dvars.append(xi)
             ovars.append(y[i])
-        
+
         numGenerations = 1
 
         self.trainingSet.append({'sampleSize':numGenerations,
@@ -276,21 +289,22 @@ class mldb:
 
         dataFileName = 'test.huuuu'
         self.writeDB(statBaseFn)
-        
+
     def buildFromSDDS(self,baseFN, root, yNames):
-        '''
-        Build training set from sdds (simulation) data obtained with for example OPAL
+        """Build training set from sdds (simulation) data
+
+        Data obtained with for example OPAL
         The dataDescriptionFile will define the input (aka design) and output (aka object) variables
-        '''
+        """
         self.trainingSet = []
-        
+
         p   = SDDSParser()
         x   = []
         y   = []
         fns = []
 
         cwd       = os.getcwd()
-        os.chdir(root)        
+        os.chdir(root)
         (x,y,fns) = p.collectStatFileData(baseFN, '.', yNames)
         os.chdir(cwd)
 
@@ -299,14 +313,14 @@ class mldb:
         yDim      = len(yNames)
         xNames   = []
         xValues  = []
-        
+
         print('dim(x)= ', xDim, 'dim(y)= ', yDim, ' #datapoints= ',lDataSets)
-        
+
         xall = x[0].split()
-        for i in range(xDim):    
+        for i in range(xDim):
             xNames.append(substring_before(xall[i], '='))
             xValues.append(substring_after(xall[i], '='))
-        
+
         # design variables
         dvarsNames = xNames
         # object variables
@@ -320,14 +334,14 @@ class mldb:
             for j in range(xDim):
                 xi.append(substring_after(xall[j], '='))
             yi = []
-            for j in range(len(yNames)): 
-                yi.append(y[i][j][-1])  
-                
+            for j in range(len(yNames)):
+                yi.append(y[i][j][-1])
+
             dvars.append(xi)
             ovars.append(yi)
-        
+
         #print(str(ovars[0])+'= f('+str(dvars[0])+')' )
-               
+
         # Add to training set
         # Treat everything as one generation
         numGenerations = 1
@@ -345,10 +359,10 @@ class mldb:
 
 
     def buildASCII(self,path,dataDescriptionFile,dataFileName,interlockFileName):
-        '''
-        Build training set from archiver data obtained with the ArchiveExport command
+        """Build training set from archiver data obtained with the ArchiveExport command
+        
         The dataDescriptionFile will define the input (aka design) and output (aka object) variables
-        '''
+        """
         self.trainingSet = []
         # Number of header lines
         nrHeaderLines = 4
@@ -399,7 +413,7 @@ class mldb:
 
         if dvarsNamesNotInData:
           print('WARNING: Design variables not in data', dvarsNamesNotInData)
-          
+
         if objsNamesNotInData:
           print('WARNING: Objectives not in data',       objsNamesNotInData)
 
@@ -459,7 +473,7 @@ class mldb:
             # Make zero vectors for each interlock
             # Use interlock timestamp to add 1's
             # Add vectors to objValues
-            
+
             str2date = lambda x: datetime.strptime(x.decode("utf-8"), '%Y-%m-%d')
             # Now no nanosecond info
             str2time = lambda x: datetime.strptime(x.decode("utf-8"), '%H:%M:%S.%f')
@@ -467,7 +481,7 @@ class mldb:
                                           usecols     = {0,1},
                                           dtype       = None,
                                           converters  = {0:str2date, 1:str2time})
- 
+
             # Add date + time into single datetime
             interlocktime = [datetime.combine(date.date(),time.time()) for (date,time) in zip(interlockvars[:,0],interlockvars[:,1])]
             # For each interlock time find corresponding tvar time
@@ -503,7 +517,7 @@ class mldb:
 
     def writeDB(self,filename_postfix):
 
-        print('Write ML-Database ' + filename_postfix+'.pk')    
+        print('Write ML-Database ' + filename_postfix+'.pk')
         pick.dump(self.trainingSet,open(filename_postfix+'.pk','wb'),-1)
 
     def load(self,filename):
@@ -527,7 +541,7 @@ class mldb:
 
     def getYDim(self):
         return len(self.trainingSet[0]['objNames'])
-    
+
     def getYNames(self):
         return self.trainingSet[0]['objNames']
 
@@ -541,7 +555,7 @@ class mldb:
         data = self.getAllDvar(0)
         for i in range(1,self.getNumberOfSamples()):
           data = np.append(data, self.getAllDvar(i), axis=0)
-        data = strToFloat(data)    
+        data = strToFloat(data)
         nQoIs   = len(self.getXNames())
         data = np.asarray(data)
         data = data[:,:nQoIs]
@@ -551,7 +565,7 @@ class mldb:
         data = self.getAllObj(0)
         for i in range(1,self.getNumberOfSamples()):
             data = np.append(data, self.getAllObj(i), axis=0)
-        data = strToFloat(data)    
+        data = strToFloat(data)
         nQoIs   = len(self.getYNames())
         data = np.asarray(data)
         data = data[:,:nQoIs]
@@ -568,7 +582,7 @@ class mldb:
 
     def getTimes(self,gen,indiv):
         return self.trainingSet[gen+1]['times'][indiv]
-    
+
     def getBounds(self):
         return self.trainingSet[0]['bounds']
 
@@ -578,11 +592,11 @@ class mldb:
             print ('xDim        = ' + str(self.getXDim()) + ' -> ' + str(self.getXNames()))
             print ('yDim        = ' + str(self.getYDim()) + ' -> ' + str(self.getYNames()))
             print ('generations = ' + str(self.getNumberOfSamples()))
-            
+
             samples=0
             for i in range(self.getNumberOfSamples()):
                 s = self.getSampleSize(i)
-                samples += s 
+                samples += s
 
             print('Data points  = ' + str(samples))
 
@@ -591,7 +605,7 @@ class mldb:
             y = []
             x = self.getDVarVec(0,0)
             y = self.getObjVec(0,0)
-            
+
             print('Show first dataset from generation 0: y = f(x)')
             print (str(y)+ ' = f('+str(x)+')')
         else:
@@ -607,7 +621,7 @@ class mldb:
         d=self.getAllDvarData()
         x = pd.DataFrame(data=d, columns=self.getXNames())
         return x
-    
+
     def getQoiDvarPD(self, ind=0):
       generations = self.getNumberOfSamples()
       print (generations)
@@ -631,7 +645,7 @@ class mldb:
 #
 #    for arg in argv:
 #        if arg.startswith("--path"):
-#            path = str.split(arg, "=")[1]    
+#            path = str.split(arg, "=")[1]
 #        elif arg.startswith("--filename-postfix"):
 #            filename_postfix = str.split(arg, "=")[1]
 #        elif arg.startswith("--dataDescription"):
@@ -641,7 +655,7 @@ class mldb:
 #        elif arg.startswith("--interlock"):
 #            interlockFile = str.split(arg, "=")[1]
 #
-#    dbO = MlDb()    
+#    dbO = MlDb()
 #
 #    # Generate and save MlDb from the OPAL simulation
 #    if readAscii:
@@ -651,9 +665,9 @@ class mldb:
 #        dbO.build(path,filename_postfix)
 #
 #    # read the data from the MlDb
-#    dbO.load(filename_postfix+'.pk')  
+#    dbO.load(filename_postfix+'.pk')
 #
-#    # 
+#    #
 #    #
 #    # iterate over all generations and individuals
 #    # this can be used to create the neural net.
@@ -665,7 +679,7 @@ class mldb:
 #        for j in range(dbO.getSampleSize(i)):
 #            x = dbO.getDVarVec(i,j)
 #            y = dbO.getObjVec(i,j)
-#   
+#
 #    dbO.printOverview()
 
 #call main

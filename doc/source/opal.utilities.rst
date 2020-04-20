@@ -1,22 +1,14 @@
 opal.utilities package
 ======================
 
-Submodules
-----------
+Notebooks
+---------
+
+.. toctree::
+
+   Logger<Logger>
 
 opal.utilities.logger module
 ----------------------------
 
 .. automodule:: opal.utilities.logger
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: opal.utilities
-    :members:
-    :undoc-members:
-    :show-inheritance:

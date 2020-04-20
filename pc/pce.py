@@ -1,9 +1,16 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 22 09:13:43 2018
+# Copyright (c) 2018, Andreas Adelmann, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 
-@author: adelmann
-"""
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
+# -*- coding: utf-8 -*-
 
 import os, sys
 #sys.path.insert(0, '/Users/adelmann/git/')
@@ -31,9 +38,9 @@ def getPCData(fn):
     return u
 
 class pceEval:
- 
+
     def __init__(self,fn,verbose=True):
-        
+
         self.pctype='LEG_N'
         self.u                   = getPCData(fn)
         self.data                = self.u[0]
@@ -41,7 +48,7 @@ class pceEval:
         self.mi                  = self.data['pcmi'][1]
         self.order               = self.data['order']
         self.dim                 = len(self.pcc)
-        self.modelParameterDom   = self.data['training'][0]  
+        self.modelParameterDom   = self.data['training'][0]
         #
         if not verbose:
             print('pceEval initialized')
@@ -50,17 +57,16 @@ class pceEval:
             print ("modelParameterDom      ",self.modelParameterDom )
             for i in range(self.dim):
                 print ("QoI                    ", self.u[i]['training'][5])
-            
-            
+
+
     def evalPc(self,x,d):
-        """
-        Use external pce_eval (should be written in Py)
+        """Use external pce_eval (should be written in Py)
         """
         xscaled = (2.0 * x-(self.modelParameterDom[:,1]+self.modelParameterDom[:,0])) / (self.modelParameterDom[:,1]-self.modelParameterDom[:,0])
         np.savetxt('/tmp/mindex.dat',self.mi[d],fmt='%d')
-        np.savetxt('/tmp/pccf.dat',self.pcc[d])          
+        np.savetxt('/tmp/pccf.dat',self.pcc[d])
         np.savetxt('/tmp/xdata.dat', xscaled.reshape(1, xscaled.shape[0]))
         cmd="pushd . && cd /tmp && $UQTK_SRC/src_cpp/bin/pce_eval -x'PC_mi' -f'pccf.dat' -s"+self.pctype+" -r'mindex.dat' > fev.log && popd"
         os.system(cmd)
-        pcoutput=np.loadtxt('/tmp/ydata.dat')    
+        pcoutput=np.loadtxt('/tmp/ydata.dat')
         return pcoutput

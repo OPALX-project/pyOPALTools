@@ -1,4 +1,16 @@
 #!/usr/bin/python
+# Copyright (c) 2017, Andreas Adelmann, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 import os
 import sys
 import glob
@@ -28,45 +40,45 @@ outpath = "./"
 filename_postfix = "results.json"
 generation = -1
 plotAll = False
-    
-data = { } 
+
+data = { }
 
 def readJSONData(filename):
     dirname = os.path.dirname(filename)
     optjson = jsonreader(dirname + '/')
-    
+
     # get the generation from the filename
-    basename = os.path.basename(filename)    
+    basename = os.path.basename(filename)
     generation = int( str.split(basename, "_", 1)[0] )
     optjson.readGeneration(generation)
-    
+
     #
     # make plain format
     #
-    
+
     # build name to column map
     dvars = optjson.getDesignVariables()
     objs  = optjson.getObjectives()
     idname   = "ID"
-    
+
     idx = 0
     for name in dvars:
         nameToColumnMap[name] = idx
         idx += 1
-    
+
     for name in objs:
         nameToColumnMap[name] = idx
         idx += 1
-    
+
     nameToColumnMap[idname] = idx
-    
+
     # build data matrix by stacking columns [dvars objsval ids]
     dvarval = optjson.getAllInput()
     objsval = optjson.getAllOutput()
     ids     = optjson.getIDs()
-    
+
     data = np.column_stack((dvarval, objsval, ids))
-    
+
     return data
 
 
@@ -104,7 +116,7 @@ def computeLimits(data, selected_ids):
 
     return (xlim, ylim)
 
-def getXY(generation,path,filename_postfix,selected_ids):        
+def getXY(generation,path,filename_postfix,selected_ids):
 
     fn = path + '/' + str(generation) + '_' + filename_postfix
 
@@ -114,7 +126,7 @@ def getXY(generation,path,filename_postfix,selected_ids):
 
     obj1_idx = nameToColumnMap[selected_ids[0]]
     obj2_idx = nameToColumnMap[selected_ids[1]]
-    
+
     x = data[str(generation)][:, obj1_idx]
     y = data[str(generation)][:, obj2_idx]
 
@@ -148,12 +160,12 @@ class Plotter:
         _vars = obj.get_variables()
         plt.subplots_adjust(bottom=0.03*(len(_vars)+2))
         self.sliders = []
-        self.buttons = [] 
+        self.buttons = []
 
         for i,var in enumerate(_vars):
             self.add_slider(i*0.03, var[0], var[1], var[2])
 
-        self.add_reset()    
+        self.add_reset()
         plt.show()
 
     def add_reset(self):
@@ -171,7 +183,7 @@ class Plotter:
 
     def add_slider(self, pos, name, min, max):
         ax = plt.axes([0.1, 0.02+pos, 0.8, 0.02], axisbg='lightgoldenrodyellow')
-        slider = Slider(ax, name, min, max, valinit=int(self.obj.generation), valfmt="%d") 
+        slider = Slider(ax, name, min, max, valinit=int(self.obj.generation), valfmt="%d")
         self.sliders.append(slider)
         def update(val):
             self.obj.readData()
@@ -190,19 +202,19 @@ class OptData:
         self.filename_postfix=filename_postfix
         self.selected_ids=selected_ids
         self.x,self.y = getXY(generation,path,filename_postfix,selected_ids)
-    
+
     def readData(self):
         self.x,self.y = getXY(int(self.generation),self.path,self.filename_postfix,self.selected_ids)
 
     def readInitialData(self):
         self.x,self.y = getXY(int(self.initialgeneration),self.path,self.filename_postfix,self.selected_ids)
-     
+
     def getX(self):
         return self.x
 
     def getY(self):
         return self.y
-        
+
     def get_variables(self):
         return [
             ('generation', 0., 5000.)
@@ -217,28 +229,28 @@ def main(argv):
             for obj in str.split(objectives, ","):
                 obj = improveName(obj)
                 selected_ids.append(obj)
-    
+
         elif arg.startswith("--dvars"):
             dvars = str.split(arg, "=")[1]
             for obj in str.split(dvars, ","):
                 obj = improveName(obj)
                 selected_ids.append(obj)
-    
+
         elif arg.startswith("--path"):
             path = str.split(arg, "=")[1]
-    
+
         elif arg.startswith("--filename-postfix"):
             filename_postfix = str.split(arg, "=")[1]
-    
+
         elif arg.startswith("--outpath"):
             outpath = str.split(arg, "=")[1]
-    
+
         elif arg.startswith("--video"):
             videoname = str.split(arg, "=")[1]
-    
+
         elif arg.startswith("--generation"):
             generation = str.split(arg, "=")[1]
-            
+
         elif arg.startswith("--plot-all"):
             plotAll = True
 

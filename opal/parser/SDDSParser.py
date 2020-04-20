@@ -1,5 +1,18 @@
-# Author:   Matthias Frey
-# Date:     March 2018
+# Copyright (c) 2018, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# Implemented as part of the PhD thesis
+# "Precise Simulations of Multibunches in High Intensity Cyclotrons"
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 import numpy as np
 import re,os,sys
@@ -7,15 +20,15 @@ import pandas as pd
 from collections import OrderedDict
 
 class SDDSParser:
-    
+
     def parse(self, filename):
         self._nParameters = 0
         self._nRows = 0
-        
+
         self._units = OrderedDict()
         self._desc = {}
         self._dtypes = {}
-        
+
         # check file version
         version = self._checkVersion(filename)
 
@@ -37,11 +50,11 @@ class SDDSParser:
                                     names=list(self._units.keys()), index_col=False)
 
     def _checkVersion(self, filename):
-        
+
         pattern = 'OPAL (.*) git'
-        
+
         v = 0
-        
+
         with open(filename) as f:
             for line in f:
                 if 'OPAL' and 'git rev.' in line:
@@ -50,16 +63,16 @@ class SDDSParser:
                     v = self._version(obj.group(1))
                     break;
         return v
-                    
-    
+
+
     def _version(self, v):
         digits = v.split('.')
-        
+
         i1 = int(digits[0]) * 10000
         i2 = int(digits[1]) * 100
         return i1 + i2
-        
-    
+
+
     def _parseHeader1_6(self, filename):
         column_pattern = '&columnname=(.*),type=(.*),units=(.*),description=\"(.*)\"&end'
         #parameter_pattern = '&parametername=(.*),type=(.*),description=\"(.*)\"&end'
@@ -85,7 +98,7 @@ class SDDSParser:
                     self._nRows += 1 # there is one more line (with git revision)
                     break
 
-    
+
     def _parseHeader1_9(self, filename):
         with open(filename) as f:
             for line in f:
@@ -104,20 +117,20 @@ class SDDSParser:
                 else:
                     self._nRows += self._nParameters - 1
                     break
-    
+
     # returns a column
     def getDataOfVariable(self, varname):
         if not self._hasVariable(varname):
             raise ValueError("Variable '" + varname + "' not in dataset.")
         return self._dataset[varname]
-    
-    
+
+
     def getUnitOfVariable(self, varname):
         if not self._hasVariable(varname):
             raise ValueError("Variable '" + varname + "' not in dataset.")
         return self._units[varname]
-    
-    
+
+
     def getVariables(self):
         return list(self._dataset.columns)
 
@@ -127,7 +140,7 @@ class SDDSParser:
             raise ValueError("Variable '" + varname + "' not in dataset.")
         return self._desc[varname]
 
-    
+
     def _description(self, f):
         for line in f:
             self._nRows += 1
@@ -137,8 +150,8 @@ class SDDSParser:
                 pass
             elif '&end' in line:
                 break
-    
-    
+
+
     def _parameter(self, f):
         for line in f:
             self._nRows += 1
@@ -150,8 +163,8 @@ class SDDSParser:
                 pass
             elif '&end' in line:
                 break
-    
-    
+
+
     def _column(self, f):
         variable = ''
         unit = ''
@@ -197,7 +210,7 @@ class SDDSParser:
                 pass
             elif '&end' in line:
                 break
-    
+
     def __removeNumber(self, s):
         # 25. March 2019
         # https://stackoverflow.com/questions/12851791/removing-numbers-from-string
@@ -212,12 +225,12 @@ class SDDSParser:
 
         This function finds all stat files that are one level
         below root. An exclude list can be specified.
- 
-        Two vectors are returned: x with the design variables names and values 
-        (IBF=485.9269768907996 ... from above) and the last value(s) of stat 
+
+        Two vectors are returned: x with the design variables names and values
+        (IBF=485.9269768907996 ... from above) and the last value(s) of stat
         file data spcified via yNames.
 
-        Example: 
+        Example:
         x        = []
         y        = []
         baseFN   = 'optLinac_40nC'

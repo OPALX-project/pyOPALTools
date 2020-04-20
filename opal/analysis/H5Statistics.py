@@ -1,3 +1,19 @@
+# Copyright (c) 2019 - 2020, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# All rights reserved
+#
+# Implemented as part of the PhD thesis
+# "Precise Simulations of Multibunches in High Intensity Cyclotrons"
+#
+# This file is part of pyOPALTools.
+#
+# pyOPALTools is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# You should have received a copy of the GNU General Public License
+# along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
+
 from opal.analysis.Statistics import Statistics
 import dask.array as da
 import dask
@@ -9,14 +25,16 @@ from opal.analysis.cyclotron import eval_radius, eval_radial_momentum
 class H5Statistics(Statistics):
 
     def _select(self, data, attrval, val):
-        """
-        Take a slice from the array
+        """Take a slice from the array
 
         Parameters
         ----------
-        data    (dask.array)    container to extract data from
-        attrval (dask.array)    data compare with in extraction value
-        val     (int/float)     value for extraction comparison
+        data : dask.array
+            Container to extract data from
+        attrval : dask.array
+            Data to compare with in extraction value
+        val : int or float
+            Value for extraction comparison
 
         Notes
         -----
@@ -29,7 +47,8 @@ class H5Statistics(Statistics):
 
         Returns
         -------
-        slice of data
+        array_like
+            Slice of data
         """
         data = da.compress(val == attrval, data)
         data = data.compute()
@@ -42,14 +61,7 @@ class H5Statistics(Statistics):
 
 
     def _selectBunch(self, data, bunch, step):
-        """
-        Take a slice from the array
-
-        Parameters
-        -----------
-        data    (array)         the data where to extract
-        bunch   (int)           to select
-        step    (int)           step in H5 file
+        """Take a bunch slice from the array
 
         Notes
         -----
@@ -59,6 +71,20 @@ class H5Statistics(Statistics):
 
         Open issue:
         https://github.com/dask/dask/issues/3293
+
+        Parameters
+        ----------
+        data : array_like
+            The data where to extract
+        bunch : int
+            Bunch to select
+        step : int
+            Step in H5 file
+
+        Returns
+        -------
+        array_like
+            Slice of data
         """
         if bunch > -1 and self.ds.isStepDataset('bunchNumber', step):
             bunchnum = self.ds.getData('bunchNumber', step=step)
@@ -67,20 +93,27 @@ class H5Statistics(Statistics):
         return data
 
     def selectData(self, var, **kwargs):
-        """
+        """Select subset of data
+
         Given a H5 dataset, select a subset using
-        the the attributes step (or turn) and bunch.
+        the attributes step (or turn) and bunch.
 
         Parameters
         -----------
-        data    (array)         the data where to extract
-        bunch   (int)           to select
-        step    (int)           step in H5 file
-        turn    (int)           of dataset (probe H5 files only)
+        var : str
+            Variable name
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
 
         Returns
         -------
-        data array
+        array_like
+            Data array
         """
         step    = kwargs.get('step', 0)
         turn    = kwargs.get('turn', None)
@@ -102,24 +135,30 @@ class H5Statistics(Statistics):
 
 
     def moment(self, var, k, **kwargs):
-        """
-        Calculate the k-th central moment.
-        
+        """Calculate the k-th central moment.
+
         Parameters
         ----------
-        var     (str)           the variable to compute k-th central moment
-        k       (int)           the moment, k = 1 is central mean
-        
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
-        
+        var : str
+            The variable to compute k-th central moment
+        k : int
+            The moment number, k = 1 is central mean
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
+
+        Returns
+        -------
+        float
+            k-th central moment
+
         Notes
         -----
-        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html#scipy.stats.moment
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html
         """
         data = self.selectData(var, **kwargs)
 
@@ -127,19 +166,28 @@ class H5Statistics(Statistics):
 
 
     def radial_moment(self, k, **kwargs):
-        """
-        Calculate the k-th central radial moment.
+        """Calculate the k-th central radial moment.
 
         Parameters
         ----------
-        k       (int)           the moment, k = 1 is central mean
+        k : int
+            The moment number, k = 1 is central mean
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
 
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
+        Returns
+        -------
+        float
+            k-th central radial moment
+
+        Notes
+        -----
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.moment.html
         """
         x = self.selectData('x', **kwargs)
         y = self.selectData('y', **kwargs)
@@ -150,19 +198,24 @@ class H5Statistics(Statistics):
 
 
     def mean(self, var, **kwargs):
-        """
-        Calculate the arithmetic mean.
-        
+        """Calculate the arithmetic mean.
+
         Parameters
         ----------
-        var     (str)           the variable to compute mean
-        
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
+        var : str
+            The variable
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
+
+        Returns
+        -------
+        float
+            arithmetic mean
         """
         data = self.selectData(var, **kwargs)
 
@@ -170,22 +223,29 @@ class H5Statistics(Statistics):
 
 
     def skew(self, var, **kwargs):
-        """
-        Calculate the skewness.
-        
-        23. March 2018
-        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.skew.html#scipy.stats.skew
-        
+        """Calculate the skewness.
+
         Parameters
         ----------
-        var     (str)           the variable
-        
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
+        var : str
+            The variable
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
+
+        Returns
+        -------
+        float
+            skewness
+
+        Notes
+        -----
+        23. March 2018
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.skew.html
         """
         data = self.selectData(var, **kwargs)
 
@@ -193,26 +253,33 @@ class H5Statistics(Statistics):
 
 
     def kurtosis(self, var, **kwargs):
-        """
-        23. March 2018
-        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kurtosis.html#scipy.stats.kurtosis
-        
-        Compute the kurtosis (Fisher or Pearson) of a dataset.
-        
+        """Compute the kurtosis (Fisher or Pearson) of a dataset.
+
         Kurtosis is the fourth central moment divided by the square of the variance.
         Fisher’s definition is used, i.e. 3.0 is subtracted from the result to give 0.0
         for a normal distribution.
-        
+
         Parameters
         ----------
-        var     (str)           the variable
-        
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
+        var : str
+            The variable
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
+
+        Returns
+        -------
+        float
+            kurtosis
+
+        Notes
+        -----
+        23. March 2018
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kurtosis.html
         """
         opal_logger.error('dask.stats.kurtosis does not agree with scipy.stats.kurtosis')
         data = self.selectData(var, **kwargs)
@@ -221,26 +288,29 @@ class H5Statistics(Statistics):
 
 
     def gaussian_kde(self, var, **kwargs):
-        """
-        23. March 2018
-        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian_kde.html#scipy.stats.gaussian_kde
-        
-        Representation of a kernel-density estimate using Gaussian kernels.
-        
+        """Representation of a kernel-density estimate using Gaussian kernels.
+
         Parameters
         ----------
-        var     (str)           the variable
-        
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
-        
+        var : str
+            The variable
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
+
         Returns
         -------
-        kernel density estimator of scipy.
+        scipy.stats.gaussian_kde
+            scipy kernel density estimator
+
+        Notes
+        -----
+        23. March 2018
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.gaussian_kde.html
         """
         data = self.selectData(var, **kwargs)
 
@@ -248,28 +318,38 @@ class H5Statistics(Statistics):
 
 
     def histogram(self, var, bins, range, **kwargs):
-        """
-        Compute a histogram of a dataset
-        
+        """Compute a histogram of a dataset
+
         Parameters
         ----------
-        var     (str)           the variable
-        bins    (int)           number of bins
-        range   ([])            range of histogram
+        var : str
+            The variable
+        bins : int or str
+            Binning type or nr of bins
+            (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
+        range : list
+            Range of histogram
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
+        density : bool, optional
+            Normalize such that integral over range is 1 (default: True).
 
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
-        density (bool)          normalize such that integral over
-                                range is 1.
-                                
         Returns
         -------
-        a numpy.histogram with bin edges
-        (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
+        numpy.histogram : array
+            The values of the histogram. See `density` and `weights` for a
+            description of the possible semantics.
+        bin_edges : array of dtype float
+            Return the bin edges ``(length(hist)+1)``.
+
+        Notes
+        -----
+            See https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html
         """
         density = kwargs.pop('density', True)
 
@@ -279,25 +359,32 @@ class H5Statistics(Statistics):
 
 
     def halo_continuous_beam(self, var, **kwargs):
-        """
+        r"""Compute the halo for a continuous beam.
+
         Compute the halo in horizontal or
         vertical direction according to
-        
-        h_x = <x^4> / <x^2>^2 - 2
-        
+
+        .. math:: h_x = \frac{{<}x^4{>}} {{<}x^2{>}^2} - 2
+
         Parameters
         ----------
-        var     (str)           the variable
-        
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
-        
-        Reference
-        ---------
+        var : str
+            The variable
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
+
+        Returns
+        -------
+        float
+            halo
+
+        References
+        ----------
         T. P. Wangler, Los Alamos National Laboratory, Los Alamos, NM 87545,
         K. R. Crandall, TechSource, Santa Fe, NM 87594-1057,
         BEAM HALO IN PROTON LINAC BEAMS,
@@ -311,25 +398,32 @@ class H5Statistics(Statistics):
 
 
     def halo_ellipsoidal_beam(self, var, **kwargs):
-        """
+        r"""Compute the halo for a ellipsoidal beam
+
         Compute the halo in horizontal, vertical
         or longitudinal direction according to
-        
-        h_x = <x^4> / <x^2>^2 - 15 / 17
-        
+
+        .. math:: h_x = \frac{{<}x^4{>}} {{<}x^2{>}^2} - \frac{15}{7}
+
         Parameters
         ----------
-        var     (str)           the variable
-        
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
-        
-        Reference
-        ---------
+        var : str
+            The variable
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
+
+        Returns
+        -------
+        float
+            halo
+
+        References
+        ----------
         T. P. Wangler, Los Alamos National Laboratory, Los Alamos, NM 87545,
         K. R. Crandall, TechSource, Santa Fe, NM 87594-1057,
         BEAM HALO IN PROTON LINAC BEAMS,
@@ -344,25 +438,30 @@ class H5Statistics(Statistics):
 
 
     def radial_halo_ellipsoidal_beam(self, **kwargs):
-        """
+        r"""Compute the radial halo for a ellipsoidal beam
+
         Compute the halo in radial direction
         according to
 
-        h_r = <r^4> / <r^2>^2 - 15 / 17
+        .. math:: h_r = \frac{{<}r^4{>}} {{<}r^2{>}^2} - \frac{15}{7}
 
         Parameters
         ----------
-        None
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
 
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
+        Returns
+        -------
+        float
+            halo
 
-        Reference
-        ---------
+        References
+        ----------
         T. P. Wangler, Los Alamos National Laboratory, Los Alamos, NM 87545,
         K. R. Crandall, TechSource, Santa Fe, NM 87594-1057,
         BEAM HALO IN PROTON LINAC BEAMS,
@@ -380,31 +479,40 @@ class H5Statistics(Statistics):
 
 
     def halo_2d_ellipsoidal_beam(self, var, **kwargs):
-        """
+        r"""Compute the 2D halo for a ellipsoidal beam
+
         Compute the 2D halo in horizontal, vertical
         or longitudinal direction according to
 
-        H_i = sqrt(3) / 2  * sqrt(A) / B - 15 / 7
-
-        A = <q^4><p^4> + 3 * <q^2p^2>^2 - 4 * <qp^3> * <q^3p>
-        B = <q^2><p^2> - <qp>^2
+        .. math::
+            \begin{align}
+            H_i & = \frac{\sqrt{3}} {2} \frac{\sqrt{A}} {B} - \frac{15}{7} \\
+            A & = {<}q^4{>}{<}p^4{>} + 3 {<}q^2p^2{>}^2 - 4 {<}qp^3{>} {<}q^3p{>} \\
+            B & = {<}q^2{>}{<}p^2{>} - {<}qp{>}^2
+            \end{align}
 
         with coordinate q and momentum p. Specify either the
         'step' or 'turn' (probes only).
 
         Parameters
         ----------
-        var   (str)     the direction 'x', 'y' or 'z'
+        var : str
+            The direction 'x', 'y', 'z'
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
 
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
+        Returns
+        -------
+        float
+            halo
 
-        Reference
-        ---------
+        References
+        ----------
         https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
         """
         q = self.selectData(var, **kwargs)
@@ -413,29 +521,38 @@ class H5Statistics(Statistics):
 
 
     def radial_halo_2d_ellipsoidal_beam(self, azimuth, **kwargs):
-        """
+        r"""Compute the 2D radial halo for a ellipsoidal beam
+
         Compute the 2D radial halo according to
 
-        H_i = sqrt(3) / 2  * sqrt(A) / B - 15 / 7
-
-        A = <r^4><p^4> + 3 * <r^2p^2>^2 - 4 * <rp^3> * <r^3p>
-        B = <r^2><p^2> - <rp>^2
+        .. math::
+            \begin{align}
+            H_i & = \frac{\sqrt{3}}{2} \frac{\sqrt{A}}{B} - \frac{15}{7} \\
+            A   & = {<}r^4{>}{<}p^4{>} + 3 {<}r^2p^2{>}^2 - 4 {<}rp^3{>} {<}r^3p{>} \\
+            B   & = {<}r^2{>}{<}p^2{>} - {<}rp{>}^2
+            \end{align}
 
         with radius r and radial momentum p.
 
         Parameters
         ----------
-        azimuth (float)         for radial halo only (in degree)
+        azimuth : float
+            Azimuth for radial halo only (in degree)
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
 
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
+        Returns
+        -------
+        float
+            halo
 
-        Reference
-        ---------
+        References
+        ----------
         https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
         """
         x = self.selectData('x', **kwargs)
@@ -454,24 +571,34 @@ class H5Statistics(Statistics):
 
 
     def _halo_2d_ellipsoidal_beam(self, q, p):
-        """
+        r"""Compute the 2D halo
+
         Compute the 2D halo in horizontal, vertical
         or longitudinal direction according to
 
-        H_i = sqrt(3) / 2  * sqrt(A) / B - 15 / 7
+        .. math::
+            \begin{align}
+                H_i & = \frac{\sqrt{3}}{2} \frac{\sqrt{A}}{B} - \frac{15}{7} \\
+                A & = {<}q^4{>}{<}p^4{>} + 3 {<}q^2p^2{>}^2 - 4 {<}qp^3{>} {<}q^3p{>} \\
+                B & = {<}q^2{>}{<}p^2{>} - {<}qp{>}^2
+            \end{align}
 
-        A = <q^4><p^4> + 3 * <q^2p^2>^2 - 4 * <qp^3> * <q^3p>
-        B = <q^2><p^2> - <qp>^2
-
-        with coordinate q and momentum p.
+        with coordinate `q` and momentum `p`.
 
         Parameters
         ----------
-        q     (array)   coordinate data
-        p     (array)   momentum data
+        q : array_like
+            coordinate data
+        p : array_like
+            momentum data
 
-        Reference
-        ---------
+        Returns
+        -------
+        float
+            halo
+
+        References
+        ----------
         https://journals.aps.org/prab/abstract/10.1103/PhysRevSTAB.5.124202
         """
 
@@ -497,27 +624,33 @@ class H5Statistics(Statistics):
 
 
     def projected_emittance(self, dim, **kwargs):
-        """
-        Compute the projected emittance. It shifts the
+        r"""Compute the projected emittance
+
+        It shifts the
         coordinates by their mean value such that the bunch
         is centered around zero.
-        
-        \varepsilon = \sqrt{ <coords^2><momenta^2> - <coords*momenta>^2 }
-        
+
+        .. math:: \varepsilon = \sqrt{ {<}coords^2{>}{<}momenta^2{>} - {<}coords*momenta{>}^2 }
+
         Parameters
         ----------
-        dim     (str)           the dimension 'x', 'y' or 'z'
-        
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
-        
+        dim : str
+            the dimension 'x', 'y' or 'z'
+
+        Parameters
+        ----------
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
+
         Returns
         -------
-        the projected emittance
+        float
+            the projected emittance
         """
         coords  = self.selectData(dim, **kwargs)
         momenta = self.selectData('p' + dim, **kwargs)
@@ -535,27 +668,30 @@ class H5Statistics(Statistics):
 
 
     def radial_projected_emittance(self, azimuth, **kwargs):
-        """
-        Compute the radial projected emittance. It shifts the
+        r"""Compute the radial projected emittance
+
+        It shifts the
         coordinates by their mean value such that the bunch
         is centered around zero.
 
-        \varepsilon = \sqrt{ <r^2><p_r^2> - <r*p_r>^2 }
+        .. math:: \varepsilon = \sqrt{ {<}r^2{>}{<}p_r^2{>} - {<}r*p_r{>}^2 }
 
         Parameters
         ----------
-        azimuth (float)         azimuthal angle (in degree)
-
-        Optionals
-        ---------
-        step    (int)           of dataset
-        turn    (int)           of dataset
-        bunch   (int)           for which to compute (only if 'turn'
-                                not given (default: -1 --> all particles)
+        azimuth : float
+            Azimuth angle (in degree)
+        bunch : int, optional
+            Bunch to select (default: -1, which means all particles)
+        step : int, optional
+            Step in H5 file (default: 0)
+        turn : int, optional
+            Turn of dataset (default: None, which implies no specific turn selection)
+            (probe H5 files only)
 
         Returns
         -------
-        the projected emittance
+        float
+            the projected emittance
         """
         x = self.selectData('x', **kwargs)
         px = self.selectData('px', **kwargs)
@@ -582,24 +718,31 @@ class H5Statistics(Statistics):
 
 
     def find_beams(self, var, **kwargs):
-        """
-        Compute the starting and end points of a beam via
-        a histogram.
+        """Compute the starting and end points of a beam via a histogram.
+
         The purpose of this script is to distinguish bunches
         of a multi-bunch simulation.
 
         Parameters
         ----------
-        var     (str)           the variable
-
-        Optionals
-        ---------
-        step    (int)           of dataset
-        bins    (int)           number of bins for histogram
+        var : str
+            The variable
+        step : int, optional
+            Step in H5 file (default: 0)
+        bins : int, optional
+            Number of bins for histogram (default: 0)
+        Wn : float, optional
+            Critical frequency for lowpass filter (default: 0.15)
+            (see https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html)
 
         Returns
         -------
-        a list of minima locations and corresponding histogram
+        peaks: ndarray
+            Indices of minima locations
+        hist : array
+            The values of the corresponding numpy histogram.
+        bin_edges : array of dtype float
+            Return the bin edges ``(length(hist)+1)``.
         """
         step = kwargs.pop('step', 0)
         Wn   = kwargs.pop('Wn', 0.15)
@@ -632,31 +775,39 @@ class H5Statistics(Statistics):
 
 
     def rotate(x, y, theta):
-        """
-        Rotate the coordinates (x, y) by theta (degree)
+        r"""Rotate the coordinates (`x`, `y`) by `theta` (degree)
 
         Parameters
         ----------
-        x       (dask.array) is x-data
-        y       (dask.array) is y-data
-        theta   (float) is the angle in degree
-
-
-        Note
-        ----
-
-        R(theta) = [ cos(theta), -sin(theta)
-                     sin(theta), cos(theta) ]
-
-        [rx, ry] = R(theta) * [x, y]
-
-        Reference
-        ---------
-        https://en.wikipedia.org/wiki/Rotation_matrix
+        x : dask.array
+            x-data
+        y : dask.array
+            y-data
+        theta : float
+            The angle in degree
 
         Returns
         -------
-        rotated coordinates (rx, ry)
+        rx: dask.array
+            rotated coordinates `x`
+        ry: dask.array
+            rotated coordinates `y`
+
+        Notes
+        -----
+        .. math::
+            \begin{align}
+            R(\theta) & = \begin{bmatrix}
+                           \cos(\theta) & -\sin(\theta) \\
+                           \sin(\theta) &  \cos(\theta)
+                        \end{bmatrix} \\
+            \begin{bmatrix} rx & ry \end{bmatrix} & =
+            R(\theta) * \begin{bmatrix} x & y \end{bmatrix}
+            \end{align}
+
+        References
+        ----------
+        https://en.wikipedia.org/wiki/Rotation_matrix
         """
 
         theta = da.deg2rad(theta)
