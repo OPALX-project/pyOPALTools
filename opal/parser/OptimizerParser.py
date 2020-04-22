@@ -1,4 +1,4 @@
-# Copyright (c) 2017 - 2019, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# Copyright (c) 2017 - 2020, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
 # All rights reserved
 #
 # Implemented as part of the PhD thesis
@@ -261,10 +261,6 @@ class OptimizerParser:
         self.__nParetoFiles = 0
         self.__pareto = 'ParetoFront'
 
-        self.__version_supported = {
-            '2.1.0':    self.__readGeneration_version_2_1_0
-        }
-
         self.__loaded_generation   = -1
         self.__loaded_optimizer    = -1
         self.__loaded_pareto_front = -1
@@ -364,11 +360,12 @@ class OptimizerParser:
         tag = 'OPAL version'
         if tag in data.keys():
             version = data[tag]
+            version_int = int(version.replace('.', ''))
 
-            if version in self.__version_supported.keys():
-                self.__version_supported[version](data)
-            else:
+            if version_int < 210:
                 raise IOError('No version ' + version + ' supported.')
+
+            self.__readGeneration_version_2_1_0(data)
         else:
             self.__readGeneration_version_2_0_0(data)
 

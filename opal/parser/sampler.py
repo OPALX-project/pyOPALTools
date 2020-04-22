@@ -213,8 +213,9 @@ class SamplerParser:
 
             if self.__version_tag in parsed.keys():
                 version = parsed[self.__version_tag]
+                version_int = int(version.replace('.', ''))
 
-                if version < '2.1.0':
+                if version_int < 210:
                     raise IOError("Version " + version + " not supported.")
 
                 self.__parse_version_2_1_0(parsed)
