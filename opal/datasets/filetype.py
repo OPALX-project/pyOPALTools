@@ -72,7 +72,6 @@ class FileType(IntEnum):
             # FIXME not nice file handling
             # currently only JSON could be for
             # OPTIMIZER or SAMPLER --> try parsing
-            # if no exception is raised, it's a SAMPLER file
             if isinstance(extension[ext], list):
                 opal_logger.debug('FileType.extensionToFileType: Optimizer or sampler output')
                 try:
