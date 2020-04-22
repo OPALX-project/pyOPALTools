@@ -678,8 +678,7 @@ class OptimizerParser:
         try:
             self.__actual_parse(filename)
             self.__reset_attributes()
-        except Exception as e:
-            print ( e)
+        except:
             self.__reset_attributes()
             return False
         return True
