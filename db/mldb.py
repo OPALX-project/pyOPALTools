@@ -173,6 +173,8 @@ class mldb:
         self.trainingSet = []
         optjson = OptimizerParser(path + '/')
 
+        optjson.parse()
+
         numGenerations = optjson.getNumOfGenerations()
 
         for i in range(numGenerations):

@@ -70,6 +70,7 @@ def plot_parcoords(path, filename_postfix, generation, filename):
 
     dirname = os.path.dirname(infile)
     optjson = jsonreader(dirname + '/')
+    optjson.parse()
 
     # get the generation from the filename
     basename = os.path.basename(infile)

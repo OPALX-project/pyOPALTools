@@ -18,6 +18,7 @@ import os
 from enum import IntEnum, unique
 
 from opal.parser.sampler import SamplerParser
+from opal.parser.OptimizerParser import OptimizerParser
 
 from opal.utilities.logger import opal_logger
 
@@ -74,12 +75,17 @@ class FileType(IntEnum):
             # if no exception is raised, it's a SAMPLER file
             if isinstance(extension[ext], list):
                 opal_logger.debug('FileType.extensionToFileType: Optimizer or sampler output')
-                parser = SamplerParser()
                 try:
-                    parser.parse(fname)
-                    return cls.SAMPLER
+                    parser = SamplerParser()
+                    optparser = OptimizerParser(os.path.dirname(fname))
+                    if parser.check_file(fname):
+                        return cls.SAMPLER
+                    elif optparser.check_file(fname):
+                        return cls.OPTIMIZER
+                    else:
+                        return cls.NONE
                 except:
-                    return cls.OPTIMIZER
+                    return cls.NONE
             else:
                 return extension[ext]
         elif fname in file:

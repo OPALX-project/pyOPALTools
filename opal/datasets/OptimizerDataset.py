@@ -54,6 +54,8 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
 
         self.__parser = OptimizerParser(directory)
 
+        self.__parser.parse()
+
         self.__postfix = '_' + str.split(fname, "_", 2)[1] + '_'
 
         self._loaded_generation = -1

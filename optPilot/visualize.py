@@ -46,6 +46,7 @@ data = { }
 def readJSONData(filename):
     dirname = os.path.dirname(filename)
     optjson = jsonreader(dirname + '/')
+    optjson.parse()
 
     # get the generation from the filename
     basename = os.path.basename(filename)
