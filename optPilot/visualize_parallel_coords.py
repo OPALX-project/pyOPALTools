@@ -69,7 +69,8 @@ def plot_parcoords(path, filename_postfix, generation, filename):
     infile = os.path.join(path, str(generation) + '_' + filename_postfix)
 
     dirname = os.path.dirname(infile)
-    optjson = jsonreader(dirname + '/')
+    optjson = jsonreader()
+    optjson.parse(dirname + '/')
 
     # get the generation from the filename
     basename = os.path.basename(infile)

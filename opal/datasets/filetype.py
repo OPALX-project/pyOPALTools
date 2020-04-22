@@ -1,4 +1,4 @@
-# Copyright (c) 2018, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# Copyright (c) 2018, 2020, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
 # All rights reserved
 #
 # Implemented as part of the PhD thesis
@@ -18,6 +18,7 @@ import os
 from enum import IntEnum, unique
 
 from opal.parser.sampler import SamplerParser
+from opal.parser.OptimizerParser import OptimizerParser
 
 from opal.utilities.logger import opal_logger
 
@@ -71,15 +72,19 @@ class FileType(IntEnum):
             # FIXME not nice file handling
             # currently only JSON could be for
             # OPTIMIZER or SAMPLER --> try parsing
-            # if no exception is raised, it's a SAMPLER file
             if isinstance(extension[ext], list):
                 opal_logger.debug('FileType.extensionToFileType: Optimizer or sampler output')
-                parser = SamplerParser()
                 try:
-                    parser.parse(fname)
-                    return cls.SAMPLER
+                    parser = SamplerParser()
+                    optparser = OptimizerParser()
+                    if parser.check_file(fname):
+                        return cls.SAMPLER
+                    elif optparser.check_file(fname):
+                        return cls.OPTIMIZER
+                    else:
+                        return cls.NONE
                 except:
-                    return cls.OPTIMIZER
+                    return cls.NONE
             else:
                 return extension[ext]
         elif fname in file:

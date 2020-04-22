@@ -52,7 +52,9 @@ class OptimizerDataset(DatasetBase, OptimizerPlotter, OptimizerAnalysis):
         """
         super(OptimizerDataset, self).__init__(directory, fname)
 
-        self.__parser = OptimizerParser(directory)
+        self.__parser = OptimizerParser()
+
+        self.__parser.parse(directory)
 
         self.__postfix = '_' + str.split(fname, "_", 2)[1] + '_'
 
