@@ -171,9 +171,9 @@ class mldb:
 
     def build(self,filename_postfix, path):
         self.trainingSet = []
-        optjson = OptimizerParser(path + '/')
+        optjson = OptimizerParser()
 
-        optjson.parse()
+        optjson.parse(path + '/')
 
         numGenerations = optjson.getNumOfGenerations()
 

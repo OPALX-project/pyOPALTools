@@ -77,7 +77,7 @@ class FileType(IntEnum):
                 opal_logger.debug('FileType.extensionToFileType: Optimizer or sampler output')
                 try:
                     parser = SamplerParser()
-                    optparser = OptimizerParser(os.path.dirname(fname))
+                    optparser = OptimizerParser()
                     if parser.check_file(fname):
                         return cls.SAMPLER
                     elif optparser.check_file(fname):

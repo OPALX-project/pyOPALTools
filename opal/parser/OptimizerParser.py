@@ -184,8 +184,8 @@ class OptimizerParser:
 
             1. Find all .json files of a directory, e.g. "./"
 
-            >>> optjson = optreader.OptimizerParser("./")
-            >>> optjson.parse()
+            >>> optjson = optreader.OptimizerParser()
+            >>> optjson.parse("./")
 
             2. Read in a generation file, e.g. 1
 
@@ -236,7 +236,7 @@ class OptimizerParser:
 
 
     # @param directory to json files
-    def __init__(self, directory):
+    def __init__(self):
         """Parse a generation file
 
         Parameters
@@ -254,8 +254,7 @@ class OptimizerParser:
             - there are several several different basenames
             - no json file is found
         """
-        self.__directory = directory
-
+        self.__directory = ""
         self.__reset_attributes()
 
     @property
@@ -603,7 +602,12 @@ class OptimizerParser:
             self.__parse_version_2_0_0(data)
 
 
-    def parse(self):
+    def parse(self, directory):
+        """Collect information about optimizer JSON files.
+        """
+        self.__directory = directory
+        self.__reset_attributes()
+
         tbasename = ""
         for f in os.listdir(self.__directory):
             if f.endswith(".json"):

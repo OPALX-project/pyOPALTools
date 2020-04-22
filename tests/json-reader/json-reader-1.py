@@ -6,8 +6,8 @@ import sys,os
 try:
     
     # 1. Find all .json files of a directory, e.g. "./"
-    optjson = optreader("./data/")
-    optjson.parse()
+    optjson = optreader()
+    optjson.parse("./data/")
     print ( "Read generation ", sys.argv[1])
     # 2. Read in a generation file, e.g. 450  
     optjson.readGeneration(int(sys.argv[1]))
