@@ -1,4 +1,4 @@
-# Copyright (c) 2018, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# Copyright (c) 2018, 2020 Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
 # All rights reserved
 #
 # Implemented as part of the PhD thesis
@@ -122,9 +122,6 @@ class SamplerParser:
         self.__objs  = []
 
         self.__version_tag = 'OPAL version'
-        self.__version_support = {
-            '2.1.0': self.__parse_version_2_1_0
-        }
 
     def __parse_version_2_0_0(self, data):
         samples = data['samples']
@@ -217,10 +214,10 @@ class SamplerParser:
             if self.__version_tag in parsed.keys():
                 version = parsed[self.__version_tag]
 
-                if not version in self.__version_support.keys():
+                if version < '2.1.0':
                     raise IOError("Version " + version + " not supported.")
 
-                self.__version_support[version](parsed)
+                self.__parse_version_2_1_0(parsed)
             else:
                 self.__parse_version_2_0_0(parsed)
 
