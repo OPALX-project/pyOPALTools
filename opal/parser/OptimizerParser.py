@@ -237,22 +237,7 @@ class OptimizerParser:
 
     # @param directory to json files
     def __init__(self):
-        """Parse a generation file
-
-        Parameters
-        ----------
-        directory : str
-            Where the .json files are
-
-        Returns
-        -------
-        OptimizerParser
-
-        Notes
-        -----
-        Raises a runtime error if
-            - there are several several different basenames
-            - no json file is found
+        """Constructor.
         """
         self.__directory = ""
         self.__reset_attributes()
@@ -604,6 +589,17 @@ class OptimizerParser:
 
     def parse(self, directory):
         """Collect information about optimizer JSON files.
+
+        Parameters
+        ----------
+        directory : str
+            Where the .json files are
+
+        Notes
+        -----
+        Raises a runtime error if
+            - there are several several different basenames
+            - no json file is found
         """
         self.__directory = directory
         self.__reset_attributes()
