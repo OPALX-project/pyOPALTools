@@ -14,7 +14,10 @@ import unittest.mock
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('../..'))
+src = os.path.abspath('../..')
+sys.path.insert(0, src)
+# Define PYTHONPATH for nbsphinx
+os.environ['PYTHONPATH'] = src
 
 # Mock dependencies
 MOCK_MODULES = ['chaospy',
