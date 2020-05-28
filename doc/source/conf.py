@@ -48,8 +48,8 @@ for mod_name in MOCK_MODULES:
 # -- Project information -----------------------------------------------------
 
 project = 'pyOPALTools'
-copyright = '2020, Matthias Frey, Jochem Snuverink, Andreas Adelmann, Nicole Neveu, Renato Bellotti, Philippe Ganz'
-author = 'Matthias Frey, Jochem Snuverink, Andreas Adelmann, Nicole Neveu, Renato Bellotti, Philippe Ganz'
+copyright = '2020, Matthias Frey, Jochem Snuverink, Andreas Adelmann, Nicole Neveu, Renato Bellotti, Philippe Ganz.'
+author = 'Matthias Frey, Jochem Snuverink, Andreas Adelmann, Nicole Neveu, Renato Bellotti, Philippe Ganz.'
 
 
 # -- General configuration ---------------------------------------------------
@@ -86,6 +86,11 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = []
+
+# If not None, a 'Last updated on:' timestamp is inserted at every page
+# bottom, using the given strftime format.
+# The empty string is equivalent to '%b %d, %Y'.
+html_last_updated_fmt = "%d %b %Y"
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
