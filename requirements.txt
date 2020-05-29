@@ -1,8 +1,10 @@
-numpy
-scipy
-jupyter
-jupyterlab	# this is the future
-matplotlib
+chaospy
 h5py
-pyQt5
+matplotlib
+numpy
+pandas
+plotly
+scipy
 seaborn
+sklearn
+yt
