@@ -24,3 +24,4 @@ import opal.parser.PeakParser
 import opal.parser.sampler
 import opal.parser.TimingParser
 import opal.parser.LossParser
+import opal.parser.FieldParser

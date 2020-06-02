@@ -40,7 +40,8 @@ class FileType(IntEnum):
     SMB         = 13,
     AMR         = 14,
     LOSS        = 15,
-    NONE        = 16
+    FIELD       = 16,
+    NONE        = 17
 
     @classmethod
     def extensionToFileType(cls, fname):
@@ -58,7 +59,8 @@ class FileType(IntEnum):
             '.peaks':   cls.PEAK,
             '.hist':    cls.HIST,
             '.json':    [cls.OPTIMIZER, cls.SAMPLER],
-            '.loss':    cls.LOSS
+            '.loss':    cls.LOSS,
+            '.field':   cls.FIELD
         }
 
         file = {
