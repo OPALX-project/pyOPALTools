@@ -19,13 +19,13 @@ class FieldParser:
     Attributes
     ----------
     _dim : list
-        List of number of grid points per dimension
+        list of number of grid points per dimension
     _indices : numpy.ndarray
-        Indices representing the grid points
+        indices representing the grid points
     _field : numpy.ndarray
-        Field on grid points
+        field on grid points
     _columns: dict
-        The keys are the column names and the values their units.
+        the keys are the column names and the values their units
     """
 
     def __init__(self):
@@ -62,7 +62,7 @@ class FieldParser:
         Returns
         -------
         numpy.ndarray
-            The field data on the grid.
+            the field data on the grid
         """
         return self._field
 
@@ -72,7 +72,7 @@ class FieldParser:
         Returns
         -------
         numpy.ndarray
-            The grid point indices.
+            the grid point indices
         """
         return self._indices
 
@@ -82,13 +82,17 @@ class FieldParser:
         Returns
         -------
         list
-            The number of grid points per dimension.
+            the number of grid points per dimension
         """
         return self._dim
 
 
     def is_scalar(self):
-        """Check if a scalar field
+        """
+        Returns
+        -------
+        bool
+            True if a scalar field
         """
         return self._field.shape[3] == 1
 
