@@ -19,6 +19,7 @@ from enum import IntEnum, unique
 
 from opal.parser.sampler import SamplerParser
 from opal.parser.OptimizerParser import OptimizerParser
+from opal.parser.FieldParser import FieldParser
 
 from opal.utilities.logger import opal_logger
 
@@ -89,6 +90,10 @@ class FileType(IntEnum):
                     return cls.NONE
             else:
                 return extension[ext]
+
+        fparser = FieldParser()
+        if fparser.check_file(fname):
+            return cls.FIELD
         elif fname in file:
             return file[fname]
         elif 'time' in fname.lower() or 'timing' in fname.lower():
