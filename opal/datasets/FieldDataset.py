@@ -27,21 +27,27 @@ class FieldDataset(DatasetBase):
     def getData(self, step=0):
         return self._parser.field
 
-    def getSlice(self, dim, index = 0):
+    def getSlice(self, normal, index = 0):
         try:
+            if normal == 'x':
+                dim = 0
+            elif normal == 'y':
+                dim = 1
+            elif normal == 'z':
+                dim = 2
+            else:
+                raise ValueError("The normal can only by 'x', 'y' or 'z'.")
+
             d = self._parser.dimension
             if index < 0 or index > d[dim] - 1:
                 raise IndexError("Bad grid point '" + str(index) + "'.")
 
-            ind = self._parser.indices[..., -dim]
-            print ( ind )
-
             if dim == 0:
-                return self._parser.indices[index,:,:, 1:3], self._parser.field[index,:,:]
+                return self._parser.positions[index,:,:, 1:3], self._parser.field[index,:,:]
             elif dim == 1:
-                return self._parser.indices[..., -dim], self._parser.field[:,index,:]
+                return self._parser.positions[:, index, :][:,:, [0, 2]], self._parser.field[:,index,:]
             elif dim == 2:
-                return self._parser.indices[:,:,index, 0:2],self._parser.field[:,:,index]
+                return self._parser.positions[:,:,index, 0:2], self._parser.field[:,:,index]
             else:
                 raise IndexError("Bad dimension '" + str(dim) + "'.")
         except Exception as ex:
