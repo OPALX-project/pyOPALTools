@@ -59,7 +59,11 @@ class FieldDataset(DatasetBase, FieldPlotter):
         self._load_step(step)
         return self._parser.field
 
-    def getSlice(self, field, normal, pos=0.0, step=0):
+    @property
+    def dataframe(self):
+        return self._df
+
+    def getSlice(self, field, normal, pos=0.0, step=0, index=0):
         try:
             if normal == 'x':
                 dim = 0
@@ -75,14 +79,15 @@ class FieldDataset(DatasetBase, FieldPlotter):
 
             self._load_step(step)
 
-            idx = self._find_nearest(self.positions[:, dim], pos, dim)
+            if index > 0:
+                index = self._find_nearest(self.positions[:, dim], pos, dim)
 
             ## why do we need astype? Bug of pandas?
             nindex = self.indices[:, dim].astype(int)
-            pos_1 = self.positions[nindex == idx, dims[0]]
-            pos_2 = self.positions[nindex == idx, dims[1]]
+            pos_1 = self.positions[nindex == index, dims[0]]
+            pos_2 = self.positions[nindex == index, dims[1]]
 
-            ff    = self._df[field].values[nindex == idx]
+            ff    = self._df[field].values[nindex == index]
 
             d = self._dim
             pos_1 = pos_1.reshape((d[dims[0]], d[dims[1]]))

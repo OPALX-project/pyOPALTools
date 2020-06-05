@@ -12,14 +12,40 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 from .BasePlotter import *
+import numpy as np
 
 class FieldPlotter(BasePlotter):
 
     def __init__(self):
         pass
 
-    def plot_slice(self, field, normal, pos, step=0):
-        ix, iy, field = self.ds.getSlice(field, normal, pos, step)
+    def plot_slice(self, field, normal, pos=0.0, step=0, index=0):
+        ix, iy, field = self.ds.getSlice(field, normal, pos, step, index=index)
         plt.pcolormesh(ix, iy, field)
+        plt.colorbar()
+        return plt
+
+    def plot_projection(self, field, normal, step=0):
+        ix, iy, field_sum = self.ds.getSlice(field, normal, step=step, index=1)
+
+        if normal == 'x':
+            dim = 0
+        elif normal == 'y':
+            dim = 1
+        elif normal == 'z':
+            dim = 2
+
+        mindex = max(self.ds.indices[:, dim])
+
+        data = self.ds.dataframe[normal].values
+
+        # mesh spacing in each dimension is constant in OPAL
+        # --> it is enough to take just one value
+        dx = np.diff(data)[0]
+
+        for i in range(1, int(mindex) + 1):
+            _, _, data = self.ds.getSlice(field, normal, step=step, index=i)
+            field_sum += data * dx
+        plt.pcolormesh(ix, iy, field_sum)
         plt.colorbar()
         return plt
