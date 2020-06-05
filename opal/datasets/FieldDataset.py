@@ -36,7 +36,7 @@ class FieldDataset(DatasetBase):
             elif normal == 'z':
                 dim = 2
             else:
-                raise ValueError("The normal can only by 'x', 'y' or 'z'.")
+                raise ValueError("The normal can only be 'x', 'y' or 'z'.")
 
             d = self._parser.dimension
             if index < 0 or index > d[dim] - 1:
