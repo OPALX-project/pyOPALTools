@@ -43,6 +43,7 @@ class FieldDataset(DatasetBase, FieldPlotter):
         (used for zero padding)
     _parser : FieldParser
         class to parser field data
+    _units : dict
     """
 
     def __init__(self, directory, fname):
@@ -53,11 +54,29 @@ class FieldDataset(DatasetBase, FieldPlotter):
         self._loaded_step = -1
         self._directory   = directory
 
-        #self._parser.parse(self.filename)
+        self._label_mapper = {
+            'ex':   r'$E_x$',
+            'ey':   r'$E_y$',
+            'ez':   r'$E_z$',
+            'phi':  r'$\phi$',
+            'rho':  r'$\rho$'
+        }
 
-    def getData(self, field, step=0):
+    def getData(self, var, step=0):
         self._load_step(step)
-        return self._parser.field
+        return self._df[:, var].values
+
+    def getLabel(self, var):
+        if var in self._label_mapper:
+            var = self._label_mapper[var]
+        return var
+
+    def getUnit(self, var):
+        return self._units[var]
+
+    @property
+    def names(self):
+        return list(self._df.keys())
 
     @property
     def dataframe(self):
@@ -117,16 +136,15 @@ class FieldDataset(DatasetBase, FieldPlotter):
 
 
     def __str__(self):
+        if self._loaded_step == -1:
+            self._load_step(0)
         s  = '\n\tField dataset.\n\n'
-
-        field_type = 'vector'
-        if self._parser.is_scalar():
-            field_type = 'scalar'
-
-        s += '\tType:       ' + field_type + ' field \n\n'
-        dim = self._parser.dimension
-        s += '\tDimension:  ' + str(dim[0]) + ' x ' + \
-            str(dim[1]) + ' x ' + str(dim[2]) + '\n\n'
+        s += '\tDimension:  ' + str(self._dim[0]) + ' x ' + \
+            str(self._dim[1]) + ' x ' + str(self._dim[2]) + '\n\n'
+        fields = list(self._df.keys())
+        s += '\tAvailable fields (' + str(len(fields)) + ') :\n\n'
+        for field in fields:
+            s += '\t' + field + '\n'
         return s
 
     def _count_files(self, directory, fname):
@@ -199,8 +217,10 @@ class FieldDataset(DatasetBase, FieldPlotter):
                     # 5. June 2020
                     # https://stackoverflow.com/questions/52913379/concat-dataframe-having-duplicate-columns/52913406
                     self._df =  self._df.merge(df, how='outer')
+                    self._units.update(self._parser.get_unit_dictionary())
                 else:
                     self._df = self._parser.dataframe
+                    self._units = self._parser.get_unit_dictionary()
             self._loaded_step = step
             self._dim = self._parser.dimension
             # clear data in parser (not needed anymore)

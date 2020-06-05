@@ -58,6 +58,9 @@ class FieldParser:
         self._image = None
         self._df = None
 
+    def get_unit_dictionary(self):
+        return self._columns
+
     @property
     def field(self):
         """

@@ -28,10 +28,22 @@ class FieldPlotter(BasePlotter):
     def plot_projection(self, field, normal, step=0):
         ix, iy, field_sum = self.ds.getSlice(field, normal, step=step, index=1)
 
+        xlab = 'x'
+        ylab = 'y'
+        xunit = self.ds.getUnit('x')
+        yunit = self.ds.getUnit('y')
         if normal == 'x':
             dim = 0
+            xlab = 'y'
+            ylab = 'z'
+            xunit = self.ds.getUnit('y')
+            yunit = self.ds.getUnit('z')
         elif normal == 'y':
             dim = 1
+            xlab = 'x'
+            ylab = 'z'
+            xunit = self.ds.getUnit('x')
+            yunit = self.ds.getUnit('z')
         elif normal == 'z':
             dim = 2
 
@@ -47,5 +59,12 @@ class FieldPlotter(BasePlotter):
             _, _, data = self.ds.getSlice(field, normal, step=step, index=i)
             field_sum += data * dx
         plt.pcolormesh(ix, iy, field_sum)
-        plt.colorbar()
+        plt.xlabel(xlab + ' [' + xunit + ']')
+        plt.ylabel(ylab + ' [' + yunit + ']')
+        cbar = plt.colorbar()
+
+        clab = self.ds.getLabel(field)
+        cunit = self.ds.getUnit(field)
+
+        cbar.set_label(clab + ' [' + cunit + '*m]')
         return plt
