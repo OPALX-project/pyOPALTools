@@ -12,22 +12,20 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 import pandas as pd
+import numpy as np
+import collections
 
 class FieldParser:
     """Read OPAL field data generated with compile flag DBG_SCALARFIELD enabled.
 
     Attributes
     ----------
-    _dim : list
-        list of number of grid points per dimension
-    _indices : numpy.ndarray
-        indices representing the grid points
-    _field : numpy.ndarray
-        field on grid points
     _columns: dict
         the keys are the column names and the values their units
-    _image: numpy.array
-        image potential is available
+    _df  : pandas.core.frame.DataFrame
+        the data
+    _dim : list
+        list of number of grid points per dimension
     """
 
     def __init__(self):
@@ -39,31 +37,26 @@ class FieldParser:
         if not self._check_header(filename):
             raise IOError("File '" + filename + "' is not a proper grid file.")
 
-        self._parse_header(filename)
+        col_types = self._parse_header(filename)
 
-        df = pd.read_csv(filename, sep='\s+', comment='#', header=None)
+        self._df = pd.read_csv(filename, sep='\s+', comment='#', header=None,
+                               names=list(col_types.keys()), dtype=col_types)
 
-        self._indices   = df.values[:, 0:3]
-        self._positions = df.values[:, 3:6]
-
-        if 'image' in self._columns.keys():
-            self._field     = df.values[:, 6]
-            self._image     = df.values[:, 7]
-        else:
-            self._field     = df.values[:, 6:]
+        #print ( self._df)
 
         for i in range(3):
-            self._dim[i] = int(max(self._indices[:, i]) -
-                               min(self._indices[:, i]) + 1)
+            self._dim[i] = int(max(self.indices[:, i]) -
+                               min(self.indices[:, i]) + 1)
 
-        ni = self._dim[0]
-        nj = self._dim[1]
-        nk = self._dim[2]
+    @property
+    def dataframe(self):
+        return self._df
 
-        self._field     = self._field.reshape((ni, nj, nk, self._field.shape[1]))
-        self._indices   = self._indices.reshape((ni, nj, nk, 3))
-        self._positions = self._positions.reshape((ni, nj, nk, 3))
-
+    def clear(self):
+        self._dim = None
+        self._columns = {}
+        self._image = None
+        self._df = None
 
     @property
     def field(self):
@@ -73,7 +66,9 @@ class FieldParser:
         numpy.ndarray
             the field data on the grid
         """
-        return self._field
+        if 'image' in self._columns.keys():
+            return self._df.values[:, 6]
+        return self._df.values[:, 6:]
 
     @property
     def image(self):
@@ -83,7 +78,9 @@ class FieldParser:
         numpy.array
             the image potential (if available)
         """
-        return self._image
+        if 'image' in self._columns.keys():
+            return self._df.values[:, 7]
+        return None
 
     @property
     def indices(self):
@@ -93,7 +90,7 @@ class FieldParser:
         numpy.ndarray
             the grid point indices
         """
-        return self._indices
+        return self._df.values[:, 0:3]
 
     @property
     def positions(self):
@@ -103,7 +100,7 @@ class FieldParser:
         numpy.ndarray
             the positions at the grid points
         """
-        return self._positions
+        return self._df.values[:, 3:6]
 
     @property
     def dimension(self):
@@ -123,7 +120,7 @@ class FieldParser:
         bool
             True if a scalar field
         """
-        return self._field.shape[3] == 1
+        return self.field.shape[1] == 1
 
     def _check_header(self, filename):
         # check the first line
@@ -146,18 +143,21 @@ class FieldParser:
                     break
 
         header_line = header_line.split()
-        col = ''
+        col_types = collections.OrderedDict()
+
         # first entry is '#' --> skip
         for entry in header_line[1:]:
             if '[' in entry:
-                self._columns[col] = entry.replace('[', '').replace(']', '')
+                self._columns[list(col_types.keys())[-1]] = entry.replace('[', '').replace(']', '')
             else:
-                col = entry
+                col_types[entry] = np.float64
 
         # add remaining columns that have no unit
-        for entry in header_line[1:]:
-            if not entry in self._columns.keys() and not '[' in entry:
+        for entry in col_types.keys():
+            if not entry in self._columns.keys():
                 self._columns[entry] = None
+                col_types[entry] = np.int32
+        return col_types
 
     def check_file(self, filename):
         """Check if a field file.
