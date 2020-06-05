@@ -12,6 +12,7 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 from opal.parser.FieldParser import FieldParser
+from opal.visualization.FieldPlotter import FieldPlotter
 from .DatasetBase import DatasetBase
 from opal.utilities.logger import opal_logger
 import pandas as pd
@@ -19,7 +20,7 @@ import numpy as np
 import os
 import re
 
-class FieldDataset(DatasetBase):
+class FieldDataset(DatasetBase, FieldPlotter):
     """
     Attributes
     ----------
@@ -58,7 +59,7 @@ class FieldDataset(DatasetBase):
         self._load_step(step)
         return self._parser.field
 
-    def getSlice(self, field, normal, pos=0.0, step=0, component='x'):
+    def getSlice(self, field, normal, pos=0.0, step=0):
         try:
             if normal == 'x':
                 dim = 0
