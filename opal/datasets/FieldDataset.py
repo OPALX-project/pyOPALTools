@@ -95,6 +95,8 @@ class FieldDataset(DatasetBase):
 
     def _find_nearest(self, array, value, dim):
         """Find nearest value is an array
+
+        Reference: https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array (5. June 2020)
         """
         idx = (np.abs(array-value)).argmin()
         return int(self.indices[idx, dim])
