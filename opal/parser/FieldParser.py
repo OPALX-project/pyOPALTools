@@ -26,11 +26,14 @@ class FieldParser:
         field on grid points
     _columns: dict
         the keys are the column names and the values their units
+    _image: numpy.array
+        image potential is available
     """
 
     def __init__(self):
-        self._dim = [0, 0, 0]
+        self._dim     = [0, 0, 0]
         self._columns =  {}
+        self._image   = None
 
     def parse(self, filename):
         if not self._check_header(filename):
@@ -42,7 +45,12 @@ class FieldParser:
 
         self._indices   = df.values[:, 0:3]
         self._positions = df.values[:, 3:6]
-        self._field     = df.values[:, 6:]
+
+        if 'image' in self._columns.keys():
+            self._field     = df.values[:, 6]
+            self._image     = df.values[:, 7]
+        else:
+            self._field     = df.values[:, 6:]
 
         for i in range(3):
             self._dim[i] = int(max(self._indices[:, i]) -
@@ -56,6 +64,7 @@ class FieldParser:
         self._indices   = self._indices.reshape((ni, nj, nk, 3))
         self._positions = self._positions.reshape((ni, nj, nk, 3))
 
+
     @property
     def field(self):
         """
@@ -67,6 +76,16 @@ class FieldParser:
         return self._field
 
     @property
+    def image(self):
+        """
+        Returns
+        -------
+        numpy.array
+            the image potential (if available)
+        """
+        return self._image
+
+    @property
     def indices(self):
         """
         Returns
@@ -75,6 +94,16 @@ class FieldParser:
             the grid point indices
         """
         return self._indices
+
+    @property
+    def positions(self):
+        """
+        Returns
+        -------
+        numpy.ndarray
+            the positions at the grid points
+        """
+        return self._positions
 
     @property
     def dimension(self):
