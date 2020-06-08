@@ -66,22 +66,21 @@ class FieldPlotter(BasePlotter):
 
         xlab = 'x'
         ylab = 'y'
-        xunit = self.ds.getUnit('x')
-        yunit = self.ds.getUnit('y')
         if normal == 'x':
             dim = 0
             xlab = 'y'
             ylab = 'z'
-            xunit = self.ds.getUnit('y')
-            yunit = self.ds.getUnit('z')
         elif normal == 'y':
             dim = 1
             xlab = 'x'
             ylab = 'z'
-            xunit = self.ds.getUnit('x')
-            yunit = self.ds.getUnit('z')
         elif normal == 'z':
             dim = 2
+            xlab = 'x'
+            ylab = 'y'
+
+        xunit = self.ds.getUnit(xlab)
+        yunit = self.ds.getUnit(ylab)
 
         mindex = max(self.ds.indices[:, dim])
 
