@@ -115,8 +115,7 @@ class FieldParser:
         numpy.ndarray
             the grid point indices
         """
-        ## why do we need astype? Bug of pandas?
-        return self._df.values[:, 0:3].astype(int)
+        return self._df.iloc[:, 0:3].values
 
     @property
     def positions(self):

@@ -244,8 +244,9 @@ class FieldDataset(DatasetBase, FieldPlotter):
         numpy.ndarray :
             grid points
         """
-        ## why do we need astype? Bug of pandas?
-        return self._df.values[:, 0:3].astype(int)
+        if self._loaded_step < 0:
+            self._load_step(0)
+        return self._df.iloc[:, 0:3].values
 
     @property
     def positions(self):
@@ -256,6 +257,8 @@ class FieldDataset(DatasetBase, FieldPlotter):
         numpy.ndarray :
             coordinates
         """
+        if self._loaded_step < 0:
+            self._load_step(0)
         return self._df.values[:, 3:6]
 
 
