@@ -165,8 +165,8 @@ class FieldDataset(DatasetBase, FieldPlotter):
             normal direction. Either 'x', 'y', or 'z'
         pos : float, optional
             coordinate position of slice
-        step : int
-            time step, optional
+        step : int, optional
+            time step
         index : int, optional
             optional to 'pos'. If index > 0, pos is ignored.
 
