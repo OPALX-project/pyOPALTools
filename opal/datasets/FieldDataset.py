@@ -46,6 +46,7 @@ class FieldDataset(DatasetBase, FieldPlotter):
     _parser : FieldParser
         class to parse field data
     _units : dict
+        the keys are the variable names and the values their units
     """
 
     def __init__(self, directory, fname):
@@ -83,7 +84,7 @@ class FieldDataset(DatasetBase, FieldPlotter):
         """
         try:
             if not var in self.names:
-                raise KeyError("No variable '" + var + "' in dataset.")
+                raise KeyError("No variable '" + var + "' in dataset. Available variables: " + str(self.names))
             self._load_step(step)
             return self._df[var].values
         except Exception as ex:
@@ -104,7 +105,7 @@ class FieldDataset(DatasetBase, FieldPlotter):
             Plotting label
         """
         if not var in self.names:
-            raise KeyError("No variable '" + var + "' in dataset.")
+            raise KeyError("No variable '" + var + "' in dataset. Available variables: " + str(self.names))
 
         if var in self._label_mapper:
             var = self._label_mapper[var]
@@ -118,8 +119,12 @@ class FieldDataset(DatasetBase, FieldPlotter):
             the unit of a variable
         """
         try:
+            if self._loaded_step < 0:
+                self._load_step(0)
+
             if not var in self._units.keys():
-                raise KeyError("No variable '" + var + "' in dataset.")
+                raise KeyError("No variable '" + var + "' in dataset. Available variables: " + \
+                    str(list(self._units.keys())))
             return self._units[var]
         except Exception as ex:
             opal_logger.exception(ex)
@@ -158,11 +163,11 @@ class FieldDataset(DatasetBase, FieldPlotter):
             name of scalar field or vector field component
         normal : str
             normal direction. Either 'x', 'y', or 'z'
-        pos : float
+        pos : float, optional
             coordinate position of slice
         step : int
-            time step
-        index : int
+            time step, optional
+        index : int, optional
             optional to 'pos'. If index > 0, pos is ignored.
 
         Returns
