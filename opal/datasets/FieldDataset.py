@@ -197,8 +197,7 @@ class FieldDataset(DatasetBase, FieldPlotter):
             if index == 0:
                 index = self._find_nearest(self.positions[:, dim], pos, dim)
 
-            ## why do we need astype? Bug of pandas?
-            nindex = self.indices[:, dim].astype(int)
+            nindex = self.indices[:, dim]
             pos_1 = self.positions[nindex == index, d[0]]
             pos_2 = self.positions[nindex == index, d[1]]
 
@@ -245,7 +244,8 @@ class FieldDataset(DatasetBase, FieldPlotter):
         numpy.ndarray :
             grid points
         """
-        return self._df.values[:, 0:3]
+        ## why do we need astype? Bug of pandas?
+        return self._df.values[:, 0:3].astype(int)
 
     @property
     def positions(self):

@@ -50,8 +50,6 @@ class FieldParser:
         self._df = pd.read_csv(filename, sep='\s+', comment='#', header=None,
                                names=list(col_types.keys()), dtype=col_types)
 
-        #print ( self._df)
-
         for i in range(3):
             self._dim[i] = int(max(self.indices[:, i]) -
                                min(self.indices[:, i]) + 1)
@@ -117,7 +115,8 @@ class FieldParser:
         numpy.ndarray
             the grid point indices
         """
-        return self._df.values[:, 0:3]
+        ## why do we need astype? Bug of pandas?
+        return self._df.values[:, 0:3].astype(int)
 
     @property
     def positions(self):
