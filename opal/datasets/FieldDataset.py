@@ -347,20 +347,22 @@ class FieldDataset(DatasetBase, FieldPlotter):
         the dataframes of the individual field files of
         a step.
         """
-        if not self._loaded_step == step:
-            self._df = pd.DataFrame()
-            for f in self._fields.keys():
-                self._parser.parse(self._get_combined_filename(step, f))
-                df = self._parser.dataframe
-                if not self._df.empty:
-                    # 5. June 2020
-                    # https://stackoverflow.com/questions/52913379/concat-dataframe-having-duplicate-columns/52913406
-                    self._df =  self._df.merge(df, how='outer')
-                    self._units.update(self._parser.get_unit_dictionary())
-                else:
-                    self._df = self._parser.dataframe
-                    self._units = self._parser.get_unit_dictionary()
-            self._loaded_step = step
-            self._dim = self._parser.dimension
-            # clear data in parser (not needed anymore)
-            self._parser.clear()
+        if self._loaded_step == step:
+           return
+
+        self._df = pd.DataFrame()
+        for f in self._fields.keys():
+            self._parser.parse(self._get_combined_filename(step, f))
+            df = self._parser.dataframe
+            if not self._df.empty:
+                # 5. June 2020
+                # https://stackoverflow.com/questions/52913379/concat-dataframe-having-duplicate-columns/52913406
+                self._df =  self._df.merge(df, how='outer')
+                self._units.update(self._parser.get_unit_dictionary())
+            else:
+                self._df = self._parser.dataframe
+                self._units = self._parser.get_unit_dictionary()
+        self._loaded_step = step
+        self._dim = self._parser.dimension
+        # clear data in parser (not needed anymore)
+        self._parser.clear()
