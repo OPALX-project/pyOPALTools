@@ -92,6 +92,7 @@ class FieldParser:
         numpy.ndarray
             the field data on the grid
         """
+        # 'image' is the image potential of OPAL-T
         if 'image' in self._columns.keys():
             return self._df.values[:, 6]
         return self._df.values[:, 6:]
