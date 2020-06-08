@@ -29,11 +29,20 @@ class FieldParser:
     """
 
     def __init__(self):
+        """Constructor
+        """
         self._dim     = [0, 0, 0]
         self._columns =  {}
         self._image   = None
 
     def parse(self, filename):
+        """Parse a file.
+
+        Parameters
+        ----------
+        filename : str
+            the full name of a file to parse
+        """
         if not self._check_header(filename):
             raise IOError("File '" + filename + "' is not a proper grid file.")
 
@@ -50,15 +59,31 @@ class FieldParser:
 
     @property
     def dataframe(self):
+        """Get all data.
+
+        Returns
+        -------
+        pandas.core.frame.DataFrame
+            all the data
+        """
         return self._df
 
     def clear(self):
+        """Reset attributes
+        """
         self._dim = None
         self._columns = {}
         self._image = None
         self._df = None
 
     def get_unit_dictionary(self):
+        """Get the dictionary of units.
+
+        Returns
+        -------
+        dict :
+            column names (keys) and their units (values)
+        """
         return self._columns
 
     @property
@@ -158,7 +183,7 @@ class FieldParser:
         # add remaining columns that have no unit
         for entry in col_types.keys():
             if not entry in self._columns.keys():
-                self._columns[entry] = None
+                self._columns[entry] = ''
                 col_types[entry] = np.int32
         return col_types
 

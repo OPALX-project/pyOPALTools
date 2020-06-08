@@ -19,13 +19,51 @@ class FieldPlotter(BasePlotter):
     def __init__(self):
         pass
 
-    def plot_slice(self, field, normal, pos=0.0, step=0, index=0):
+    def plot_slice(self, field, normal, pos=0.0, index=0, step=0):
+        """Do a slice plot.
+
+        Parameters
+        ----------
+        field : str
+            name of scalar field or vector field component
+        normal : str
+            normal direction. Either 'x', 'y', or 'z'
+        pos : float
+            coordinate position of slice
+        step : int
+            time step
+        index : int
+            optional to 'pos'. If index > 0, pos is ignored.
+
+        Returns
+        -------
+        matplotlib.pyplot
+            Plot handle
+        """
         ix, iy, field = self.ds.getSlice(field, normal, pos, step, index=index)
         plt.pcolormesh(ix, iy, field)
         plt.colorbar()
         return plt
 
     def plot_projection(self, field, normal, step=0):
+        """Do a projection plot.
+
+        Parameters
+        ----------
+        field : str
+            name of scalar field or vector field component
+        normal : str
+            normal direction. Either 'x', 'y', or 'z'
+        step : int
+            time step
+        index : int
+            optional to 'pos'. If index > 0, pos is ignored.
+
+        Returns
+        -------
+        matplotlib.pyplot
+            Plot handle
+        """
         ix, iy, field_sum = self.ds.getSlice(field, normal, step=step, index=1)
 
         xlab = 'x'

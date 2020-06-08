@@ -38,6 +38,8 @@ class FieldDataset(DatasetBase, FieldPlotter):
     _loaded_step : int
         the number of the loaded file (if -1, no file
         is loaded)
+    _label_mapper : dict
+        map variable names to nice plotting labels
     _npadding : int
         the number of digits in the number
         (used for zero padding)
@@ -47,6 +49,8 @@ class FieldDataset(DatasetBase, FieldPlotter):
     """
 
     def __init__(self, directory, fname):
+        """Constructor.
+        """
         super(FieldDataset, self).__init__(directory, fname)
 
         self._parser = FieldParser()
@@ -63,26 +67,113 @@ class FieldDataset(DatasetBase, FieldPlotter):
         }
 
     def getData(self, var, step=0):
-        self._load_step(step)
-        return self._df[:, var].values
+        """Get the data of a variable.
+
+        Parameters
+        ----------
+        var : str
+            variable name
+        step : int
+            time step
+
+        Returns
+        -------
+        numpy.ndarray
+            data of a column
+        """
+        try:
+            if not var in self.names:
+                raise KeyError("No variable '" + var + "' in dataset.")
+            self._load_step(step)
+            return self._df[var].values
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return None
 
     def getLabel(self, var):
+        """Obtain label for plotting.
+
+        Parameters
+        ----------
+        var : str
+            variable name
+
+        Returns
+        -------
+        str
+            Plotting label
+        """
+        if not var in self.names:
+            raise KeyError("No variable '" + var + "' in dataset.")
+
         if var in self._label_mapper:
             var = self._label_mapper[var]
         return var
 
     def getUnit(self, var):
-        return self._units[var]
+        """
+        Returns
+        -------
+        str
+            the unit of a variable
+        """
+        try:
+            if not var in self._units.keys():
+                raise KeyError("No variable '" + var + "' in dataset.")
+            return self._units[var]
+        except Exception as ex:
+            opal_logger.exception(ex)
+            return ''
 
     @property
     def names(self):
+        """
+        Returns
+        -------
+        list
+            the variable names
+        """
+        if self._loaded_step < 0:
+            self._load_step(0)
         return list(self._df.keys())
 
     @property
     def dataframe(self):
+        """
+        Returns
+        -------
+        pandas.core.frame.DataFrame
+            all the data
+        """
+        if self._loaded_step < 0:
+            self._load_step(0)
         return self._df
 
-    def getSlice(self, field, normal, pos=0.0, step=0, index=0):
+    def getSlice(self, field, normal, pos=0.0, index=0, step=0):
+        """Get a 2d slice through the data.
+
+        Parameters
+        ----------
+        field : str
+            name of scalar field or vector field component
+        normal : str
+            normal direction. Either 'x', 'y', or 'z'
+        pos : float
+            coordinate position of slice
+        step : int
+            time step
+        index : int
+            optional to 'pos'. If index > 0, pos is ignored.
+
+        Returns
+        -------
+        numpy.ndarray :
+            coordinate values in the first direction
+        numpy.ndarray :
+            coordinate values in the second direction
+        numpy.ndarray :
+            field values
+        """
         try:
             if normal == 'x':
                 dim = 0
@@ -93,25 +184,24 @@ class FieldDataset(DatasetBase, FieldPlotter):
             else:
                 raise ValueError("The normal can only be 'x', 'y' or 'z'.")
 
-            dims = [0, 1, 2]
-            del dims[dim]
+            d = [0, 1, 2]
+            del d[dim]
 
             self._load_step(step)
 
-            if index > 0:
+            if index == 0:
                 index = self._find_nearest(self.positions[:, dim], pos, dim)
 
             ## why do we need astype? Bug of pandas?
             nindex = self.indices[:, dim].astype(int)
-            pos_1 = self.positions[nindex == index, dims[0]]
-            pos_2 = self.positions[nindex == index, dims[1]]
+            pos_1 = self.positions[nindex == index, d[0]]
+            pos_2 = self.positions[nindex == index, d[1]]
 
             ff    = self._df[field].values[nindex == index]
 
-            d = self._dim
-            pos_1 = pos_1.reshape((d[dims[0]], d[dims[1]]))
-            pos_2 = pos_2.reshape((d[dims[0]], d[dims[1]]))
-            ff    = ff.reshape((d[dims[0]], d[dims[1]]))
+            pos_1 = pos_1.reshape((self._dim[d[0]], self._dim[d[1]]))
+            pos_2 = pos_2.reshape((self._dim[d[0]], self._dim[d[1]]))
+            ff    = ff.reshape((self._dim[d[0]], self._dim[d[1]]))
 
             return pos_1, pos_2, ff
         except Exception as ex:
@@ -119,23 +209,59 @@ class FieldDataset(DatasetBase, FieldPlotter):
             return None
 
     def _find_nearest(self, array, value, dim):
-        """Find nearest value is an array
+        """Find nearest value in an array.
 
-        Reference: https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array (5. June 2020)
+        Parameters
+        ----------
+        array : numpy.array
+            the array where to find value
+        value : float
+            the value to check
+        dim : int
+            the dimension to check
+        Reference
+        ---------
+        https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array (5. June 2020)
+
+        Returns
+        -------
+        int :
+            array index
         """
         idx = (np.abs(array-value)).argmin()
         return int(self.indices[idx, dim])
 
     @property
     def indices(self):
+        """Get indices of grid points.
+
+        Returns
+        -------
+        numpy.ndarray :
+            grid points
+        """
         return self._df.values[:, 0:3]
 
     @property
     def positions(self):
+        """Get coordinates at the grid points.
+
+        Returns
+        -------
+        numpy.ndarray :
+            coordinates
+        """
         return self._df.values[:, 3:6]
 
 
     def __str__(self):
+        """Get dataset info.
+
+        Returns
+        -------
+        str :
+            string
+        """
         if self._loaded_step == -1:
             self._load_step(0)
         s  = '\n\tField dataset.\n\n'
@@ -183,6 +309,19 @@ class FieldDataset(DatasetBase, FieldPlotter):
         print('Found', count_field, 'vector field files.')
 
     def _zero_padding(self, step):
+        """Get zero padded number as string in order
+        to load a file.
+
+        Parameters
+        ----------
+        step : int
+            the time step
+
+        Returns
+        -------
+        str
+            zero padded number as string
+        """
         return str(step).zfill(self._npadding)
 
     def _get_combined_filename(self, step, field):
