@@ -44,7 +44,7 @@ class FieldDataset(DatasetBase, FieldPlotter):
         the number of digits in the number
         (used for zero padding)
     _parser : FieldParser
-        class to parser field data
+        class to parse field data
     _units : dict
     """
 
@@ -73,7 +73,7 @@ class FieldDataset(DatasetBase, FieldPlotter):
         ----------
         var : str
             variable name
-        step : int
+        step : int, optional
             time step
 
         Returns
