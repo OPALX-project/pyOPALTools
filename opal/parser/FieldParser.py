@@ -33,7 +33,6 @@ class FieldParser:
         """
         self._dim     = [0, 0, 0]
         self._columns =  {}
-        self._image   = None
 
     def parse(self, filename):
         """Parse a file.
@@ -73,7 +72,6 @@ class FieldParser:
         """
         self._dim = None
         self._columns = {}
-        self._image = None
         self._df = None
 
     def get_unit_dictionary(self):
