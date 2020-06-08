@@ -19,6 +19,7 @@ from enum import IntEnum, unique
 
 from opal.parser.sampler import SamplerParser
 from opal.parser.OptimizerParser import OptimizerParser
+from opal.parser.FieldParser import FieldParser
 
 from opal.utilities.logger import opal_logger
 
@@ -40,7 +41,8 @@ class FileType(IntEnum):
     SMB         = 13,
     AMR         = 14,
     LOSS        = 15,
-    NONE        = 16
+    FIELD       = 16,
+    NONE        = 17
 
     @classmethod
     def extensionToFileType(cls, fname):
@@ -58,7 +60,8 @@ class FileType(IntEnum):
             '.peaks':   cls.PEAK,
             '.hist':    cls.HIST,
             '.json':    [cls.OPTIMIZER, cls.SAMPLER],
-            '.loss':    cls.LOSS
+            '.loss':    cls.LOSS,
+            '.dat':     cls.FIELD
         }
 
         file = {
@@ -87,6 +90,10 @@ class FileType(IntEnum):
                     return cls.NONE
             else:
                 return extension[ext]
+
+        fparser = FieldParser()
+        if fparser.check_file(fname):
+            return cls.FIELD
         elif fname in file:
             return file[fname]
         elif 'time' in fname.lower() or 'timing' in fname.lower():

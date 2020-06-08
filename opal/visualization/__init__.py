@@ -30,3 +30,4 @@ from .StatPlotter             import StatPlotter
 from .TimingPlotter           import TimingPlotter
 from .StdOpalOutputPlotter    import StdOpalOutputPlotter
 from .TrackOrbitPlotter       import TrackOrbitPlotter
+from .FieldPlotter            import FieldPlotter
