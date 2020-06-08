@@ -28,12 +28,12 @@ class FieldPlotter(BasePlotter):
             name of scalar field or vector field component
         normal : str
             normal direction. Either 'x', 'y', or 'z'
-        pos : float
+        pos : float, optional
             coordinate position of slice
-        step : int
+        step : int, optional
             time step
-        index : int
-            optional to 'pos'. If index > 0, pos is ignored.
+        index : int, optional
+            if index > 0, pos is ignored.
 
         Returns
         -------
@@ -54,10 +54,8 @@ class FieldPlotter(BasePlotter):
             name of scalar field or vector field component
         normal : str
             normal direction. Either 'x', 'y', or 'z'
-        step : int
+        step : int, optional
             time step
-        index : int
-            optional to 'pos'. If index > 0, pos is ignored.
 
         Returns
         -------
