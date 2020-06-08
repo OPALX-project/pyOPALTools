@@ -61,7 +61,7 @@ class FileType(IntEnum):
             '.hist':    cls.HIST,
             '.json':    [cls.OPTIMIZER, cls.SAMPLER],
             '.loss':    cls.LOSS,
-            '.field':   cls.FIELD
+            '.dat':     cls.FIELD
         }
 
         file = {
