@@ -219,7 +219,8 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
             - 'px'      momentum in x
             - 'py'      momentum in y
             - 'pz'      momentum in z
-            - 'ptype'   particle type
+            - 'time'    time
+            - 'turn'    turn number
             - 'x'       position in x
             - 'y'       position in x
             - 'z'       position in x
@@ -229,7 +230,7 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
         -------
         pandas.core.frame.DataFrame
             a dataframe with the columns
-            ['id' ,'px', 'py', 'pz', 'ptype', 'x', 'y', 'z', 'q']
+            ['id' ,'px', 'py', 'pz', 'time', 'turn', 'x', 'y', 'z']
         """
         cnames= ['id' ,'px', 'py', 'pz', 'time', 'turn', 'x', 'y', 'z']
         x = pd.DataFrame(columns=cnames)
