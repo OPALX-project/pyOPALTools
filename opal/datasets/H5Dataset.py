@@ -211,18 +211,60 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
     '''
     Experimental returns Pandas data frames
     '''
-    def getMonitorDataFrame(monData):
+    def getMonitorDataFrame(self):
+        """Monitor H5 files only.
+        Get a dataframe with the following
+        columns:
+            - 'id'      particle id
+            - 'px'      momentum in x
+            - 'py'      momentum in y
+            - 'pz'      momentum in z
+            - 'ptype'   particle type
+            - 'x'       position in x
+            - 'y'       position in x
+            - 'z'       position in x
+            - 'q'       particle charge
+
+        Returns
+        -------
+        pandas.core.frame.DataFrame
+            a dataframe with the columns
+            ['id' ,'px', 'py', 'pz', 'ptype', 'x', 'y', 'z', 'q']
+        """
         cnames= ['id' ,'px', 'py', 'pz', 'time', 'turn', 'x', 'y', 'z']
         x = pd.DataFrame(columns=cnames)
         for v in cnames:
-            x[v] = monData.getData(v)
+            x[v] = self.getData(v)
         return x
 
-    def getH5DataFrame(h5Data,s=0):
+    def getH5DataFrame(self, step=0):
+        """Get a dataframe with the following
+        columns:
+            - 'id'      particle id
+            - 'px'      momentum in x
+            - 'py'      momentum in y
+            - 'pz'      momentum in z
+            - 'ptype'   particle type
+            - 'x'       position in x
+            - 'y'       position in x
+            - 'z'       position in x
+            - 'q'       particle charge
+
+        Parameters
+        ----------
+        step : int, optional
+            the output step
+
+        Returns
+        -------
+        pandas.core.frame.DataFrame
+            a dataframe with the columns
+            ['id' ,'px', 'py', 'pz', 'ptype', 'x', 'y', 'z', 'q']
+        """
         cnames= ['id' ,'px', 'py', 'pz', 'ptype', 'x', 'y', 'z', 'q']
         x = pd.DataFrame(columns=cnames)
         for v in cnames:
-            x[v] = h5Data.getData(v,step=s)
+            x[v] = self.getData(v,step=step)
         return x
 
 
