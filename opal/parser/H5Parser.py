@@ -56,7 +56,7 @@ class H5Parser:
         """Closes h5 file.
         """
         if self.__h5f:
-            self.__h5f.close()
+            del self.__h5f
             self.__h5f = ''
 
     def getNSteps(self):
