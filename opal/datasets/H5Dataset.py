@@ -208,9 +208,6 @@ class H5Dataset(DatasetBase, H5Plotter, H5Statistics):
             opal_logger.exception(ex)
             return ''
 
-    '''
-    Experimental returns Pandas data frames
-    '''
     def getMonitorDataFrame(self):
         """Monitor H5 files only.
         Get a dataframe with the following
