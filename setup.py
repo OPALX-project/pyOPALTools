@@ -14,7 +14,7 @@ PACKAGES = [
     'opal.utilities',
     'opal.visualization',
     'opal.visualization.statistics',
-    'opal.visualization.styles'
+    'opal.visualization.styles',
     'optPilot',
     'pc',
     'setup',
