@@ -17,7 +17,6 @@ PACKAGES = [
     'opal.visualization.styles',
     'optPilot',
     'pc',
-    'setup',
     'surrogate'
 ]
 
