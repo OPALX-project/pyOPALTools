@@ -34,6 +34,11 @@ opal.visualization.BasePlotter module
 
 .. automodule:: opal.visualization.BasePlotter
 
+opal.visualization.FieldPlotter module
+-------------------------------------
+
+.. automodule:: opal.visualization.FieldPlotter
+
 opal.visualization.GridPlotter module
 -------------------------------------
 

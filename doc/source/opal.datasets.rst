@@ -18,6 +18,11 @@ opal.datasets.DatasetBase module
 
 .. automodule:: opal.datasets.DatasetBase
 
+opal.datasets.FieldDataset module
+--------------------------------
+
+.. automodule:: opal.datasets.FieldDataset
+
 opal.datasets.GridDataset module
 --------------------------------
 
