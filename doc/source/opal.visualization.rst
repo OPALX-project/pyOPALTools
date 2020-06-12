@@ -15,6 +15,7 @@ Notebooks
 .. toctree::
 
    AmrPlotter<testAmrOpal-1.py>
+   FieldPlotter<FieldDataset>
    H5Plotter_RingMultiBunch<RingMultiBunch>
    ProbePlotter<Probe>
    ProbePlotter_PeakFile<ProbePeak>
