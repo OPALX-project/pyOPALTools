@@ -62,15 +62,15 @@ def new_label(fun, *args, **kwargs):
         return fun(*args, **kwargs)
 
     if mpl.rcParams['text.usetex']:
-        dollar = frozenset('$')
+        signs = frozenset('$[](){}\\-') # symbols not to escape due to LaTex
         lst = list(args)
         if isinstance(lst[idx], str):
-            # we need to add the dollar sign '$' otherwise LaTex formulas
+            # we need to add the signs otherwise LaTex formulas
             # are not properly compiled
-            re._alphanum_str = re._alphanum_str.union(dollar)
+            re._alphanum_str = re._alphanum_str.union(signs)
             lst[idx] = re.escape(lst[idx])
-            # remove dollar sign again
-            re._alphanum_str = re._alphanum_str.difference(dollar)
+            # remove signs again
+            re._alphanum_str = re._alphanum_str.difference(signs)
             args = tuple(lst)
     return fun(*args, **kwargs)
 
