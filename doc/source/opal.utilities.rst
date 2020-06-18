@@ -7,7 +7,6 @@ Notebooks
 .. toctree::
 
    Logger<Logger>
-   Wrapper<Wrapper>
 
 opal.utilities.logger module
 ----------------------------
