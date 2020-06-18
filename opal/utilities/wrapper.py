@@ -18,42 +18,20 @@
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import functools
-
-def my_escape(pattern):
-    _alphanum_str = frozenset(
-    "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890$")
-    _alphanum_bytes = frozenset(
-        b"_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890$")
-    """
-    Escape all the characters in pattern except ASCII letters, numbers and '_'.
-    """
-    if isinstance(pattern, str):
-        alphanum = _alphanum_str
-        s = list(pattern)
-        for i, c in enumerate(pattern):
-            if c not in alphanum:
-                if c == "\000":
-                    s[i] = "\\000"
-                else:
-                    s[i] = "\\" + c
-        return "".join(s)
-    else:
-        alphanum = _alphanum_bytes
-        s = []
-        esc = ord(b"\\")
-        for c in pattern:
-            if c in alphanum:
-                s.append(c)
-            else:
-                if c == 0:
-                    s.extend(b"\\000")
-                else:
-                    s.append(esc)
-                    s.append(c)
-        return bytes(s)
-
+import inspect
+import re
 
 def wrapper(fun, new_fun):
+    """Wrapper.
+
+    Parameters
+    ----------
+    fun : function
+        the function to wrap
+    new_fun : function
+        the new function that is called before
+        calling the original function
+    """
     @functools.wraps(fun)
     def run(*args, **kwargs):
         return new_fun(fun, *args, **kwargs)
@@ -61,6 +39,17 @@ def wrapper(fun, new_fun):
 
 
 def new_label(fun, *args, **kwargs):
+    """New function for matplotlib axis labels.
+
+    Parameters
+    ----------
+    fun : function
+        the original label matplotlib function
+    args : tuple
+        arguments of the original function
+    kwargs : dict
+        further keyword arguments of the original function
+    """
     fun_args = inspect.getargspec(fun)
 
     idx = -1
@@ -73,13 +62,17 @@ def new_label(fun, *args, **kwargs):
         return fun(*args, **kwargs)
 
     if mpl.rcParams['text.usetex']:
+        dollar = frozenset('$')
         lst = list(args)
         if isinstance(lst[idx], str):
-            lst[idx] = my_escape(lst[idx])
+            # we need to add the dollar sign '$' otherwise LaTex formulas
+            # are not properly compiled
+            re._alphanum_str = re._alphanum_str.union(dollar)
+            lst[idx] = re.escape(lst[idx])
+            # remove dollar sign again
+            re._alphanum_str = re._alphanum_str.difference(dollar)
             args = tuple(lst)
     return fun(*args, **kwargs)
-
-
 
 
 
@@ -88,69 +81,3 @@ mpl.axis.Axis.set_label_text = wrapper(mpl.axis.Axis.set_label_text, new_label)
 mpl.axes.Axes.set_title = wrapper(mpl.axes.Axes.set_title, new_label)
 
 mpl.axes.Axes.text = wrapper(mpl.axes.Axes.text, new_label)
-
-
-#def wrapper(fun, new_fun):
-    #"""Wrapper.
-
-    #Parameters
-    #----------
-    #fun : function
-        #the function to wrap
-    #new_fun : function
-        #the new function that is called before
-        #calling the original function
-    #"""
-    #@functools.wraps(fun)
-    #def run(*args, **kwargs):
-        #return new_fun(fun, *args, **kwargs)
-    #return run
-
-
-#def new_plt_label(fun, s, *args, **kwargs):
-    #"""New function for matplotlib axis labels.
-
-    #Parameters
-    #----------
-    #fun : function
-        #the original label matplotlib function
-    #s : str
-        #the label
-    #args : tuple
-        #further arguments to the original label function
-    #kwargs : dict
-        #further keyword arguments to the original label function
-    #"""
-    #isTex = mpl.rcParams['text.usetex']
-    #if isTex:
-        #s = re.escape(s)
-    #return fun(s, *args, **kwargs)
-
-#def new_plt_text(fun, x, y, s, fontdict=None, **kwargs):
-    #"""New function for matplotlib axis labels.
-
-    #Parameters
-    #----------
-    #fun : function
-        #the original label matplotlib function
-    #s : str
-        #the label
-    #args : tuple
-        #further arguments to the original label function
-    #kwargs : dict
-        #further keyword arguments to the original label function
-    #"""
-    #isTex = mpl.rcParams['text.usetex']
-    #if isTex:
-        #s = re.escape(s)
-    #return fun(x, y, s, fontdict, **kwargs)
-
-
-## wrap matplotlib.pyplot.xlabel
-#plt.xlabel = wrapper(plt.xlabel, new_plt_label)
-
-## wrap matplotlib.pyplot.xlabel
-#plt.ylabel = wrapper(plt.ylabel, new_plt_label)
-
-## wrap matplotlib.pyplot.text
-#plt.text = wrapper(plt.text, new_plt_text)
