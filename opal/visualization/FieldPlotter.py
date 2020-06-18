@@ -28,7 +28,7 @@ class FieldPlotter(BasePlotter):
             normal direction. Either 'x', 'y', or 'z'
         step : int, optional
             time step
-        kwargs : dict
+        kwargs : dict, optional
             keywords of matplotlib.pyplot.plot
 
         Returns
@@ -78,7 +78,7 @@ class FieldPlotter(BasePlotter):
             time step
         index : int, optional
             if index > 0, pos is ignored.
-        kwargs : dict
+        kwargs : dict, optional
             keywords of matplotlib.pyplot.pcolormesh
 
         Returns
@@ -130,7 +130,7 @@ class FieldPlotter(BasePlotter):
             time step
         method : str, optional
             projection method: 'integrated', 'sum' or 'max'
-        kwargs : dict
+        kwargs : dict, optional
             keywords of matplotlib.pyplot.pcolormesh
 
         Returns
