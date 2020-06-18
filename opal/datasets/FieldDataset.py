@@ -171,6 +171,18 @@ class FieldDataset(DatasetBase, FieldAnalysis, FieldPlotter):
 
 
     def get_mesh_spacing(self, step=0):
+        """Get the mesh spacings.
+
+        Parameters
+        ----------
+        step : int, optional
+            time step
+
+        Returns
+        -------
+        list
+            the mesh spacing per dimension
+        """
         self._load_step(step)
         h = [0.0, 0.0, 0.0]
         for i in range(3):
