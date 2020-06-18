@@ -64,8 +64,8 @@ class FieldPlotter(BasePlotter):
         ff = ff[j_mask]
 
         plt.plot(pos, ff, **kwargs)
-        plt.xlabel(normal + ' [' + self.ds.getUnit(normal) + ']')
-        plt.ylabel(self.ds.getLabel(field) + ' [' + self.ds.getUnit(field) + ']')
+        plt.xlabel(self.ds.getLabelWithUnit(normal))
+        plt.ylabel(self.ds.getLabelWithUnit(field))
         return plt
 
     def plot_slice(self, field, normal, pos=0.0, index=0, step=0, **kwargs):
@@ -98,9 +98,7 @@ class FieldPlotter(BasePlotter):
                                       step=step)
         plt.pcolormesh(ix, iy, ff, **kwargs)
         cbar = plt.colorbar()
-        clab = self.ds.getLabel(field)
-        cunit = self.ds.getUnit(field)
-        cbar.set_label(clab + ' [' + cunit + ']')
+        cbar.set_label(self.ds.getLabelWithUnit(field))
 
         xlab = 'x'
         ylab = 'y'
