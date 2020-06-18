@@ -39,7 +39,7 @@ def wrapper(fun, new_fun):
 
 
 def new_label(fun, *args, **kwargs):
-    """New function for matplotlib axis labels.
+    """New function for matplotlib text.
 
     Parameters
     ----------
