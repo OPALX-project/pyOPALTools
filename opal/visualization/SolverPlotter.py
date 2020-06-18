@@ -42,13 +42,12 @@ class SolverPlotter(BasePlotter):
             data = self.ds.getData(var)
             plt.plot(time, data)
 
-            plt.xlabel(self.ds.getLabel('time') + ' [' + self.ds.getUnit('time') + ']')
+            plt.xlabel(self.ds.getLabelWithUnit('time'))
 
             if self.ds.getUnit(var) == r'$1$':
                 plt.ylabel(self.ds.getLabel(var))
             else:
-                print ( self.ds.getUnit(var) )
-                plt.ylabel(self.ds.getLabel(var) + ' [' + self.ds.getUnit(var) + ']')
+                plt.ylabel(self.ds.getLabelWithUnit(var))
 
             plt.grid(grid, which='both')
             plt.xscale(xscale)

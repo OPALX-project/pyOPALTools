@@ -16,10 +16,59 @@ import numpy as np
 
 class FieldPlotter(BasePlotter):
 
-    def __init__(self):
-        pass
+    def plot_line(self, field, normal, step=0, **kwargs):
+        """Do a line plot through the center. The line can only
+        be drawn orthogonal to one of the directions x, y, or z.
 
-    def plot_slice(self, field, normal, pos=0.0, index=0, step=0):
+        Parameters
+        ----------
+        field : str
+            name of scalar field or vector field component
+        normal : str
+            normal direction. Either 'x', 'y', or 'z'
+        step : int, optional
+            time step
+        kwargs : dict, optional
+            keywords of matplotlib.pyplot.plot
+
+        Returns
+        -------
+        matplotlib.pyplot
+            Plot handle
+        """
+        dirs = ['x', 'y', 'z']
+
+        if normal not in dirs:
+            raise ValueError("Normal has to be one of " + str(dirs) + ".")
+
+        idx = dirs.index(normal)
+
+        ii = self.indices[:, (idx + 1) % 3]
+        jj = self.indices[:, (idx + 2) % 3]
+
+        i = int(0.5 * max(ii))
+        j = int(0.5 * max(jj))
+
+        # masks to select center data in
+        # other directions
+        i_mask = (ii == i)
+        j_mask = (jj == j)
+
+        jj = jj[i_mask]
+
+        pos = self.positions[i_mask, idx]
+        pos = pos[j_mask]
+
+        ff = self.ds.getData(field, step=step)
+        ff = ff[i_mask]
+        ff = ff[j_mask]
+
+        plt.plot(pos, ff, **kwargs)
+        plt.xlabel(self.ds.getLabelWithUnit(normal))
+        plt.ylabel(self.ds.getLabelWithUnit(field))
+        return plt
+
+    def plot_slice(self, field, normal, pos=0.0, index=0, step=0, **kwargs):
         """Do a slice plot.
 
         Parameters
@@ -34,18 +83,41 @@ class FieldPlotter(BasePlotter):
             time step
         index : int, optional
             if index > 0, pos is ignored.
+        kwargs : dict, optional
+            keywords of matplotlib.pyplot.pcolormesh
 
         Returns
         -------
         matplotlib.pyplot
             Plot handle
         """
-        ix, iy, field = self.ds.getSlice(field, normal, pos, step, index=index)
-        plt.pcolormesh(ix, iy, field)
-        plt.colorbar()
+        ix, iy, ff = self.ds.getSlice(field=field,
+                                      normal=normal,
+                                      pos=pos,
+                                      index=index,
+                                      step=step)
+        plt.pcolormesh(ix, iy, ff, **kwargs)
+        cbar = plt.colorbar()
+        cbar.set_label(self.ds.getLabelWithUnit(field))
+
+        xlab = 'x'
+        ylab = 'y'
+        if normal == 'x':
+            xlab = 'y'
+            ylab = 'z'
+        elif normal == 'y':
+            xlab = 'x'
+            ylab = 'z'
+        elif normal == 'z':
+            xlab = 'x'
+            ylab = 'y'
+
+        plt.xlabel(self.ds.getLabelWithUnit(xlab))
+        plt.ylabel(self.ds.getLabelWithUnit(ylab))
+
         return plt
 
-    def plot_projection(self, field, normal, step=0):
+    def plot_projection(self, field, normal, step=0, method='integrated', **kwargs):
         """Do a projection plot.
 
         Parameters
@@ -56,13 +128,20 @@ class FieldPlotter(BasePlotter):
             normal direction. Either 'x', 'y', or 'z'
         step : int, optional
             time step
+        method : str, optional
+            projection method: 'integrated', 'sum' or 'max'
+        kwargs : dict, optional
+            keywords of matplotlib.pyplot.pcolormesh
 
         Returns
         -------
         matplotlib.pyplot
             Plot handle
         """
-        ix, iy, field_sum = self.ds.getSlice(field, normal, step=step, index=1)
+        ix, iy, values = self.ds.getSlice(field=field,
+                                          normal=normal,
+                                          index=1,
+                                          step=step)
 
         xlab = 'x'
         ylab = 'y'
@@ -79,27 +158,34 @@ class FieldPlotter(BasePlotter):
             xlab = 'x'
             ylab = 'y'
 
-        xunit = self.ds.getUnit(xlab)
-        yunit = self.ds.getUnit(ylab)
-
         mindex = max(self.ds.indices[:, dim])
 
         data = self.ds.dataframe[normal].values
 
-        # mesh spacing in each dimension is constant in OPAL
-        # --> it is enough to take just one value
-        dx = np.diff(data)[0]
+        dx = self.ds.get_mesh_spacing(step)[dim]
 
         for i in range(1, int(mindex) + 1):
             _, _, data = self.ds.getSlice(field, normal, step=step, index=i)
-            field_sum += data * dx
-        plt.pcolormesh(ix, iy, field_sum)
-        plt.xlabel(xlab + ' [' + xunit + ']')
-        plt.ylabel(ylab + ' [' + yunit + ']')
+            if method == 'integrated':
+                values += data * dx
+            elif method == 'sum':
+                values += data
+            elif method == 'max':
+                values = np.maximum(values, data)
+            else:
+                raise ValueError("Projection method '" + method + "' not available.")
+
+        plt.pcolormesh(ix, iy, values, **kwargs)
+        plt.xlabel(self.ds.getLabelWithUnit(xlab))
+        plt.ylabel(self.ds.getLabelWithUnit(ylab))
         cbar = plt.colorbar()
 
         clab = self.ds.getLabel(field)
         cunit = self.ds.getUnit(field)
 
-        cbar.set_label(clab + ' [' + cunit + '*m]')
+        mult = ''
+        if method == 'integrated':
+            mult = '*m'
+
+        cbar.set_label(clab + ' [' + cunit + mult + ']')
         return plt

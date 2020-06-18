@@ -100,14 +100,8 @@ class SamplerPlotter(BasePlotter):
             plt.gca().ticklabel_format(axis='y', style='sci', scilimits=(-2, 2),
                                     useMathText=True, useOffset=True)
 
-            xlabel = out.getLabel(xvar)
-            xunit  = out.getUnit(xvar)
-
-            ylabel = out.getLabel(yvar)
-            yunit  = out.getUnit(yvar)
-
-            plt.xlabel(xlabel + ' [' + xunit + ']')
-            plt.ylabel(ylabel + ' [' + yunit + ']')
+            plt.xlabel(self.ds.getLabelWithUnit(xvar))
+            plt.ylabel(self.ds.getLabelWithUnit(yvar))
             plt.tight_layout()
 
             return plt

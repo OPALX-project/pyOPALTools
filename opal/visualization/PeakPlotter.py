@@ -97,10 +97,10 @@ class PeakPlotter(BasePlotter):
 
                 plt.plot(p1, p2, marker='o', **kwargs)
 
-                plt.xlabel('radius [' + unit + '] (' +
-                        os.path.basename(dsets[0].filename) + ')')
-                plt.ylabel('radius [' + unit + '] (' +
-                        os.path.basename(dsets[1].filename) + ')')
+                plt.xlabel(self.ds.getLabelWithUnit('radius') + ' (' +
+                           os.path.basename(dsets[0].filename) + ')')
+                plt.ylabel(self.ds.getLabelWithUnit('radius') + ' (' +
+                           os.path.basename(dsets[1].filename) + ')')
             else:
                 diff = p1 - p2
 

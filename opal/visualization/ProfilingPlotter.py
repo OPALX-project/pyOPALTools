@@ -47,7 +47,6 @@ class ProfilingPlotter(BasePlotter):
             nTotal = len(self.ds.getVariables())
             nCols = sum('processor' in var for var in self.ds.getVariables())
 
-            time_unit = self.ds.getUnit('time')
             time = self.ds.getData('time')
 
             nRows = len(time)
@@ -94,8 +93,7 @@ class ProfilingPlotter(BasePlotter):
                 plt.plot(time, stamps[:, i], label=lab)
 
 
-            xlabel = self.ds.getLabel('time')
-            plt.xlabel(xlabel + ' [' + time_unit + ']')
+            plt.xlabel(self.ds.getLabelWithUnit('time'))
             plt.xscale(xscale)
 
             plt.ylabel('#cores')
@@ -132,7 +130,6 @@ class ProfilingPlotter(BasePlotter):
             nCols = sum('processor' in var for var in self.ds.getVariables())
 
 
-            time_unit = self.ds.getUnit('time')
             time = self.ds.getData('time')
 
             nRows = len(time)
@@ -158,8 +155,7 @@ class ProfilingPlotter(BasePlotter):
             plt.plot(time, maximum, label='maximum')
             plt.plot(time, mean, label='mean')
 
-            xlabel = self.ds.getLabel('time')
-            plt.xlabel(xlabel + ' [' + time_unit + ']')
+            plt.xlabel(self.ds.getLabelWithUnit('time'))
             plt.xscale(xscale)
 
             plt.ylabel('#particles')
@@ -194,8 +190,6 @@ class ProfilingPlotter(BasePlotter):
             nTotal = len(self.ds.getVariables())
             nCols = sum('processor' in var for var in self.ds.getVariables())
 
-
-            time_unit = self.ds.getUnit('time')
             time = self.ds.getData('time')
 
             nRows = len(time)
@@ -223,8 +217,7 @@ class ProfilingPlotter(BasePlotter):
 
             plt.boxplot(stamps, 0, '', positions=time)
 
-            xlabel = self.ds.getLabel('time')
-            plt.xlabel(xlabel + ' [' + time_unit + ']')
+            plt.xlabel(self.ds.getLabelWithUnit('time'))
             plt.xscale(xscale)
 
             plt.ylabel('#particles')

@@ -13,6 +13,7 @@
 
 from opal.parser.FieldParser import FieldParser
 from opal.visualization.FieldPlotter import FieldPlotter
+from opal.analysis.FieldAnalysis import FieldAnalysis
 from .DatasetBase import DatasetBase
 from opal.utilities.logger import opal_logger
 import pandas as pd
@@ -20,7 +21,7 @@ import numpy as np
 import os
 import re
 
-class FieldDataset(DatasetBase, FieldPlotter):
+class FieldDataset(DatasetBase, FieldAnalysis, FieldPlotter):
     """
     Attributes
     ----------
@@ -45,6 +46,8 @@ class FieldDataset(DatasetBase, FieldPlotter):
         (used for zero padding)
     _parser : FieldParser
         class to parse field data
+    _stride : list
+        list of stride per dimension
     _units : dict
         the keys are the variable names and the values their units
     """
@@ -153,6 +156,38 @@ class FieldDataset(DatasetBase, FieldPlotter):
         if self._loaded_step < 0:
             self._load_step(0)
         return self._df
+
+    @property
+    def stride(self):
+        """
+        Returns
+        -------
+        list
+            stride per dimension
+        """
+        if self._loaded_step < 0:
+            self._load_step(0)
+        return self._stride
+
+
+    def get_mesh_spacing(self, step=0):
+        """Get the mesh spacings.
+
+        Parameters
+        ----------
+        step : int, optional
+            time step
+
+        Returns
+        -------
+        list
+            the mesh spacing per dimension
+        """
+        self._load_step(step)
+        h = [0.0, 0.0, 0.0]
+        for i in range(3):
+            h[i] = np.diff(self.positions[:, i][::self._stride[i]])[0]
+        return h
 
     def getSlice(self, field, normal, pos=0.0, index=0, step=0):
         """Get a 2d slice through the data.
@@ -372,5 +407,6 @@ class FieldDataset(DatasetBase, FieldPlotter):
                 self._units = self._parser.get_unit_dictionary()
         self._loaded_step = step
         self._dim = self._parser.dimension
+        self._stride = self._parser.stride
         # clear data in parser (not needed anymore)
         self._parser.clear()
