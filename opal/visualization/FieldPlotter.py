@@ -19,6 +19,33 @@ class FieldPlotter(BasePlotter):
     def __init__(self):
         pass
 
+
+    def plot_line(self, field, step=0, **kwargs):
+
+
+        ix = self.indices[:, 0]
+        iy = self.indices[:, 1]
+        iz = self.indices[:, 2]
+
+        k = int(0.5 * max(iz))
+        j = int(0.5 * max(iy))
+
+        ix = ix[iz == k]
+        iy = iy[iz == k]
+
+        ix = ix[iy == j]
+
+        x = self.positions[iz == k, 0]
+        x = x[iy == j]
+
+        ff = self.ds.getData(field, step=step)
+        ff = ff[iz == k]
+        ff = ff[iy == j]
+
+        plt.plot(x, ff, **kwargs)
+        return plt
+
+
     def plot_slice(self, field, normal, pos=0.0, index=0, step=0):
         """Do a slice plot.
 
@@ -40,12 +67,16 @@ class FieldPlotter(BasePlotter):
         matplotlib.pyplot
             Plot handle
         """
-        ix, iy, field = self.ds.getSlice(field, normal, pos, step, index=index)
+        ix, iy, field = self.ds.getSlice(field=field,
+                                         normal=normal,
+                                         pos=pos,
+                                         index=index,
+                                         step=step)
         plt.pcolormesh(ix, iy, field)
         plt.colorbar()
         return plt
 
-    def plot_projection(self, field, normal, step=0):
+    def plot_projection(self, field, normal, step=0, method='integrated'):
         """Do a projection plot.
 
         Parameters
@@ -62,7 +93,10 @@ class FieldPlotter(BasePlotter):
         matplotlib.pyplot
             Plot handle
         """
-        ix, iy, field_sum = self.ds.getSlice(field, normal, step=step, index=1)
+        ix, iy, values = self.ds.getSlice(field=field,
+                                          normal=normal,
+                                          index=1,
+                                          step=step)
 
         xlab = 'x'
         ylab = 'y'
@@ -86,14 +120,24 @@ class FieldPlotter(BasePlotter):
 
         data = self.ds.dataframe[normal].values
 
-        # mesh spacing in each dimension is constant in OPAL
-        # --> it is enough to take just one value
-        dx = np.diff(data)[0]
+        dx = self.ds.get_mesh_spacing(step)[dim]
+
+        mult = ''
+        if method == 'integrated':
+            mult = '*m'
 
         for i in range(1, int(mindex) + 1):
             _, _, data = self.ds.getSlice(field, normal, step=step, index=i)
-            field_sum += data * dx
-        plt.pcolormesh(ix, iy, field_sum)
+            if method == 'integrated':
+                values += data * dx
+            elif method == 'sum':
+                values += data
+            elif method == 'max':
+                values = np.maximum(values, data)
+            else:
+                raise ValueError("Projection method '" + method + "' not available.")
+
+        plt.pcolormesh(ix, iy, values)
         plt.xlabel(xlab + ' [' + xunit + ']')
         plt.ylabel(ylab + ' [' + yunit + ']')
         cbar = plt.colorbar()
@@ -101,5 +145,5 @@ class FieldPlotter(BasePlotter):
         clab = self.ds.getLabel(field)
         cunit = self.ds.getUnit(field)
 
-        cbar.set_label(clab + ' [' + cunit + '*m]')
+        cbar.set_label(clab + ' [' + cunit + mult + ']')
         return plt
