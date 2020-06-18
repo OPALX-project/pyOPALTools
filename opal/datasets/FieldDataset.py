@@ -162,8 +162,8 @@ class FieldDataset(DatasetBase, FieldAnalysis, FieldPlotter):
         """
         Returns
         -------
-        pandas.core.frame.DataFrame
-            all the data
+        list
+            stride per dimension
         """
         if self._loaded_step < 0:
             self._load_step(0)
