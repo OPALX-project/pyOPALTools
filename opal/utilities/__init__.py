@@ -15,3 +15,4 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 import opal.utilities.logger
+import opal.utilities.wrapper
