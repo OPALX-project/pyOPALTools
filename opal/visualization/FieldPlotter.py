@@ -16,37 +16,54 @@ import numpy as np
 
 class FieldPlotter(BasePlotter):
 
-    def __init__(self):
-        pass
+    def plot_line(self, field, normal, step=0, **kwargs):
+        """Do a line plot through the center. The line can only
+        be drawn orthogonal to one of the directions x, y, or z.
 
+        Parameters
+        ----------
+        field : str
+            name of scalar field or vector field component
+        normal : str
+            normal direction. Either 'x', 'y', or 'z'
+        step : int, optional
+            time step
+        kwargs : dict
+            keywords of matplotlib.pyplot.plot
 
-    def plot_line(self, field, step=0, **kwargs):
+        Returns
+        -------
+        matplotlib.pyplot
+            Plot handle
+        """
+        dirs = ['x', 'y', 'z']
 
+        if normal not in dirs:
+            raise ValueError("Normal has to be one of " + str(dirs) + ".")
 
-        ix = self.indices[:, 0]
-        iy = self.indices[:, 1]
-        iz = self.indices[:, 2]
+        idx = dirs.index(normal)
 
-        k = int(0.5 * max(iz))
-        j = int(0.5 * max(iy))
+        ii = self.indices[:, (idx + 1) % 3]
+        jj = self.indices[:, (idx + 2) % 3]
 
-        ix = ix[iz == k]
-        iy = iy[iz == k]
+        i = int(0.5 * max(ii))
+        j = int(0.5 * max(jj))
 
-        ix = ix[iy == j]
+        jj = jj[ii == i]
 
-        x = self.positions[iz == k, 0]
-        x = x[iy == j]
+        pos = self.positions[ii == i, idx]
+        pos = pos[jj == j]
 
         ff = self.ds.getData(field, step=step)
-        ff = ff[iz == k]
-        ff = ff[iy == j]
+        ff = ff[ii == i]
+        ff = ff[jj == j]
 
-        plt.plot(x, ff, **kwargs)
+        plt.plot(pos, ff, **kwargs)
+        plt.xlabel(normal + ' [' + self.ds.getUnit(normal) + ']')
+        plt.ylabel(self.ds.getLabel(field) + ' [' + self.ds.getUnit(field) + ']')
         return plt
 
-
-    def plot_slice(self, field, normal, pos=0.0, index=0, step=0):
+    def plot_slice(self, field, normal, pos=0.0, index=0, step=0, **kwargs):
         """Do a slice plot.
 
         Parameters
@@ -61,22 +78,46 @@ class FieldPlotter(BasePlotter):
             time step
         index : int, optional
             if index > 0, pos is ignored.
+        kwargs : dict
+            keywords of matplotlib.pyplot.pcolormesh
 
         Returns
         -------
         matplotlib.pyplot
             Plot handle
         """
-        ix, iy, field = self.ds.getSlice(field=field,
-                                         normal=normal,
-                                         pos=pos,
-                                         index=index,
-                                         step=step)
-        plt.pcolormesh(ix, iy, field)
-        plt.colorbar()
+        ix, iy, ff = self.ds.getSlice(field=field,
+                                      normal=normal,
+                                      pos=pos,
+                                      index=index,
+                                      step=step)
+        plt.pcolormesh(ix, iy, ff, **kwargs)
+        cbar = plt.colorbar()
+        clab = self.ds.getLabel(field)
+        cunit = self.ds.getUnit(field)
+        cbar.set_label(clab + ' [' + cunit + ']')
+
+        xlab = 'x'
+        ylab = 'y'
+        if normal == 'x':
+            xlab = 'y'
+            ylab = 'z'
+        elif normal == 'y':
+            xlab = 'x'
+            ylab = 'z'
+        elif normal == 'z':
+            xlab = 'x'
+            ylab = 'y'
+
+        xunit = self.ds.getUnit(xlab)
+        yunit = self.ds.getUnit(ylab)
+
+        plt.xlabel(xlab + ' [' + xunit + ']')
+        plt.ylabel(ylab + ' [' + yunit + ']')
+
         return plt
 
-    def plot_projection(self, field, normal, step=0, method='integrated'):
+    def plot_projection(self, field, normal, step=0, method='integrated', **kwargs):
         """Do a projection plot.
 
         Parameters
@@ -87,6 +128,10 @@ class FieldPlotter(BasePlotter):
             normal direction. Either 'x', 'y', or 'z'
         step : int, optional
             time step
+        method : str, optional
+            projection method: 'integrated', 'sum' or 'max'
+        kwargs : dict
+            keywords of matplotlib.pyplot.pcolormesh
 
         Returns
         -------
@@ -137,7 +182,7 @@ class FieldPlotter(BasePlotter):
             else:
                 raise ValueError("Projection method '" + method + "' not available.")
 
-        plt.pcolormesh(ix, iy, values)
+        plt.pcolormesh(ix, iy, values, **kwargs)
         plt.xlabel(xlab + ' [' + xunit + ']')
         plt.ylabel(ylab + ' [' + yunit + ']')
         cbar = plt.colorbar()
