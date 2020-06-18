@@ -198,27 +198,16 @@ class SamplerPlotter(BasePlotter):
 
             plt.plot(np.arange(nsamples - 1), matches)
 
-            isTex = mpl.rcParams['text.usetex']
-
-            xlabel = '#samples'
             ylabel = '#identical samples'
-            llabel = '#samples'
-            blabel = '%'
-
-            if isTex:
-                xlabel = '\\' + xlabel
-                ylabel = '\\' + ylabel
-                llabel = '\\' + llabel
-                blabel = '\\' + blabel
 
             if percent:
-                ylabel = ylabel + ' in ' + blabel
+                ylabel = ylabel + ' in %'
 
-            plt.xlabel( xlabel )
-            plt.ylabel( ylabel )
+            plt.xlabel('#samples')
+            plt.ylabel(ylabel)
 
             if kwargs.pop('nsamples', False) and not percent:
-                plt.axhline(nsamples, linestyle='dashed', label=llabel)
+                plt.axhline(nsamples, linestyle='dashed', label='#samples')
                 plt.legend(loc = 'upper center', ncol=1, labelspacing=0.,
                         bbox_to_anchor=(0.5, 1.1, 0.0, 0.0))
 
@@ -290,34 +279,21 @@ class SamplerPlotter(BasePlotter):
             bars = plt.bar(ind, matches)
             plt.xticks(ind, ntrains)
 
-            isTex = mpl.rcParams['text.usetex']
-
-            xlabel = '#training samples'
-            ylabel = '#identical samples with validation set'
-            llabel = '#samples'
-            blabel = '%'
-
-            if isTex:
-                xlabel = '\\' + xlabel
-                ylabel = '\\' + ylabel
-                llabel = '\\' + llabel
-                blabel = '\\' + blabel
-
-            plt.xlabel( xlabel )
-            plt.ylabel( ylabel )
+            plt.xlabel('#training samples')
+            plt.ylabel('#identical samples with validation set')
 
             topline = kwargs.pop('nsamples', False)
 
             if topline:
-                plt.axhline(nsamples, linestyle='dashed', label=llabel)
+                plt.axhline(nsamples, linestyle='dashed', label='#samples')
 
             if kwargs.pop('percent', True):
                 # 12. April 2019
                 # https://matplotlib.org/gallery/lines_bars_and_markers/barchart.html#sphx-glr-gallery-lines-bars-and-markers-barchart-py
                 for rect in bars:
                     height = rect.get_height()
-                    plt.gca().text(rect.get_x() + rect.get_width()*0.5, 1.01*height,
-                                '{}'.format(height * 100.0 / nsamples) + blabel, ha='center', va='bottom')
+                    plt.text(rect.get_x() + rect.get_width()*0.5, 1.01*height,
+                             '{}'.format(height * 100.0 / nsamples) + '%', ha='center', va='bottom')
 
                 #self._autolabel(plt.gca(), bars, 'center')
 
