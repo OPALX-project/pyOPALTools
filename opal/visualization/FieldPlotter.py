@@ -49,14 +49,19 @@ class FieldPlotter(BasePlotter):
         i = int(0.5 * max(ii))
         j = int(0.5 * max(jj))
 
-        jj = jj[ii == i]
+        # masks to select center data in
+        # other directions
+        i_mask = (ii == i)
+        j_mask = (jj == j)
 
-        pos = self.positions[ii == i, idx]
-        pos = pos[jj == j]
+        jj = jj[i_mask]
+
+        pos = self.positions[i_mask, idx]
+        pos = pos[j_mask]
 
         ff = self.ds.getData(field, step=step)
-        ff = ff[ii == i]
-        ff = ff[jj == j]
+        ff = ff[i_mask]
+        ff = ff[j_mask]
 
         plt.plot(pos, ff, **kwargs)
         plt.xlabel(normal + ' [' + self.ds.getUnit(normal) + ']')
