@@ -49,7 +49,7 @@ class GridPlotter(BasePlotter):
                 total += level
 
             plt.plot(time, total, label='total')
-            plt.xlabel(self.ds.getLabel('time') + ' [' + self.ds.getUnit('time') + ']')
+            plt.xlabel(self.ds.getLabelWithUnit('time'))
             plt.ylabel('#grids')
             plt.xscale(xscale)
             plt.yscale(yscale)
@@ -111,7 +111,7 @@ class GridPlotter(BasePlotter):
             plt.xscale(xscale)
             plt.yscale(yscale)
 
-            plt.xlabel(self.ds.getLabel('time') + ' [' + self.ds.getUnit('time') + ']')
+            plt.xlabel(self.ds.getLabelWithUnit('time'))
             plt.ylabel('#grids per core')
             plt.grid(grid, which='both')
             plt.tight_layout()

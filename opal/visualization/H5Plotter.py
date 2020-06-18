@@ -116,13 +116,8 @@ class H5Plotter(ProbePlotter):
             else:
                 plt.scatter(xdata, ydata, marker='.', s=markersize, **kwargs)
 
-            xunit  = self.ds.getUnit(xvar)
-            yunit  = self.ds.getUnit(yvar)
-            xlabel = self.ds.getLabel(xvar)
-            ylabel = self.ds.getLabel(yvar)
-
-            plt.xlabel(xlabel + ' [' + xunit + ']')
-            plt.ylabel(ylabel + ' [' + yunit + ']')
+            plt.xlabel(self.ds.getLabelWithUnit(xvar))
+            plt.ylabel(self.ds.getLabelWithUnit(yvar))
 
             plt.tight_layout()
 
@@ -170,13 +165,8 @@ class H5Plotter(ProbePlotter):
             xy = np.vstack([xdata, ydata])
             plt.hist2d(xdata, ydata, bins = bins, cmap=cmap)
 
-            xunit  = self.ds.getUnit(xvar)
-            yunit  = self.ds.getUnit(yvar)
-            xlabel = self.ds.getLabel(xvar)
-            ylabel = self.ds.getLabel(yvar)
-
-            plt.xlabel(xlabel + ' [' + xunit + ']')
-            plt.ylabel(ylabel + ' [' + yunit + ']')
+            plt.xlabel(self.ds.getLabelWithUnit(xvar))
+            plt.ylabel(self.ds.getLabelWithUnit(yvar))
 
             return plt
         except Exception as ex:
@@ -214,10 +204,7 @@ class H5Plotter(ProbePlotter):
 
             plt.hist(data, bins=bins, density=density)
 
-            xunit  = self.ds.getUnit(var)
-            xlabel = self.ds.getLabel(var)
-
-            plt.xlabel(xlabel + ' [' + xunit + ']')
+            plt.xlabel(self.ds.getLabelWithUnit(var))
 
             ylabel = '#entries'
 
@@ -260,12 +247,6 @@ class H5Plotter(ProbePlotter):
             xdata = self.ds.getData(xvar, step=step)
             ydata = self.ds.getData(yvar, step=step)
 
-            xunit  = self.ds.getUnit(xvar)
-            xlabel = self.ds.getLabel(xvar)
-
-            yunit  = self.ds.getUnit(yvar)
-            ylabel = self.ds.getLabel(yvar)
-
             if xdata.size < 1 or ydata.size < 1:
                 raise ValueError('Empty data container.')
 
@@ -280,11 +261,12 @@ class H5Plotter(ProbePlotter):
             l = plt.scatter(xdata[lidx], ydata[lidx], c='r', s=20, edgecolor='', marker='.')
             g = plt.scatter(xdata[gidx], ydata[gidx], c='k', s=20, edgecolor='', marker='.')
 
+            xlabel = self.ds.getLabel(xvar)
             label = r'$pdf\left(' + xlabel + ', ' + xlabel + r'\right)$'
             plt.legend([l, g], [label + r'$ < $' + str(value), label + r'$ \geq $' + str(value)])
 
-            plt.xlabel(xlabel + ' [' + xunit + ']')
-            plt.ylabel(ylabel + ' [' + yunit + ']')
+            plt.xlabel(self.ds.getLabelWithUnit(xvar))
+            plt.ylabel(self.ds.getLabelWithUnit(yvar))
 
             return plt
         except Exception as ex:
@@ -321,14 +303,11 @@ class H5Plotter(ProbePlotter):
             xdata = self.ds.getData(xvar, step=step)
             ydata = self.ds.getData(yvar, step=step)
 
-            xunit  = self.ds.getUnit(xvar)
-            xlabel = self.ds.getLabel(xvar)
+            xlabel = self.ds.getLabelWithUnit(xvar)
+            ylabel = self.ds.getLabelWithUnit(yvar)
 
-            yunit  = self.ds.getUnit(yvar)
-            ylabel = self.ds.getLabel(yvar)
-
-            plt = impl_plots.plot_joint(xdata, xlabel + ' [' + xunit + ']',
-                                        ydata, ylabel + ' [' + yunit + ']',
+            plt = impl_plots.plot_joint(xdata, xlabel,
+                                        ydata, ylabel,
                                         join, **kwargs)
 
             return plt
@@ -379,13 +358,6 @@ class H5Plotter(ProbePlotter):
             xdata = self.ds.getData(xvar, step=step)
             ydata = self.ds.getData(yvar, step=step)
 
-            xunit  = self.ds.getUnit(xvar)
-            xlabel = self.ds.getLabel(xvar)
-
-            yunit  = self.ds.getUnit(yvar)
-            ylabel = "[" + self.ds.getLabel(yvar) + "]"
-
-
             if xdata.size < 1 or ydata.size < 1:
                 raise ValueError('Empty data container.')
 
@@ -427,8 +399,8 @@ class H5Plotter(ProbePlotter):
 
             plt.axis([xmin, xmax, ymin, ymax])
             cb = plt.colorbar(pc)
-            plt.xlabel(xlabel)
-            plt.ylabel(ylabel)
+            plt.xlabel(self.ds.getLabelWithUnit(xvar))
+            plt.ylabel(self.ds.getLabelWithUnit(yvar))
             cb.set_label(clabel)
 
             return plt

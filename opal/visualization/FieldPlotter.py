@@ -114,11 +114,8 @@ class FieldPlotter(BasePlotter):
             xlab = 'x'
             ylab = 'y'
 
-        xunit = self.ds.getUnit(xlab)
-        yunit = self.ds.getUnit(ylab)
-
-        plt.xlabel(xlab + ' [' + xunit + ']')
-        plt.ylabel(ylab + ' [' + yunit + ']')
+        plt.xlabel(self.ds.getLabelWithUnit(xlab))
+        plt.ylabel(self.ds.getLabelWithUnit(ylab))
 
         return plt
 
@@ -163,9 +160,6 @@ class FieldPlotter(BasePlotter):
             xlab = 'x'
             ylab = 'y'
 
-        xunit = self.ds.getUnit(xlab)
-        yunit = self.ds.getUnit(ylab)
-
         mindex = max(self.ds.indices[:, dim])
 
         data = self.ds.dataframe[normal].values
@@ -184,8 +178,8 @@ class FieldPlotter(BasePlotter):
                 raise ValueError("Projection method '" + method + "' not available.")
 
         plt.pcolormesh(ix, iy, values, **kwargs)
-        plt.xlabel(xlab + ' [' + xunit + ']')
-        plt.ylabel(ylab + ' [' + yunit + ']')
+        plt.xlabel(self.ds.getLabelWithUnit(xlab))
+        plt.ylabel(self.ds.getLabelWithUnit(ylab))
         cbar = plt.colorbar()
 
         clab = self.ds.getLabel(field)

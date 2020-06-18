@@ -56,25 +56,34 @@ class DatasetBase:
         return os.path.join(self._directory, self._fname)
 
 
-    def getData(var, **kwargs):
+    def getData(self, var, **kwargs):
         """
         To be implemented by derived class.
         """
         pass
 
 
-    def getUnit(var):
+    def getUnit(self, var):
         """
         To be implemented by derived class.
         """
         pass
 
 
-    def getLabel(var):
+    def getLabel(self, var):
         """
         To be implemented by derived class.
         """
         pass
+
+    def getLabelWithUnit(self, var):
+        """
+        Returns
+        -------
+        str
+            plotting label with unit
+        """
+        return self.getLabel(var) + ' [' + self.getUnit(var) + ']'
 
     @property
     def size(self):
