@@ -26,12 +26,15 @@ class FieldParser:
         the data
     _dim : list
         list of number of grid points per dimension
+    _stride : list
+        list of stride per dimension
     """
 
     def __init__(self):
         """Constructor
         """
         self._dim     = [0, 0, 0]
+        self._stride  = [0, 0, 0]
         self._columns =  {}
 
     def parse(self, filename):
@@ -53,6 +56,7 @@ class FieldParser:
         for i in range(3):
             self._dim[i] = int(max(self.indices[:, i]) -
                                min(self.indices[:, i]) + 1)
+            self._stride[i] = np.where(np.diff(self.indices[:, i]) == 1)[0][0] + 1
 
     @property
     def dataframe(self):
@@ -68,7 +72,8 @@ class FieldParser:
     def clear(self):
         """Reset attributes
         """
-        self._dim = None
+        self._dim = [0, 0, 0]
+        self._stride = [0, 0, 0]
         self._columns = {}
         self._df = None
 
@@ -136,6 +141,17 @@ class FieldParser:
             the number of grid points per dimension
         """
         return self._dim
+
+
+    @property
+    def stride(self):
+        """
+        Returns
+        -------
+        list
+            the stride per dimension
+        """
+        return self._stride
 
 
     def is_scalar(self):
