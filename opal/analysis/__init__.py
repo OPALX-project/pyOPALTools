@@ -15,6 +15,7 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 from .Statistics import Statistics
+from .FieldAnalysis import FieldAnalysis
 from .H5Statistics import H5Statistics
 from .TrackOrbitAnalysis import TrackOrbitAnalysis
 from .StdOpalOutputAnalysis import StdOpalOutputAnalysis
