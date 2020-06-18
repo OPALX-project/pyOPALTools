@@ -172,10 +172,6 @@ class FieldPlotter(BasePlotter):
 
         dx = self.ds.get_mesh_spacing(step)[dim]
 
-        mult = ''
-        if method == 'integrated':
-            mult = '*m'
-
         for i in range(1, int(mindex) + 1):
             _, _, data = self.ds.getSlice(field, normal, step=step, index=i)
             if method == 'integrated':
@@ -194,6 +190,10 @@ class FieldPlotter(BasePlotter):
 
         clab = self.ds.getLabel(field)
         cunit = self.ds.getUnit(field)
+
+        mult = ''
+        if method == 'integrated':
+            mult = '*m'
 
         cbar.set_label(clab + ' [' + cunit + mult + ']')
         return plt
