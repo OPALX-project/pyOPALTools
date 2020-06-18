@@ -58,20 +58,19 @@ def new_label(fun, *args, **kwargs):
     elif 's' in fun_args.args:
         idx = fun_args.args.index('s')
 
-    if idx == -1:
+    if idx == -1 or not mpl.rcParams['text.usetex']:
         return fun(*args, **kwargs)
 
-    if mpl.rcParams['text.usetex']:
-        signs = frozenset('$[](){}\\-') # symbols not to escape due to LaTex
-        lst = list(args)
-        if isinstance(lst[idx], str):
-            # we need to add the signs otherwise LaTex formulas
-            # are not properly compiled
-            re._alphanum_str = re._alphanum_str.union(signs)
-            lst[idx] = re.escape(lst[idx])
-            # remove signs again
-            re._alphanum_str = re._alphanum_str.difference(signs)
-            args = tuple(lst)
+    signs = frozenset('$[](){}\\-.') # symbols not to escape due to LaTex
+    lst = list(args)
+    if isinstance(lst[idx], str):
+        # we need to add the signs otherwise LaTex formulas
+        # are not properly compiled
+        re._alphanum_str = re._alphanum_str.union(signs)
+        lst[idx] = re.escape(lst[idx])
+        # remove signs again
+        re._alphanum_str = re._alphanum_str.difference(signs)
+        args = tuple(lst)
     return fun(*args, **kwargs)
 
 
