@@ -52,9 +52,9 @@ class FieldPlotter(BasePlotter):
         # masks to select center data in
         # other directions
         i_mask = (ii == i)
-        j_mask = (jj == j)
 
         jj = jj[i_mask]
+        j_mask = (jj == j)
 
         pos = self.positions[i_mask, idx]
         pos = pos[j_mask]
