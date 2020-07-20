@@ -19,6 +19,11 @@ class BaseParser:
         ----------
         filename : str
            file to be checked
+
+        Returns
+        -------
+        bool
+            True if a valid file, otherwise False.
         """
         try:
             self.parse(filename)
