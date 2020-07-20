@@ -14,8 +14,9 @@
 import pandas as pd
 import numpy as np
 import collections
+from .BaseParser import BaseParser
 
-class FieldParser:
+class FieldParser(BaseParser):
     """Read OPAL field data generated with compile flag DBG_SCALARFIELD enabled.
 
     Attributes
@@ -33,9 +34,7 @@ class FieldParser:
     def __init__(self):
         """Constructor
         """
-        self._dim     = [0, 0, 0]
-        self._stride  = [0, 0, 0]
-        self._columns =  {}
+        self.clear()
 
     def parse(self, filename):
         """Parse a file.
@@ -199,17 +198,3 @@ class FieldParser:
                 self._columns[entry] = ''
                 col_types[entry] = np.int32
         return col_types
-
-    def check_file(self, filename):
-        """Check if a field file.
-
-        Parameters
-        ----------
-        filename : str
-           file to be checked
-        """
-        try:
-            self.parse(filename)
-        except:
-            return False
-        return True

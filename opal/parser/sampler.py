@@ -16,8 +16,9 @@
 
 import json
 import os
+from .BaseParser import BaseParser
 
-class SamplerParser:
+class SamplerParser(BaseParser):
     """Parses ``*.json`` files of OPAL that are written by the SAMPLE command.
 
     **Notes**:
@@ -157,37 +158,14 @@ class SamplerParser:
                 self.__objs.append(samples[str(ind)]['obj'])
 
 
-    def __reset_attributes(self):
-        """Clear all private members.
+    def clear(self):
+        """Clear data.
         """
         self.__dvars = []
         self.__dvar_bounds = {}
         self.__objs  = []
         self.__begin = 0
         self.__end   = 0
-
-
-    def check_file(self, filename):
-        """Check if a file is really a sampler output
-
-        Parameters
-        ----------
-        filename : str
-           JSON file to be loaded
-
-        Returns
-        -------
-        bool
-            True if a sampler file, otherwise False
-        """
-        try:
-            self.parse(filename)
-            self.__reset_attributes()
-        except:
-            self.__reset_attributes()
-            return False
-        return True
-
 
     def parse(self, filename):
         """Load the JSON file.
@@ -201,7 +179,7 @@ class SamplerParser:
             raise IOError("File '" + filename + "' doesn't exist.")
 
         try:
-            self.__reset_attributes()
+            self.clear()
 
             parsed = json.load( open(filename) )
 
