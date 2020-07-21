@@ -110,7 +110,8 @@ def load_dataset(directory, **kwargs):
             for fname in fnames:
                 full_path = os.path.join(directory, fname)
                 ftype = FileType.extensionToFileType(full_path)
-                _append_dataset(datasets, ftype, astype, directory, fname)
+                if _append_dataset(datasets, ftype, astype, directory, fname)
+                    break
         opal_logger.debug('\nDone.\n' )
 
         if not datasets:
@@ -124,6 +125,28 @@ def load_dataset(directory, **kwargs):
 
 
 def _append_dataset(datasets, ftype, astype, directory, fname):
+    """Append a dataset to the list.
+
+    Parameters
+    ----------
+    datasets : list
+        Collection of datasets
+    ftype : FileType, optional
+        Type of file to read in
+    astype : FileType, optional
+        Read a file according some dataset type
+        E.g. OPAL standard output contains timings
+        as well.
+    directory : str
+        Root directory of the OPAL simulation
+    fname : str
+        File to read in
+
+    Returns
+    -------
+    bool
+        True if reading is stopped (i.e. sampler, optimizer and AMR datasets), False otherwise.
+    """
     if  ftype == FileType.H5:
         datasets.append(H5Dataset(directory, fname))
         opal_logger.debug('    ' + fname + ' matches H5 file type.')
@@ -135,7 +158,7 @@ def _append_dataset(datasets, ftype, astype, directory, fname):
         opal_logger.debug('    ' + fname + ' matches smb file type.' )
     elif ftype == FileType.TIMING:
         datasets.append(TimeDataset(directory, fname, 'ippl'))
-        opal_logger.debug('    ' + fname + ' matches timing file type.' )
+        opal_logger.debug('    ' + fname + ' matches IPPL timing file type.' )
     elif ftype == FileType.OUTPUT:
         if astype == FileType.TIMING:
             datasets.append(TimeDataset(directory, fname, 'output'))
