@@ -194,11 +194,11 @@ def _append_dataset(datasets, ftype, astype, directory, fname):
         return True
     elif ftype == FileType.SAMPLER:
         datasets.append(SamplerDataset(directory, fname))
-        opal_logger.debug('    ' + fname + ' matches sampler file type.' )
+        opal_logger.debug('    ' + fname + ' matches sampler file type. Stop reading further.' )
         return True
     elif ftype == FileType.AMR:
         datasets.append(AmrDataset(directory))
-        opal_logger.debug('    ' + directory + ' matches AMR file type.' )
+        opal_logger.debug('    ' + directory + ' matches AMR file type. Stop reading further.' )
         return True
     elif ftype == FileType.LOSS:
         datasets.append(LossDataset(directory, fname))
