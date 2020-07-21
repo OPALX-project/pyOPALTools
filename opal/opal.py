@@ -131,9 +131,9 @@ def _append_dataset(datasets, ftype, astype, directory, fname):
     ----------
     datasets : list
         Collection of datasets
-    ftype : FileType, optional
+    ftype : FileType
         Type of file to read in
-    astype : FileType, optional
+    astype : FileType
         Read a file according some dataset type
         E.g. OPAL standard output contains timings
         as well.
