@@ -17,9 +17,16 @@
 import os
 from enum import IntEnum, unique
 
-from opal.parser.sampler import SamplerParser
-from opal.parser.OptimizerParser import OptimizerParser
 from opal.parser.FieldParser import FieldParser
+from opal.parser.HistogramParser import HistogramParser
+from opal.parser.H5Parser import H5Parser
+from opal.parser.LossParser import LossParser
+from opal.parser.OptimizerParser import OptimizerParser
+from opal.parser.PeakParser import PeakParser
+from opal.parser.sampler import SamplerParser
+from opal.parser.SDDSParser import SDDSParser
+from opal.parser.TimingParser import TimingParser
+from opal.parser.TrackOrbitParser import TrackOrbitParser
 
 from opal.utilities.logger import opal_logger
 
@@ -45,65 +52,85 @@ class FileType(IntEnum):
     NONE        = 17
 
     @classmethod
+    def get_extensions(cls):
+        extension = {
+            '.h5':      [cls.H5],
+            '.stat':    [cls.STAT],
+            '.smb':     [cls.SMB],
+            '.mem':     [cls.MEM],
+            '.lbal':    [cls.LBAL],
+            '.out':     [cls.OUTPUT],
+            '.output':  [cls.OUTPUT],
+            '.grid':    [cls.GRID],
+            '.solver':  [cls.SOLVER],
+            '.peaks':   [cls.PEAK],
+            '.hist':    [cls.HIST],
+            '.json':    [cls.OPTIMIZER, cls.SAMPLER],
+            '.loss':    [cls.LOSS],
+            '.dat':     [cls.FIELD, cls.TRACK_ORBIT, cls.TIMING]
+        }
+        return extension
+
+    @classmethod
+    def get_parsers(cls):
+        parsers = {
+            cls.H5:             H5Parser(),
+            cls.STAT:           SDDSParser(),
+            cls.SMB:            SDDSParser(),
+            cls.MEM:            SDDSParser(),
+            cls.LBAL:           SDDSParser(),
+            cls.OUTPUT:         TimingParser(),
+            cls.GRID:           SDDSParser(),
+            cls.SOLVER:         SDDSParser(),
+            cls.PEAK:           PeakParser(),
+            cls.HIST:           HistogramParser(),
+            cls.OPTIMIZER:      OptimizerParser(),
+            cls.SAMPLER:        SamplerParser(),
+            cls.LOSS:           LossParser(),
+            cls.FIELD:          FieldParser(),
+            cls.TIMING:         TimingParser(),
+            cls.TRACK_ORBIT:    TrackOrbitParser()
+        }
+        return parsers
+
+    @classmethod
     def extensionToFileType(cls, fname):
         opal_logger.debug('FileType.extensionToFileType: Check file type')
-        extension = {
-            '.h5':      cls.H5,
-            '.stat':    cls.STAT,
-            '.smb':     cls.SMB,
-            '.mem':     cls.MEM,
-            '.lbal':    cls.LBAL,
-            '.out':     cls.OUTPUT,
-            '.output':  cls.OUTPUT,
-            '.grid':    cls.GRID,
-            '.solver':  cls.SOLVER,
-            '.peaks':   cls.PEAK,
-            '.hist':    cls.HIST,
-            '.json':    [cls.OPTIMIZER, cls.SAMPLER],
-            '.loss':    cls.LOSS,
-            '.dat':     cls.FIELD
-        }
-
-        file = {
-            'timing.dat':       cls.TIMING,
-            '-trackOrbit.dat':  cls.TRACK_ORBIT
-        }
+        extension = cls.get_extensions()
+        parsers = cls.get_parsers()
 
         _ , ext = os.path.splitext(fname)
-
-        if ext in extension:
-            # FIXME not nice file handling
-            # currently only JSON could be for
-            # OPTIMIZER or SAMPLER --> try parsing
-            if isinstance(extension[ext], list):
-                opal_logger.debug('FileType.extensionToFileType: Optimizer or sampler output')
+        if ext in extension.keys():
+            for t in extension[ext]:
                 try:
-                    parser = SamplerParser()
-                    optparser = OptimizerParser()
+                    parser = parsers[t]
                     if parser.check_file(fname):
-                        return cls.SAMPLER
-                    elif optparser.check_file(fname):
-                        return cls.OPTIMIZER
-                    else:
-                        return cls.NONE
+                        return t
                 except:
-                    return cls.NONE
-            else:
-                return extension[ext]
-
-        fparser = FieldParser()
-        if fparser.check_file(fname):
-            return cls.FIELD
-        elif fname in file:
-            return file[fname]
-        elif 'time' in fname.lower() or 'timing' in fname.lower():
-            # hopeful test for timing files
-            return cls.TIMING
+                    pass
+            return cls.NONE
         elif '.o' in fname:
             return cls.OUTPUT
-        elif '-trackOrbit.dat' in fname:
-            return cls.TRACK_ORBIT
         elif os.path.basename(fname) == 'Header':
             return cls.AMR
         else:
             return cls.NONE
+
+    def checkFileType(cls, fname):
+        _ , ext = os.path.splitext(fname)
+        extension = cls.get_extensions()
+        if cls == cls.AMR:
+            return True
+        elif not ext in extension.keys():
+            return False
+
+        parsers = cls.get_parsers()
+        for t in extension[ext]:
+            if t == cls:
+                try:
+                    parser = parsers[t]
+                    if parser.check_file(fname):
+                        return True
+                except:
+                    return False
+        return False

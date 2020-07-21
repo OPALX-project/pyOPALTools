@@ -16,17 +16,12 @@
 
 import re
 import numpy as np
+from .BaseParser import BaseParser
 
-class LossParser:
+class LossParser(BaseParser):
 
     def __init__(self):
-
-        self._names = [ 'element' ]
-
-        self._units = { 'element': '' }
-
-        self._dataset = []
-
+        self.clear()
 
     def parse(self, filename):
         """Parser method for loss files
@@ -82,6 +77,16 @@ class LossParser:
         self._dataset = np.genfromtxt(filename,
                                       comments='#',
                                       dtype=dtypes)
+
+    def clear(self):
+        """Clear data.
+        """
+        self._names = [ 'element' ]
+
+        self._units = { 'element': '' }
+
+        self._dataset = []
+
 
     def getDataOfVariable(self, var):
         if var in self._names:

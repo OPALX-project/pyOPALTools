@@ -15,10 +15,12 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 import numpy as np
+from .BaseParser import BaseParser
 
-class TrackOrbitParser:
+class TrackOrbitParser(BaseParser):
 
     def __init__(self):
+        self.clear()
 
         self._names = [ 'ID', 'x', 'px', 'y', 'py', 'z', 'pz' ]
 
@@ -41,8 +43,6 @@ class TrackOrbitParser:
             self._names[5]:   'particle coordinate in z',
             self._names[6]:   'particle momentum in z',
         }
-
-        self._dataset = []
 
 
     def parse(self, filename):
@@ -78,6 +78,11 @@ class TrackOrbitParser:
 
         for i in range(len(self._dataset[self._names[0]])):
             self._dataset[self._names[0]][i] = self._dataset[self._names[0]][i][-1:]
+
+    def clear(self):
+        """Clear data.
+        """
+        self._dataset = []
 
     def getDataOfVariable(self, var):
 

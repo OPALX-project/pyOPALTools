@@ -18,16 +18,12 @@ import numpy as np
 import re,os,sys
 import pandas as pd
 from collections import OrderedDict
+from .BaseParser import BaseParser
 
-class SDDSParser:
+class SDDSParser(BaseParser):
 
     def parse(self, filename):
-        self._nParameters = 0
-        self._nRows = 0
-
-        self._units = OrderedDict()
-        self._desc = {}
-        self._dtypes = {}
+        self.clear()
 
         # check file version
         version = self._checkVersion(filename)
@@ -48,6 +44,17 @@ class SDDSParser:
         self._dataset = pd.read_csv(filename, skiprows=self._nRows,
                                     sep=self._separator,
                                     names=list(self._units.keys()), index_col=False)
+
+    def clear(self):
+        """Clear data.
+        """
+        self._nParameters = 0
+        self._nRows = 0
+
+        self._units = OrderedDict()
+        self._desc = {}
+        self._dtypes = {}
+        self._dataset = None
 
     def _checkVersion(self, filename):
 
