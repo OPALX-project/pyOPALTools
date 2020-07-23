@@ -110,7 +110,7 @@ def load_dataset(directory, **kwargs):
             for fname in fnames:
                 full_path = os.path.join(directory, fname)
                 ftype = FileType.extensionToFileType(full_path)
-                if _append_dataset(datasets, ftype, astype, directory, fname)
+                if _append_dataset(datasets, ftype, astype, directory, fname):
                     break
         opal_logger.debug('\nDone.\n' )
 
