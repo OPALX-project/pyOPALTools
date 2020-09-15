@@ -6,14 +6,19 @@ Notebooks
 
 .. toctree::
 
-   confidence_interval<confidence_interval>
+   uq_example<uq_example>
 
-surrogate.bootstrap module
---------------------------
+surrogate.bootstrap.bootstrap module
+------------------------------------
 
-.. automodule:: surrogate.bootstrap
+.. automodule:: surrogate.bootstrap.bootstrap
 
-surrogate.uq module
--------------------
+surrogate.chaospy\_model module
+-------------------------------
 
-.. automodule:: surrogate.uq
+.. automodule:: surrogate.chaospy\_model
+
+surrogate.uqtk\_model module
+----------------------------
+
+.. automodule:: surrogate.uqtk\_model
