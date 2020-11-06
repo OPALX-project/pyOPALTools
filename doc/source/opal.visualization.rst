@@ -15,6 +15,7 @@ Notebooks
 .. toctree::
 
    AmrPlotter<testAmrOpal-1.py>
+   FieldPlotter<FieldDataset>
    H5Plotter_RingMultiBunch<RingMultiBunch>
    ProbePlotter<Probe>
    ProbePlotter_PeakFile<ProbePeak>
@@ -33,6 +34,11 @@ opal.visualization.BasePlotter module
 -------------------------------------
 
 .. automodule:: opal.visualization.BasePlotter
+
+opal.visualization.FieldPlotter module
+-------------------------------------
+
+.. automodule:: opal.visualization.FieldPlotter
 
 opal.visualization.GridPlotter module
 -------------------------------------

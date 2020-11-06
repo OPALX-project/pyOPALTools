@@ -17,8 +17,9 @@
 import h5py
 import dask.array as da
 from .H5Error import H5ParseError, H5DatasetError, H5OverflowError
+from .BaseParser import BaseParser
 
-class H5Parser:
+class H5Parser(BaseParser):
 
     def __init__(self):
         """Constructor.
@@ -51,13 +52,19 @@ class H5Parser:
         else:
             raise H5ParseError("Cannot read '" + fname + "'")
 
+    def clear(self):
+        """Clear data.
+        """
+        self.close()
 
     def close(self):
         """Closes h5 file.
         """
         if self.__h5f:
-            self.__h5f.close()
+            del self.__h5f
             self.__h5f = ''
+            self.__filename = ''
+            self.__nsteps = 0
 
     def getNSteps(self):
         """Number of steps in file.

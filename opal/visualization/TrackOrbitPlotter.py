@@ -50,14 +50,8 @@ class TrackOrbitPlotter(BasePlotter):
 
             plt.plot(xdata, ydata, **kwargs)
 
-            xlabel = self.ds.getLabel('x')
-            xunit  = self.ds.getUnit('x')
-
-            ylabel = self.ds.getLabel('y')
-            yunit  = self.ds.getUnit('y')
-
-            plt.xlabel(xlabel + ' [' + xunit + ']')
-            plt.ylabel(ylabel + ' [' + yunit + ']')
+            plt.xlabel(self.ds.getLabelWithUnit('x'))
+            plt.ylabel(self.ds.getLabelWithUnit('y'))
 
             return plt
         except Exception as ex:

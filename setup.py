@@ -4,31 +4,38 @@ DISTNAME    = 'opal'
 VERSION     = '1.0.0'
 
 PACKAGES = [
+    'amr',
+    'db',
+    'jobhandler',
     'opal',
     'opal.analysis',
     'opal.datasets',
-    'db',
     'opal.parser',
     'opal.utilities',
     'opal.visualization',
     'opal.visualization.statistics',
-    'opal.visualization.styles'
+    'opal.visualization.styles',
+    'optPilot',
+    'pc',
+    'surrogate'
 ]
 
+# For running the jupyter notebooks, in addition the modules
+# * jupyter
+# * notebook
+# are required
 INSTALL_REQUIRES = [
-    'h5py>=2.7.1',
-    'jupyter>=1.0.0',
-    'matplotlib>=2.1.0',
-    'notebook>=5.2.0',
-    'numpy>=1.13.3',
-    'pandas>=0.21.0',
-    'pickleshare>=0.7.4',
-    'plotly>=2.5.1',
-    'scipy>=0.19.1',
-    'seaborn>=0.8.1',
-    'pyaml>=18.11.0'
+    'chaospy>=3.2.9',
+    'h5py>=2.9.0',
+    'matplotlib>=3.0.3',
+    'numpy>=1.16.2',
+    'pandas>=0.24.2',
+    'plotly>=3.7.0',
+    'scipy>=1.2.1',
+    'seaborn>=0.9.0',
+    'sklearn',
+    'yt>=3.5.1'
 ]
-
 
 if __name__ == "__main__":
     setup(

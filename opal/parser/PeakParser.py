@@ -16,8 +16,9 @@
 
 import re
 import numpy as np
+from .BaseParser import BaseParser
 
-class PeakParser:
+class PeakParser(BaseParser):
     """Read measurement file of the form::
 
         # Peak Radii (mm), 18 June 2008, 200 uA (RRI2-65)
@@ -57,13 +58,7 @@ class PeakParser:
     """
 
     def __init__(self):
-
-        self._peaks = {
-            'type':     '',
-            'name':     [],
-            'dataset':  [],
-            'unit':     []
-        }
+        self.clear()
 
     def parse(self, filename):
 
@@ -114,6 +109,16 @@ class PeakParser:
                                                      dtype=np.float64
                                                      )
         )
+
+    def clear(self):
+        """Clear data.
+        """
+        self._peaks = {
+            'type':     '',
+            'name':     [],
+            'dataset':  [],
+            'unit':     []
+        }
 
 
     def getDataOfVariable(self, var):

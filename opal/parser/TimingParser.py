@@ -17,9 +17,9 @@
 import pickle as pickle
 import pprint
 import re
+from .BaseParser import BaseParser
 
-
-class TimingParser:
+class TimingParser(BaseParser):
     """Read and write an Ippl timing file.
 
     Attributes
@@ -67,10 +67,27 @@ class TimingParser:
 
     def __init__(self):
         # list of dictionaries
-        self._problem = {}
-        self._data = []
+        self.clear()
         self._format = ['PICKLE',
                         'ASCII']
+
+
+    def parse(self, filename):
+        isValid = False
+        try:
+            self.read_output_file(filename)
+            isValid = True
+        except:
+            pass
+
+        if not isValid:
+            self.read_ippl_timing(filename)
+
+    def clear(self):
+        """Clear data.
+        """
+        self._problem = {}
+        self._data = []
 
 
     def _init_data_structure(self):

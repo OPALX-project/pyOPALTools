@@ -16,8 +16,9 @@
 
 import re
 import numpy as np
+from .BaseParser import BaseParser
 
-class HistogramParser:
+class HistogramParser(BaseParser):
     """Parses OPAL ``*.hist`` files
 
     Parses ``*.hist`` files of OPAL that are written for probe
@@ -50,14 +51,7 @@ class HistogramParser:
     """
 
     def __init__(self):
-
-        self._info = {
-            'min':      [],
-            'max':      [],
-            'nbins':    [],
-            'binsize':  [],
-            'bincount': []
-        }
+        self.clear()
 
 
     def parse(self, filename):
@@ -139,6 +133,19 @@ class HistogramParser:
             )
 
         self._info['bincount'].append('')
+
+
+    def clear(self):
+        """Clear data.
+        """
+        self._info = {
+            'min':      [],
+            'max':      [],
+            'nbins':    [],
+            'binsize':  [],
+            'bincount': []
+        }
+
 
 
     def getDataOfVariable(self, var):

@@ -29,3 +29,4 @@ import opal.datasets.PeakDataset
 import opal.datasets.ProbeHistDataset
 import opal.datasets.OptimizerDataset
 import opal.datasets.SamplerDataset
+import opal.datasets.FieldDataset

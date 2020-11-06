@@ -7,6 +7,11 @@ Notebooks
 .. toctree::
    cyclotron<Cyclotron>
 
+opal.analysis.FieldAnalysis module
+---------------------------------
+
+.. automodule:: opal.analysis.FieldAnalysis
+
 opal.analysis.H5Statistics module
 ---------------------------------
 

@@ -8,6 +8,11 @@ Notebooks
 
    OptimizerParser<testParallelPlot>
 
+opal.parser.FieldParser module
+--------------------------
+
+.. automodule:: opal.parser.FieldParser
+
 opal.parser.H5Error module
 --------------------------
 

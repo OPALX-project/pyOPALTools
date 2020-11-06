@@ -32,6 +32,7 @@ from .datasets.ProbeHistDataset import ProbeHistDataset
 from .datasets.OptimizerDataset import OptimizerDataset
 from .datasets.SamplerDataset import SamplerDataset
 from .datasets.LossDataset import LossDataset
+from .datasets.FieldDataset import FieldDataset
 
 from .utilities.logger import opal_logger
 
@@ -89,7 +90,9 @@ def load_dataset(directory, **kwargs):
             opal_logger.debug('Loading files of given file type')
             for fname in os.listdir(directory):
                 full_path = os.path.join(directory, fname)
-                if FileType.extensionToFileType(full_path) == ftype:
+                if os.path.isdir(full_path):
+                    continue
+                if FileType.checkFileType(ftype, full_path):
                     fnames.append(fname)
 
             if not fnames:
@@ -99,68 +102,16 @@ def load_dataset(directory, **kwargs):
 
         opal_logger.debug('Start loading files ...')
         datasets = []
-        for fname in fnames:
-            full_path = os.path.join(directory, fname)
-            ftype = FileType.extensionToFileType(full_path)
-
-            if  ftype == FileType.H5:
-                datasets.append(H5Dataset(directory, fname))
-                opal_logger.debug('    ' + fname + ' matches H5 file type.')
-            elif ftype == FileType.STAT:
-                datasets.append(StatDataset(directory, fname))
-                opal_logger.debug('    ' + fname + ' matches stat file type.' )
-            elif ftype == FileType.SMB:
-                datasets.append(StatDataset(directory, fname))
-                opal_logger.debug('    ' + fname + ' matches smb file type.' )
-            elif ftype == FileType.TIMING:
-                datasets.append(TimeDataset(directory, fname, 'ippl'))
-                opal_logger.debug('    ' + fname + ' matches timing file type.' )
-            elif ftype == FileType.OUTPUT:
-                if astype == FileType.TIMING:
-                    datasets.append(TimeDataset(directory, fname, 'output'))
-                    opal_logger.debug('    ' + fname + ' matches timing file type.' )
-                else:
-                    datasets.append(StdOpalOutputDataset(directory, fname))
-                    opal_logger.debug('    ' + fname + ' matches OPAL standard output file type.' )
-            elif ftype == FileType.MEM:
-                datasets.append(MemoryDataset(directory, fname))
-                opal_logger.debug('    ' + fname + ' matches memory file type.' )
-            elif ftype == FileType.LBAL:
-                datasets.append(LBalDataset(directory, fname))
-                opal_logger.debug('    ' + fname + ' matches load balancing file type.' )
-            elif ftype == FileType.GRID:
-                datasets.append(GridDataset(directory, fname))
-                opal_logger.debug('    ' + fname + ' matches grid file type.' )
-            elif ftype == FileType.SOLVER:
-                datasets.append(SolverDataset(directory, fname))
-                opal_logger.debug('    ' + fname + ' matches solver file type.' )
-            elif ftype == FileType.TRACK_ORBIT:
-                datasets.append(TrackOrbitDataset(directory, fname))
-                opal_logger.debug('    ' + fname + ' matches track orbit file type.' )
-            elif ftype == FileType.PEAK:
-                datasets.append(PeakDataset(directory, fname))
-                opal_logger.debug('    ' + fname + ' matches peak file type.' )
-            elif ftype == FileType.HIST:
-                datasets.append(ProbeHistDataset(directory, fname))
-                opal_logger.debug('    ' + fname + ' matches probe histogram file type.' )
-            elif ftype == FileType.OPTIMIZER:
-                datasets.append(OptimizerDataset(directory, fname))
-                # after reading we leave since optimizer produces many files
-                opal_logger.debug('    ' + fname + ' matches optimizer file type. Stop reading further.' )
-                break
-            elif ftype == FileType.SAMPLER:
-                datasets.append(SamplerDataset(directory, fname))
-                opal_logger.debug('    ' + fname + ' matches sampler file type.' )
-                break
-            elif ftype == FileType.AMR:
-                datasets.append(AmrDataset(directory))
-                opal_logger.debug('    ' + directory + ' matches AMR file type.' )
-                break
-            elif ftype == FileType.LOSS:
-                datasets.append(LossDataset(directory, fname))
-                opal_logger.debug('    ' + directory + ' matches loss file type.' )
-            elif ftype == FileType.NONE:
-                opal_logger.error('no appropriate file match.' )
+        if not ftype == FileType.NONE:
+            for fname in fnames:
+                if _append_dataset(datasets, ftype, astype, directory, fname):
+                    break
+        else:
+            for fname in fnames:
+                full_path = os.path.join(directory, fname)
+                ftype = FileType.extensionToFileType(full_path)
+                if _append_dataset(datasets, ftype, astype, directory, fname):
+                    break
         opal_logger.debug('\nDone.\n' )
 
         if not datasets:
@@ -171,3 +122,90 @@ def load_dataset(directory, **kwargs):
             return datasets
     except Exception as ex:
         opal_logger.error(ex)
+
+
+def _append_dataset(datasets, ftype, astype, directory, fname):
+    """Append a dataset to the list.
+
+    Parameters
+    ----------
+    datasets : list
+        Collection of datasets
+    ftype : FileType
+        Type of file to read in
+    astype : FileType
+        Read a file according some dataset type
+        E.g. OPAL standard output contains timings
+        as well.
+    directory : str
+        Root directory of the OPAL simulation
+    fname : str
+        File to read in
+
+    Returns
+    -------
+    bool
+        True if reading is stopped (i.e. sampler, optimizer and AMR datasets), False otherwise.
+    """
+    if  ftype == FileType.H5:
+        datasets.append(H5Dataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches H5 file type.')
+    elif ftype == FileType.STAT:
+        datasets.append(StatDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches stat file type.' )
+    elif ftype == FileType.SMB:
+        datasets.append(StatDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches smb file type.' )
+    elif ftype == FileType.TIMING:
+        datasets.append(TimeDataset(directory, fname, 'ippl'))
+        opal_logger.debug('    ' + fname + ' matches IPPL timing file type.' )
+    elif ftype == FileType.OUTPUT:
+        if astype == FileType.TIMING:
+            datasets.append(TimeDataset(directory, fname, 'output'))
+            opal_logger.debug('    ' + fname + ' matches timing file type.' )
+        else:
+            datasets.append(StdOpalOutputDataset(directory, fname))
+            opal_logger.debug('    ' + fname + ' matches OPAL standard output file type.' )
+    elif ftype == FileType.MEM:
+        datasets.append(MemoryDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches memory file type.' )
+    elif ftype == FileType.LBAL:
+        datasets.append(LBalDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches load balancing file type.' )
+    elif ftype == FileType.GRID:
+        datasets.append(GridDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches grid file type.' )
+    elif ftype == FileType.SOLVER:
+        datasets.append(SolverDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches solver file type.' )
+    elif ftype == FileType.TRACK_ORBIT:
+        datasets.append(TrackOrbitDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches track orbit file type.' )
+    elif ftype == FileType.PEAK:
+        datasets.append(PeakDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches peak file type.' )
+    elif ftype == FileType.HIST:
+        datasets.append(ProbeHistDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches probe histogram file type.' )
+    elif ftype == FileType.OPTIMIZER:
+        datasets.append(OptimizerDataset(directory, fname))
+        # after reading we leave since optimizer produces many files
+        opal_logger.debug('    ' + fname + ' matches optimizer file type. Stop reading further.' )
+        return True
+    elif ftype == FileType.SAMPLER:
+        datasets.append(SamplerDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches sampler file type. Stop reading further.' )
+        return True
+    elif ftype == FileType.AMR:
+        datasets.append(AmrDataset(directory))
+        opal_logger.debug('    ' + directory + ' matches AMR file type. Stop reading further.' )
+        return True
+    elif ftype == FileType.LOSS:
+        datasets.append(LossDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches loss file type.' )
+    elif ftype == FileType.FIELD:
+        datasets.append(FieldDataset(directory, fname))
+        opal_logger.debug('    ' + fname + ' matches field file type.' )
+    elif ftype == FileType.NONE:
+        opal_logger.error('no appropriate file match.' )
+    return False

@@ -1,4 +1,4 @@
-# Copyright (c) 2018, Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
+# Copyright (c) 2018, 2020 Matthias Frey, Paul Scherrer Institut, Villigen PSI, Switzerland
 # All rights reserved
 #
 # Implemented as part of the PhD thesis
@@ -16,8 +16,9 @@
 
 import json
 import os
+from .BaseParser import BaseParser
 
-class SamplerParser:
+class SamplerParser(BaseParser):
     """Parses ``*.json`` files of OPAL that are written by the SAMPLE command.
 
     **Notes**:
@@ -122,9 +123,6 @@ class SamplerParser:
         self.__objs  = []
 
         self.__version_tag = 'OPAL version'
-        self.__version_support = {
-            '2.1.0': self.__parse_version_2_1_0
-        }
 
     def __parse_version_2_0_0(self, data):
         samples = data['samples']
@@ -160,37 +158,14 @@ class SamplerParser:
                 self.__objs.append(samples[str(ind)]['obj'])
 
 
-    def __reset_attributes(self):
-        """Clear all private members.
+    def clear(self):
+        """Clear data.
         """
         self.__dvars = []
         self.__dvar_bounds = {}
         self.__objs  = []
         self.__begin = 0
         self.__end   = 0
-
-
-    def check_file(self, filename):
-        """Check if a file is really a sampler output
-
-        Parameters
-        ----------
-        filename : str
-           JSON file to be loaded
-
-        Returns
-        -------
-        bool
-            True if a sampler file, otherwise False
-        """
-        try:
-            self.parse(filename)
-            self.__reset_attributes()
-        except:
-            self.__reset_attributes()
-            return False
-        return True
-
 
     def parse(self, filename):
         """Load the JSON file.
@@ -204,7 +179,7 @@ class SamplerParser:
             raise IOError("File '" + filename + "' doesn't exist.")
 
         try:
-            self.__reset_attributes()
+            self.clear()
 
             parsed = json.load( open(filename) )
 
@@ -216,11 +191,12 @@ class SamplerParser:
 
             if self.__version_tag in parsed.keys():
                 version = parsed[self.__version_tag]
+                version_int = int(version.replace('.', ''))
 
-                if not version in self.__version_support.keys():
+                if version_int < 210:
                     raise IOError("Version " + version + " not supported.")
 
-                self.__version_support[version](parsed)
+                self.__parse_version_2_1_0(parsed)
             else:
                 self.__parse_version_2_0_0(parsed)
 
