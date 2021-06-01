@@ -31,19 +31,22 @@ class LossParser(BaseParser):
 
         **1. Clean**
 
-        line = "# Element STQ1 x (mm),  y (mm),  z (mm),  px ( ),  py ( ),  pz ( ), id,  turn,  time (ns)"
+        (OPAL version <= 2.4)
+        line = "# Element STQ1 x (m),  y (m),  z (m),  px ( ),  py ( ),  pz ( ), id,  turn,  time (ns)"
+        (OPAL version >= 2.6)
+        line = "# x (m),  y (m),  z (m),  px ( ),  py ( ),  pz ( ), id,  turn,  time (s)"
 
         gets
 
-        line = " x (mm),  y (mm),  z (mm),  px ( ),  py ( ),  pz ( ), id,  turn,  time (ns)"
+        line = " x (m),  y (m),  z (m),  px ( ),  py ( ),  pz ( ), id,  turn,  time (s)"
 
         **2. no commas**
 
-        line = " x (mm),  y (mm),  z (mm),  px ( ),  py ( ),  pz ( ), id,  turn,  time (ns)"
+        line = " x (m),  y (m),  z (m),  px ( ),  py ( ),  pz ( ), id,  turn,  time (s)"
 
         gets
 
-        line = " x (mm)   y (mm)   z (mm)   px ( )   py ( )   pz ( )  id   turn   time (ns)"
+        line = " x (m)   y (m)   z (m)   px ( )   py ( )   pz ( )  id   turn   time (s)"
         """
         line = ''
 
@@ -52,8 +55,10 @@ class LossParser(BaseParser):
         with open(filename) as f:
             line = f.readline()
 
-        # 1. step
+        # 1. step (OPAL version <= 2.4)
         line = re.sub(r"# Element (\S+)", ' ', line)
+        # 1. step (OPAL version >= 2.6)
+        line = re.sub(r"# ", ' ', line)
 
         # 2. step
         line = re.sub(r',', ' ', line)
