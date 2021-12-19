@@ -19,8 +19,11 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import functools
 import inspect
-import re
+import sys
 
+if  (sys.version_info < (3,7)):
+  import re
+  
 def wrapper(fun, new_fun):
     """Wrapper.
 
@@ -63,7 +66,7 @@ def new_label(fun, *args, **kwargs):
 
     signs = frozenset('$[](){}\\-.') # symbols not to escape due to LaTex
     lst = list(args)
-    if isinstance(lst[idx], str):
+    if isinstance(lst[idx], str) and (sys.version_info < (3,7)):
         # we need to add the signs otherwise LaTex formulas
         # are not properly compiled
         re._alphanum_str = re._alphanum_str.union(signs)
