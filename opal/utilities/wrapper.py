@@ -53,7 +53,7 @@ def new_label(fun, *args, **kwargs):
     kwargs : dict
         further keyword arguments of the original function
     """
-    fun_args = inspect.getargspec(fun)
+    fun_args = inspect.getfullargspec(fun)
 
     idx = -1
     if 'label' in fun_args.args:
