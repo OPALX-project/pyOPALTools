@@ -15,7 +15,9 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 from opal.analysis.Statistics import Statistics
-import numpy as np
+import dask.array as da
+import dask
+from dask.array import stats
 import scipy as sc
 from opal.utilities.logger import opal_logger
 from opal.analysis.cyclotron import eval_radius, eval_radial_momentum
@@ -27,19 +29,30 @@ class H5Statistics(Statistics):
 
         Parameters
         ----------
-        data : array_like
+        data : dask.array
             Container to extract data from
-        attrval : array_like
+        attrval : dask.array
             Data to compare with in extraction value
         val : int or float
             Value for extraction comparison
+
+        Notes
+        -----
+        There is an open issue on chunking. After taking a slice
+        of the array, the shape is NaN causing errors. It needs
+        to be rechunked.
+
+        Open issue:
+        https://github.com/dask/dask/issues/3293
 
         Returns
         -------
         array_like
             Slice of data
         """
-        data = data[val == attrval]
+        data = da.compress(val == attrval, data)
+        data = data.compute()
+        data = da.from_array(data, chunks='auto')
 
         if data.size < 1:
             raise ValueError('Empty data container.')
@@ -49,6 +62,15 @@ class H5Statistics(Statistics):
 
     def _selectBunch(self, data, bunch, step):
         """Take a bunch slice from the array
+
+        Notes
+        -----
+        There is an open issue on chunking. After taking a slice
+        of the array, the shape is NaN causing errors. It needs
+        to be rechunked.
+
+        Open issue:
+        https://github.com/dask/dask/issues/3293
 
         Parameters
         ----------
@@ -140,7 +162,7 @@ class H5Statistics(Statistics):
         """
         data = self.selectData(var, **kwargs)
 
-        return sc.stats.moment(data, axis=0, moment=k)
+        return stats.moment(data, axis=0, moment=k).compute().item(0)
 
 
     def radial_moment(self, k, **kwargs):
@@ -197,7 +219,7 @@ class H5Statistics(Statistics):
         """
         data = self.selectData(var, **kwargs)
 
-        return np.mean(data, axis=0)
+        return data.mean(axis=0).compute()
 
 
     def skew(self, var, **kwargs):
@@ -227,7 +249,7 @@ class H5Statistics(Statistics):
         """
         data = self.selectData(var, **kwargs)
 
-        return sc.stats.skew(data, axis=0)
+        return stats.skew(data, axis=0).compute().item(0)
 
 
     def kurtosis(self, var, **kwargs):
@@ -259,9 +281,10 @@ class H5Statistics(Statistics):
         23. March 2018
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.kurtosis.html
         """
+        opal_logger.error('dask.stats.kurtosis does not agree with scipy.stats.kurtosis')
         data = self.selectData(var, **kwargs)
 
-        return sc.stats.kurtosis(data, axis=0, fisher=True)
+        return stats.kurtosis(data, axis=0, fisher=True).compute().item(0)
 
 
     def gaussian_kde(self, var, **kwargs):
@@ -291,10 +314,10 @@ class H5Statistics(Statistics):
         """
         data = self.selectData(var, **kwargs)
 
-        return sc.stats.gaussian_kde(data)
+        return dask.delayed(sc.stats.gaussian_kde)(data)
 
 
-    def histogram(self, var, bins, **kwargs):
+    def histogram(self, var, bins, range, **kwargs):
         """Compute a histogram of a dataset
 
         Parameters
@@ -304,6 +327,8 @@ class H5Statistics(Statistics):
         bins : int or str
             Binning type or nr of bins
             (see https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html)
+        range : list
+            Range of histogram
         bunch : int, optional
             Bunch to select (default: -1, which means all particles)
         step : int, optional
@@ -330,7 +355,7 @@ class H5Statistics(Statistics):
 
         data = self.selectData(var, **kwargs)
 
-        return np.histogram(data, bins=bins, density=density)
+        return da.histogram(data, bins=bins, range=range, density=density)
 
 
     def halo_continuous_beam(self, var, **kwargs):
@@ -367,9 +392,9 @@ class H5Statistics(Statistics):
         """
         data = self.selectData(var, **kwargs)
 
-        m4 = sc.stats.moment(data, moment=4)
-        m2 = sc.stats.moment(data, moment=2)
-        return m4 / m2 ** 2 - 2.0
+        m4 = stats.moment(data, moment=4)
+        m2 = stats.moment(data, moment=2)
+        return (m4 / m2 ** 2 - 2.0).compute().item(0)
 
 
     def halo_ellipsoidal_beam(self, var, **kwargs):
@@ -406,10 +431,10 @@ class H5Statistics(Statistics):
         """
         data = self.selectData(var, **kwargs)
 
-        m4 = sc.stats.moment(data, moment=4)
-        m2 = sc.stats.moment(data, moment=2)
+        m4 = stats.moment(data, moment=4)
+        m2 = stats.moment(data, moment=2)
 
-        return m4 / m2 ** 2 - 15.0 / 7.0
+        return (m4 / m2 ** 2 - 15.0 / 7.0).compute().item(0)
 
 
     def radial_halo_ellipsoidal_beam(self, **kwargs):
@@ -447,10 +472,10 @@ class H5Statistics(Statistics):
 
         r  = eval_radius(x, y)
 
-        m4 = sc.stats.moment(r, moment=4)
-        m2 = sc.stats.moment(r, moment=2)
+        m4 = stats.moment(r, moment=4)
+        m2 = stats.moment(r, moment=2)
 
-        return m4 / m2 ** 2 - 15.0 / 7.0
+        return (m4 / m2 ** 2 - 15.0 / 7.0).compute()
 
 
     def halo_2d_ellipsoidal_beam(self, var, **kwargs):
@@ -492,7 +517,6 @@ class H5Statistics(Statistics):
         """
         q = self.selectData(var, **kwargs)
         p = self.selectData('p' + var, **kwargs)
-
         return self._halo_2d_ellipsoidal_beam(q, p)
 
 
@@ -539,7 +563,7 @@ class H5Statistics(Statistics):
 
         r  = eval_radius(x, y)
 
-        azimuth = np.deg2rad(azimuth)
+        azimuth = da.deg2rad(azimuth)
 
         pr = eval_radial_momentum(px, py, azimuth)
 
@@ -579,24 +603,24 @@ class H5Statistics(Statistics):
         """
 
         # make centered
-        q = q - np.mean(q)
-        p = p - np.mean(p)
+        q = q - da.mean(q)
+        p = p - da.mean(p)
 
-        q2 = np.mean(q ** 2)
-        q4 = np.mean(q ** 4)
+        q2 = da.mean(q ** 2)
+        q4 = da.mean(q ** 4)
 
-        p2 = np.mean(p ** 2)
-        p4 = np.mean(p ** 4)
+        p2 = da.mean(p ** 2)
+        p4 = da.mean(p ** 4)
 
-        q1p1 = np.mean(q*p)
-        q2p2 = np.mean(q**2 * p**2)
-        q1p3 = np.mean(q * p**3)
-        q3p1 = np.mean(q**3 * p)
+        q1p1 = da.mean(q*p)
+        q2p2 = da.mean(q**2 * p**2)
+        q1p3 = da.mean(q * p**3)
+        q3p1 = da.mean(q**3 * p)
 
         A = q4 * p4 + 3.0 * q2p2 ** 2 - 4.0 * q1p3 * q3p1
         B = q2 * p2 - q1p1 ** 2
 
-        return 0.5 * np.sqrt(3.0 * A) / B - 15.0 / 7.0
+        return (0.5 * da.sqrt(3.0 * A) / B - 15.0 / 7.0).compute()
 
 
     def projected_emittance(self, dim, **kwargs):
@@ -631,16 +655,16 @@ class H5Statistics(Statistics):
         coords  = self.selectData(dim, **kwargs)
         momenta = self.selectData('p' + dim, **kwargs)
 
-        c2 = sc.stats.moment(coords, moment=2)
-        m2 = sc.stats.moment(momenta, moment=2)
+        c2 = stats.moment(coords, moment=2)
+        m2 = stats.moment(momenta, moment=2)
 
-        # we need to center the beam
-        coords  -= np.mean(coords,  axis=0)
-        momenta -= np.mean(momenta, axis=0)
+        # we need to shift coords to center the beam
+        coords  -= coords.mean(axis=0)
+        momenta -= momenta.mean(, axis=0)
 
-        cm = np.mean(coords * momenta, axis=0)
+        cm = (coords * momenta).mean(axis=0)
 
-        return np.sqrt( m2 * c2 - cm ** 2 )
+        return da.sqrt( m2 * c2 - cm ** 2 ).compute()
 
 
     def radial_projected_emittance(self, azimuth, **kwargs):
@@ -729,19 +753,22 @@ class H5Statistics(Statistics):
         if data.size < 1:
             raise ValueError('Empty data container.')
 
-        dmin = np.min(data)
-        dmax = np.max(data)
-        data, bin_edges = np.histogram(data, bins=bins)
+        dmin = da.min(data)
+        dmax = da.max(data)
+        data, bin_edges = da.histogram(data, bins=bins, range=[dmin, dmax])
 
         # smooth
         from scipy import signal
         b, a = signal.butter(1, Wn=Wn, btype='lowpass')
-        data_smoothed = signal.filtfilt(b, a, data)
+        data_smoothed = dask.delayed(signal.filtfilt)(b, a, data)
 
 
         from scipy.signal import find_peaks
-        ymax = np.max(data_smoothed)
-        tmp = -data_smoothed + ymax
+        ymax = dask.delayed(max)(data_smoothed)
+
+        # we need to compute here otherwise find_peaks
+        # does not work
+        tmp = (-data_smoothed + ymax).compute()
 
         peak_indices, _ = find_peaks(tmp, height=0)
         return peak_indices, data, bin_edges

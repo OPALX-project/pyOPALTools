@@ -15,10 +15,11 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 from .ProbePlotter import *
-from .statistics import impl_plots
 import numpy as np
+import dask.array as da
+import dask
 import scipy as sc
-
+import seaborn as sns
 
 class H5Plotter(ProbePlotter):
 
@@ -75,18 +76,18 @@ class H5Plotter(ProbePlotter):
 
             if bins:
                 bdata = self.ds.getData('bin', step=step)
-                bmax = np.max(bdata)
+                bmax = (da.max(bdata)).compute()
                 nBins = bmax + 1
 
                 for b in range(nBins):
-                    xbin = xdata[bdata == b]
-                    ybin = ydata[bdata == b]
+                    xbin = self._select(xdata, bdata, b, step)
+                    ybin = self._select(ydata, bdata, b, step)
                     plt.scatter(xbin, ybin, marker='.', s=markersize, **kwargs)
             elif bunches:
                 bdata = self.ds.getData('bunchNumber', step=step)
                 # get all bunches
-                bmin = np.min(bdata)
-                bmax = np.max(bdata)
+                bmin = (da.min(bdata)).compute()
+                bmax = (da.max(bdata)).compute()
                 # 27. March 2018
                 # https://stackoverflow.com/questions/6486450/python-compute-list-difference
                 skipped = set(range(bmin, bmax+1)) - set(bunches)
@@ -96,8 +97,8 @@ class H5Plotter(ProbePlotter):
 
                 # plot all skipped bunches with same color
                 for i, s in enumerate(skipped):
-                    xbin = xdata[bdata == s]
-                    ybin = ydata[bdata == s]
+                    xbin = self._select(xdata, bdata, s, step)
+                    ybin = self._select(ydata, bdata, s, step)
                     lab = None
                     if i == 0:
                         lab = 'others'
@@ -105,8 +106,8 @@ class H5Plotter(ProbePlotter):
                                 color=plt.cm.tab20(colors[nBunches]),
                                 label=lab, **kwargs)
                 for i, b in enumerate(bunches):
-                    xbin = xdata[bdata == b]
-                    ybin = ydata[bdata == b]
+                    xbin = self._select(xdata, bdata, b, step)
+                    ybin = self._select(ydata, bdata, b, step)
                     plt.scatter(xbin, ybin, marker='.',
                                 s=markersize, color=plt.cm.tab20(colors[i]),
                                 label='bunch ' + str(i), **kwargs)
@@ -161,8 +162,8 @@ class H5Plotter(ProbePlotter):
 
             xdata = self.ds.getData(xvar, step=step)
             ydata = self.ds.getData(yvar, step=step)
-
-            xy = np.vstack([xdata, ydata])
+            
+            xy = da.vstack([xdata, ydata])
             plt.hist2d(xdata, ydata, bins = bins, cmap=cmap)
 
             plt.xlabel(self.ds.getLabelWithUnit(xvar))
@@ -250,7 +251,7 @@ class H5Plotter(ProbePlotter):
             if xdata.size < 1 or ydata.size < 1:
                 raise ValueError('Empty data container.')
 
-            values = np.vstack([xdata, ydata])
+            values = da.vstack([xdata, ydata]).compute()
 
             kde = sc.stats.gaussian_kde(values)
             pdf = kde.evaluate(values)
@@ -287,10 +288,17 @@ class H5Plotter(ProbePlotter):
             'all', 'contour' or 'scatter'
         step : int, optional
             Step of dataset
+        marginals : str, optional
+            'hist', 'kde', 'rug' or combination
+            separated by '+', eg. 'hist+kde'
+        size : int, optional
+            Size of plot
+        cmap : str, optional
+            Colormap
 
-        See Also
-        --------
-        visualization.statistics.impl_plots.plot_joint
+        References
+        ----------
+        https://seaborn.pydata.org/generated/seaborn.JointGrid.html
 
         Returns
         -------
@@ -303,13 +311,55 @@ class H5Plotter(ProbePlotter):
             xdata = self.ds.getData(xvar, step=step)
             ydata = self.ds.getData(yvar, step=step)
 
+            if xdata.size < 1 or ydata.size < 1:
+                raise ValueError('Empty data container.')
+
+            marginals    = kwargs.pop('marginals', 'hist')
+            size       = kwargs.pop('size', 8)
+            cmap         = kwargs.pop('cmap', 'Blues_d')
+
+            g = sns.JointGrid(x=xdata, y=ydata, size=size)
+
+            hasJoin = False
+
+            doAll = 'all' in join
+
             xlabel = self.ds.getLabelWithUnit(xvar)
             ylabel = self.ds.getLabelWithUnit(yvar)
 
-            plt = impl_plots.plot_joint(xdata, xlabel,
-                                        ydata, ylabel,
-                                        join, **kwargs)
+            if 'scatter' in join or doAll:
+                g = g.plot_joint(plt.scatter, marker='.', s=10, cmap=cmap)
+                hasJoin = True
 
+            if 'contour' in join or doAll:
+                g = g.plot_joint(sns.kdeplot, shade=False, cmap=cmap)
+                hasJoin = True
+
+            g.set_axis_labels(xlabel, ylabel)
+
+            if not hasJoin and not join == '':
+                raise RuntimeError("Fill list either with 'scatter', " +
+                                   "'contour', 'all'.")
+
+            hist = 'hist' in marginals
+            kde  = 'kde' in marginals
+            rug  = 'rug' in marginals
+
+            if hist:
+                g = g.plot_marginals(sns.distplot, kde=kde, rug=rug)
+            elif kde:
+                g = g.plot_marginals(sns.kdeplot, shade=True)
+
+            if rug and not hist:
+                g = g.plot_marginals(sns.rugplot)
+
+            hasMarginals = hist + kde + rug
+            if not hasMarginals and not marginals == '':
+                raise RuntimeError("Use either 'kde', 'hist', 'rug', " +
+                                   "or combination with '+', e.g. hist+rug.")
+
+            plt.tight_layout()
+            
             return plt
         except Exception as ex:
             opal_logger.exception(ex)
@@ -346,6 +396,7 @@ class H5Plotter(ProbePlotter):
         Notes
         -----
         https://matplotlib.org/examples/pylab_examples/pcolor_demo.html
+        Open issue: https://github.com/dask/dask/issues/2939
 
         Returns
         -------
@@ -354,9 +405,8 @@ class H5Plotter(ProbePlotter):
         """
         try:
             step    = kwargs.pop('step', 0)
-
-            xdata = self.ds.getData(xvar, step=step)
-            ydata = self.ds.getData(yvar, step=step)
+            xdata = self.ds.getData(xvar, step=step).compute()
+            ydata = self.ds.getData(yvar, step=step).compute()
 
             if xdata.size < 1 or ydata.size < 1:
                 raise ValueError('Empty data container.')
@@ -392,7 +442,7 @@ class H5Plotter(ProbePlotter):
 
             xi, yi = np.mgrid[xmin:xmax:nxbin*1j,
                               ymin:ymax:nybin*1j]
-            zi = pdf(np.vstack([xi.flatten(), yi.flatten()]))
+            zi = pdf(da.vstack([xi.flatten(), yi.flatten()]))
 
             pc = plt.pcolormesh(xi, yi, zi.reshape(xi.shape),
                                 cmap=cmap, shading=shading)

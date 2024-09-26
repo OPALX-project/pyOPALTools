@@ -15,7 +15,7 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 import h5py
-import numpy as np
+import dask.array as da
 from .H5Error import H5ParseError, H5DatasetError, H5OverflowError
 from .BaseParser import BaseParser
 
@@ -137,9 +137,9 @@ class H5Parser(BaseParser):
 
         data = []
         path = self.__step_prefix + str(step) + '/' + dsetName
-        return np.asarray(self.__h5f[path])
-
-
+        return da.from_array(self.__h5f[path], chunks=('auto'))
+    
+    
     def getStepAttribute(self, attrName, step=0):
         """Obtain the attribute data of a step.
 

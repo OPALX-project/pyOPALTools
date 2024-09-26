@@ -15,7 +15,6 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 from .formatter import *
-import opal.visualization.statistics
 import opal.visualization.styles
 
 from .AmrPlotter              import AmrPlotter

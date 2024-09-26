@@ -15,6 +15,7 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 import numpy as np
+import dask.array as da
 import scipy as sp
 
 def calcCenteringExtraction(radius, turnCorrection=1.35, phaseCorrection=0.0, amplitudeCorrection=1):
@@ -259,7 +260,7 @@ def eval_radius(x, y):
     float
         Radius
     """
-    r = np.sqrt(x ** 2 + y ** 2)
+    r = da.sqrt(x ** 2 + y ** 2)
     return r
 
 
@@ -298,4 +299,4 @@ def eval_radial_momentum(px, py, theta):
         \rightarrow p_r & = p_x \cos(\theta) + p_y \sin(\theta)
         \end{align}
     """
-    return px * np.cos(theta) + py * np.sin(theta)
+    return px * da.cos(theta) + py * da.sin(theta)

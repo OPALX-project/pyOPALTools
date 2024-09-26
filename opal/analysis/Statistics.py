@@ -147,7 +147,6 @@ class Statistics:
         -----
             See https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.histogram.html
         """
-        bins    = kwargs.get('bins', 'sturges')
-        density = kwargs.get('density', True)
-
-        return np.histogram(data, density=density, bins=bins)
+        bins    = kwargs.pop('bins', 'sturges')
+        density = kwargs.pop('density', True)
+        return np.histogram(data, bins=bins, density=density)
