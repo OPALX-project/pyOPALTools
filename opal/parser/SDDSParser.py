@@ -58,17 +58,17 @@ class SDDSParser(BaseParser):
 
     def _checkVersion(self, filename):
 
-        pattern = 'OPAL (.*) git'
+        pattern = 'OPAL(X)? (?P<version>[\d.]+) git'
 
         v = 0
 
         with open(filename) as f:
             for line in f:
-                if 'OPAL' and 'git rev.' in line:
+                if ('OPAL' in line) and ('git rev.' in line):
                     line = line.replace('#', '')
                     obj = re.match(pattern, line)
-                    v = self._version(obj.group(1))
-                    break;
+                    v = self._version(obj.group("version"))
+                    break
         return v
 
 
