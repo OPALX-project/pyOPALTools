@@ -1,2 +1,15 @@
 *.h5 filter=lfs diff=lfs merge=lfs -text
 *.dat filter=lfs diff=lfs merge=lfs -text
+tests/testData/Accelerated-trackOrbit.dat !filter !diff !merge text
+tests/testData/timings/timing_bdw_16cores.dat !filter !diff !merge text
+tests/testData/timings/timing_bdw_1core.dat !filter !diff !merge text
+tests/testData/timings/timing_bdw_2core.dat !filter !diff !merge text
+tests/testData/timings/timing_bdw_4core.dat !filter !diff !merge text
+tests/testData/timings/timing_bdw_8core.dat !filter !diff !merge text
+tests/testData/timings/timing_knl_16cores.dat !filter !diff !merge text
+tests/testData/timings/timing_knl_1core.dat !filter !diff !merge text
+tests/testData/timings/timing_knl_2core.dat !filter !diff !merge text
+tests/testData/timings/timing_knl_4core.dat !filter !diff !merge text
+tests/testData/timings/timing_knl_8core.dat !filter !diff !merge text
+tests/testData/timings/timing_problemsize.dat !filter !diff !merge text
+tests/testData/Accelerated.h5 !filter !diff !merge text
