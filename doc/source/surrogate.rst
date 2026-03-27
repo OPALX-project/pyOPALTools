@@ -6,7 +6,7 @@ Notebooks
 
 .. toctree::
 
-   uq_example<uq_example>
+   uq_example<../../surrogate/uq_example.ipynb>
 
 surrogate.bootstrap.bootstrap module
 ------------------------------------

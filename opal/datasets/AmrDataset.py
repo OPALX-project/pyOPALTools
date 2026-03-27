@@ -34,7 +34,7 @@ class AmrDataset(DatasetBase, AmrPlotter):
         """
         import yt
 
-        self._ds = yt.load(directory, dataset_type='boxlib_opal')
+        self._ds = yt.load(directory)
 
         super(AmrDataset, self).__init__(directory, 'Header')
 
@@ -100,10 +100,14 @@ class AmrDataset(DatasetBase, AmrPlotter):
 
     def __str__(self):
         s  = '\n\tAMR dataset.\n\n'
-        s += '\tAvailable fields (' + str(len(self._ds.field_list)) + ') :\n\n'
-        for field in self._ds.field_list:
-            s += '\t    ' + field[1] + '\n'
-        s += '\n\tAvailable derived fields (' + str(len(self._ds.derived_field_list)) + ') :\n\n'
-        for dfield in self._ds.derived_field_list:
-            s += '\t    ' + dfield[1] + '\n'
+        try:
+            s += '\tAvailable fields (' + str(len(self._ds.field_list)) + ') :\n\n'
+            for field in self._ds.field_list:
+                s += '\t    ' + field[1] + '\n'
+            s += '\n\tAvailable derived fields (' + str(len(self._ds.derived_field_list)) + ') :\n\n'
+            for dfield in self._ds.derived_field_list:
+                s += '\t    ' + dfield[1] + '\n'
+        except Exception as ex:
+            opal_logger.warning('Unable to list AMR fields: %s', ex)
+            s += '\tField listing unavailable with the installed yt backend.\n'
         return s

@@ -19,13 +19,7 @@ import pandas as pd
 from datetime import datetime
 from bisect   import bisect_left
 from opal import load_dataset, filetype
-
-if sys.version_info[0] < 3:
-  # Python 2
-  import cPickle as pick
-else:
-  # Python 3
-  import pickle as pick
+import pickle as pick
 
 from opal.parser.OptimizerParser import OptimizerParser
 #
@@ -385,10 +379,7 @@ class mldb:
         # read data (to be put in separate class)
 
         # match with header data file
-        if sys.version_info[0] < 3:
-          f = open(dataFileName)
-        else:
-          f = open(dataFileName, errors='ignore')
+        f = open(dataFileName, errors='ignore')
         for i in range(0,nrHeaderLines):
             header = f.readline()
         f.close()
@@ -524,10 +515,7 @@ class mldb:
 
     def load(self,filename):
         with open(filename, 'rb') as f:
-            if sys.version_info[0] < 3:
-                self.trainingSet = pick.load(f)
-            else:
-                self.trainingSet = pick.load(f,encoding='latin1')
+            self.trainingSet = pick.load(f, encoding='latin1')
 
     def getSampleSize(self,i=0):
         return len(self.trainingSet[i+1]['dvarValues'])

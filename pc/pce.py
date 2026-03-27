@@ -15,23 +15,14 @@
 import os, sys
 #sys.path.insert(0, '/Users/adelmann/git/')
 #sys.path.insert(0, '/Users/adelmann/git/pyOPALTools/')
-
-if sys.version_info[0] < 3:
-  # Python 2
-  import cPickle as pick
-else:
-  # Python 3
-  import pickle as pick
+import pickle as pick
 
 import numpy as np
 
 def getPCData(fn):
     if (os.path.isfile(fn)):
         with open(fn, 'rb') as pickle_file:
-            if sys.version_info.major > 2:
-                u = pick.load(pickle_file,encoding='latin1')
-            else:
-                u = pick.load(pickle_file)
+            u = pick.load(pickle_file, encoding='latin1')
     else:
         print ('Training points not found, run analysis first')
         sys.exit()

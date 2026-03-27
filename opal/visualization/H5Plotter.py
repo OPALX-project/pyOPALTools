@@ -306,11 +306,11 @@ class H5Plotter(ProbePlotter):
             xlabel = self.ds.getLabelWithUnit(xvar)
             ylabel = self.ds.getLabelWithUnit(yvar)
 
-            plt = impl_plots.plot_joint(xdata, xlabel,
-                                        ydata, ylabel,
-                                        join, **kwargs)
+            plot_handle = impl_plots.plot_joint(xdata, xlabel,
+                                                ydata, ylabel,
+                                                join, **kwargs)
 
-            return plt
+            return plot_handle
         except Exception as ex:
             opal_logger.exception(ex)
             return plt.figure()

@@ -72,15 +72,19 @@ class OptimizerPlotter(BasePlotter):
         https://stackoverflow.com/questions/40243446/how-to-save-plotly-offline-graph-in-format-png
         """
         try:
-            import plotly.plotly as py
-            import plotly.graph_objs as go
+            try:
+                import plotly.graph_objects as go
+            except ImportError:
+                import plotly.graph_objs as go
 
             if config.opal['style'] == 'jupyter':
                 from plotly.offline import iplot as pyplot
             else:
                 from plotly.offline import plot as pyplot
-        except:
-            print ( "Install plotly: pip install plotly" )
+        except Exception as ex:
+            opal_logger.exception(ex)
+            print("Install plotly: pip install plotly")
+            return None
 
         basename = self.ds.getGenerationBasename(gen, opt)
 
