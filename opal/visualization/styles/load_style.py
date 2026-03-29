@@ -15,17 +15,20 @@
 # along with pyOPALTools. If not, see <https://www.gnu.org/licenses/>.
 
 def load_style(use='default'):
+    from opal.visualization.styles._compat import install_rcparams_compat
     from opal.visualization.styles.default import default
     from opal.visualization.styles.jupyter import jupyter
     from opal.visualization.styles.poster import poster
 
-    styles = [
-        'default',
-        'jupyter',
-        'poster'
-    ]
+    styles = {
+        'default': default,
+        'jupyter': jupyter,
+        'poster': poster,
+    }
 
     if use in styles:
         from opal.utilities.logger import opal_logger
+
+        install_rcparams_compat()
         opal_logger.info("Loading '" + use + "' plotting style")
-        eval(use + '()')
+        styles[use]()

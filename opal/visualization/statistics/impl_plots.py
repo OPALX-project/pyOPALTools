@@ -105,7 +105,7 @@ def plot_joint(xdata, xlab,
     size         = kwargs.pop('size', 8)
     cmap         = kwargs.pop('cmap', 'Blues_d')
 
-    g = sns.JointGrid(x=xdata, y=ydata, size=size)
+    g = sns.JointGrid(x=xdata, y=ydata, height=size)
 
     hasJoin = False
 

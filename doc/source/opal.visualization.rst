@@ -14,16 +14,16 @@ Notebooks
 
 .. toctree::
 
-   AmrPlotter<testAmrOpal-1.py>
-   FieldPlotter<FieldDataset>
-   H5Plotter_RingMultiBunch<RingMultiBunch>
-   ProbePlotter<Probe>
-   ProbePlotter_PeakFile<ProbePeak>
-   OptimizerPlotter<Optimizer>
-   SamplerPlotter<Sampler>
-   StatPlotter_FODO<FODO>
-   StatPlotter_Gantry<Gantry2>
-   StatPlotter_RingCyclotron<RingCyclotron>
+   AmrPlotter<../../opal/test/testAmrOpal-1.py.ipynb>
+   FieldPlotter<../../opal/test/FieldDataset.ipynb>
+   H5Plotter_RingMultiBunch<../../opal/test/RingMultiBunch.ipynb>
+   ProbePlotter<../../opal/test/Probe.ipynb>
+   ProbePlotter_PeakFile<../../opal/test/ProbePeak.ipynb>
+   OptimizerPlotter<../../opal/test/Optimizer.ipynb>
+   SamplerPlotter<../../opal/test/Sampler.ipynb>
+   StatPlotter_FODO<../../opal/test/FODO.ipynb>
+   StatPlotter_Gantry<../../opal/test/Gantry2.ipynb>
+   StatPlotter_RingCyclotron<../../opal/test/RingCyclotron.ipynb>
 
 opal.visualization.AmrPlotter module
 ------------------------------------

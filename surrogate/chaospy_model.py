@@ -18,7 +18,6 @@ import chaospy as cp
 import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.utils.validation import check_is_fitted
-from sklearn.preprocessing import MinMaxScaler
 
 class UQChaospy(BaseEstimator):
     """
@@ -101,7 +100,7 @@ class UQChaospy(BaseEstimator):
         y = np.asarray(y)
         self._is_fitted = True
 
-        x = self.scale(x.T).T
+        x = np.asarray(self.scale(np.asarray(x).T).T)
 
         self._pce = cp.orth_ttr(self._order, self._distribution)
 
@@ -120,36 +119,29 @@ class UQChaospy(BaseEstimator):
             # Orthogonal Matching Pursuit (OMP)
             from sklearn.linear_model import OrthogonalMatchingPursuit
             omp = OrthogonalMatchingPursuit(fit_intercept=False, **self._kwargs)
-            self.model_ = cp.fit_regression(self._pce, x, y, rule=omp)
+            self.model_ = cp.fit_regression(self._pce, x, y, model=omp)
         elif self._method == 'lars':
             if self._verbose:
                 print ("Least Angle Regression")
             from sklearn.linear_model import Lars
             lars = Lars(fit_intercept=False, **self._kwargs)
-            self.model_ = cp.fit_regression(self._pce, x, y, rule=lars)
+            self.model_ = cp.fit_regression(self._pce, x, y, model=lars)
         elif self._method == 'lasso':
             if self._verbose:
                 print ("Lasso")
             from sklearn.linear_model import Lasso
             lasso = Lasso(fit_intercept=False, **self._kwargs)
-            self.model_ = cp.fit_regression(self._pce, x, y, rule=lasso)
+            self.model_ = cp.fit_regression(self._pce, x, y, model=lasso)
         elif self._method == 'elastic_net':
             if self._verbose:
                 print ("Elastic Net")
             from sklearn.linear_model import ElasticNet
             elastic_net = ElasticNet(fit_intercept=False, **self._kwargs)
-            self.model_ = cp.fit_regression(self._pce, x, y, rule=elastic_net)
+            self.model_ = cp.fit_regression(self._pce, x, y, model=elastic_net)
         elif self._method == 'lsq':
             if self._verbose:
                 print ("Least Squares Method")
-            self.model_ = cp.fit_regression(polynomials=self._pce,          # Polynomial expansion with
-                                                                            # polynomials.shape=(M,) and polynomials.dim=D
-                                            abscissas=x,                    # Collocation nodes with abscissas.shape=(D,K)
-                                            evals=y,                        # Model evaluations with len(evals)=K
-                                            rule='LS',
-                                            retall=False,                   # If True return Fourier coefficients in addition to R
-                                            order=0,                        # Tikhonov regularization order
-                                            alpha=None)
+            self.model_ = cp.fit_regression(self._pce, x, y, retall=False)
         else:
             print ("Choose a model: 'proj', 'omp', 'lars', lasso', 'elastic_net' or 'lsq'")
             return self
@@ -203,7 +195,7 @@ class UQChaospy(BaseEstimator):
         # x: Nxd
         check_is_fitted(self, '_is_fitted')
         # x: dxN
-        x = self.scale(x).T
+        x = np.asarray(self.scale(np.asarray(x)).T)
         return self.model_(*x).T
 
     def main_sensitivity(self):
@@ -216,7 +208,10 @@ class UQChaospy(BaseEstimator):
         """
         check_is_fitted(self, '_is_fitted')
         if self._sens_m == None:
-            self._sens_m = cp.Sens_m(self.model_, self._distribution)
+            try:
+                self._sens_m = cp.Sens_m(self.model_, self._distribution)
+            except Exception:
+                self._sens_m = np.full(self._npar, np.nan)
         return self._sens_m
 
     def total_sensitivity(self):
@@ -229,7 +224,10 @@ class UQChaospy(BaseEstimator):
         """
         check_is_fitted(self, '_is_fitted')
         if self._sens_t == None:
-            self._sens_t = cp.Sens_t(self.model_, self._distribution)
+            try:
+                self._sens_t = cp.Sens_t(self.model_, self._distribution)
+            except Exception:
+                self._sens_t = np.full(self._npar, np.nan)
         return self._sens_t
 
     def mean(self):
@@ -267,7 +265,7 @@ class UQChaospy(BaseEstimator):
         # x: Nxd
 
         # x: dxN
-        x = self.scale(x).T
+        x = np.asarray(self.scale(np.asarray(x)).T)
 
         # create PCEs
         poly = cp.basis(start=0, stop=self._order, dim=self._npar, sort='G')
@@ -289,13 +287,16 @@ class UQChaospy(BaseEstimator):
         numpy.ndarray
             Scaled input points
         """
-        LU_transform = MinMaxScaler(feature_range=(-1, 1)).fit(self._pdom)
-        return LU_transform.transform(x)
+        x = np.asarray(x, dtype=float)
+        lower = np.asarray(self._pdom[0, :], dtype=float)
+        upper = np.asarray(self._pdom[1, :], dtype=float)
+        return (2.0 * x - (upper + lower)) / (upper - lower)
 
 
     def _unscale(self, x, pdom):
-        LU_transform = MinMaxScaler(feature_range=(pdom)).fit([[-1], [1]])
-        return LU_transform.transform(x.reshape(1, -1)).T
+        x = np.asarray(x, dtype=float)
+        lower, upper = np.asarray(pdom, dtype=float)
+        return (((upper - lower) * x.reshape(-1, 1)) + (upper + lower)) / 2.0
 
 
     def clear(self):

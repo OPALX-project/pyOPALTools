@@ -60,9 +60,9 @@ class SamplerPlotter(BasePlotter):
             dirname = os.path.dirname(self.ds.filename)
             sdir = os.path.join(dirname, str(0))
             out = load_dataset(sdir, fname=fname, info=False)
-            ydata = np.zeros(out.size, dtype=np.float)
-            ymin  = np.finfo(np.float).max + np.zeros(out.size, dtype=np.float)
-            ymax  = np.finfo(np.float).min + np.zeros(out.size, dtype=np.float)
+            ydata = np.zeros(out.size, dtype=float)
+            ymin  = np.finfo(float).max + np.zeros(out.size, dtype=float)
+            ymax  = np.finfo(float).min + np.zeros(out.size, dtype=float)
 
             xdata = out.getData(xvar, **kwargs)
 
@@ -77,8 +77,8 @@ class SamplerPlotter(BasePlotter):
                 ymin = np.minimum(ymin, data)
                 ymax = np.maximum(ymax, data)
 
-            mean = np.zeros(len(ydata), dtype=np.float)
-            mean = ydata / np.float(nsamples)
+            mean = np.zeros(len(ydata), dtype=float)
+            mean = ydata / float(nsamples)
 
             if not kwargs.pop('idx', False):
                 plt.plot(xdata, mean, **kwargs, color='black', linestyle='dashed', label='mean')

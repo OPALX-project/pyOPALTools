@@ -16,8 +16,12 @@ import sys
 
 src = os.path.abspath('../..')
 sys.path.insert(0, src)
-# Define PYTHONPATH for nbsphinx
-os.environ['PYTHONPATH'] = src
+# Make the repository root available to notebook kernels as well.
+pythonpath = os.environ.get('PYTHONPATH')
+if pythonpath:
+    os.environ['PYTHONPATH'] = os.pathsep.join([src, pythonpath])
+else:
+    os.environ['PYTHONPATH'] = src
 
 # Mock dependencies
 MOCK_MODULES = ['chaospy',
@@ -72,7 +76,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', '**.ipynb_checkpoints']
+exclude_patterns = ['_build', '**/.ipynb_checkpoints']
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -108,8 +112,10 @@ autosummary_generate = True
 # nbsphinx notebook settings
 ## Allow notebook errors
 nbsphinx_allow_errors = True
-## Always execute notebooks
-nbsphinx_execute = 'always'
+## Keep the default HTML build lightweight. Notebook execution is covered by
+## a separate smoke-test script and can be re-enabled explicitly when needed.
+nbsphinx_execute = os.environ.get('PYOPALTOOLS_NBSPHINX_EXECUTE', 'never')
+nbsphinx_kernel_name = 'python3'
 ## Recommended setting for matplotlib
 ## https://nbsphinx.readthedocs.io/en/0.6.0/usage.html#nbsphinx_execute
 nbsphinx_execute_arguments = [
