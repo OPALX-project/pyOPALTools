@@ -22,3 +22,10 @@ import opal.parser
 import opal.utilities
 import opal.visualization
 import opal.config
+
+from importlib.metadata import version, PackageNotFoundError
+
+try:
+    __version__ = version("opal")
+except PackageNotFoundError:
+    __version__ = "0.0.0"
