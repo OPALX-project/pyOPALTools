@@ -12,14 +12,20 @@ Install the package in editable mode from the repository root:
    python -m pip install --upgrade pip
    python -m pip install -e .
 
-Documentation
--------------
-
-The HTML documentation depends on Sphinx and notebook support:
+To install the test dependencies as well, use:
 
 .. code-block:: bash
 
-   python -m pip install sphinx sphinx_rtd_theme nbsphinx nbconvert ipykernel
+   python -m pip install -e ".[test]"
+
+Documentation
+-------------
+
+The HTML documentation depends on the ``docs`` extra:
+
+.. code-block:: bash
+
+   python -m pip install -e ".[docs]"
 
 Build the documentation with notebook execution disabled by default:
 
