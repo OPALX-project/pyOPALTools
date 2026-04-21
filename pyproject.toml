@@ -28,6 +28,15 @@ dependencies = [
   "yt>=3.5.1"
 ]
 
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "nbformat",
+  "nbconvert",
+  "nbclient",
+  "jupyter-client"
+]
+
 [project.urls]
 Homepage = "https://github.com/OPALX-project/pyOPALTools.git"
 
