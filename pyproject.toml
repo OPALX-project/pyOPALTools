@@ -37,6 +37,15 @@ test = [
   "jupyter-client"
 ]
 
+docs = [
+  "sphinx",
+  "sphinx-rtd-theme",
+  "nbsphinx",
+  "nbconvert",
+  "ipykernel",
+  "plotly"
+]
+
 [project.urls]
 Homepage = "https://github.com/OPALX-project/pyOPALTools.git"
 
