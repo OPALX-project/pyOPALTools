@@ -3,6 +3,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [Unreleased]
+### Changed
+* migrated packaging metadata to `pyproject.toml`
+* added optional dependencies for test and documentation workflows
+* updated documentation and CI to install project extras instead of ad hoc dependency lists
+
 ## [1.0.0] - 2019-04-05
 ### Added
 * data set information, overloading __str__ (issue #19)
